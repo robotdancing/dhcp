@@ -1008,6 +1008,7 @@ AC_CONFIG_FILES([
   common/tests/Makefile
   dhcpctl/Makefile.am
   dhcpctl/Makefile
+  keama/Makefile
   includes/Makefile
   omapip/Makefile.am
   omapip/Makefile
