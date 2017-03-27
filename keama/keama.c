@@ -21,11 +21,16 @@
  *
  */
 
-#include "data.h"
+#include "keama.h"
 
+#include <sys/errno.h>
 #include <arpa/inet.h>
+#include <assert.h>
+#include <fcntl.h>
+#include <stdarg.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 
 #define KEAMA_USAGE "Usage: keama [-4|-6] [-i input-file] [-o output-file]"
 
@@ -44,12 +49,18 @@ char *input_file = NULL;
 char *output_file = NULL;
 FILE *input = NULL;
 FILE *output = NULL;
+isc_boolean_t json = ISC_FALSE;
 
 static const char use_noarg[] = "No argument for command: %s";
 
 int 
 main(int argc, char **argv) {
-	int i;
+	int i, fd;
+	char *inbuf = NULL;
+	size_t oldsize = 0;
+	size_t newsize = 0;
+	ssize_t cc;
+	struct parse *cfile;
 	size_t cnt = 0;
 
 	for (i = 1; i < argc; i++) {
@@ -57,6 +68,8 @@ main(int argc, char **argv) {
 			local_family = AF_INET;
 		else if (strcmp(argv[i], "-6") == 0)
 			local_family = AF_INET6;
+		else if (strcmp(argv[i], "-T") == 0)
+			json = ISC_TRUE;
 		else if (strcmp(argv[i], "-i") == 0) {
 			if (++i == argc)
 				usage(use_noarg, argv[i -  1]);
@@ -69,12 +82,38 @@ main(int argc, char **argv) {
 			usage("Unknown command: %s", argv[i]);
 	}
 
-	if (input_file) {
-		input = fopen(input_file, "r");
-		if (input == NULL)
+	if (!json && (local_family == 0))
+		usage("address family must be set using ", "-4 or -6");
+
+	if (input_file == NULL) {
+		input_file = "--stdin--";
+		fd = fileno(stdin);
+		for (;;) {
+			if (newsize == 0)
+				newsize = 1024;
+			else {
+				oldsize = newsize;
+				newsize *= 4;
+			}
+			inbuf = (char *)realloc(inbuf, newsize);
+			if (inbuf == 0)
+				usage("out of memory reading standard "
+				      "input: %s", strerror(errno));
+			cc = read(fd, inbuf + oldsize, newsize - oldsize);
+			if (cc < 0)
+				usage("error reading standard input: %s",
+				      strerror(errno));
+			if (cc + oldsize < newsize) {
+				newsize = cc + oldsize;
+				break;
+			}
+		}
+	} else {
+		fd = open(input_file, O_RDONLY);
+		if (fd < 0)
 			usage("Cannot open '%s' for reading", input_file);
-	} else
-		input = stdin;
+	}
+
 	if (output_file) {
 		output = fopen(output_file, "w");
 		if (output == NULL)
@@ -82,5 +121,76 @@ main(int argc, char **argv) {
 	} else
 		output = stdout;
 
+	cfile = new_parse(fd, inbuf, newsize, input_file, 0);
+	assert(cfile != NULL);
+
+	if (json) {
+		struct element *elem;
+
+		elem = json_parse(cfile);
+		if (elem != NULL) {
+			print(output, elem, 0, 0);
+			fprintf(output, "\n");
+		}
+	} else {
+		cnt = conf_file_parse(cfile);
+		if (cfile->stack_top > 0) {
+			print(output, cfile->stack[0], 0, 0);
+			fprintf(output, "\n");
+		}
+	}
+
+	end_parse(cfile);
+
 	exit(cnt);
+}
+
+void
+stackPush(struct parse *pc, struct element *elem)
+{
+	if (pc->stack_top + 2 >= pc->stack_size) {
+		size_t new_size = pc->stack_size + 10;
+		size_t amount = new_size * sizeof(struct element *);
+
+		pc->stack = (struct element **)realloc(pc->stack, amount);
+		if (pc->stack == NULL)
+			parse_error(pc, "can't resize element stack");
+		pc->stack_size = new_size;
+	}
+	pc->stack_top++;
+	pc->stack[pc->stack_top] = elem;
+}
+
+void
+parse_error(struct parse *cfile, const char *fmt, ...)
+{
+	va_list list;
+	char lexbuf[256];
+	char mbuf[1024];
+	char fbuf[1024];
+	unsigned i, lix;
+	
+	snprintf(fbuf, sizeof(fbuf), "%s line %d: %s",
+		 cfile->tlname, cfile->lexline, fmt);
+	
+	va_start(list, fmt);
+	vsnprintf(mbuf, sizeof(mbuf), fbuf, list);
+	va_end(list);
+
+	lix = 0;
+	for (i = 0;
+	     cfile->token_line[i] && i < (cfile->lexchar - 1); i++) {
+		if (lix < sizeof(lexbuf) - 1)
+			lexbuf[lix++] = ' ';
+		if (cfile->token_line[i] == '\t') {
+			for (; lix < (sizeof lexbuf) - 1 && (lix & 7); lix++)
+				lexbuf[lix] = ' ';
+		}
+	}
+	lexbuf[lix] = 0;
+
+	fprintf(stderr, "%s\n%s\n", mbuf, cfile->token_line);
+	if (cfile->lexchar < 81)
+		fprintf(stderr, "%s^\n", lexbuf);
+	exit(1);
 }

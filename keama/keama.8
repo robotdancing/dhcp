@@ -66,7 +66,9 @@ given the standard input is used.
 Specify the Kea configuration file to write. When it is not given
 the standard output is used.
 .PP
-The number of conversion failures is returned.
+The number of conversion failures is returned. Note that any parsing warning
+or error is fatal so please check and fix the ISC DHCP configuration file
+before using this tool.
 .SH SEE ALSO
 dhcpd(8), kea-dhcp4(8), kea-dhcp6(8).
 .SH AUTHOR

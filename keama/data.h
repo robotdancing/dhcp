@@ -143,10 +143,19 @@ struct {								\
 		(head2)->tqh_last = &(head2)->tqh_first;		\
 } while (0)
 
+/* From bind9 lib/isc/include/isc/boolean.h */
+
+typedef enum { isc_boolean_false = 0, isc_boolean_true = 1 } isc_boolean_t;
+
+#define ISC_FALSE isc_boolean_false
+#define ISC_TRUE isc_boolean_true
+#define ISC_TF(x) ((x) ? ISC_TRUE : ISC_FALSE)
+
 /* From Kea src/lib/cc/data.h */
 
 struct element;
 
+/* Element types */
 #define ELEMENT_NONE		0
 #define ELEMENT_INTEGER		1
 #define ELEMENT_REAL		2
@@ -163,28 +172,31 @@ struct string {
 };
 
 struct string *allocString(void);
-struct string *makeString(size_t l, char *s);
+/* In makeString() l == -1 means use strlen(s) */
+struct string *makeString(int l, const char *s);
+void appendString(struct string *s, const char *a);
+isc_boolean_t eqString(const struct string *s, const struct string *o);
 
-/* Element list or map item */
-struct item {
-	char *key;		/* item key (for map) */
-	struct element *value;	/* item value */
-	TAILQ_ENTRY(item) next;	/* next item in chain */
+/* Comments */
+struct comment {
+	char *line;			/* comment line */
+	TAILQ_ENTRY(comment) next;	/* next line */
 };
+TAILQ_HEAD(comments, comment);
 
-struct item *allocItem(void);
+struct comment *createComment(const char *line);
 
 /* Element list */
-TAILQ_HEAD(list, item);
+TAILQ_HEAD(list, element);
 
 /* Element map */
-TAILQ_HEAD(map, item);
+TAILQ_HEAD(map, element);
 
 /* Element value */
 union value {
 	int64_t int_value;		/* integer */
 	double double_value;		/* real */
-	int bool_value;			/* boolean */
+	isc_boolean_t bool_value;	/* boolean */
         /**/				/* null */
 	struct string string_value;	/* string */
 	struct list list_value;		/* list */
@@ -193,15 +205,19 @@ union value {
 
 /* Element */
 struct element {
-	int type;		/* element type (ELEMENT_XXX) */
-	char *comment;		/* comment associated with this element */
-	union value value;	/* value */
+	int type;			/* element type (ELEMENT_XXX) */
+	int kind;			/* element kind (e.g. ROOT_GROUP) */
+	isc_boolean_t skip;		/* skip as not converted */
+	char *key;			/* element key (for map) */
+	union value value;		/* value */
+	struct comments comments;	/* associated comments */
+	TAILQ_ENTRY(element) next;	/* next item in list or map chain */
 };
 
 /* Value getters */
-int64_t intValue(struct element *e);
-double doubleValue(struct element *e);
-int boolValue(struct element *e);
+int64_t intValue(const struct element *e);
+double doubleValue(const struct element *e);
+isc_boolean_t boolValue(const struct element *e);
 struct string *stringValue(struct element *e);
 struct list *listValue(struct element *e);
 struct map *mapValue(struct element *e);
@@ -210,8 +226,9 @@ struct map *mapValue(struct element *e);
 struct element *create(void);
 struct element *createInt(int64_t i);
 struct element *createDouble(double d);
-struct element *createBool(int b);
-struct element *createString(struct string *s);
+struct element *createBool(isc_boolean_t b);
+struct element *createNull(void);
+struct element *createString(const struct string *s);
 struct element *createList(void);
 struct element *createMap(void);
 
@@ -220,25 +237,31 @@ struct element *listGet(struct element *l, int i);
 void listSet(struct element *l, struct element *e, int i);
 void listPush(struct element *l, struct element *e);
 void listRemove(struct element *l, int i);
-size_t listSize(struct element *l);
+size_t listSize(const struct element *l);
+void concat(struct element *l, struct element *o);
 
 /* Map functions */
-struct element *mapGet(struct element *m, char *k);
-void mapSet(struct element *m, struct element *e, char *k);
-void mapRemove(struct element *m, char *k);
-int mapContains(struct element *m, char *k);
-size_t mapSize(struct element *m);
+struct element *mapGet(struct element *m, const char *k);
+void mapSet(struct element *m, struct element *e, const char *k);
+void mapRemove(struct element *m, const char *k);
+isc_boolean_t mapContains(const struct element *m, const char *k);
+size_t mapSize(const struct element *m);
 void merge(struct element *m, struct element *o);
 
 /* Tools */
-char *type2name(int t);
-int name2type(char *n);
-void print(FILE *fp, struct element *e, int skip, unsigned indent);
-void printList(FILE *fp, struct list *l, int skip, unsigned indent);
-void printMap(FILE *fp, struct map *m, int skip, unsigned indent);
-void printString(FILE *fp, struct string *s);
+const char *type2name(int t);
+int name2type(const char *n);
+void print(FILE *fp, const struct element *e,
+	   isc_boolean_t skip, unsigned indent);
+void printList(FILE *fp, const struct list *l,
+	       isc_boolean_t skip, unsigned indent);
+void printMap(FILE *fp, const struct map *m,
+	      isc_boolean_t skip, unsigned indent);
+void printString(FILE *fp, const struct string *s);
 
 /* Inheritance */
-int derive(struct element *parent, struct element *child, char *param);
+isc_boolean_t derive(struct element *parent,
+		     struct element *child,
+		     const char *param);
 
 #endif /* DATA_H */

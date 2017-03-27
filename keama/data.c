@@ -39,36 +39,75 @@ allocString(void)
 }
 
 struct string *
-makeString(size_t l, char *s)
+makeString(int l, const char *s)
 {
 	struct string *result;
 
 	result = allocString();
-	result->length = l;
-	if (l > 0) {
-		result->content = (char *)malloc(l + 1);
+	if (l < 0)
+		result->length = strlen(s);
+	else
+		result->length = (size_t)l;
+	if (result->length > 0) {
+		result->content = (char *)malloc(result->length + 1);
 		assert(result->content != NULL);
-		memcpy(result->content, s, l);
-		result->content[l] = 0;
+		memcpy(result->content, s, result->length);
+		result->content[result->length] = 0;
 	}
 
 	return result;
 }
 
-struct item *
-allocItem(void)
+void
+appendString(struct string *s, const char *a)
 {
-	struct item *result;
+	size_t n;
 
-	result = (struct item *)malloc(sizeof(struct item));
-	assert(result != NULL);
-	memset(result, 0, sizeof(struct item));
+	assert(s != NULL);
 
-	return result;
+	if (a == NULL)
+		return;
+	n = strlen(a);
+	if (n == 0)
+		return;
+	s->content = (char *)realloc(s->content, s->length + n + 1);
+	assert(s->content != NULL);
+	memcpy(s->content + s->length, a, n);
+	s->length += n;
+	s->content[s->length] = 0;
+}
+
+isc_boolean_t
+eqString(const struct string *s, const struct string *o)
+{
+	assert(s != NULL);
+	assert(o != NULL);
+
+	if (s->length != o->length)
+		return ISC_FALSE;
+	if (s->length == 0)
+		return ISC_TRUE;
+	return ISC_TF(memcmp(s->content, o->content, s->length) == 0);
+}
+
+struct comment *
+createComment(const char *line)
+{
+	struct comment *comment;
+
+	assert(line != NULL);
+
+	comment = (struct comment *)malloc(sizeof(struct comment));
+	assert(comment != NULL);
+	memset(comment, 0, sizeof(struct comment));
+
+	comment->line = strdup(line);
+
+	return comment;
 }
 
 int64_t
-intValue(struct element *e)
+intValue(const struct element *e)
 {
 	assert(e != NULL);
 	assert(e->type == ELEMENT_INTEGER);
@@ -76,15 +115,15 @@ intValue(struct element *e)
 }
 
 double
-doubleValue(struct element *e)
+doubleValue(const struct element *e)
 {
 	assert(e != NULL);
 	assert(e->type == ELEMENT_REAL);
 	return e->value.double_value;
 }
 
-int
-boolValue(struct element *e)
+isc_boolean_t
+boolValue(const struct element *e)
 {
 	assert(e != NULL);
 	assert(e->type == ELEMENT_BOOLEAN);
@@ -119,109 +158,119 @@ mapValue(struct element *e)
 struct element *
 create(void)
 {
-	struct element *result;
+	struct element *elem;
 
-	result = (struct element *)malloc(sizeof(struct element));
-	assert(result != NULL);
-	memset(result, 0, sizeof(struct element));
+	elem = (struct element *)malloc(sizeof(struct element));
+	assert(elem != NULL);
+	memset(elem, 0, sizeof(struct element));
+	TAILQ_INIT(&elem->comments);
 
-	return result;
+	return elem;
 }
 
 struct element *
 createInt(int64_t i)
 {
-	struct element *result;
+	struct element *elem;
 
-	result = create();
-	result->type = ELEMENT_INTEGER;
-	result->value.int_value = i;
+	elem = create();
+	elem->type = ELEMENT_INTEGER;
+	elem->value.int_value = i;
 
-	return result;
+	return elem;
 }
 
 struct element *
 createDouble(double d)
 {
-	struct element *result;
+	struct element *elem;
 
-	result = create();
-	result->type = ELEMENT_REAL;
-	result->value.double_value = d;
+	elem = create();
+	elem->type = ELEMENT_REAL;
+	elem->value.double_value = d;
 
-	return result;
+	return elem;
 }
 
 struct element *
-createBool(int b)
+createBool(isc_boolean_t b)
 {
-	struct element *result;
+	struct element *elem;
 
-	result = create();
-	result->type = ELEMENT_BOOLEAN;
-	result->value.bool_value = b;
+	elem = create();
+	elem->type = ELEMENT_BOOLEAN;
+	elem->value.bool_value = b;
 
-	return result;
+	return elem;
 }
 
 struct element *
-createString(struct string *s)
+createNull(void)
 {
-	struct element *result;
+	struct element *elem;
 
-	result = create();
-	result->type = ELEMENT_STRING;
-	result->value.string_value = *s;
+	elem = create();
+	elem->type = ELEMENT_NULL;
 
-	return result;
+	return elem;
+}
+
+struct element *
+createString(const struct string *s)
+{
+	struct element *elem;
+
+	elem = create();
+	elem->type = ELEMENT_STRING;
+	elem->value.string_value = *s;
+
+	return elem;
 }
 
 struct element *
 createList(void)
 {
-	struct element *result;
+	struct element *elem;
 
-	result = create();
-	result->type = ELEMENT_LIST;
-	TAILQ_INIT(&result->value.list_value);
+	elem = create();
+	elem->type = ELEMENT_LIST;
+	TAILQ_INIT(&elem->value.list_value);
 
-	return result;
+	return elem;
 }
 
 struct element *
 createMap(void)
 {
-	struct element *result;
+	struct element *elem;
 
-	result = create();
-	result->type = ELEMENT_MAP;
-	TAILQ_INIT(&result->value.map_value);
+	elem = create();
+	elem->type = ELEMENT_MAP;
+	TAILQ_INIT(&elem->value.map_value);
 
-	return result;
+	return elem;
 }
 
 struct element *
 listGet(struct element *l, int i)
 {
-	struct item *item;
+	struct element *elem;
 
 	assert(l != NULL);
 	assert(l->type == ELEMENT_LIST);
 	assert(i >= 0);
 
-	item = TAILQ_FIRST(&l->value.list_value);
-	assert(item != NULL);
-	assert(item->key == NULL);
-	assert(item->value != NULL);
+	elem = TAILQ_FIRST(&l->value.list_value);
+	assert(elem != NULL);
+	assert(elem->key == NULL);
 
 	for (unsigned j = i; j > 0; --j) {
-		item = TAILQ_NEXT(item, next);
-		assert(item != NULL);
-		assert(item->key == NULL);
-		assert(item->value != NULL);
+		elem = TAILQ_NEXT(elem, next);
+		assert(elem != NULL);
+		assert(elem->key == NULL);
 	}
 
-	return item->value;
+	return elem;
 }
 
 void
@@ -233,113 +282,106 @@ listSet(struct element *l, struct element *e, int i)
 	assert(i >= 0);
 
 	if (i == 0) {
-		struct item *item;
-
-		item = allocItem();
-		item->value = e;
-		TAILQ_INSERT_HEAD(&l->value.list_value, item, next);
+		TAILQ_INSERT_HEAD(&l->value.list_value, e, next);
 	} else {
-		struct item *prev;
-		struct item *item;
+		struct element *prev;
 		
 		prev = TAILQ_FIRST(&l->value.list_value);
 		assert(prev != NULL);
 		assert(prev->key == NULL);
-		assert(prev->value != NULL);
 
 		for (unsigned j = i; j > 1; --j) {
 			prev = TAILQ_NEXT(prev, next);
 			assert(prev != NULL);
 			assert(prev->key == NULL);
-			assert(prev->value != NULL);
 		}
 
-		item = allocItem();
-		item->value = e;
-		TAILQ_INSERT_AFTER(&l->value.list_value, prev, item, next);
+		TAILQ_INSERT_AFTER(&l->value.list_value, prev, e, next);
 	}
 }
 
 void
 listPush(struct element *l, struct element *e)
 {
-	struct item *item;
-
 	assert(l != NULL);
 	assert(l->type == ELEMENT_LIST);
 	assert(e != NULL);
 
-	item = allocItem();
-	item->value = e;
-	TAILQ_INSERT_TAIL(&l->value.list_value, item, next);
+	TAILQ_INSERT_TAIL(&l->value.list_value, e, next);
 }
 
 void
 listRemove(struct element *l, int i)
 {
-	struct item *item;
+	struct element *elem;
 
 	assert(l != NULL);
 	assert(l->type == ELEMENT_LIST);
 	assert(i >= 0);
 
-	item = TAILQ_FIRST(&l->value.list_value);
-	assert(item != NULL);
-	assert(item->key == NULL);
-	assert(item->value != NULL);
+	elem = TAILQ_FIRST(&l->value.list_value);
+	assert(elem != NULL);
+	assert(elem->key == NULL);
 
 	for (unsigned j = i; j > 0; --j) {
-		item = TAILQ_NEXT(item, next);
-		assert(item != NULL);
-		assert(item->key == NULL);
+		elem = TAILQ_NEXT(elem, next);
+		assert(elem != NULL);
+		assert(elem->key == NULL);
 	}
 
-	TAILQ_REMOVE(&l->value.list_value, item, next);
+	TAILQ_REMOVE(&l->value.list_value, elem, next);
 }
 
 size_t
-listSize(struct element *l)
+listSize(const struct element *l)
 {
-	struct item *item;
+	struct element *elem;
 	size_t cnt;
 
 	assert(l != NULL);
 	assert(l->type == ELEMENT_LIST);
 
 	cnt = 0;
-	TAILQ_FOREACH(item, &l->value.list_value, next) {
-		assert(item->key == NULL);
-		assert(item->value != NULL);
+	TAILQ_FOREACH(elem, &l->value.list_value, next) {
+		assert(elem->key == NULL);
 		cnt++;
 	}
 
 	return cnt;
 }
 
-struct element *
-mapGet(struct element *m, char *k)
+void
+concat(struct element *l, struct element *o)
 {
-	struct item *item;
+	assert(l != NULL);
+	assert(l->type == ELEMENT_LIST);
+	assert(o != NULL);
+	assert(o->type == ELEMENT_LIST);
+
+	TAILQ_CONCAT(&l->value.list_value, &o->value.list_value, next);
+}
+
+struct element *
+mapGet(struct element *m, const char *k)
+{
+	struct element *elem;
 
 	assert(m != NULL);
 	assert(m->type == ELEMENT_MAP);
 	assert(k != NULL);
 
-	TAILQ_FOREACH(item, &m->value.map_value, next) {
-		assert(item->key != NULL);
-		assert(item->value != NULL);
-		if (strcmp(item->key, k) == 0)
+	TAILQ_FOREACH(elem, &m->value.map_value, next) {
+		assert(elem->key != NULL);
+		if (strcmp(elem->key, k) == 0)
 			break;
 	}
 
-	return item->value;
+	return elem;
 }
 
 void
-mapSet(struct element *m, struct element *e, char *k)
+mapSet(struct element *m, struct element *e, const char *k)
 {
-	struct item *item;
-
 	assert(m != NULL);
 	assert(m->type == ELEMENT_MAP);
 	assert(e != NULL);
@@ -347,67 +389,60 @@ mapSet(struct element *m, struct element *e, char *k)
 #if 0
 	assert(mapGet(m, k) == NULL);
 #endif
-
-	item = allocItem();
-	item->key = strdup(k);
-	assert(item->key != NULL);
-	assert(item->value != NULL);
-	item->value = e;
-	TAILQ_INSERT_TAIL(&m->value.map_value, item, next);
+	e->key = strdup(k);
+	assert(e->key != NULL);
+	TAILQ_INSERT_TAIL(&m->value.map_value, e, next);
 }
 
 void
-mapRemove(struct element *m, char *k)
+mapRemove(struct element *m, const char *k)
 {
-	struct item *item;
+	struct element *elem;
 
 	assert(m != NULL);
 	assert(m->type == ELEMENT_MAP);
 	assert(k != NULL);
 
-	TAILQ_FOREACH(item, &m->value.map_value, next) {
-		assert(item->key != NULL);
-		assert(item->value != NULL);
-		if (strcmp(item->key, k) == 0)
+	TAILQ_FOREACH(elem, &m->value.map_value, next) {
+		assert(elem->key != NULL);
+		if (strcmp(elem->key, k) == 0)
 			break;
 	}
 
-	assert(item != NULL);
-	TAILQ_REMOVE(&m->value.map_value, item, next);
+	assert(elem != NULL);
+	TAILQ_REMOVE(&m->value.map_value, elem, next);
 }
 
-int
-mapContains(struct element *m, char *k)
+isc_boolean_t
+mapContains(const struct element *m, const char *k)
 {
-	struct item *item;
+	struct element *elem;
 
 	assert(m != NULL);
 	assert(m->type == ELEMENT_MAP);
 	assert(k != NULL);
 
-	TAILQ_FOREACH(item, &m->value.map_value, next) {
-		assert(item->key != NULL);
-		assert(item->value != NULL);
-		if (strcmp(item->key, k) == 0)
+	TAILQ_FOREACH(elem, &m->value.map_value, next) {
+		assert(elem->key != NULL);
+		if (strcmp(elem->key, k) == 0)
 			break;
 	}
 
-	return item != NULL;
+	return ISC_TF(elem != NULL);
 }
 
 size_t
-mapSize(struct element *m)
+mapSize(const struct element *m)
 {
-	struct item *item;
+	struct element *elem;
 	size_t cnt;
 
 	assert(m != NULL);
 	assert(m->type == ELEMENT_MAP);
 
 	cnt = 0;
-	TAILQ_FOREACH(item, &m->value.map_value, next) {
-		assert(item->key != NULL);
-		assert(item->value != NULL);
+	TAILQ_FOREACH(elem, &m->value.map_value, next) {
+		assert(elem->key != NULL);
 		cnt++;
 	}
 
@@ -417,22 +452,23 @@ mapSize(struct element *m)
 void
 merge(struct element *m, struct element *o)
 {
-	struct item *item;
+	struct element *elem;
 
 	assert(m != NULL);
 	assert(m->type == ELEMENT_MAP);
 	assert(o != NULL);
 	assert(o->type == ELEMENT_MAP);
 
-	TAILQ_FOREACH(item, &o->value.map_value, next) {
-		assert(item->key != NULL);
-		assert(item->value != NULL);
-		if (!mapContains(m, item->key))
-			mapSet(m, item->value, item->key);
+	TAILQ_FOREACH(elem, &o->value.map_value, next) {
+		assert(elem->key != NULL);
+		TAILQ_REMOVE(&o->value.map_value, elem, next);
+		if (!mapContains(m, elem->key)) {
+			TAILQ_INSERT_TAIL(&m->value.map_value, elem, next);
+		}
 	}
 }
 
-char *
+const char *
 type2name(int t)
 {
 	switch (t) {
@@ -461,7 +497,7 @@ type2name(int t)
 }
 
 int
-name2type(char *n)
+name2type(const char *n)
 {
 	assert(n != NULL);
 	if (strcmp(n, "integer") == 0)
@@ -485,12 +521,10 @@ name2type(char *n)
 }
 
 void
-print(FILE *fp, struct element *e, int skip, unsigned indent)
+print(FILE *fp, const struct element *e, isc_boolean_t skip, unsigned indent)
 {
 	assert(fp != NULL);
 	assert(e != NULL);
-
-	// TODO comments
 
 	switch (e->type) {
 	case ELEMENT_LIST:
@@ -522,12 +556,27 @@ print(FILE *fp, struct element *e, int skip, unsigned indent)
 	}
 }
 
-void
-printList(FILE *fp, struct list *l, int skip, unsigned indent)
+static void
+addIndent(FILE *fp, int skip, unsigned indent)
 {
-	struct item *item;
 	unsigned sp;
-	int first;
+
+	if (skip) {
+		fprintf(fp, "//");
+		if (indent > 2)
+			for (sp = 0; sp < indent - 2; ++sp)
+				fprintf(fp, " ");
+	} else
+		for (sp = 0; sp < indent; ++sp)
+			fprintf(fp, " ");
+}	
+
+void
+printList(FILE *fp, const struct list *l, isc_boolean_t skip, unsigned indent)
+{
+	struct element *elem;
+	struct comment *comment;
+	isc_boolean_t first;
 
 	assert(fp != NULL);
 	assert(l != NULL);
@@ -538,39 +587,33 @@ printList(FILE *fp, struct list *l, int skip, unsigned indent)
 	}
 
 	fprintf(fp, "[\n");
-	first = 1;
-	TAILQ_FOREACH(item, l, next) {
-		assert(item->key == NULL);
-		assert(item->value != NULL);
+	first = ISC_TRUE;
+	TAILQ_FOREACH(elem, l, next) {
+		isc_boolean_t skip_elem = skip;
+		assert(elem->key == NULL);
+		if (!skip)
+			skip_elem = elem->skip;
 		if (!first)
 			fprintf(fp, ",\n");
-		first = 0;
-		if (skip)
-			fprintf(fp, "//");
-		for (sp = 0; sp < indent; ++sp)
-			fprintf(fp, " ");
-		if (!skip)
-			fprintf(fp, "  ");
-		print(fp, item->value, skip, indent + 2);
+		first = ISC_FALSE;
+		TAILQ_FOREACH(comment, &elem->comments, next) {
+			addIndent(fp, skip_elem, indent + 2);
+			fprintf(fp, "%s\n", comment->line);
+		}
+		addIndent(fp, skip_elem, indent + 2);
+		print(fp, elem, skip_elem, indent + 2);
 	}
 	fprintf(fp, "\n");
-	if (skip) {
-		fprintf(fp, "//");
-		if (indent > 2)
-			for (sp = 0; sp < indent - 2; ++sp)
-				fprintf(fp, " ");
-	} else
-		for (sp = 0; sp < indent; ++sp)
-			fprintf(fp, " ");
+	addIndent(fp, skip, indent);
 	fprintf(fp, "]");
 }
 
 void
-printMap(FILE *fp, struct map *m, int skip, unsigned indent)
+printMap(FILE *fp, const struct map *m, isc_boolean_t skip, unsigned indent)
 {
-	struct item *item;
-	unsigned sp;
-	int first;
+	struct element *elem;
+	struct comment *comment;
+	isc_boolean_t first;
 
 	assert(fp != NULL);
 	assert(m != NULL);
@@ -581,36 +624,30 @@ printMap(FILE *fp, struct map *m, int skip, unsigned indent)
 	}
 
 	fprintf(fp, "{\n");
-	first = 1;
-	TAILQ_FOREACH(item, m, next) {
-		assert(item->key != NULL);
-		assert(item->value != NULL);
+	first = ISC_TRUE;
+	TAILQ_FOREACH(elem, m, next) {
+		isc_boolean_t skip_elem = skip;
+		assert(elem->key != NULL);
+		if (!skip)
+			skip_elem = elem->skip;
 		if (!first)
 			fprintf(fp, ",\n");
-		first = 0;
-		if (skip)
-			fprintf(fp, "//");
-		for (sp = 0; sp < indent; ++sp)
-			fprintf(fp, " ");
-		if (!skip)
-			fprintf(fp, "  ");
-		fprintf(fp, "\"%s\": ", item->key);
-		print(fp, item->value, skip, indent + 2);
+		first = ISC_FALSE;
+		TAILQ_FOREACH(comment, &elem->comments, next) {
+			addIndent(fp, skip_elem, indent + 2);
+			fprintf(fp, "%s\n", comment->line);
+		}
+		addIndent(fp, skip_elem, indent + 2);
+		fprintf(fp, "\"%s\": ", elem->key);
+		print(fp, elem, skip_elem, indent + 2);
 	}
 	fprintf(fp, "\n");
-	if (skip) {
-		fprintf(fp, "//");
-		if (indent > 2)
-			for (sp = 0; sp < indent - 2; ++sp)
-				fprintf(fp, " ");
-	} else
-		for (sp = 0; sp < indent; ++sp)
-			fprintf(fp, " ");
+	addIndent(fp, skip, indent);
 	fprintf(fp, "}");
 }
 
 void
-printString(FILE *fp, struct string *s)
+printString(FILE *fp, const struct string *s)
 {
 	size_t i;
 
@@ -654,8 +691,8 @@ printString(FILE *fp, struct string *s)
 	fprintf(fp, "\"");
 }
 
-int
-derive(struct element *parent, struct element *child, char *param)
+isc_boolean_t
+derive(struct element *parent, struct element *child, const char *param)
 {
 	struct element *x;
 	struct element *y;
@@ -668,10 +705,10 @@ derive(struct element *parent, struct element *child, char *param)
 
 	x = mapGet(parent, param);
 	if (x == NULL)
-		return 0;
+		return ISC_FALSE;
 	y = mapGet(child, param);
 	if (y != NULL)
-		return 0;
+		return ISC_FALSE;
 	mapSet(child, x, param);
-	return 1;
+	return ISC_TRUE;
 }
