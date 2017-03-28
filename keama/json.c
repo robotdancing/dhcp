@@ -55,9 +55,10 @@ json_parse(struct parse *cfile)
 			elem = createNull();
 		else if (strcmp(val, "true") == 0)
 			elem = createBool(ISC_TRUE);
-		else if (strcmp(val, "false") ==0)
+		else if (strcmp(val, "false") == 0) {
 			elem = createBool(ISC_FALSE);
-		else
+			elem->skip = ISC_TRUE;
+		} else
 			parse_error(cfile, "unknown name %s", val);
 		TAILQ_CONCAT(&elem->comments, &cfile->comments, next);
 		break;

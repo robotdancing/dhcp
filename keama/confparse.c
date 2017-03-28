@@ -24,7 +24,6 @@
 /* From server/confpars.c */
 
 #include "keama.h"
-#include "statement.h"
 
 #include <arpa/inet.h>
 #include <assert.h>
@@ -162,8 +161,8 @@ parse_statement(struct parse *cfile, int type, int declaration)
 	isc_boolean_t lose;
 	char *n;
 #endif
-	isc_boolean_t known;
 	isc_boolean_t authoritative;
+	struct element *option;
 	unsigned code;
 	size_t host_decl = 0;
 	size_t subnet = 0;
@@ -434,6 +433,8 @@ parse_statement(struct parse *cfile, int type, int declaration)
 		   "option dhcp-server-identifier". */
 	case SERVER_IDENTIFIER:
 		code = DHO_DHCP_SERVER_IDENTIFIER;
+		option = createMap();
+		mapSet(option, createInt(code), "code");
 		skip_token(&val, NULL, cfile);
 		goto finish_option;
 
@@ -449,10 +450,7 @@ parse_statement(struct parse *cfile, int type, int declaration)
 			return declaration;
 		}
 
-		known = ISC_FALSE;
-/* Kea TODO */
-#if 0
-		parse_option_name(cfile, 1, &known, &option);
+		option = parse_option_name(cfile);
 		token = peek_token(&val, NULL, cfile);
 		if (token == CODE) {
 			if (type != ROOT_GROUP)
@@ -464,15 +462,9 @@ parse_statement(struct parse *cfile, int type, int declaration)
 			parse_option_code_definition(cfile, option);
 			return declaration;
 		}
-
-		/* If this wasn't an option code definition, don't
-		   allow an unknown option. */
-		if (!known)
-			parse_error(cfile, "unknown option %s.%s",
-				    option->universe->name,
-				    option->name);
-#endif
 	finish_option:
+		parse_option_statement(NULL, cfile, option,
+				       supersede_option_statement);
 		return declaration;
 		break;
 
@@ -1587,20 +1579,34 @@ parse_fixed_addr_param(struct parse *cfile, enum dhcp_token type) {
 	enum dhcp_token token;
 	struct element *addresses;
 	struct string *address;
+	isc_boolean_t ipaddr = ISC_TRUE;
 
 	addresses = createList();
 
 	do {
 		address = NULL;
 		if (type == FIXED_ADDR)
-			address = parse_ip_addr_or_hostname(cfile, 1);
+			address = parse_ip_addr_or_hostname(cfile, &ipaddr);
 		else if (type == FIXED_ADDR6)
-			address = parse_ip6_addr_expr(cfile);
+			address = parse_ip6_addr_txt(cfile);
 		else
 			parse_error(cfile, "requires FIXED_ADDR[6]");
 		if (address == NULL)
 			parse_error(cfile, "can't parse fixed address");
-		listPush(addresses, createString(address));
+		if (ipaddr) {
+			struct element *name;
+			struct comment *comment;
+
+			name = createString(address);
+			ipaddr = ISC_TRUE;
+			name->skip = ISC_TRUE;
+			cfile->issue_counter++;
+			comment = createComment("### please resolve this "
+						"name into one address");
+			TAILQ_INSERT_TAIL(&name->comments, comment, next);
+			listPush(addresses, name);
+		} else
+			listPush(addresses, createString(address));
 		token = peek_token(&val, NULL, cfile);
 		if (token == COMMA)
 			token = next_token(&val, NULL, cfile);
@@ -1735,7 +1741,7 @@ parse_address_range6(struct parse *cfile, int type, size_t where)
 	/*
 	 * Read starting address as text.
 	 */
-	lo = parse_ip6_addr_expr(cfile);
+	lo = parse_ip6_addr_txt(cfile);
 	if (lo == NULL)
 		parse_error(cfile, "can't parse range6 address (low)");
 
@@ -1778,7 +1784,7 @@ parse_address_range6(struct parse *cfile, int type, size_t where)
 		 * No '/', so we are looking for the end address of 
 		 * the IPv6 pool.
 		 */
-		hi = parse_ip6_addr_expr(cfile);
+		hi = parse_ip6_addr_txt(cfile);
 		if (hi == NULL)
 			parse_error(cfile,
 				    "can't parse range6 address (high)");
@@ -1833,11 +1839,11 @@ parse_prefix6(struct parse *cfile, int type, size_t where)
 	/*
 	 * Read starting and ending address as text.
 	 */
-	lo = parse_ip6_addr_expr(cfile);
+	lo = parse_ip6_addr_txt(cfile);
 	if (lo == NULL)
 		parse_error(cfile, "can't parse prefix6 address (low)");
 
-	hi = parse_ip6_addr_expr(cfile);
+	hi = parse_ip6_addr_txt(cfile);
 	if (hi == NULL)
 		parse_error(cfile, "can't parse prefix6 address (high)");
 
@@ -1911,7 +1917,7 @@ parse_fixed_prefix6(struct parse *cfile, size_t host_decl)
 		mapSet(host, prefixes, "prefixes");
 	}
 
-	ia = parse_ip6_addr_expr(cfile);
+	ia = parse_ip6_addr_txt(cfile);
 	if (ia == NULL)
 		parse_error(cfile, "can't parse fixed-prefix6 address");
 	token = next_token(NULL, NULL, cfile);
