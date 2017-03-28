@@ -77,6 +77,19 @@ appendString(struct string *s, const char *a)
 	s->content[s->length] = 0;
 }
 
+void
+concatString(struct string *s, const struct string *a)
+{
+	assert(s != NULL);
+	assert(a != NULL);
+
+	s->content = (char *)realloc(s->content, s->length + a->length + 1);
+	assert(s->content != NULL);
+	memcpy(s->content + s->length, a->content, a->length);
+	s->length += a->length;
+	s->content[s->length] = 0;
+}
+
 isc_boolean_t
 eqString(const struct string *s, const struct string *o)
 {

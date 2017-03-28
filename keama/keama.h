@@ -119,9 +119,116 @@ struct parse {
 #define CLASS_DECL_STATIC	4
 #define CLASS_DECL_SUBCLASS	8
 
-/* Authentication and BOOTP policy possibilities (not all values work
-   for each). */
-enum policy { P_IGNORE, P_ACCEPT, P_PREFER, P_REQUIRE, P_DONT };
+/* Hardware buffer size */
+#define HARDWARE_ADDR_LEN 20
+
+/* Expression context */
+
+enum expression_context {
+	context_any, /* indefinite */
+	context_boolean,
+	context_data,
+	context_numeric,
+	context_dns,
+	context_data_or_numeric, /* indefinite */
+	context_function
+};
+
+/* Statements */
+
+enum statement_op {
+	null_statement,
+	if_statement,
+	add_statement,
+	eval_statement,
+	break_statement,
+	default_option_statement,
+	supersede_option_statement,
+	append_option_statement,
+	prepend_option_statement,
+	send_option_statement,
+	statements_statement,
+	on_statement,
+	switch_statement,
+	case_statement,
+	default_statement,
+	set_statement,
+	unset_statement,
+	let_statement,
+	define_statement,
+	log_statement,
+	return_statement,
+	execute_statement,
+	vendor_opt_statement
+};
+
+/* Expression tree structure. */
+
+enum expr_op {
+	expr_none,
+	expr_match,
+	expr_check,
+	expr_equal,
+	expr_substring,
+	expr_suffix,
+	expr_concat,
+	expr_host_lookup,
+	expr_and,
+	expr_or,
+	expr_not,
+	expr_option,
+	expr_hardware,
+	expr_packet,
+	expr_const_data,
+	expr_extract_int8,
+	expr_extract_int16,
+	expr_extract_int32,
+	expr_encode_int8,
+	expr_encode_int16,
+	expr_encode_int32,
+	expr_const_int,
+	expr_exists,
+	expr_encapsulate,
+	expr_known,
+	expr_reverse,
+	expr_leased_address,
+	expr_binary_to_ascii,
+	expr_config_option,
+	expr_host_decl_name,
+	expr_pick_first_value,
+ 	expr_lease_time,
+ 	expr_dns_transaction,
+	expr_static,
+	expr_ns_add,
+ 	expr_ns_delete,
+ 	expr_ns_exists,
+ 	expr_ns_not_exists,
+	expr_not_equal,
+	expr_null,
+	expr_variable_exists,
+	expr_variable_reference,
+	expr_filename,
+ 	expr_sname,
+	expr_arg,
+	expr_funcall,
+	expr_function,
+	expr_add,
+	expr_subtract,
+	expr_multiply,
+	expr_divide,
+	expr_remainder,
+	expr_binary_and,
+	expr_binary_or,
+	expr_binary_xor,
+	expr_client_state,
+	expr_ucase,
+	expr_lcase,
+	expr_regex_match,
+	expr_iregex_match,
+	expr_gethostname,
+	expr_v6relay,
+	expr_concat_dclist
+};
 
 /* Kea parse tools */
 void stackPush(struct parse *cfile, struct element *elem);
@@ -177,12 +284,10 @@ void skip_to_rbrace(struct parse *, int);
 void parse_semi(struct parse *);
 void parse_string(struct parse *, char **, unsigned *);
 struct string *parse_host_name(struct parse *);
-struct string *parse_ip_addr_or_hostname(struct parse *, int);
-/* parse_ip_addr */
+struct string *parse_ip_addr_or_hostname(struct parse *, isc_boolean_t *);
+struct string *parse_ip_addr(struct parse *);
 struct string *parse_ip6_addr(struct parse *);
-struct string *parse_ip6_addr_expr(struct parse *);
-/* parse_ip6_prefix */
-/* parse_ip_addr_with_subnet */
+struct string *parse_ip6_addr_txt(struct parse *);
 struct element *parse_hardware_param(struct parse *);
 void parse_lease_time(struct parse *, time_t *);
 struct string *parse_numeric_aggregate(struct parse *,
@@ -190,33 +295,47 @@ struct string *parse_numeric_aggregate(struct parse *,
 				       int, int, unsigned);
 void convert_num(struct parse *, unsigned char *, const char *,
 		 int, unsigned);
-time_t parse_date(struct parse *);
-time_t parse_date_core(struct parse *);
-/* parse_option_name */
+struct element *parse_option_name(struct parse *);
 void parse_option_space_decl(struct parse *);
-/* parse_option_code_definition */
-/* parse_base64 */
+void parse_option_code_definition(struct parse *, struct element *);
+struct string *parse_base64(struct parse *);
 struct string *parse_cshl(struct parse *);
-/* parse_executable_statements */
-/* parse_executable_statement */
-/* parse_zone */
-int parse_key(struct parse *);
-/* parse_on_statement */
-/* parse_switch_statement */
-/* parse_case_statement */
-/* parse_if_statement */
-/* parse_boolean_expression */
-int parse_boolean(struct parse *);
-/* parse_data_expression */
-/* parse_numeric_expression */
-/* parse_non_binary */
-/* parse_expression */
-/* parse_option_data */
-/* parse_option_statement */
+isc_boolean_t parse_executable_statements(struct element *,
+					  struct parse *, isc_boolean_t *,
+					  enum expression_context);
+isc_boolean_t parse_executable_statement(struct element *,
+					 struct parse *, isc_boolean_t *,
+					 enum expression_context);
+isc_boolean_t parse_zone(struct element *, struct parse *);
+isc_boolean_t parse_key(struct element *, struct parse *);
+isc_boolean_t parse_on_statement(struct element *, struct parse *,
+				 isc_boolean_t *);
+isc_boolean_t parse_switch_statement(struct element *, struct parse *,
+				     isc_boolean_t *);
+isc_boolean_t parse_case_statement(struct element *, struct parse *,
+				   isc_boolean_t *, enum expression_context);
+isc_boolean_t parse_if_statement(struct element *, struct parse *,
+				 isc_boolean_t *);
+isc_boolean_t parse_boolean_expression(struct element *, struct parse *,
+				       isc_boolean_t *);
+isc_boolean_t parse_boolean(struct parse *);
+isc_boolean_t parse_data_expression(struct element *, struct parse *,
+				    isc_boolean_t *);
+isc_boolean_t numeric_expression(struct element *, struct parse *,
+				 isc_boolean_t *);
+isc_boolean_t parse_non_binary(struct element *, struct parse *,
+			       isc_boolean_t *, enum expression_context);
+isc_boolean_t parse_expression(struct element *, struct parse *,
+			       isc_boolean_t *, enum expression_context,
+			       struct element *, enum expr_op);
+isc_boolean_t parse_option_data(struct element *, struct parse *,
+				int, struct element *);
+isc_boolean_t parse_option_statement(struct element *, struct parse *,
+				     struct element *, enum statement_op);
 /* parse_option_token */
 /* parse_option_decl */
-/* parse_X */
-struct expression *parse_domain_list(struct parse *cfile, int);
+isc_boolean_t parse_X(struct parse *, uint8_t, unsigned);
+struct element *parse_domain_list(struct parse *cfile, int);
 
 /* json.c */
 struct element *json_parse(struct parse *);
