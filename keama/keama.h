@@ -318,6 +318,7 @@ isc_boolean_t parse_if_statement(struct element *, struct parse *,
 				 isc_boolean_t *);
 isc_boolean_t parse_boolean_expression(struct element *, struct parse *,
 				       isc_boolean_t *);
+/* currently unused */
 isc_boolean_t parse_boolean(struct parse *);
 isc_boolean_t parse_data_expression(struct element *, struct parse *,
 				    isc_boolean_t *);
@@ -328,14 +329,9 @@ isc_boolean_t parse_non_binary(struct element *, struct parse *,
 isc_boolean_t parse_expression(struct element *, struct parse *,
 			       isc_boolean_t *, enum expression_context,
 			       struct element *, enum expr_op);
-isc_boolean_t parse_option_data(struct element *, struct parse *,
-				int, struct element *);
+isc_boolean_t parse_option_data(struct element *, struct parse *);
 isc_boolean_t parse_option_statement(struct element *, struct parse *,
 				     struct element *, enum statement_op);
-/* parse_option_token */
-/* parse_option_decl */
-isc_boolean_t parse_X(struct parse *, uint8_t, unsigned);
-struct element *parse_domain_list(struct parse *cfile, int);
 
 /* json.c */
 struct element *json_parse(struct parse *);

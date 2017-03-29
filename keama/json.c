@@ -180,5 +180,3 @@ json_map_parse(struct parse *cfile)
 	cfile->stack_top--;
 	return map;
 }
-
-size_t __attribute__((weak)) conf_file_parse(struct parse *cfile) { return 0; }

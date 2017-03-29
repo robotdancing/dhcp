@@ -233,6 +233,16 @@ struct element *createString(const struct string *s);
 struct element *createList(void);
 struct element *createMap(void);
 
+/* Reset */
+void resetInt(struct element *e, int64_t i);
+void resetDouble(struct element *e, double d);
+void resetBool(struct element *e, isc_boolean_t b);
+void resetNull(struct element *e);
+void resetString(struct element *e, const struct string *s);
+void resetList(struct element *e);
+void resetMap(struct element *e);
+void resetBy(struct element *e, struct element *o);
+
 /* List functions */
 struct element *listGet(struct element *l, int i);
 void listSet(struct element *l, struct element *e, int i);
