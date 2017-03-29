@@ -264,6 +264,124 @@ createMap(void)
 	return elem;
 }
 
+static void
+reset(struct element *e)
+{
+	e->type = 0;
+	e->kind = 0;
+	assert(e->key == NULL);
+	memset(&e->value, 0, sizeof(e->value));
+}
+
+void
+resetInt(struct element *e, int64_t i)
+{
+	assert(e != NULL);
+
+	reset(e);
+	e->type = ELEMENT_INTEGER;
+	e->value.int_value = i;
+}
+	
+void
+resetDouble(struct element *e, double d)
+{
+	assert(e != NULL);
+
+	reset(e);
+	e->type = ELEMENT_REAL;
+	e->value.double_value = d;
+}
+
+void
+resetBool(struct element *e, isc_boolean_t b)
+{
+	assert(e != NULL);
+
+	reset(e);
+	e->type = ELEMENT_BOOLEAN;
+	e->value.bool_value = b;
+}
+
+void resetNull(struct element *e)
+{
+	assert(e != NULL);
+
+	reset(e);
+	e->type = ELEMENT_NULL;
+}
+
+void
+resetString(struct element *e, const struct string *s)
+{
+	assert(e != NULL);
+
+	reset(e);
+	e->type = ELEMENT_STRING;
+	e->value.string_value = *s;
+}
+
+void
+resetList(struct element *e)
+{
+	assert(e != NULL);
+
+	reset(e);
+	e->type = ELEMENT_LIST;
+	TAILQ_INIT(&e->value.list_value);
+}
+
+void
+resetMap(struct element *e)
+{
+	assert(e != NULL);
+
+	reset(e);
+	e->type = ELEMENT_MAP;
+	TAILQ_INIT(&e->value.map_value);
+}
+
+void
+resetBy(struct element *e, struct element *o)
+{
+	assert(e != NULL);
+	assert(o != NULL);
+
+	reset(e);
+	e->type = o->type;
+	e->kind = o->kind;
+	e->skip = o->skip;
+	e->key = o->key;
+	o->key = NULL;
+	TAILQ_CONCAT(&e->comments, &o->comments, next);
+
+	switch (e->type) {
+	case ELEMENT_INTEGER:
+		e->value.int_value = o->value.int_value;
+		break;
+	case ELEMENT_REAL:
+		e->value.double_value = o->value.double_value;
+		break;
+	case ELEMENT_BOOLEAN:
+		e->value.bool_value = o->value.bool_value;
+		break;
+	case ELEMENT_STRING:
+		e->value.string_value = o->value.string_value;
+		break;
+	case ELEMENT_LIST:
+		TAILQ_INIT(&e->value.list_value);
+		TAILQ_CONCAT(&e->value.list_value, &o->value.list_value, next);
+		break;
+	case ELEMENT_MAP:
+		TAILQ_INIT(&e->value.map_value);
+		TAILQ_CONCAT(&e->value.map_value, &o->value.map_value, next);
+		break;
+	default:
+		assert(0);
+	}
+	reset(o);
+}
+
 struct element *
 listGet(struct element *l, int i)
 {
