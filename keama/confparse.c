@@ -443,6 +443,7 @@ parse_statement(struct parse *cfile, int type, int declaration)
 	case SERVER_IDENTIFIER:
 		option = option_lookup_code("dhcp4",
 					    DHO_DHCP_SERVER_IDENTIFIER);
+		assert(option);
 		goto finish_option;
 
 	case OPTION:
@@ -476,7 +477,7 @@ parse_statement(struct parse *cfile, int type, int declaration)
 			parse_error(cfile, "unknown option %s.%s",
 				    option->space, option->name);
 	finish_option:
-		parse_option_statement(NULL, cfile, option,
+		parse_option_statement(cfile, option,
 				       supersede_option_statement);
 		return declaration;
 		break;

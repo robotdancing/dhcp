@@ -349,8 +349,8 @@ isc_boolean_t parse_expression(struct element *, struct parse *,
 			       struct element *, enum expr_op);
 isc_boolean_t parse_option_data(struct element *, struct parse *,
 				struct option *);
-isc_boolean_t parse_option_statement(struct element *, struct parse *,
-				     struct option *, enum statement_op);
+isc_boolean_t parse_option_statement(struct parse *, struct option *,
+				     enum statement_op);
 
 /* options.c */
 const char *option_map_space(const char *);

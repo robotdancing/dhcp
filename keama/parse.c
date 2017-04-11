@@ -413,12 +413,12 @@ parse_hardware_param(struct parse *cfile)
 		size_t used;
 		if (i == 0) {
 			(void)snprintf(buf, sizeof(buf),
-				       "%02x", t->content[i]);
+				       "%2.2x", t->content[i]);
 			continue;
 		}
 		used = strlen(buf);
 		(void)snprintf(buf + used, sizeof(buf) - used,
-			       ":%02x", t->content[i]);
+			       ":%2.2x", t->content[i]);
 	}
 	if (ether)
 		r = makeString(-1, buf);
@@ -1290,6 +1290,8 @@ struct string *
 parse_cshl(struct parse *cfile)
 {
 	uint8_t ibuf;
+	char tbuf[4];
+	isc_boolean_t first = ISC_TRUE;
 	struct string *data;
 	enum dhcp_token token;
 	const char *val;
@@ -1301,7 +1303,12 @@ parse_cshl(struct parse *cfile)
 		if (token != NUMBER && token != NUMBER_OR_NAME)
 			parse_error(cfile, "expecting hexadecimal number.");
 		convert_num(cfile, &ibuf, val, 16, 8);
-		concatString(data, makeString(1, (char *)&ibuf));
+		if (first)
+			snprintf(tbuf, sizeof(tbuf), "%2.2x", ibuf);
+		else
+			snprintf(tbuf, sizeof(tbuf), ":%2.2x", ibuf);
+		first = ISC_FALSE;
+		appendString(data, tbuf);
 
 		token = peek_token(&val, NULL, cfile);
 		if (token != COLON)
@@ -1416,7 +1423,7 @@ parse_executable_statement(struct element *result,
 			*lose = ISC_TRUE;
 			return ISC_FALSE;
 		}
-		return parse_option_statement(result, cfile, option,
+		return parse_option_statement(cfile, option,
 					      send_option_statement);
 
 	case SUPERSEDE:
@@ -1428,7 +1435,7 @@ parse_executable_statement(struct element *result,
 			*lose = ISC_TRUE;
 			return ISC_FALSE;
 		}
-		return parse_option_statement(result, cfile, option,
+		return parse_option_statement(cfile, option,
 					      supersede_option_statement);
 
 	case ALLOW:
@@ -1456,7 +1463,7 @@ parse_executable_statement(struct element *result,
 			*lose = ISC_TRUE;
 			return ISC_FALSE;
 		}
-		return parse_option_statement(result, cfile, option,
+		return parse_option_statement(cfile, option,
 					      default_option_statement);
 	case PREPEND:
 		skip_token(&val, NULL, cfile);
@@ -1466,7 +1473,7 @@ parse_executable_statement(struct element *result,
 			*lose = ISC_TRUE;
 			return ISC_FALSE;
 		}
-		return parse_option_statement(result, cfile, option,
+		return parse_option_statement(cfile, option,
 					      prepend_option_statement);
 	case APPEND:
 		skip_token(&val, NULL, cfile);
@@ -1476,7 +1483,7 @@ parse_executable_statement(struct element *result,
 			*lose = ISC_TRUE;
 			return ISC_FALSE;
 		}
-		return parse_option_statement(result, cfile, option,
+		return parse_option_statement(cfile, option,
 					      append_option_statement);
 
 	case ON:
@@ -1748,14 +1755,14 @@ parse_executable_statement(struct element *result,
 
 	default:
 		if (is_identifier(token)) {
-			skip_token(&val, NULL, cfile);
 			/* the config universe is the server one */
 			option = option_lookup_name("_server_", val);
 			if (option) {
+				skip_token(&val, NULL, cfile);
 				result->skip = ISC_TRUE;
 				cfile->issue_counter++;
 				return parse_option_statement
-					      (result, cfile, option,
+					      (cfile, option,
 					       supersede_option_statement);
 			}
 		}
@@ -3595,8 +3602,8 @@ parse_option_data(struct element *expr,
 	enum dhcp_token token;
 	struct string *data;
 	struct string *saved;
-	/*struct element *elem;*/
-	struct comments comments;
+	struct element *elem;
+	struct comment *comment;
 	isc_boolean_t canon_bool = ISC_FALSE;
 	isc_boolean_t has_ignore = ISC_FALSE;
 
@@ -3636,20 +3643,25 @@ parse_option_data(struct element *expr,
 		appendString(data, val);
 	}
 				
-	TAILQ_INIT(&comments);
 	if (canon_bool) {
-		struct comment *comment;
-
 		comment = createComment("/// canonized booleans to "
 					" lowercase true or false");
-		TAILQ_INSERT_TAIL(&comments, comment, next);
+		TAILQ_INSERT_TAIL(&expr->comments, comment, next);
 	}
 	if (has_ignore) {
-		struct comment *comment;
-
 		comment = createComment("/// 'ignore' pseudo-boolean is used");
-		TAILQ_INSERT_TAIL(&comments, comment, next);
+		TAILQ_INSERT_TAIL(&expr->comments, comment, next);
+		expr->skip = ISC_TRUE;
+		cfile->issue_counter++;
 	}
+
+	if (canon_bool || has_ignore) {
+		elem = createString(saved);
+		elem->skip = ISC_TRUE;
+		mapSet(expr, elem, "original-data");
+	}
+	mapSet(expr, createString(data), "data");
+
         return ISC_TRUE;
 }
 
@@ -3661,20 +3673,38 @@ parse_option_data(struct element *expr,
    starts as above and ends in a SEMI. */
 
 isc_boolean_t
-parse_option_statement(struct element *result, struct parse *cfile,
-
-		       struct option *option, enum statement_op op)
+parse_option_statement(struct parse *cfile,
+		       struct option *option,
+		       enum statement_op op)
 {
 	const char *val;
 	enum dhcp_token token;
 	struct element *expr;
+	struct element *opt_data;
+	struct element *opt_data_list;
 	isc_boolean_t lose;
+	size_t where;
 
-	expr = createMap();
-	TAILQ_CONCAT(&expr->comments, &cfile->comments, next);
+	opt_data = createMap();
+	TAILQ_CONCAT(&opt_data->comments, &cfile->comments, next);
+	mapSet(opt_data, createString(makeString(-1, option->space)), "space");
+	mapSet(opt_data, createString(makeString(-1, option->name)), "name");
+	mapSet(opt_data, createInt(option->code), "code");
+	if (option->status == kea_unknown) {
+		opt_data->skip = ISC_TRUE;
+		cfile->issue_counter++;
+	}
+	if (op != supersede_option_statement) {
+		struct comment *comment;
+
+		comment = createComment("/// Kea does not support "
+					"option data set variants");
+		TAILQ_INSERT_TAIL(&opt_data->comments, comment, next);
+	}
+
 	token = peek_token(&val, NULL, cfile);
 	/* We should keep a list of defined empty options */
-	if ((token == SEMI) && (option && (option->format[0] != 'Z'))) {
+	if ((token == SEMI) && (option->format[0] != 'Z')) {
 		/* Eat the semicolon... */
 		/*
 		 * XXXSK: I'm not sure why we should ever get here, but we 
@@ -3688,6 +3718,7 @@ parse_option_statement(struct element *result, struct parse *cfile,
 		skip_token(&val, NULL, cfile);
 
 		/* Parse a data expression and use its value for the data. */
+		expr = createMap();
 		if (!parse_data_expression(expr, cfile, &lose)) {
 			/* In this context, we must have an executable
 			   statement, so if we found something else, it's
@@ -3697,18 +3728,46 @@ parse_option_statement(struct element *result, struct parse *cfile,
 					    "expecting a data expression.");
 			return ISC_FALSE;
 		}
+		mapSet(opt_data, createBool(ISC_FALSE), "csv-format");
+		/* Stringify numeric expressions */
+		if (expr->type == ELEMENT_INTEGER) {
+			char buf[80];
+
+			snprintf(buf, sizeof(buf), "%lld",
+				 (long long)intValue(expr));
+			resetString(expr, makeString(-1, buf));
+		}
+		if (expr->type == ELEMENT_STRING)
+			mapSet(opt_data, expr, "data");
+		else {
+			opt_data->skip = ISC_TRUE;
+			cfile->issue_counter++;
+			mapSet(opt_data, expr, "expression");
+		}
 	} else {
-		if (!parse_option_data(expr, cfile, option))
+		if (!parse_option_data(opt_data, cfile, option))
 			return ISC_FALSE;
 	}
 
 	parse_semi(cfile);
 
-	/*
-	switch (op) {
-		supersede_option_statement
-////////////
-*/	return ISC_TRUE;
+	for (where = cfile->stack_top; where > 0; --where) {
+		if (cfile->stack[where]->kind == PARAMETER)
+			continue;
+		if ((local_family == AF_INET) &&
+		    (cfile->stack[where]->kind == POOL_DECL))
+			continue;
+		break;
+	}
+
+	opt_data_list = mapGet(cfile->stack[where], "option-data");
+	if (opt_data_list == NULL) {
+		opt_data_list = createList();
+		mapSet(cfile->stack[where], opt_data_list, "option-data");
+	}
+	listPush(opt_data_list, opt_data);
+
+	return ISC_TRUE;
 }
 
 /* parse_error moved to keama.c */
