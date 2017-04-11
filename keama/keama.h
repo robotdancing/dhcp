@@ -230,6 +230,23 @@ enum expr_op {
 	expr_concat_dclist
 };
 
+/* options */
+
+enum option_status {
+	kea_unknown = 0,	/* known only by ISC DHCP */
+	supported,		/* known by both ISC DHCP and Kea, same name */
+	must_renamed,		/* known by both, different name */
+	special			/* requires special processing */
+};
+
+struct option {
+	const char *name;		/* option name */
+	const char *format;		/* ISC DHCP format string */
+	const char *space;		/* ISC DHCP space (aka universe) */
+	unsigned code;			/* code point */
+	enum option_status status;	/* status */
+};
+
 /* Kea parse tools */
 void stackPush(struct parse *cfile, struct element *elem);
 
@@ -284,7 +301,7 @@ void skip_to_rbrace(struct parse *, int);
 void parse_semi(struct parse *);
 void parse_string(struct parse *, char **, unsigned *);
 struct string *parse_host_name(struct parse *);
-struct string *parse_ip_addr_or_hostname(struct parse *, isc_boolean_t *);
+struct string *parse_ip_addr_or_hostname(struct parse *, isc_boolean_t);
 struct string *parse_ip_addr(struct parse *);
 struct string *parse_ip6_addr(struct parse *);
 struct string *parse_ip6_addr_txt(struct parse *);
@@ -295,9 +312,10 @@ struct string *parse_numeric_aggregate(struct parse *,
 				       int, int, unsigned);
 void convert_num(struct parse *, unsigned char *, const char *,
 		 int, unsigned);
-struct element *parse_option_name(struct parse *);
+struct option *parse_option_name(struct parse *, isc_boolean_t,
+				 isc_boolean_t *);
 void parse_option_space_decl(struct parse *);
-void parse_option_code_definition(struct parse *, struct element *);
+void parse_option_code_definition(struct parse *, struct option *);
 struct string *parse_base64(struct parse *);
 struct string *parse_cshl(struct parse *);
 isc_boolean_t parse_executable_statements(struct element *,
@@ -329,11 +347,20 @@ isc_boolean_t parse_non_binary(struct element *, struct parse *,
 isc_boolean_t parse_expression(struct element *, struct parse *,
 			       isc_boolean_t *, enum expression_context,
 			       struct element *, enum expr_op);
-isc_boolean_t parse_option_data(struct element *, struct parse *);
+isc_boolean_t parse_option_data(struct element *, struct parse *,
+				struct option *);
 isc_boolean_t parse_option_statement(struct element *, struct parse *,
-				     struct element *, enum statement_op);
+				     struct option *, enum statement_op);
+
+/* options.c */
+const char *option_map_space(const char *);
+struct option *option_lookup_name(const char *, const char *);
+struct option *option_lookup_code(const char *, unsigned);
+void option_map_name(struct option *);
 
 /* json.c */
 struct element *json_parse(struct parse *);
 struct element *json_list_parse(struct parse *);
 struct element *json_map_parse(struct parse *);
+
+/* options.c */

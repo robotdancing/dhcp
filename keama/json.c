@@ -41,7 +41,7 @@ json_parse(struct parse *cfile)
 	cfile->stack_top = 0;
 
 	token = next_token(&val, NULL, cfile);
-	switch ((int)token) {
+	switch (token) {
 	case NUMBER:
 		elem = createInt(atoll(val));
 		TAILQ_CONCAT(&elem->comments, &cfile->comments, next);
@@ -62,7 +62,7 @@ json_parse(struct parse *cfile)
 			parse_error(cfile, "unknown name %s", val);
 		TAILQ_CONCAT(&elem->comments, &cfile->comments, next);
 		break;
-	case '[':
+	case LBRACKET:
 		elem = json_list_parse(cfile);
 		break;
 	case LBRACE:
@@ -90,8 +90,8 @@ json_list_parse(struct parse *cfile)
 	stackPush(cfile, list);
 	do {
 		token = peek_token(&val, NULL, cfile);
-		switch ((int)token) {
-		case ']':
+		switch (token) {
+		case RBRACKET:
 			done = ISC_TRUE;
 			break;
 		case END_OF_FILE:
@@ -131,7 +131,7 @@ json_map_parse(struct parse *cfile)
 	stackPush(cfile, map);
 	do {
 		token = peek_token(&val, NULL, cfile);
-		switch ((int)token) {
+		switch (token) {
 		case RBRACE:
 			done = ISC_TRUE;
 			break;

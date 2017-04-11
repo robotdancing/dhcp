@@ -21,8 +21,6 @@
  *
  */
 
-#include "keama.h"
-
 #include <sys/errno.h>
 #include <arpa/inet.h>
 #include <assert.h>
@@ -31,6 +29,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+
+#include "keama.h"
 
 #define KEAMA_USAGE "Usage: keama [-4|-6] [-i input-file] [-o output-file]"
 

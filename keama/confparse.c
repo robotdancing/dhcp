@@ -32,21 +32,20 @@
 #include <stdlib.h>
 #include <string.h>
 
+isc_boolean_t got_authoritative = ISC_FALSE;
+
 static void new_network_interface(struct parse *, struct element *);
 static struct string *addrmask(const struct string *, const struct string *);
 static int get_prefix_length(const char *, const char *);
 
-/* conf-file :== parameters declarations END_OF_FILE
-   parameters :== <nil> | parameter | parameters parameter
-   declarations :== <nil> | declaration | declarations declaration
-
-   Add head config file comments to the DHCP server map */
+/* Add head config file comments to the DHCP server map */
 
 size_t
 conf_file_parse(struct parse *cfile)
 {
 	struct element *top;
 	struct element *dhcp;
+	size_t issues;
 
 	top = createMap();
 	top->kind = TOPLEVEL;
@@ -64,7 +63,13 @@ conf_file_parse(struct parse *cfile)
 	else
 		parse_error(cfile, "address family is not set");
 
-	return conf_file_subparse(cfile, ROOT_GROUP);
+	issues = conf_file_subparse(cfile, ROOT_GROUP);
+
+	if (!got_authoritative)
+		parse_error(cfile,
+			    "missing top level authoritative statement");
+
+	return issues;
 }
 
 size_t
@@ -157,13 +162,11 @@ parse_statement(struct parse *cfile, int type, int declaration)
 	const char *val;
 	struct element *hardware;
 	struct element *cache;
-#if 0
+	struct element *et;
 	isc_boolean_t lose;
-	char *n;
-#endif
+	isc_boolean_t known;
 	isc_boolean_t authoritative;
-	struct element *option;
-	unsigned code;
+	struct option *option;
 	size_t host_decl = 0;
 	size_t subnet = 0;
 	size_t i;
@@ -290,25 +293,26 @@ parse_statement(struct parse *cfile, int type, int declaration)
 			parse_error(cfile,
 				   "fixed-address parameter not "
 				   "allowed here.");
-		if (((token == FIXED_ADDR) &&
-		     mapContains(cfile->stack[host_decl], "ip-address")) ||
-		    ((token == FIXED_ADDR6) &&
-		     mapContains(cfile->stack[host_decl], "ip-addresses")))
-			parse_error(cfile, "Only one fixed address "
-				    "declaration per host.");
 		cache = parse_fixed_addr_param(cfile, token);
 		if (token == FIXED_ADDR) {
+			if (mapContains(cfile->stack[host_decl], "ip-address"))
+				parse_error(cfile, "Only one fixed address "
+					    "declaration per host.");
 			mapSet(cfile->stack[host_decl],
 			       listGet(cache, 0), "ip-address");
-			listRemove(cache, 0);
 			if (listSize(cache) > 0) {
 				cache->skip = ISC_TRUE;
 				cfile->issue_counter++;
 				mapSet(cfile->stack[host_decl],
 				       cache, "extra-ip-addresses");
 			}
-		} else
+		} else {
+			if (mapContains(cfile->stack[host_decl],
+					"ip-addresses"))
+				parse_error(cfile, "Only one fixed address "
+					    "declaration per host.");
 			mapSet(cfile->stack[host_decl], cache, "ip-addresses");
+		}
 		break;
 
 	case POOL:
@@ -422,8 +426,13 @@ parse_statement(struct parse *cfile, int type, int declaration)
 	authoritative:
 		if (type == HOST_DECL)
 			parse_error(cfile, "authority makes no sense here.");
+		if (type == ROOT_GROUP) {
+			got_authoritative = authoritative;
+			break;
+		}
 		cache = createBool(authoritative);
 		cache->skip = ISC_TRUE;
+		TAILQ_CONCAT(&cache->comments, &cfile->comments, next);
 		mapSet(cfile->stack[cfile->stack_top], cache, "authoritative");
 		cfile->issue_counter++;
 		parse_semi(cfile);
@@ -432,10 +441,8 @@ parse_statement(struct parse *cfile, int type, int declaration)
 		/* "server-identifier" is a special hack, equivalent to
 		   "option dhcp-server-identifier". */
 	case SERVER_IDENTIFIER:
-		code = DHO_DHCP_SERVER_IDENTIFIER;
-		option = createMap();
-		mapSet(option, createInt(code), "code");
-		skip_token(&val, NULL, cfile);
+		option = option_lookup_code("dhcp4",
+					    DHO_DHCP_SERVER_IDENTIFIER);
 		goto finish_option;
 
 	case OPTION:
@@ -450,7 +457,7 @@ parse_statement(struct parse *cfile, int type, int declaration)
 			return declaration;
 		}
 
-		option = parse_option_name(cfile);
+		option = parse_option_name(cfile, ISC_TRUE, &known);
 		token = peek_token(&val, NULL, cfile);
 		if (token == CODE) {
 			if (type != ROOT_GROUP)
@@ -459,9 +466,15 @@ parse_statement(struct parse *cfile, int type, int declaration)
 					    " may not be scoped.");
 			skip_token(&val, NULL, cfile);
 
+			/* next function must deal with redefinitions */
 			parse_option_code_definition(cfile, option);
 			return declaration;
 		}
+		/* If this wasn't an option code definition, don't
+		   allow an unknown option. */
+		if (!known)
+			parse_error(cfile, "unknown option %s.%s",
+				    option->space, option->name);
 	finish_option:
 		parse_option_statement(NULL, cfile, option,
 				       supersede_option_statement);
@@ -490,11 +503,10 @@ parse_statement(struct parse *cfile, int type, int declaration)
 
 	default:
 	unknown:
-/* Kea todo */
-#if 0
-		et = NULL;
+		et = createMap();
+		TAILQ_CONCAT(&et->comments, &cfile->comments, next);
 		lose = ISC_FALSE;
-		if (!parse_executable_statement(&et, cfile, &lose,
+		if (!parse_executable_statement(et, cfile, &lose,
 						context_any)) {
 			if (!lose) {
 				if (declaration)
@@ -507,9 +519,12 @@ parse_statement(struct parse *cfile, int type, int declaration)
 			}
 			return declaration;
 		}
-		if (!et)
-#endif
+		if (mapSize(et) == 0)
 			return declaration;
+		
+		et->skip = ISC_TRUE;
+		cfile->issue_counter++;
+		mapSet(cfile->stack[cfile->stack_top], et, "statements");
 	}
 
 	return 0;
@@ -655,6 +670,7 @@ parse_pool_statement(struct parse *cfile, int type)
 
 	pool = createMap();
 	pool->kind = POOL_DECL;
+	TAILQ_CONCAT(&pool->comments, &cfile->comments, next);
 
 	if (type != SUBNET_DECL && type != SHARED_NET_DECL)
 		parse_error(cfile, "Dynamic pools are only valid inside "
@@ -756,18 +772,14 @@ parse_host_declaration(struct parse *cfile)
 	int declaration = 0;
 	isc_boolean_t dynamicp = ISC_FALSE;
 	isc_boolean_t deleted = ISC_FALSE;
-#if 0
-	int known;
-	struct option *option;
-	struct expression *expr = NULL;
-#endif
+
+	host = createMap();
+	host->kind = HOST_DECL;
+	TAILQ_CONCAT(&host->comments, &cfile->comments, next);
 
 	name = parse_host_name(cfile);
 	if (!name)
 		parse_error(cfile, "expecting a name for host declaration.");
-
-	host = createMap();
-	host->kind = HOST_DECL;
 
 	mapSet(host, createString(name), "hostname");
 
@@ -840,6 +852,7 @@ parse_host_declaration(struct parse *cfile)
 					parse_error(cfile,
 						    "expecting hex list.");
 			}
+			/* Kea todo: get text */
 			mapSet(host, createString(client_id), "client-id");
 
 			parse_semi(cfile);
@@ -848,30 +861,61 @@ parse_host_declaration(struct parse *cfile)
 
 		if (token == HOST_IDENTIFIER) {
 			struct string *host_id;
-			struct element *elem;
+			isc_boolean_t known;
+			struct option *option;
+			struct element *expr;
+			int relays;
 
 			if (mapContains(host, "host-identifier"))
 				parse_error(cfile,
 					    "only one host-identifier allowed "
 					    "per host");
 	      		skip_token(&val, NULL, cfile);
+			save_parse_state(cfile);
 			token = next_token(&val, NULL, cfile);
 			host_id = makeString(-1, val);
-			if (token != V6RELOPT && token != OPTION)
-				parse_error(cfile, 
-					    "host-identifier must be an option"
-					    " or v6relopt");
 			while (peek_raw_token(NULL, NULL, cfile) != SEMI) {
 				next_raw_token(&val, NULL, cfile);
 				appendString(host_id, val);
 			}
+			restore_parse_state(cfile);
+			expr = createString(host_id);
+			expr->skip = ISC_TRUE;
+			cfile->issue_counter++;
+			mapSet(host, expr, "host-identifier");
+
+			token = next_token(&val, NULL, cfile);
+			if (token == V6RELOPT) {
+				token = next_token(&val, NULL, cfile); 
+
+				if (token != NUMBER)
+					parse_error(cfile,
+						    "host-identifier v6relopt "
+						    "must have a number");
+				relays = atoi(val);
+				if (relays < 0)
+					parse_error(cfile,
+						    "host-identifier v6relopt "
+						    "must have a number >= 0");
+			} else if (token != OPTION)
+				parse_error(cfile, 
+					    "host-identifier must be an option"
+					    " or v6relopt");
+			known = ISC_FALSE;
+			option = parse_option_name(cfile, ISC_TRUE, &known);
+			if (!known)
+				parse_error(cfile, "unknown option %s.%s",
+					    option->space, option->name);
+			expr = createMap();
+			if (!parse_option_data(expr, cfile, option))
+				parse_error(cfile, "can't parse option data");
 
 			parse_semi(cfile);
 
-			elem = createString(host_id);
-			elem->skip = ISC_TRUE;
-			cfile->issue_counter++;
-			mapSet(host, elem, "host-identifier");
+			/* Kea todo: map to flexible id "option=data' */
+			if (expr->type != ELEMENT_STRING)
+				parse_error(cfile, "option must be a "
+					    "string or binary option");
 			continue;
 		}
 
@@ -916,17 +960,15 @@ parse_class_declaration(struct parse *cfile, int type)
 	struct element *class = NULL, *pc = NULL;
 	struct element *children;
 	struct element *lease_limit;
+	struct element *expr;
 	int declaration = 0;
 	struct string *data;
 	char *name;
 	const char *tname;
 	isc_boolean_t new = ISC_TRUE;
-#if 0
 	isc_boolean_t lose = ISC_FALSE;
 	isc_boolean_t matchedonce = ISC_FALSE;
 	isc_boolean_t submatchedonce = ISC_FALSE;
-	unsigned code;
-#endif
 	int i;
 	isc_boolean_t has_superclass = ISC_FALSE;
 	int flags = 0;
@@ -1049,6 +1091,7 @@ parse_class_declaration(struct parse *cfile, int type)
 		class = createMap();
 		class->kind = CLASS_DECL;
 		class->skip = ISC_TRUE;
+		TAILQ_CONCAT(&class->comments, &cfile->comments, next);
 		cfile->issue_counter++;
 		if (type == CLASS_TYPE_SUBCLASS) {
 			struct element *sub;
@@ -1062,30 +1105,27 @@ parse_class_declaration(struct parse *cfile, int type)
 			has_superclass = ISC_TRUE;
 		}
 
-/* Kea TODO */
-#if 0
 		/* If this is an implicit vendor or user class, add a
 		   statement that causes the vendor or user class ID to
 		   be sent back in the reply. */
 		if (type == CLASS_TYPE_VENDOR || type == CLASS_TYPE_USER) {
-			stmt = NULL;
-			if (!executable_statement_allocate(&stmt, MDL))
-				log_fatal("no memory for class statement.");
-			stmt->op = supersede_option_statement;
-			if (option_cache_allocate(&stmt->data.option,
-						  MDL)) {
-				stmt->data.option->data = data;
-				code = (type == CLASS_TYPE_VENDOR)
-					? DHO_VENDOR_CLASS_IDENTIFIER
-					: DHO_USER_CLASS;
-				option_code_hash_lookup(
-						&stmt->data.option->option,
-							dhcp_universe.code_hash,
-							&code, 0, MDL);
+			struct element *opt_data;
+			struct element *opt_data_list;
+			int code;
+
+			opt_data = createMap();
+			code = (type == CLASS_TYPE_VENDOR)
+				? DHO_VENDOR_CLASS_IDENTIFIER
+				: DHO_USER_CLASS;
+			mapSet(opt_data, createInt(code), "code");
+			mapSet(opt_data, createString(data), "data");
+			opt_data_list = mapGet(class, "option-data");
+			if (opt_data_list == NULL) {
+				opt_data_list = createList();
+				mapSet(class, opt_data_list, "option-data");
 			}
-			class->statements = stmt;
+			listPush(opt_data_list, opt_data);
 		}
-#endif
 		/* Save the name, if there is one. */
 		if (mapContains(class, "name"))
 			mapRemove(class, "name");
@@ -1134,8 +1174,6 @@ parse_class_declaration(struct parse *cfile, int type)
 			}
 			skip_token(&val, NULL, cfile);
 			token = peek_token(&val, NULL, cfile);
-/* Kea TODO */
-#if 0
 			if (token != IF)
 				goto submatch;
 			skip_token(&val, NULL, cfile);
@@ -1143,22 +1181,23 @@ parse_class_declaration(struct parse *cfile, int type)
 				parse_error(cfile, "A class may only have "
 					    "one 'match if' clause.");
 			matchedonce = ISC_TRUE;
-			if (class->expr)
-				expression_dereference(&class->expr, MDL);
-			if (!parse_boolean_expression(&class->expr, cfile,
-						      &lose)) {
+			expr = createMap();
+			if (!parse_boolean_expression(expr, cfile, &lose)) {
 				if (!lose)
 					parse_error(cfile,
 						    "expecting boolean expr.");
 			} else {
+				expr->skip = ISC_TRUE;
+				cfile->issue_counter++;
+				mapSet(class, expr, "match");
 				parse_semi(cfile);
+				/* kea todo: translate match into test */
 			}
 		} else if (token == SPAWN) {
 			skip_token(&val, NULL, cfile);
 			if (pc)
 				parse_error(cfile,
 					    "invalid spawn in subclass.");
-			class->spawning = 1;
 			token = next_token(&val, NULL, cfile);
 			if (token != WITH)
 				parse_error(cfile,
@@ -1169,17 +1208,17 @@ parse_class_declaration(struct parse *cfile, int type)
 					    "can't override existing %s.",
 					    "submatch/spawn");
 			submatchedonce = ISC_TRUE;
-			if (class->submatch)
-				expression_dereference(&class->submatch, MDL);
-			if (!parse_data_expression(&class->submatch,
-						   cfile, &lose)) {
+			expr = createMap();
+			if (!parse_data_expression(expr, cfile, &lose)) {
 				if (!lose)
 					parse_error(cfile,
 						    "expecting data expr.");
 			} else {
+				expr->skip = ISC_TRUE;
+				cfile->issue_counter++;
+				mapSet(class, expr, "spawn");
 				parse_semi(cfile);
 			}
-#endif
 		} else if (token == LEASE) {
 			skip_token(&val, NULL, cfile);
 			token = next_token(&val, NULL, cfile);
@@ -1239,6 +1278,7 @@ parse_shared_net_declaration(struct parse *cfile)
 	share = createMap();
 	share->skip = ISC_TRUE;
 	share->kind = SHARED_NET_DECL;
+	TAILQ_CONCAT(&share->comments, &cfile->comments, next);
 
 	/* Get the name of the shared network... */
 	token = peek_token(&val, NULL, cfile);
@@ -1389,6 +1429,7 @@ parse_subnet_declaration(struct parse *cfile)
 
 	subnet = createMap();
 	subnet->kind = SUBNET_DECL;
+	TAILQ_CONCAT(&subnet->comments, &cfile->comments, next);
 
 	/* Find parent */
 	for (i = cfile->stack_top; i > 0; --i) {
@@ -1457,6 +1498,7 @@ parse_subnet6_declaration(struct parse *cfile) {
 
 	subnet = createMap();
 	subnet->kind = SUBNET_DECL;
+	TAILQ_CONCAT(&subnet->comments, &cfile->comments, next);
 
 	/* Find parent */
 	for (i = cfile->stack_top; i > 0; --i) {
@@ -1520,6 +1562,7 @@ parse_group_declaration(struct parse *cfile)
 	group = createMap();
 	group->skip = ISC_TRUE;
 	group->kind = GROUP_DECL;
+	TAILQ_CONCAT(&group->comments, &cfile->comments, next);
 
 	token = peek_token(&val, NULL, cfile);
 	if (is_identifier(token) || token == STRING) {
@@ -1577,36 +1620,27 @@ struct element *
 parse_fixed_addr_param(struct parse *cfile, enum dhcp_token type) {
 	const char *val;
 	enum dhcp_token token;
+	struct element *addr;
 	struct element *addresses;
 	struct string *address;
-	isc_boolean_t ipaddr = ISC_TRUE;
 
 	addresses = createList();
+	TAILQ_CONCAT(&addresses->comments, &cfile->comments, next);
 
 	do {
 		address = NULL;
 		if (type == FIXED_ADDR)
-			address = parse_ip_addr_or_hostname(cfile, &ipaddr);
+			address = parse_ip_addr_or_hostname(cfile, ISC_TRUE);
 		else if (type == FIXED_ADDR6)
 			address = parse_ip6_addr_txt(cfile);
 		else
 			parse_error(cfile, "requires FIXED_ADDR[6]");
 		if (address == NULL)
 			parse_error(cfile, "can't parse fixed address");
-		if (ipaddr) {
-			struct element *name;
-			struct comment *comment;
-
-			name = createString(address);
-			ipaddr = ISC_TRUE;
-			name->skip = ISC_TRUE;
-			cfile->issue_counter++;
-			comment = createComment("### please resolve this "
-						"name into one address");
-			TAILQ_INSERT_TAIL(&name->comments, comment, next);
-			listPush(addresses, name);
-		} else
-			listPush(addresses, createString(address));
+		addr = createString(address);
+		/* Take the comment for resolution into multiple addresses */
+		TAILQ_CONCAT(&addr->comments, &cfile->comments, next);
+		listPush(addresses, addr);
 		token = peek_token(&val, NULL, cfile);
 		if (token == COMMA)
 			token = next_token(&val, NULL, cfile);
@@ -1636,6 +1670,7 @@ parse_address_range(struct parse *cfile, int type, size_t where)
 	isc_boolean_t dynamic = ISC_FALSE;
 	struct element *pool;
 	char taddr[40];
+	struct element *r;
 
 	if ((token = peek_token(&val,
 				 NULL, cfile)) == DYNAMIC_BOOTP) {
@@ -1717,7 +1752,10 @@ parse_address_range(struct parse *cfile, int type, size_t where)
 		parse_error(cfile, "can't print range address (high)");
 	appendString(range, taddr);
 
-	mapSet(pool, createString(range), "pool");
+	r = createString(range);
+	TAILQ_CONCAT(&r->comments, &cfile->comments, next);
+
+	mapSet(pool, r, "pool");
 }
 
 /* address-range6-declaration :== ip-address6 ip-address6 SEMI
@@ -1813,6 +1851,7 @@ parse_address_range6(struct parse *cfile, int type, size_t where)
 		pool = cfile->stack[where];
 
 	range = createString(lo);
+	TAILQ_CONCAT(&range->comments, &cfile->comments, next);
 	if (is_temporary) {
 		range->skip = ISC_TRUE;
 		cfile->issue_counter++;
@@ -1831,6 +1870,7 @@ parse_prefix6(struct parse *cfile, int type, size_t where)
 	enum dhcp_token token;
 	const char *val;
 	struct element *pool;
+	struct element *prefix;
 
 	if (local_family != AF_INET6)
 		parse_error(cfile, "prefix6 statement is only supported "
@@ -1879,7 +1919,9 @@ parse_prefix6(struct parse *cfile, int type, size_t where)
 	} else
 		pool = cfile->stack[where];
 
-	mapSet(pool, createString(lo), "prefix");
+	prefix = createString(lo);
+	TAILQ_CONCAT(&prefix->comments, &cfile->comments, next);
+	mapSet(pool, prefix, "prefix");
 	mapSet(pool, createInt(bits), "delegated-len");
 	plen = get_prefix_length(lo->content, hi->content);
 	if (plen >= 0)
@@ -1902,6 +1944,7 @@ parse_fixed_prefix6(struct parse *cfile, size_t host_decl)
 	const char *val;
 	struct element *host;
 	struct element *prefixes;
+	struct element *prefix;
 
 	if (local_family != AF_INET6)
 		parse_error(cfile, "fixed-prefix6 statement is only "
@@ -1932,7 +1975,9 @@ parse_fixed_prefix6(struct parse *cfile, size_t host_decl)
 	if (token != SEMI)
 		parse_error(cfile, "semicolon expected.");
 
-	listPush(prefixes, createString(ia));
+	prefix = createString(ia);
+	TAILQ_CONCAT(&prefix->comments, &cfile->comments, next);
+	listPush(prefixes, prefix);
 }
 
 /*!
@@ -1976,6 +2021,7 @@ parse_pool6_statement(struct parse *cfile, int type)
 
 	pool = createMap();
 	pool->kind = POOL_DECL;
+	TAILQ_CONCAT(&pool->comments, &cfile->comments, next);
 
 	if (type != SUBNET_DECL)
 		parse_error(cfile, "pool6s are only valid inside "
@@ -2060,7 +2106,6 @@ parse_allow_deny(struct parse *cfile, int flag)
 	const char *action;
 	const char *option;
 	struct element *sv_option;
-	struct element *expr;
 
 	switch (flag) {
 	case 0:
@@ -2080,19 +2125,19 @@ parse_allow_deny(struct parse *cfile, int flag)
 	token = next_token(&val, NULL, cfile);
 	switch (token) {
 	case TOKEN_BOOTP:
-		option = "allow bootp";
+		option = "allow-bootp";
 		break;
 
 	case BOOTING:
-		option = "allow booting";
+		option = "allow-booting";
 		break;
 
 	case DYNAMIC_BOOTP:
-		option = "dynamic bootp";
+		option = "dynamic-bootp";
 		break;
 
 	case UNKNOWN_CLIENTS:
-		option = "boot unknown clients";
+		option = "boot-unknown-clients";
 		break;
 
 	case DUPLICATES:
@@ -2104,7 +2149,7 @@ parse_allow_deny(struct parse *cfile, int flag)
 		break;
 
 	case CLIENT_UPDATES:
-		option = "client updates";
+		option = "client-updates";
 		break;
 
 	case LEASEQUERY:
@@ -2117,13 +2162,12 @@ parse_allow_deny(struct parse *cfile, int flag)
 	parse_semi(cfile);
 
 	sv_option = createMap();
-	mapSet(sv_option, createString(makeString(-1, action)), "action");
+	mapSet(sv_option, createString(makeString(-1, action)), "data");
 	mapSet(sv_option, createString(makeString(-1, option)), "name");
-	expr = createMap();
-	expr->skip = ISC_TRUE;
+	mapSet(sv_option, createString(makeString(-1, "_server_")), "space");
+	sv_option->skip = ISC_TRUE;
 	cfile->issue_counter++;
-	mapSet(expr, sv_option, "server-option");
-	return expr;
+	return sv_option;
 }
 
 /*
@@ -2269,6 +2313,7 @@ parse_server_duid_conf(struct parse *cfile) {
 
 	sv_duid = createString(duid);
 	sv_duid->skip = ISC_TRUE;
+	TAILQ_CONCAT(&sv_duid->comments, &cfile->comments, next);
 	cfile->issue_counter++;
 	mapSet(cfile->stack[cfile->stack_top], sv_duid, "server-duid");
 }
