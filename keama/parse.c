@@ -26,6 +26,7 @@
 #include <sys/types.h>
 #include <arpa/inet.h>
 #include <ctype.h>
+#include <netdb.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -53,8 +54,6 @@ static isc_boolean_t is_compound_expression(struct element *);
 static enum expression_context op_context(enum expr_op);
 static int op_precedence(enum expr_op, enum expr_op);
 static enum expression_context expression_context(struct element *);
-
-static isc_boolean_t is_empty_option(struct element *);
 
 /* Skip to the semicolon ending the current statement.   If we encounter
    braces, the matching closing brace terminates the statement.
@@ -198,14 +197,13 @@ parse_host_name(struct parse *cfile)
 */
 
 struct string *
-parse_ip_addr_or_hostname(struct parse *cfile, isc_boolean_t *ipaddr)
+parse_ip_addr_or_hostname(struct parse *cfile, isc_boolean_t check_multi)
 {
 	const char *val;
 	enum dhcp_token token;
 	unsigned char addr[4];
 	unsigned len = sizeof(addr);
-
-	*ipaddr = ISC_FALSE;
+	isc_boolean_t ipaddr = ISC_FALSE;
 
 	token = peek_token(&val, NULL, cfile);
 	if (token == NUMBER) {
@@ -220,17 +218,43 @@ parse_ip_addr_or_hostname(struct parse *cfile, isc_boolean_t *ipaddr)
 		skip_token(NULL, NULL, cfile);
 		if (next_token(NULL, NULL, cfile) == DOT &&
 		    next_token(NULL, NULL, cfile) == NUMBER)
-			*ipaddr = ISC_TRUE;
+			ipaddr = ISC_TRUE;
 		restore_parse_state(cfile);
 
-		if (*ipaddr)
+		if (ipaddr)
 			return parse_numeric_aggregate(cfile, addr, &len,
 						       DOT, 10, 8);
 	}
 
-	if (is_identifier(token) || token == NUMBER)
-		return parse_host_name(cfile);
-	return NULL;
+	if (is_identifier(token) || token == NUMBER) {
+	  	struct string *name;
+		struct hostent *h;
+
+		name = parse_host_name(cfile);
+		if (name == NULL)
+			return NULL;
+
+		/* from do_host_lookup */
+		h = gethostbyname(name->content);
+		if ((h == NULL) || (h->h_addr_list[0] == NULL))
+			parse_error(cfile, "%s: host unknown.", name->content);
+		if (check_multi && h->h_addr_list[1]) {
+			struct comment *comment;
+			char msg[128];
+
+			snprintf(msg, sizeof(msg),
+				 "/// %s resolves into multiple addresses",
+				name->content);
+			comment = createComment(msg);
+			TAILQ_INSERT_TAIL(&cfile->comments, comment, next);
+		}
+		return makeString(4, h->h_addr_list[0]);
+	}
+
+	if (token != RBRACE && token != LBRACE)
+		token = next_token(&val, NULL, cfile);
+	parse_error(cfile, "%s (%d): expecting IP address or hostname",
+		    val, token);
 }
 	
 /*
@@ -401,6 +425,7 @@ parse_hardware_param(struct parse *cfile)
 	else
 		appendString(r, buf);
 	hw = createString(r);
+	TAILQ_CONCAT(&hw->comments, &cfile->comments, next);
 	if (!ether || (hlen != 6)) {
 		hw->skip = ISC_TRUE;
 		cfile->issue_counter++;
@@ -605,15 +630,16 @@ convert_num(struct parse *cfile, unsigned char *buf, const char *str,
  		   IDENTIFIER . IDENTIFIER
  */
 
-struct element *
-parse_option_name(struct parse *cfile)
+struct option *
+parse_option_name(struct parse *cfile,
+		  isc_boolean_t allocate,
+		  isc_boolean_t *known)
 {
 	const char *val;
 	enum dhcp_token token;
-	struct string *uname;
-	struct string *name;
-	struct element *option;
-	isc_boolean_t know_universe = ISC_TRUE;
+	const char *uname;
+	const char *space;
+	struct option *option = NULL;
 	unsigned code;
 
 	token = next_token(&val, NULL, cfile);
@@ -621,7 +647,9 @@ parse_option_name(struct parse *cfile)
 		parse_error(cfile,
 			    "expecting identifier after option keyword.");
 	
-	uname = makeString(-1, val);
+	uname = strdup(val);
+	if (!uname)
+		parse_error(cfile, "no memory for uname information.");
 	token = peek_token(&val, NULL, cfile);
 	if (token == DOT) {
 		/* Go ahead and take the DOT token... */
@@ -632,48 +660,88 @@ parse_option_name(struct parse *cfile)
 		if (!is_identifier(token))
 			parse_error(cfile, "expecting identifier after '.'");
 
-		name = makeString(-1, val);
 		/* map universe to Kea space */
-		if (strcmp(uname->content, "dhcp") == 0) {
-			uname = makeString(-1, "dhcp4");
-		} else if (strcmp(uname->content, "vendor") == 0) {
-			uname = makeString(-1,
-				    "vendor-encapsulated-options-space");
-		} else if (strcmp(uname->content, "agent") == 0) {
-			uname = makeString(-1, "dhcp-agent-options-space");
-		} else if (strcmp(uname->content, "dhcp6") == 0) {
-			/* same name */
-		} else if (strcmp(uname->content, "vsio") == 0) {
-			uname = makeString(-1, "vendor-opts-space");
-		} else
-			know_universe = ISC_FALSE;
+		space = option_map_space(uname);
+
+		/* unknown things can't happen in warning free configs */
+		if (!space) {
+			cfile->issue_counter++;
+			allocate = ISC_TRUE;
+		}
 	} else {
 		/* Use the default hash table, which contains all the
 		   standard dhcp option names. */
-		name = uname;
-		uname = makeString(-1, "dhcp4");
-		val = name->content;
+		val = uname;
+		space = "dhcp4";
 	}
 
-	option = createMap();
-	mapSet(option, createString(uname), "space");
+	if (space)
+		option = option_lookup_name(space, val);
 
-	/* If the option name is of the form unknown-[decimal], use
-	 * the trailing decimal value to find the option definition.
-	 * If there is no definition, construct one.  This is to
-	 * support legacy use of unknown options in config files or
-	 * lease databases.
-	 */
-	if (strncasecmp(val, "unknown-", 8) == 0) {
+	if (option) {
+		if (known)
+			*known = ISC_TRUE;
+		if (option->status == must_renamed)
+			option_map_name(option);
+		return option;
+	} else if (strncasecmp(val, "unknown-", 8) == 0) {
 		code = atoi(val + 8);
-		mapSet(option, createInt(code), "code");
-	} else {
-		mapSet(option, createString(name), "name");
-	}
-	if (!know_universe) {
-		option->skip = ISC_TRUE;
-		cfile->issue_counter++;
-	}
+
+		/* Option code 0 is always illegal for us, thanks
+                 * to the option decoder.
+                 */
+		if (code == 0)
+			parse_error(cfile, "Option code 0 is illegal "
+				    "in the %s space.", space);
+		if ((local_family == AF_INET) && (code == 255))
+			parse_error(cfile, "Option code 255 is illegal "
+				    "in the %s space.", space);
+
+		/* It's odd to think of unknown option codes as
+                 * being known, but this means we know what the
+                 * parsed name is talking about.
+                 */
+                if (known)
+                        *known = ISC_TRUE;
+		if (space)
+			option = option_lookup_code(space, code);
+
+		/* If we did not find an option of that code,
+                 * manufacture an unknown-xxx option definition.
+		 */
+		if (option == NULL) {
+			option = (struct option *)malloc(sizeof(*option));
+			/* DHCP code does not check allocation failure? */
+			memset(option, 0, sizeof(*option));
+			option->name = strdup(val);
+			option->space = space ? space : uname;
+			option->code = code;
+			/* X == binary but we shan't use CSV format */
+			option->format = "X";
+		} else {
+			struct comment *comment;
+			char msg[256];
+
+			snprintf(msg, sizeof(msg),
+				 "/// option %s.%s redefinition",
+				 val, space);
+			comment = createComment(msg);
+			TAILQ_INSERT_TAIL(&cfile->comments, comment, next);
+		}
+	/* If we've been told to allocate, that means that this
+	 * (might) be an option code definition, so we'll create
+	 * an option structure and return it for the parent to
+	 * decide.
+	 */
+	} else if (allocate) {
+		option = (struct option *)malloc(sizeof(*option));
+		/* DHCP code does not check allocation failure? */
+		memset(option, 0, sizeof(*option));
+		option->name = strdup(val);
+		option->space = space ? space : uname;
+	} else
+		parse_error(cfile, "no option named %s in space %s",
+			    val, space);
 
 	return option;
 }
@@ -727,7 +795,7 @@ parse_option_space_decl(struct parse *cfile)
 			if ((local_family == AF_INET) && (tsize != 1)) {
 				struct comment *comment;
 
-				comment = createComment("### only code width "
+				comment = createComment("/// only code width "
 							"1 is supported");
 				TAILQ_INSERT_TAIL(&p->comments,
 						  comment, next);
@@ -735,7 +803,7 @@ parse_option_space_decl(struct parse *cfile)
 				   (tsize != 2)) {
 				struct comment *comment;
 
-				comment = createComment("### only code width "
+				comment = createComment("/// only code width "
 							"2 is supported");
 				TAILQ_INSERT_TAIL(&p->comments,
 						  comment, next);
@@ -758,7 +826,7 @@ parse_option_space_decl(struct parse *cfile)
 			if ((local_family == AF_INET) && (lsize != 1)) {
 				struct comment *comment;
 
-				comment = createComment("### only length "
+				comment = createComment("/// only length "
 							"width 1 is "
 							"supported");
 				TAILQ_INSERT_TAIL(&p->comments,
@@ -767,7 +835,7 @@ parse_option_space_decl(struct parse *cfile)
 				   (lsize != 2)) {
 				struct comment *comment;
 
-				comment = createComment("### only length "
+				comment = createComment("/// only length "
 							"width 2 is "
 							"supported");
 				TAILQ_INSERT_TAIL(&p->comments,
@@ -829,10 +897,11 @@ parse_option_space_decl(struct parse *cfile)
 			ENCAPSULATE identifier */
 
 void
-parse_option_code_definition(struct parse *cfile, struct element *option)
+parse_option_code_definition(struct parse *cfile, struct option *option)
 {
 	const char *val;
 	enum dhcp_token token;
+	struct element *def;
 	unsigned arrayp = 0;
 	int recordp = 0;
 	isc_boolean_t no_more_in_record = ISC_FALSE;
@@ -845,11 +914,27 @@ parse_option_code_definition(struct parse *cfile, struct element *option)
 	struct string *saved;
 	struct element *optdef;
 	
+	/* Put the option in the definition */
+	def = createMap();
+	mapSet(def, createString(makeString(-1, option->space)), "space");
+	mapSet(def, createString(makeString(-1, option->name)), "name");
+	TAILQ_CONCAT(&def->comments, &cfile->comments, next);
+	if (option->status != kea_unknown) {
+		struct comment *comment;
+
+		comment = createComment("/// Kea does not allow redefinition "
+					"of options");
+		TAILQ_INSERT_TAIL(&def->comments, comment, next);
+		def->skip = ISC_TRUE;
+		cfile->issue_counter++;
+	}
+
 	/* Parse the option code. */
 	token = next_token(&val, NULL, cfile);
 	if (token != NUMBER)
 		parse_error(cfile, "expecting option code number.");
-	mapSet(option, createInt(atoi(val)), "code");
+	TAILQ_CONCAT(&def->comments, &cfile->comments, next);
+	mapSet(def, createInt(atoi(val)), "code");
 
 	token = next_token(&val, NULL, cfile);
 	if (token != EQUAL)
@@ -890,10 +975,10 @@ parse_option_code_definition(struct parse *cfile, struct element *option)
 		if (recordp) {
 			struct comment *comment;
 
-			comment = createComment("### unsupported array "
+			comment = createComment("/// unsupported array "
 						"inside a record");
-			TAILQ_INSERT_TAIL(&option->comments, comment, next);
-			option->skip = ISC_TRUE;
+			TAILQ_INSERT_TAIL(&def->comments, comment, next);
+			def->skip = ISC_TRUE;
 			not_supported = ISC_TRUE;
 			cfile->issue_counter++;
 		}
@@ -908,10 +993,10 @@ parse_option_code_definition(struct parse *cfile, struct element *option)
 		if (token == LBRACE) {
 			struct comment *comment;
 
-			comment = createComment("### unsupported record "
+			comment = createComment("/// unsupported record "
 						"inside an array");
-			TAILQ_INSERT_TAIL(&option->comments, comment, next);
-			option->skip = ISC_TRUE;
+			TAILQ_INSERT_TAIL(&def->comments, comment, next);
+			def->skip = ISC_TRUE;
 			not_supported = ISC_TRUE;
 			cfile->issue_counter++;
 		}
@@ -969,10 +1054,10 @@ parse_option_code_definition(struct parse *cfile, struct element *option)
 			struct comment *comment;
 
 			skip_token(&val, NULL, cfile);
-			comment = createComment("### unsupported "
+			comment = createComment("/// unsupported "
 						"compressed fqdn list");
-			TAILQ_INSERT_TAIL(&option->comments, comment, next);
-			option->skip = ISC_TRUE;
+			TAILQ_INSERT_TAIL(&def->comments, comment, next);
+			def->skip = ISC_TRUE;
 			not_supported = ISC_TRUE;
 			cfile->issue_counter++;
 			type = "compressed fqdn";
@@ -1044,23 +1129,23 @@ parse_option_code_definition(struct parse *cfile, struct element *option)
 		parse_error(cfile,
 			    "Arrays of encapsulations don't make sense.");
 	if (arrayp)
-		mapSet(option, createBool(arrayp), "array");
+		mapSet(def, createBool(arrayp), "array");
 	if (recordp) {
-		mapSet(option, createString(datatype), "record-types");
-		mapSet(option, createString(makeString(-1, "record")), "type");
+		mapSet(def, createString(datatype), "record-types");
+		mapSet(def, createString(makeString(-1, "record")), "type");
 	} else
-		mapSet(option, createString(datatype), "type");
+		mapSet(def, createString(datatype), "type");
 	if (not_supported)
-		mapSet(option, createString(saved), "definition");
+		mapSet(def, createString(saved), "definition");
 	if (has_encapsulation)
-		mapSet(option, createString(encapsulated), "encapsulate");
+		mapSet(def, createString(encapsulated), "encapsulate");
 
 	optdef = mapGet(cfile->stack[1], "option-def");
 	if (optdef == NULL) {
 		optdef = createList();
 		mapSet(cfile->stack[1], optdef, "option-def");
 	}
-	listPush(optdef, option);
+	listPush(optdef, def);
 }
 
 /*
@@ -1246,6 +1331,7 @@ parse_executable_statements(struct element *statements,
 			    struct parse *cfile, isc_boolean_t *lose,
 			    enum expression_context case_context)
 {
+	/* Kea todo: check reduction to scalar */
 	while (parse_executable_statement(statements, cfile,
 					  lose, case_context))
 		/* continue */
@@ -1262,10 +1348,11 @@ parse_executable_statement(struct element *result,
 	enum dhcp_token token;
 	const char *val;
 	struct element *st;
-	struct element *option;
+	struct option *option;
 	struct element *var;
 	struct element *pri;
 	struct element *expr;
+	isc_boolean_t known;
 	int flag;
 	int i;
 	struct element *zone;
@@ -1323,29 +1410,23 @@ parse_executable_statement(struct element *result,
 
 	case SEND:
 		skip_token(&val, NULL, cfile);
-	        option = parse_option_name(cfile);
+		known = ISC_FALSE;
+	        option = parse_option_name(cfile, ISC_FALSE, &known);
 		if (option == NULL) {
 			*lose = ISC_TRUE;
 			return ISC_FALSE;
 		}
-		if (!option->skip) {
-			option->skip = ISC_TRUE;
-			cfile->issue_counter++;
-		}
-		mapSet(result, option, "send");
-		return ISC_TRUE;
+		return parse_option_statement(result, cfile, option,
+					      send_option_statement);
 
 	case SUPERSEDE:
 	case OPTION:
 		skip_token(&val, NULL, cfile);
-		option = parse_option_name(cfile);
+		known = ISC_FALSE;
+		option = parse_option_name(cfile, ISC_FALSE, &known);
 		if (option == NULL) {
 			*lose = ISC_TRUE;
 			return ISC_FALSE;
-		}
-		if ((token == SUPERSEDE) && !option->skip) {
-			option->skip = ISC_TRUE;
-			cfile->issue_counter++;
 		}
 		return parse_option_statement(result, cfile, option,
 					      supersede_option_statement);
@@ -1360,11 +1441,8 @@ parse_executable_statement(struct element *result,
 		flag = 2;
 	pad:
 		skip_token(&val, NULL, cfile);
-		option = parse_allow_deny(cfile, flag);
-		st = mapGet(option, "server-option");
-		if (st == NULL)
-			return ISC_FALSE;
-		mapSet(result, st, "server-option");
+		st = parse_allow_deny(cfile, flag);
+		mapSet(result, st, "server-control");
 		break;
 
 	case DEFAULT:
@@ -1372,7 +1450,8 @@ parse_executable_statement(struct element *result,
 		token = peek_token(&val, NULL, cfile);
 		if (token == COLON)
 			goto switch_default;
-		option = parse_option_name(cfile);
+		known = ISC_FALSE;
+		option = parse_option_name(cfile, ISC_FALSE, &known);
 		if (option == NULL) {
 			*lose = ISC_TRUE;
 			return ISC_FALSE;
@@ -1381,7 +1460,8 @@ parse_executable_statement(struct element *result,
 					      default_option_statement);
 	case PREPEND:
 		skip_token(&val, NULL, cfile);
-		option = parse_option_name(cfile);
+		known = ISC_FALSE;
+                option = parse_option_name(cfile, ISC_FALSE, &known);
 		if (option == NULL) {
 			*lose = ISC_TRUE;
 			return ISC_FALSE;
@@ -1390,7 +1470,8 @@ parse_executable_statement(struct element *result,
 					      prepend_option_statement);
 	case APPEND:
 		skip_token(&val, NULL, cfile);
-		option = parse_option_name(cfile);
+		known = ISC_FALSE;
+                option = parse_option_name(cfile, ISC_FALSE, &known);
 		if (option == NULL) {
 			*lose = ISC_TRUE;
 			return ISC_FALSE;
@@ -1668,9 +1749,15 @@ parse_executable_statement(struct element *result,
 	default:
 		if (is_identifier(token)) {
 			skip_token(&val, NULL, cfile);
-			option = createMap();
-			return parse_option_statement(result, cfile, option,
-						supersede_option_statement);
+			/* the config universe is the server one */
+			option = option_lookup_name("_server_", val);
+			if (option) {
+				result->skip = ISC_TRUE;
+				cfile->issue_counter++;
+				return parse_option_statement
+					      (result, cfile, option,
+					       supersede_option_statement);
+			}
 		}
 
 		if (token == NUMBER_OR_NAME || token == NAME) {
@@ -1745,9 +1832,9 @@ parse_zone(struct element *zone, struct parse *cfile)
 		    skip_token(&val, NULL, cfile);
 		    do {
 			    struct string *value;
-			    isc_boolean_t ia;
 
-			    value = parse_ip_addr_or_hostname(cfile, &ia);
+			    value = parse_ip_addr_or_hostname(cfile,
+							      ISC_FALSE);
 			    if (value == NULL)
 				parse_error(cfile,
 					   "expecting IP addr or hostname.");
@@ -2312,6 +2399,8 @@ parse_non_binary(struct element *expr,
 	struct element *chain;
 	struct string *data;
 	struct comment *comment;
+	struct option *option;
+	isc_boolean_t known;
 	unsigned len;
 
 	token = peek_token(&val, NULL, cfile);
@@ -2364,17 +2453,23 @@ parse_non_binary(struct element *expr,
 
 	case EXISTS:
 		skip_token(&val, NULL, cfile);
-		/* Pass reference directly to expression structure. */
-		nexp = parse_option_name(cfile);
-		if (nexp == NULL) {
+		known = ISC_FALSE;
+		option = parse_option_name(cfile, ISC_FALSE, &known);
+		if (option == NULL) {
 			*lose = ISC_TRUE;
 			return ISC_FALSE;;
 		}
-		if (!nexp->skip) {
-			nexp->skip = ISC_TRUE;
-			cfile->issue_counter++;
-		}
+		nexp = createMap();
+		mapSet(nexp,
+		       createString(makeString(-1, option->space)),
+		       "space");
+		mapSet(nexp,
+		       createString(makeString(-1, option->name)),
+		       "name");
+		nexp->skip = ISC_TRUE;
+		cfile->issue_counter++;
 		mapSet(expr, nexp, "exists");
+		/* Kea todo: we have it in classification */
 		break;
 
 	case STATIC:
@@ -2667,18 +2762,22 @@ parse_non_binary(struct element *expr,
 
 	case OPTION:
 	case CONFIG_OPTION:
-		cfile->issue_counter++;
 		skip_token(&val, NULL, cfile);
-		/* Pass reference directly to expression structure. */
-		nexp = parse_option_name(cfile);
-		if (nexp == NULL) {
+		known = ISC_FALSE;
+		option = parse_option_name(cfile, ISC_FALSE, &known);
+		if (option == NULL) {
 			*lose = ISC_TRUE;
 			return ISC_FALSE;
 		}
-		if (!nexp->skip) {
-			nexp->skip = ISC_TRUE;
-			cfile->issue_counter++;
-		}
+		nexp = createMap();
+		mapSet(nexp,
+		       createString(makeString(-1, option->space)),
+		       "space");
+		mapSet(nexp,
+		       createString(makeString(-1, option->name)),
+		       "name");
+		nexp->skip = ISC_TRUE;
+		cfile->issue_counter++;
 		mapSet(expr, nexp,
 		       token == OPTION ? "option" : "config-option");
 		break;
@@ -2897,7 +2996,7 @@ parse_non_binary(struct element *expr,
 #define FORMERR 1
 #endif
 		resetInt(expr, FORMERR);
-		comment = createComment("# constant FORMERR(1)");
+		comment = createComment("/// constant FORMERR(1)");
 		TAILQ_INSERT_TAIL(&expr->comments, comment, next);
 		break;
 
@@ -2907,7 +3006,7 @@ parse_non_binary(struct element *expr,
 #define ISC_R_SUCCESS 0
 #endif
 		resetInt(expr, ISC_R_SUCCESS);
-		comment = createComment("# constant ISC_R_SUCCESS(0)");
+		comment = createComment("/// constant ISC_R_SUCCESS(0)");
 		TAILQ_INSERT_TAIL(&expr->comments, comment, next);
 		break;
 
@@ -2917,7 +3016,7 @@ parse_non_binary(struct element *expr,
 #define DHCP_R_NOTAUTH ((6 << 16) + 21)
 #endif
 		resetInt(expr, DHCP_R_NOTAUTH);
-		comment = createComment("# constant DHCP_R_NOTAUTH(393237)");
+		comment = createComment("/// constant DHCP_R_NOTAUTH(393237)");
 		TAILQ_INSERT_TAIL(&expr->comments, comment, next);
 		break;
 
@@ -2927,7 +3026,7 @@ parse_non_binary(struct element *expr,
 #define ISC_R_NOTIMPLEMENTED 27
 #endif
 		resetInt(expr, ISC_R_NOTIMPLEMENTED);
-		comment = createComment("# constant ISC_R_NOTIMPLEMENTED(27)");
+		comment = createComment("/// constant ISC_R_NOTIMPLEMENTED(27)");
 		TAILQ_INSERT_TAIL(&expr->comments, comment, next);
 		break;
 
@@ -2937,7 +3036,7 @@ parse_non_binary(struct element *expr,
 #define DHCP_R_NOTZONE ((6 << 16) + 22)
 #endif
 		resetInt(expr, DHCP_R_NOTZONE);
-		comment = createComment("# constant DHCP_R_NOTZONE(393238)");
+		comment = createComment("/// constant DHCP_R_NOTZONE(393238)");
 		TAILQ_INSERT_TAIL(&expr->comments, comment, next);
 		break;
 
@@ -2947,7 +3046,7 @@ parse_non_binary(struct element *expr,
 #define DHCP_R_NXDOMAIN ((6 << 16) + 15)
 #endif
 		resetInt(expr, DHCP_R_NXDOMAIN);
-		comment = createComment("# constant DHCP_R_NXDOMAIN(393231)");
+		comment = createComment("/// constant DHCP_R_NXDOMAIN(393231)");
 		TAILQ_INSERT_TAIL(&expr->comments, comment, next);
 		break;
 
@@ -2957,7 +3056,7 @@ parse_non_binary(struct element *expr,
 #define DHCP_R_NXRRSET ((6 << 16) + 20)
 #endif
 		resetInt(expr, DHCP_R_NXRRSET);
-		comment = createComment("# constant DHCP_R_NXRRSET(393236)");
+		comment = createComment("/// constant DHCP_R_NXRRSET(393236)");
 		TAILQ_INSERT_TAIL(&expr->comments, comment, next);
 		break;
 
@@ -2967,7 +3066,7 @@ parse_non_binary(struct element *expr,
 #define DHCP_R_REFUSED ((6 << 16) + 17)
 #endif
 		resetInt(expr, DHCP_R_REFUSED);
-		comment = createComment("# constant DHCP_R_REFUSED(393233)");
+		comment = createComment("/// constant DHCP_R_REFUSED(393233)");
 		TAILQ_INSERT_TAIL(&expr->comments, comment, next);
 		break;
 
@@ -2977,7 +3076,7 @@ parse_non_binary(struct element *expr,
 #define DHCP_R_SERVFAIL ((6 << 16) + 14)
 #endif
 		resetInt(expr, DHCP_R_SERVFAIL);
-		comment = createComment("# constant DHCP_R_SERVFAIL(393230)");
+		comment = createComment("/// constant DHCP_R_SERVFAIL(393230)");
 		TAILQ_INSERT_TAIL(&expr->comments, comment, next);
 		break;
 
@@ -2987,7 +3086,7 @@ parse_non_binary(struct element *expr,
 #define DHCP_R_YXDOMAIN ((6 << 16) + 18)
 #endif
 		resetInt(expr, DHCP_R_YXDOMAIN);
-		comment = createComment("# constant DHCP_R_YXDOMAIN(393234)");
+		comment = createComment("/// constant DHCP_R_YXDOMAIN(393234)");
 		TAILQ_INSERT_TAIL(&expr->comments, comment, next);
 		break;
 
@@ -2997,7 +3096,7 @@ parse_non_binary(struct element *expr,
 #define DHCP_R_YXRRSET ((6 << 16) + 19)
 #endif
 		resetInt(expr, DHCP_R_YXRRSET);
-		comment = createComment("# constant DHCP_R_YXRRSET(393235)");
+		comment = createComment("/// constant DHCP_R_YXRRSET(393235)");
 		TAILQ_INSERT_TAIL(&expr->comments, comment, next);
 		break;
 
@@ -3007,7 +3106,7 @@ parse_non_binary(struct element *expr,
 #define S_INIT 2
 #endif
 		resetInt(expr, S_INIT);
-		comment = createComment("# constant S_INIT(2)");
+		comment = createComment("/// constant S_INIT(2)");
 		TAILQ_INSERT_TAIL(&expr->comments, comment, next);
 		break;
 
@@ -3017,7 +3116,7 @@ parse_non_binary(struct element *expr,
 #define S_REBOOTING 1
 #endif
 		resetInt(expr, S_REBOOTING);
-		comment = createComment("# constant S_REBOOTING(1)");
+		comment = createComment("/// constant S_REBOOTING(1)");
 		TAILQ_INSERT_TAIL(&expr->comments, comment, next);
 		break;
 
@@ -3027,7 +3126,7 @@ parse_non_binary(struct element *expr,
 #define S_SELECTING 3
 #endif
 		resetInt(expr, S_SELECTING);
-		comment = createComment("# constant S_SELECTING(3)");
+		comment = createComment("/// constant S_SELECTING(3)");
 		TAILQ_INSERT_TAIL(&expr->comments, comment, next);
 		break;
 
@@ -3037,7 +3136,7 @@ parse_non_binary(struct element *expr,
 #define S_REQUESTING 4
 #endif
 		resetInt(expr, S_REQUESTING);
-		comment = createComment("# constant S_REQUESTING(4)");
+		comment = createComment("/// constant S_REQUESTING(4)");
 		TAILQ_INSERT_TAIL(&expr->comments, comment, next);
 		break;
 
@@ -3047,7 +3146,7 @@ parse_non_binary(struct element *expr,
 #define S_BOUND 5
 #endif
 		resetInt(expr, S_BOUND);
-		comment = createComment("# constant S_BOUND(5)");
+		comment = createComment("/// constant S_BOUND(5)");
 		TAILQ_INSERT_TAIL(&expr->comments, comment, next);
 		break;
 
@@ -3057,7 +3156,7 @@ parse_non_binary(struct element *expr,
 #define S_RENEWING 6
 #endif
 		resetInt(expr, S_RENEWING);
-		comment = createComment("# constant S_RENEWING(6)");
+		comment = createComment("/// constant S_RENEWING(6)");
 		TAILQ_INSERT_TAIL(&expr->comments, comment, next);
 		break;
 
@@ -3067,7 +3166,7 @@ parse_non_binary(struct element *expr,
 #define S_REBINDING 7
 #endif
 		resetInt(expr, S_REBINDING);
-		comment = createComment("# constant S_REBINDING(7)");
+		comment = createComment("/// constant S_REBINDING(7)");
 		TAILQ_INSERT_TAIL(&expr->comments, comment, next);
 		break;
 
@@ -3488,7 +3587,9 @@ new_rhs:
 }	
 
 isc_boolean_t
-parse_option_data(struct element *expr, struct parse *cfile)
+parse_option_data(struct element *expr,
+		  struct parse *cfile,
+		  struct option *option)
 {
 	const char *val;
 	enum dhcp_token token;
@@ -3539,13 +3640,14 @@ parse_option_data(struct element *expr, struct parse *cfile)
 	if (canon_bool) {
 		struct comment *comment;
 
-		comment = createComment("## canonized booleans to true|false");
+		comment = createComment("/// canonized booleans to "
+					" lowercase true or false");
 		TAILQ_INSERT_TAIL(&comments, comment, next);
 	}
 	if (has_ignore) {
 		struct comment *comment;
 
-		comment = createComment("## 'ignore' pseudo-boolean is used");
+		comment = createComment("/// 'ignore' pseudo-boolean is used");
 		TAILQ_INSERT_TAIL(&comments, comment, next);
 	}
         return ISC_TRUE;
@@ -3560,7 +3662,8 @@ parse_option_data(struct element *expr, struct parse *cfile)
 
 isc_boolean_t
 parse_option_statement(struct element *result, struct parse *cfile,
-		       struct element *option, enum statement_op op)
+
+		       struct option *option, enum statement_op op)
 {
 	const char *val;
 	enum dhcp_token token;
@@ -3568,9 +3671,10 @@ parse_option_statement(struct element *result, struct parse *cfile,
 	isc_boolean_t lose;
 
 	expr = createMap();
+	TAILQ_CONCAT(&expr->comments, &cfile->comments, next);
 	token = peek_token(&val, NULL, cfile);
 	/* We should keep a list of defined empty options */
-	if ((token == SEMI) && is_empty_option(option)) {
+	if ((token == SEMI) && (option && (option->format[0] != 'Z'))) {
 		/* Eat the semicolon... */
 		/*
 		 * XXXSK: I'm not sure why we should ever get here, but we 
@@ -3594,7 +3698,7 @@ parse_option_statement(struct element *result, struct parse *cfile,
 			return ISC_FALSE;
 		}
 	} else {
-		if (!parse_option_data(expr, cfile))
+		if (!parse_option_data(expr, cfile, option))
 			return ISC_FALSE;
 	}
 
@@ -3957,47 +4061,4 @@ expression_context(struct element *expr)
 	if (is_boolean_expression(expr))
 		return context_boolean;
 	return context_any;
-}
-
-/* Helpers */
-
-static isc_boolean_t
-is_empty_option(struct element *option)
-{
-	struct element *type;
-	struct element *code;
-	struct element *name;
-
-	if (option == NULL)
-		return ISC_FALSE;
-
-	type = mapGet(option, "type");
-	code = mapGet(option, "code");
-	name = mapGet(option, "name");
-
-	/* user defined with an available definition */
-	if (type && (strcmp(stringValue(type)->content, "empty") == 0))
-		return ISC_TRUE;
-
-	/* It should be better to get the space... */
-	if (local_family == AF_INET) {
-		/* not defined rapid commit at code 80  */
-		if (code && (intValue(code) == 80))
-			return ISC_TRUE;
-	} else {
-		/* Kea TODO: Are ISC DHCP option name case sensitive? */
-		/* rapid-commit at code 14 */
-		if ((name &&
-		     (strcasecmp(stringValue(name)->content,
-				 "rapid-commit") == 0)) ||
-		    (code && (intValue(code) == 14)))
-			return ISC_TRUE;
-		/* reconf-accept at code 20 */
-		if ((name &&
-		     (strcasecmp(stringValue(name)->content,
-				 "reconf-accept") == 0)) ||
-		    (code && (intValue(code) == 20)))
-			return ISC_TRUE;
-	}
-	return ISC_FALSE;
 }
