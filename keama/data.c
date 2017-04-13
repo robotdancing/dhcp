@@ -822,6 +822,74 @@ printString(FILE *fp, const struct string *s)
 	fprintf(fp, "\"");
 }
 
+struct element *
+copy(struct element *e)
+{
+	struct element *result;
+	struct comment *comment;
+
+	assert(e != NULL);
+
+	switch (e->type) {
+	case ELEMENT_INTEGER:
+		result = createInt(intValue(e));
+		break;
+	case ELEMENT_REAL:
+		result = createDouble(doubleValue(e));
+		break;
+	case ELEMENT_BOOLEAN:
+		result = createBool(boolValue(e));
+		break;
+	case ELEMENT_NULL:
+		result = createNull();
+		break;
+	case ELEMENT_STRING:
+		result = createString(stringValue(e));
+		break;
+	case ELEMENT_LIST:
+		result = copyList(e);
+		break;
+	case ELEMENT_MAP:
+		result = copyMap(e);
+		break;
+	default:
+		assert(0);
+	}
+	result->kind = e->kind;
+	result->skip = e->skip;
+	/* don't copy key */
+	TAILQ_FOREACH(comment, &e->comments, next) {
+		/* share comment content */
+		comment = createComment(comment->line);
+		TAILQ_INSERT_TAIL(&result->comments, comment, next);
+	}
+	return result;
+}
+
+struct element *
+copyList(struct element *l)
+{
+	struct element *result;
+	size_t i;
+
+	result = createList();
+	for (i = 0; i < listSize(l); i++)
+		listPush(result, copy(listGet(l, i)));
+	return result;
+}
+
+struct element *
+copyMap(struct element *m)
+{
+	struct element *result;
+	struct element *item;
+
+	result = createMap();
+	TAILQ_FOREACH(item, &m->value.map_value, next)
+		mapSet(result, copy(item), item->key);
+	return result;
+}
+
 isc_boolean_t
 derive(struct element *parent, struct element *child, const char *param)
 {

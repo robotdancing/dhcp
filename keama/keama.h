@@ -234,17 +234,27 @@ enum expr_op {
 
 enum option_status {
 	kea_unknown = 0,	/* known only by ISC DHCP */
-	supported,		/* known by both ISC DHCP and Kea, same name */
-	must_renamed,		/* known by both, different name */
-	special			/* requires special processing */
+	isc_dhcp_unknown = 1,	/* known only by Kea */
+	known = 2,		/* known by both ISC DHCP and Kea */
+	special = 3		/* requires special processing */
 };
 
-struct option {
+struct option_def {
 	const char *name;		/* option name */
 	const char *format;		/* ISC DHCP format string */
 	const char *space;		/* ISC DHCP space (aka universe) */
 	unsigned code;			/* code point */
 	enum option_status status;	/* status */
+};
+
+struct option {
+	const char *old;		/* old option name */
+	const char *name;		/* option name */
+	const char *format;		/* ISC DHCP format string */
+	const char *space;		/* ISC DHCP space (aka universe) */
+	unsigned code;			/* code point */
+	enum option_status status;	/* status */
+	TAILQ_ENTRY(option) next;	/* next option */
 };
 
 /* Kea parse tools */
@@ -351,12 +361,18 @@ isc_boolean_t parse_option_data(struct element *, struct parse *,
 				struct option *);
 isc_boolean_t parse_option_statement(struct parse *, struct option *,
 				     enum statement_op);
+isc_boolean_t parse_config_data(struct element *, struct parse *,
+				struct option *);
+isc_boolean_t parse_config_statement(struct parse *, struct option *,
+				     enum statement_op);
 
 /* options.c */
+void options_init(void);
 const char *option_map_space(const char *);
 struct option *option_lookup_name(const char *, const char *);
 struct option *option_lookup_code(const char *, unsigned);
-void option_map_name(struct option *);
+void push_option(struct option *);
+struct comments *get_config_comments(unsigned);
 
 /* json.c */
 struct element *json_parse(struct parse *);
