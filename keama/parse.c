@@ -30,6 +30,22 @@
 #include <stdlib.h>
 #include <string.h>
 
+static void config_valid_lifetime(struct element *, struct parse *);
+static void config_file(struct element *, struct parse *);
+static void config_sname(struct element *, struct parse *);
+static void config_next_server(struct element *, struct parse *);
+static void config_vendor_option_space(struct element *, struct parse *);
+static void config_site_option_space(struct element *, struct parse *);
+static void config_qualifying_suffix(struct element *, struct parse *);
+static void config_enable_updates(struct element *, struct parse *);
+static void config_local_address(struct element *, struct parse *);
+static void config_ddns_update_style(struct element *, struct parse *);
+static void config_preferred_lifetime(struct element *, struct parse *);
+static void config_match_client_id(struct element *, struct parse *);
+static void config_echo_client_id(struct element *, struct parse *);
+static void config_timers(struct element *, struct parse *);
+static void config_expired_leases_processing(struct element *, struct parse *);
+
 /*
 static uint32_t getULong(const unsigned char *buf);
 static int32_t getLong(const unsigned char *buf);
@@ -204,6 +220,8 @@ parse_ip_addr_or_hostname(struct parse *cfile, isc_boolean_t check_multi)
 	unsigned char addr[4];
 	unsigned len = sizeof(addr);
 	isc_boolean_t ipaddr = ISC_FALSE;
+	struct string *bin = NULL;
+	char buf[80];
 
 	token = peek_token(&val, NULL, cfile);
 	if (token == NUMBER) {
@@ -222,11 +240,11 @@ parse_ip_addr_or_hostname(struct parse *cfile, isc_boolean_t check_multi)
 		restore_parse_state(cfile);
 
 		if (ipaddr)
-			return parse_numeric_aggregate(cfile, addr, &len,
+			bin = parse_numeric_aggregate(cfile, addr, &len,
 						       DOT, 10, 8);
 	}
 
-	if (is_identifier(token) || token == NUMBER) {
+	if ((bin == NULL) && (is_identifier(token) || token == NUMBER)) {
 	  	struct string *name;
 		struct hostent *h;
 
@@ -248,13 +266,20 @@ parse_ip_addr_or_hostname(struct parse *cfile, isc_boolean_t check_multi)
 			comment = createComment(msg);
 			TAILQ_INSERT_TAIL(&cfile->comments, comment, next);
 		}
-		return makeString(4, h->h_addr_list[0]);
+		bin = makeString(4, h->h_addr_list[0]);
 	}
 
-	if (token != RBRACE && token != LBRACE)
-		token = next_token(&val, NULL, cfile);
-	parse_error(cfile, "%s (%d): expecting IP address or hostname",
-		    val, token);
+	if (bin == NULL) {
+		if (token != RBRACE && token != LBRACE)
+			token = next_token(&val, NULL, cfile);
+		parse_error(cfile, "%s (%d): expecting IP address or hostname",
+			    val, token);
+	}
+
+	memset(buf, 0, sizeof(buf));
+	if (!inet_ntop(AF_INET, bin->content, buf, sizeof(buf)))
+		parse_error(cfile, "can't print IP address");                 
+        return makeString(-1, buf);
 }
 	
 /*
@@ -679,12 +704,13 @@ parse_option_name(struct parse *cfile,
 		option = option_lookup_name(space, val);
 
 	if (option) {
-		if (known)
+		if (known && (option->status != isc_dhcp_unknown))
 			*known = ISC_TRUE;
-		if (option->status == must_renamed)
-			option_map_name(option);
 		return option;
-	} else if (strncasecmp(val, "unknown-", 8) == 0) {
+	}
+	if ((space != NULL) || (strcmp(space, "_server_") == 0))
+		return NULL;
+	if (strncasecmp(val, "unknown-", 8) == 0) {
 		code = atoi(val + 8);
 
 		/* Option code 0 is always illegal for us, thanks
@@ -718,6 +744,7 @@ parse_option_name(struct parse *cfile,
 			option->code = code;
 			/* X == binary but we shan't use CSV format */
 			option->format = "X";
+			push_option(option);
 		} else {
 			struct comment *comment;
 			char msg[256];
@@ -739,6 +766,7 @@ parse_option_name(struct parse *cfile,
 		memset(option, 0, sizeof(*option));
 		option->name = strdup(val);
 		option->space = space ? space : uname;
+		push_option(option);
 	} else
 		parse_error(cfile, "no option named %s in space %s",
 			    val, space);
@@ -1338,12 +1366,22 @@ parse_executable_statements(struct element *statements,
 			    struct parse *cfile, isc_boolean_t *lose,
 			    enum expression_context case_context)
 {
-	/* Kea todo: check reduction to scalar */
-	while (parse_executable_statement(statements, cfile,
-					  lose, case_context))
-		/* continue */
+	if (statements->type != ELEMENT_LIST)
+		parse_error(cfile, "statements is not a list?");
+	for (;;) {
+		struct element *statement;
+
+		statement = createMap();
+		TAILQ_CONCAT(&statement->comments, &cfile->comments, next);
+		if (!parse_executable_statement(statements, cfile,
+						lose, case_context))
+			break;
+		TAILQ_CONCAT(&statement->comments, &cfile->comments, next);
+		listPush(statements, statement);
+	}
 	if (!*lose)
 		return ISC_TRUE;
+		
 	return ISC_FALSE;
 }
 
@@ -1564,7 +1602,7 @@ parse_executable_statement(struct element *result,
 			if (token != LBRACE)
 				parse_error(cfile, "expecting left brace.");
 
-			expr = createMap();
+			expr = createList();
 			if (!parse_executable_statements(expr, cfile,
 							 lose, case_context)) {
 				if (*lose)
@@ -1761,7 +1799,7 @@ parse_executable_statement(struct element *result,
 				skip_token(&val, NULL, cfile);
 				result->skip = ISC_TRUE;
 				cfile->issue_counter++;
-				return parse_option_statement
+				return parse_config_statement
 					      (cfile, option,
 					       supersede_option_statement);
 			}
@@ -2061,7 +2099,7 @@ parse_on_statement(struct element *result,
 	if (token != LBRACE)
 		parse_error(cfile, "left brace expected.");
 
-	body = createMap();
+	body = createList();
 	if (!parse_executable_statements(body, cfile, lose, context_any)) {
 		if (*lose) {
 			/* Try to even things up. */
@@ -2071,6 +2109,7 @@ parse_on_statement(struct element *result,
 			return ISC_FALSE;
 		}
 	}
+	mapSet(statement, body, "body");
 	token = next_token(&val, NULL, cfile);
 	if (token != RBRACE)
 		parse_error(cfile, "right brace expected.");
@@ -2124,7 +2163,7 @@ parse_switch_statement(struct element *result,
 	if (token != LBRACE)
 		parse_error(cfile, "left brace expected.");
 
-	body = createMap();
+	body = createList();
 	if (!parse_executable_statements(body, cfile, lose,
 	      (is_data_expression(cond) ? context_data : context_numeric))) {
 		if (*lose) {
@@ -2225,7 +2264,7 @@ parse_if_statement(struct element *result,
 	token = next_token(&val, NULL, cfile);
 	if (token != LBRACE)
 		parse_error(cfile, "left brace expected.");
-	branch = createMap();
+	branch = createList();
 	if (!parse_executable_statements(branch, cfile, lose, context_any)) {
 		if (*lose) {
 			/* Try to even things up. */
@@ -2242,10 +2281,10 @@ parse_if_statement(struct element *result,
 	token = peek_token(&val, NULL, cfile);
 	if (token == ELSE) {
 		skip_token(&val, NULL, cfile);
-		branch = createMap();
 		token = peek_token(&val, NULL, cfile);
 		if (token == IF) {
 			skip_token(&val, NULL, cfile);
+			branch = createMap();
 			if (!parse_if_statement(branch, cfile, lose)) {
 				if (!*lose)
 					parse_error(cfile,
@@ -2257,6 +2296,7 @@ parse_if_statement(struct element *result,
 			parse_error(cfile, "left brace or if expected.");
 		else {
 			skip_token(&val, NULL, cfile);
+			branch = createList();
 			if (!parse_executable_statements(branch, cfile,
 							 lose, context_any))
 				return ISC_FALSE;
@@ -3685,6 +3725,9 @@ parse_option_statement(struct parse *cfile,
 	isc_boolean_t lose;
 	size_t where;
 
+	if (strcmp(option->space, "_server_") == 0)
+		return parse_config_statement(cfile, option, op);
+
 	opt_data = createMap();
 	TAILQ_CONCAT(&opt_data->comments, &cfile->comments, next);
 	mapSet(opt_data, createString(makeString(-1, option->space)), "space");
@@ -3768,6 +3811,546 @@ parse_option_statement(struct parse *cfile,
 	listPush(opt_data_list, opt_data);
 
 	return ISC_TRUE;
+}
+
+/* Specialized version of parse_option_data working on config
+ * options which are scalar (I6LSBtTfUXdNxxx.) only. */
+
+isc_boolean_t
+parse_config_data(struct element *expr,
+		  struct parse *cfile,
+		  struct option *option)
+{
+	const char *val;
+	enum dhcp_token token;
+	struct string *data;
+	struct element *elem;
+	unsigned len;
+	uint32_t u32;
+	uint16_t u16;
+	uint8_t u8;
+
+	token = peek_token(&val, NULL, cfile);
+
+	if (token == END_OF_FILE)
+		parse_error(cfile, "unexpected end of file");
+	if (token == SEMI)
+		parse_error(cfile, "empty config option");
+	if (token == COMMA)
+		parse_error(cfile, "multiple value config option");
+
+	/* from parse_option_token */
+
+	switch (option->format[0]) {
+	case 'U': /* universe */
+		token = next_token(&val, &len, cfile);
+		if (!is_identifier(token))
+			parse_error(cfile, "expecting identifier.");
+		elem = createString(makeString(len, val));
+		break;
+
+	case 'X': /* string or binary */
+		token = next_token(&val, &len, cfile);
+		if (token == NUMBER_OR_NAME || token == NUMBER)
+			data = parse_cshl(cfile);
+		else if (token == STRING)
+			data = makeString(len, val);
+		else
+			parse_error(cfile, "expecting string "
+				    "or hexadecimal data.");
+		elem = createString(data);
+		break;
+
+	case 'd': /* FQDN */
+		data = parse_host_name(cfile);
+		if (data == NULL)
+			parse_error(cfile, "not a valid domain name.");
+		elem = createString(data);
+		break;
+
+	case 't': /* text */
+		token = next_token(&val, &len, cfile);
+		elem = createString(makeString(len, val));
+		break;
+
+	case 'N': /* enumeration */
+		token = next_token(&val, &len, cfile);
+		if (!is_identifier(token))
+			parse_error(cfile, "identifier expected");
+		elem = createString(makeString(len, val));
+		break;
+
+	case 'I': /* IP address or hostname. */
+		data = parse_ip_addr_or_hostname(cfile, ISC_FALSE);
+		if (data == NULL)
+			parse_error(cfile, "expecting IP address of hostname");
+		elem = createString(data);
+		break;
+
+	case '6': /* IPv6 address. */
+		data = parse_ip6_addr_txt(cfile);
+		if (data == NULL)
+			parse_error(cfile, "expecting IPv6 address");
+		elem = createString(data);
+		break;
+
+	case 'T': /* Lease interval. */
+		token = next_token(&val, NULL, cfile);
+		if (token != INFINITE)
+                        goto check_number;
+		elem = createInt(-1);
+		break;
+
+	case 'L':  /* Unsigned 32-bit integer... */
+		token = next_token(&val, NULL, cfile);
+	check_number:
+		if ((token != NUMBER) && (token != NUMBER_OR_NAME))
+			parse_error(cfile, "expecting number.");
+		convert_num(cfile, (unsigned char *)&u32, val, 0, 32);
+		elem = createInt(ntohl(u32));
+		break;
+
+	case 'S': /* Unsigned 16-bit integer. */
+		token = next_token(&val, NULL, cfile);
+		if ((token != NUMBER) && (token != NUMBER_OR_NAME))
+                        parse_error(cfile, "expecting number.");
+		convert_num(cfile, (unsigned char *)&u16, val, 0, 16);
+		elem = createInt(ntohs(u16));
+		break;
+
+	case 'B': /* Unsigned 8-bit integer. */
+		token = next_token(&val, NULL, cfile);
+                if ((token != NUMBER) && (token != NUMBER_OR_NAME))
+                        parse_error(cfile, "expecting number.");
+                convert_num(cfile, (unsigned char *)&u8, val, 0, 8);
+		elem = createInt(ntohs(u8));
+		break;
+
+	case 'f':
+		token = next_token(&val, NULL, cfile);
+		if (!is_identifier(token))
+			parse_error(cfile, "expecting boolean.");
+		if ((strcasecmp(val, "true") == 0) ||
+		    (strcasecmp(val, "on") == 0))
+			elem = createBool(ISC_TRUE);
+		else if ((strcasecmp(val, "false") == 0) ||
+			 (strcasecmp(val, "off") == 0))
+			elem = createBool(ISC_FALSE);
+		else if (strcasecmp(val, "ignore") == 0) {
+			elem = createNull();
+			elem->skip = ISC_TRUE;
+		} else
+			parse_error(cfile, "expecting boolean.");
+		break;
+
+	default:
+		parse_error(cfile, "Bad format '%c' in parse_config_data.",
+			    option->format[0]);
+	}
+				
+	mapSet(expr, elem, "value");
+
+        return ISC_TRUE;
+}
+
+/* Specialized version of parse_option_statement for config options */
+
+isc_boolean_t
+parse_config_statement(struct parse *cfile,
+		       struct option *option,
+		       enum statement_op op)
+{
+	const char *val;
+	enum dhcp_token token;
+	struct comments *comments;
+	struct element *expr;
+	struct element *config;
+	struct element *config_list;
+	isc_boolean_t lose;
+	size_t where;
+
+	config = createMap();
+	TAILQ_CONCAT(&config->comments, &cfile->comments, next);
+	comments = get_config_comments(option->code);
+	TAILQ_CONCAT(&config->comments, comments, next);
+	mapSet(config, createString(makeString(-1, option->name)), "name");
+	mapSet(config, createInt(option->code), "code");
+	if (option->status == kea_unknown) {
+		config->skip = ISC_TRUE;
+		cfile->issue_counter++;
+	}
+	if (op != supersede_option_statement) {
+		struct comment *comment;
+
+		comment = createComment("/// Kea does not support "
+					"option data set variants");
+		TAILQ_INSERT_TAIL(&config->comments, comment, next);
+	}
+
+	token = peek_token(&val, NULL, cfile);
+	/* We should keep a list of defined empty options */
+	if ((token == SEMI) && (option->format[0] != 'Z')) {
+		/* Eat the semicolon... */
+		/*
+		 * XXXSK: I'm not sure why we should ever get here, but we 
+		 * 	  do during our startup. This confuses things if
+		 * 	  we are parsing a zero-length option, so don't
+		 * 	  eat the semicolon token in that case.
+		 */
+		skip_token(&val, NULL, cfile);
+	} else if (token == EQUAL) {
+		/* Eat the equals sign. */
+		skip_token(&val, NULL, cfile);
+
+		/* Parse a data expression and use its value for the data. */
+		expr = createMap();
+		if (!parse_data_expression(expr, cfile, &lose)) {
+			/* In this context, we must have an executable
+			   statement, so if we found something else, it's
+			   still an error. */
+			if (!lose)
+				parse_error(cfile,
+					    "expecting a data expression.");
+			return ISC_FALSE;
+		}
+		mapSet(config, expr, "value");
+	} else {
+		if (!parse_config_data(config, cfile, option))
+			return ISC_FALSE;
+	}
+
+	parse_semi(cfile);
+
+	for (where = cfile->stack_top; where > 0; --where) {
+		if ((cfile->stack[where]->kind == PARAMETER) ||
+		    (cfile->stack[where]->kind == POOL_DECL))
+			continue;
+		break;
+	}
+
+	if (option->status != special) {
+		config_list = mapGet(cfile->stack[where], "config");
+		if (config_list == NULL) {
+			config_list = createList();
+			config_list->skip = ISC_TRUE;
+			mapSet(cfile->stack[where], config_list, "config");
+		}
+		listPush(config_list, config);
+		return ISC_TRUE;
+	}
+
+	/* deal with all special cases */
+
+	switch (option->code) {
+	case 1: /* default-lease-time */
+		config_valid_lifetime(config, cfile);
+		break;
+	case 15: /* filename */
+		config_file(config, cfile);
+		/* Kea todo: DHCPv4 file (vs boot-file-name option) */
+		break;
+	case 16: /* server-name */
+		config_sname(config, cfile);
+		break;
+	case 17: /* next-server */
+		config_next_server(config, cfile);
+		break;
+	case 18: /* authoritative */
+		parse_error(cfile, "authoritative is a statement, "
+			    "here it is used as a config option");
+	case 19: /* vendor-option-space */
+		config_vendor_option_space(config, cfile);
+		break;
+	case 21: /* site-option-space */
+		config_site_option_space(config, cfile);
+		break;
+	case 23: /* ddns-domainname */
+		config_qualifying_suffix(config, cfile);
+		break;
+	case 30: /* ddns-updates */
+		config_enable_updates(config, cfile);
+		break;
+	case 35: /* local-address */
+		config_local_address(config, cfile);
+		break;
+	case 39: /* ddns-update-style */
+		config_ddns_update_style(config, cfile);
+		break;
+	case 53: /* preferred-lifetime */
+		config_preferred_lifetime(config, cfile);
+		break;
+	case 82: /* ignore-client-uids */
+		config_match_client_id(config, cfile);
+		break;
+	case 85: /* echo-client-id */
+		config_echo_client_id(config, cfile);
+		break;
+	case 88: /* dhcpv6-set-tee-times */
+		config_timers(config, cfile);
+		break;
+	case 89: /* abandon-lease-time */
+		config_expired_leases_processing(config, cfile);
+		break;
+	default:
+		parse_error(cfile, "unsupported config option %s (%u)",
+			    option->name, option->code);
+	}
+
+	return ISC_TRUE;
+}
+
+static void
+config_valid_lifetime(struct element *config, struct parse *cfile)
+{
+	struct element *value;
+	struct comment *comment;
+	size_t where;
+	isc_boolean_t pop_from_pool = ISC_FALSE;
+
+	value = mapGet(config, "value");
+
+	for (where = cfile->stack_top; where > 0; --where) {
+		int kind = cfile->stack[where]->kind;
+
+		if (kind == PARAMETER)
+			continue;
+		if ((kind == ROOT_GROUP) ||
+		    (kind == SHARED_NET_DECL) ||
+		    (kind == SUBNET_DECL) ||
+		    (kind == GROUP_DECL))
+			break;
+		if (kind == POOL_DECL) {
+			pop_from_pool = ISC_TRUE;
+			continue;
+		}
+		comment = createComment("/// valid-lifetime in unsupported "
+					"scope");
+		TAILQ_INSERT_TAIL(&value->comments, comment, next);
+		value->skip = ISC_TRUE;
+		cfile->issue_counter++;
+		break;
+	}
+	if (pop_from_pool) {
+		comment= createComment("/// valid-lifetime moved from "
+				       "an internal pool scope");
+		TAILQ_INSERT_TAIL(&value->comments, comment, next);
+	}
+	mapSet(cfile->stack[where], value, "valid-lifetime");
+}
+
+static void
+config_file(struct element *config, struct parse *cfile)
+{
+	struct element *value;
+	struct comment *comment;
+	size_t where;
+	isc_boolean_t popped = ISC_FALSE;
+
+	if (local_family != AF_INET)
+		parse_error(cfile, "boot-file-name is DHCPv4 only");
+
+	value = mapGet(config, "value");
+
+	for (where = cfile->stack_top; where > 0; --where) {
+		int kind = cfile->stack[where]->kind;
+
+		if (kind == PARAMETER)
+			continue;
+		if ((kind == HOST_DECL) ||
+		    (kind == CLASS_DECL) ||
+		    (kind == GROUP_DECL))
+			break;
+		if (kind == ROOT_GROUP) {
+			popped = ISC_TRUE;
+			break;
+		}
+	}
+	if (popped) {
+		comment = createComment("/// boot-file-name was defined in "
+					"an unsupported scope");
+		TAILQ_INSERT_TAIL(&value->comments, comment, next);
+		value->skip = ISC_TRUE;
+		cfile->issue_counter++;
+	}
+	mapSet(cfile->stack[where], value, "boot-file-name");
+}
+
+static void
+config_sname(struct element *config, struct parse *cfile)
+{
+	struct element *value;
+	struct comment *comment;
+	size_t where;
+	isc_boolean_t popped = ISC_FALSE;
+
+	if (local_family != AF_INET)
+		parse_error(cfile, "server-hostname is DHCPv4 only");
+
+	value = mapGet(config, "value");
+
+	for (where = cfile->stack_top; where > 0; --where) {
+		int kind = cfile->stack[where]->kind;
+
+		if (kind == PARAMETER)
+			continue;
+		if ((kind == HOST_DECL) ||
+		    (kind == CLASS_DECL) ||
+		    (kind == GROUP_DECL))
+			break;
+		if (kind == ROOT_GROUP) {
+			popped = ISC_TRUE;
+			break;
+		}
+	}
+	if (popped) {
+		comment = createComment("/// server-hostname was defined in "
+					"an unsupported scope");
+		TAILQ_INSERT_TAIL(&value->comments, comment, next);
+		value->skip = ISC_TRUE;
+		cfile->issue_counter++;
+	}
+	mapSet(cfile->stack[where], value, "server-hostname");
+}
+
+static void
+config_next_server(struct element *config, struct parse *cfile)
+{
+	struct element *value;
+	struct comment *comment;
+	size_t where;
+	isc_boolean_t popped = ISC_FALSE;
+
+	if (local_family != AF_INET)
+		parse_error(cfile, "next-server is DHCPv4 only");
+
+	value = mapGet(config, "value");
+
+	for (where = cfile->stack_top; where > 0; --where) {
+		int kind = cfile->stack[where]->kind;
+
+		if (kind == PARAMETER)
+			continue;
+		if ((kind == ROOT_GROUP) ||
+		    (kind == HOST_DECL) ||
+		    (kind == CLASS_DECL) ||
+		    (kind == GROUP_DECL))
+			break;
+		popped = ISC_TRUE;
+	}
+	if (popped) {
+		comment = createComment("/// next-server moved from "
+					"an internal unsupported scope");
+		TAILQ_INSERT_TAIL(&value->comments, comment, next);
+	}
+	mapSet(cfile->stack[where], value, "next-server");
+}
+
+static void
+config_vendor_option_space(struct element *config, struct parse *cfile)
+{
+	/* Kea todo */
+}
+
+static void
+config_site_option_space(struct element *config, struct parse *cfile)
+{
+	/* Kea todo */
+}
+
+static void
+config_qualifying_suffix(struct element *config, struct parse *cfile)
+{
+	/* Kea todo */
+}
+
+static void
+config_enable_updates(struct element *config, struct parse *cfile)
+{
+	/* Kea todo */ /* check scope */
+}
+
+static void
+config_local_address(struct element *config, struct parse *cfile)
+{
+	/* Kea todo */
+}
+
+static void
+config_ddns_update_style(struct element *config, struct parse *cfile)
+{
+	/* Kea todo */ /* check standard/none and fails on others */
+}
+
+static void
+config_preferred_lifetime(struct element *config, struct parse *cfile)
+{
+	struct element *value;
+	struct comment *comment;
+	size_t where;
+	isc_boolean_t pop_from_pool = ISC_FALSE;
+
+	if (local_family != AF_INET6)
+		parse_error(cfile, "preferred-lifetime is DHCPv6 only");
+
+	value = mapGet(config, "value");
+
+	for (where = cfile->stack_top; where > 0; --where) {
+		int kind = cfile->stack[where]->kind;
+
+		if (kind == PARAMETER)
+			continue;
+		if ((kind == ROOT_GROUP) ||
+		    (kind == SHARED_NET_DECL) ||
+		    (kind == SUBNET_DECL) ||
+		    (kind == GROUP_DECL))
+			break;
+		if (kind == POOL_DECL) {
+			pop_from_pool = ISC_TRUE;
+			continue;
+		}
+		comment = createComment("/// preferred-lifetime in "
+					"unsupported scope");
+		TAILQ_INSERT_TAIL(&value->comments, comment, next);
+		value->skip = ISC_TRUE;
+		cfile->issue_counter++;
+		break;
+	}
+	if (pop_from_pool) {
+		comment= createComment("/// preferred-lifetime moved from "
+				       "an internal pool scope");
+		TAILQ_INSERT_TAIL(&value->comments, comment, next);
+	}
+	mapSet(cfile->stack[where], value, "preferred-lifetime");
+}
+
+static void
+config_match_client_id(struct element *config, struct parse *cfile)
+{
+	/* Kea todo */
+	if (local_family != AF_INET)
+		parse_error(cfile, "match-client-id is DHCPv4 only");
+	/* global and subnet4 */
+}
+
+static void
+config_echo_client_id(struct element *config, struct parse *cfile)
+{
+	/* Kea todo */
+	if (local_family != AF_INET)
+		parse_error(cfile, "echo-client-id is DHCPv4 only");
+	/* global only */
+}
+
+static void
+config_timers(struct element *config, struct parse *cfile)
+{
+	/* Kea todo */
+}
+
+static void
+config_expired_leases_processing(struct element *config, struct parse *cfile)
+{
+	/* Kea todo */
 }
 
 /* parse_error moved to keama.c */

@@ -1,0 +1,94 @@
+# dhcpd.conf file for jaguar in 950 charter failover pair jaguar and
+# gozer.
+#
+# NOTE: DHCP Service for the 950 Wireless Network is now being
+# handled by sauber.isc.org.
+#
+
+#######################################################################
+# Global Configuration
+#
+
+lease-file-name "/var/db/dhcpd.leases";
+
+log-facility local0;
+
+ddns-update-style none;
+authoritative;
+
+one-lease-per-client on;
+
+option domain-name "sql1.isc.org isc.org";
+# Comment this out for 3.0.x (no support).
+#option domain-search "sql1.isc.org", "isc.org";
+option domain-name-servers 149.20.50.10, 204.152.187.13, 204.152.187.14;
+
+default-lease-time 1800;	# 30 minutes.
+max-lease-time 1800;		# 30 week
+
+#default-lease-time 3100;	# 51 minutes.
+#max-lease-time 604800;		# 1 week
+
+# If the client supplied these values, log them in the leases file.
+if exists vendor-class-identifier {
+  set vendor-string = option vendor-class-identifier;
+}
+if exists user-class {
+  set user-string = option user-class;
+}
+
+#######################################################################
+# OMAPI Configuration
+#
+# i don't think we use this anymore.  i'd like to remake the key before
+# using it again anyway.
+
+include "/etc/dhcpd.omapi.key";
+
+omapi-port 500;
+omapi-key OM_KEY;
+
+#######################################################################
+# Failover Configuration
+#
+
+##failover peer "isc" {
+#        primary;
+#        address f1.sql1.isc.org;
+#        port 647;
+#        peer address f2.sql1.isc.org;
+#        peer port 647;
+#        max-response-delay 5;
+#        max-unacked-updates 10;
+#        mclt 10;
+#	hba	aa:aa:aa:aa:aa:aa:aa:aa:aa:aa:aa:aa:aa:aa:aa:aa:
+#		aa:aa:aa:aa:aa:aa:aa:aa:aa:aa:aa:aa:aa:aa:aa:aa;
+#	split 128;
+#        load balance max seconds 5;
+#}
+
+##failover peer "sco" {
+#	primary;
+#	address f1.sql1.isc.org;
+#	port 5200;
+#	peer address sco.lab.isc.org;
+#	peer port 5201;
+#	max-response-delay 5;
+#	max-unacked-updates 10;
+#	mclt 3600;
+#	split 128;
+#	load balance max seconds 5;
+#}
+
+#######################################################################
+# Client-Network Includes
+#
+
+include "/etc/dhcpd.stubs.conf";
+include "/etc/dhcpd.voip.conf";
+include "/etc/dhcpd.wvlan.conf";
+include "/etc/dhcpd.emp-wireless-149-20.conf";
+include "/etc/dhcpd.office-149-20.conf";
+include "/etc/dhcpd.office-static-149-20.conf";
+include "/etc/dhcpd.voip-149-20.conf";
+include "/etc/dhcpd.staging.conf";

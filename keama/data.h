@@ -270,6 +270,10 @@ void printMap(FILE *fp, const struct map *m,
 	      isc_boolean_t skip, unsigned indent);
 void printString(FILE *fp, const struct string *s);
 
+struct element *copy(struct element *e);
+struct element *copyList(struct element *l);
+struct element *copyMap(struct element *m);
+
 /* Inheritance */
 isc_boolean_t derive(struct element *parent,
 		     struct element *child,
