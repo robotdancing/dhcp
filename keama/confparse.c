@@ -25,6 +25,7 @@
 
 #include "keama.h"
 
+#include <sys/errno.h>
 #include <arpa/inet.h>
 #include <assert.h>
 #include <fcntl.h>
@@ -51,7 +52,7 @@ conf_file_parse(struct parse *cfile)
 	top->kind = TOPLEVEL;
 	dhcp = createMap();
 	dhcp->kind = ROOT_GROUP;
-	TAILQ_CONCAT(&dhcp->comments, &cfile->comments, next);
+	TAILQ_CONCAT(&dhcp->comments, &cfile->comments);
 	stackPush(cfile, dhcp);
 	assert(cfile->stack_top == 1);
 	cfile->stack[0] = top;
@@ -81,7 +82,8 @@ read_conf_file(struct parse *parent, const char *filename, int group_type)
 	size_t cnt;
 
 	if ((file = open (filename, O_RDONLY)) < 0)
-		parse_error(parent, "Can't open %s: %m", filename);
+		parse_error(parent, "Can't open %s: %s",
+			    filename, strerror(errno));
 
 	cfile = new_parse(file, NULL, 0, filename, 0);
 	if (cfile == NULL)
@@ -295,11 +297,14 @@ parse_statement(struct parse *cfile, int type, int declaration)
 				   "allowed here.");
 		cache = parse_fixed_addr_param(cfile, token);
 		if (token == FIXED_ADDR) {
+			struct element *addr;
+
 			if (mapContains(cfile->stack[host_decl], "ip-address"))
 				parse_error(cfile, "Only one fixed address "
 					    "declaration per host.");
-			mapSet(cfile->stack[host_decl],
-			       listGet(cache, 0), "ip-address");
+			addr = listGet(cache, 0);
+			listRemove(cache, 0);
+			mapSet(cfile->stack[host_decl], addr, "ip-address");
 			if (listSize(cache) > 0) {
 				cache->skip = ISC_TRUE;
 				cfile->issue_counter++;
@@ -428,11 +433,12 @@ parse_statement(struct parse *cfile, int type, int declaration)
 			parse_error(cfile, "authority makes no sense here.");
 		if (type == ROOT_GROUP) {
 			got_authoritative = authoritative;
+			parse_semi(cfile);
 			break;
 		}
 		cache = createBool(authoritative);
 		cache->skip = ISC_TRUE;
-		TAILQ_CONCAT(&cache->comments, &cfile->comments, next);
+		TAILQ_CONCAT(&cache->comments, &cfile->comments);
 		mapSet(cfile->stack[cfile->stack_top], cache, "authoritative");
 		cfile->issue_counter++;
 		parse_semi(cfile);
@@ -475,7 +481,7 @@ parse_statement(struct parse *cfile, int type, int declaration)
 		   allow an unknown option. */
 		if (!known)
 			parse_error(cfile, "unknown option %s.%s",
-				    option->space, option->name);
+				    option->space->old, option->old);
 	finish_option:
 		parse_option_statement(cfile, option,
 				       supersede_option_statement);
@@ -505,7 +511,7 @@ parse_statement(struct parse *cfile, int type, int declaration)
 	default:
 	unknown:
 		et = createMap();
-		TAILQ_CONCAT(&et->comments, &cfile->comments, next);
+		TAILQ_CONCAT(&et->comments, &cfile->comments);
 		lose = ISC_FALSE;
 		if (!parse_executable_statement(et, cfile, &lose,
 						context_any)) {
@@ -671,7 +677,7 @@ parse_pool_statement(struct parse *cfile, int type)
 
 	pool = createMap();
 	pool->kind = POOL_DECL;
-	TAILQ_CONCAT(&pool->comments, &cfile->comments, next);
+	TAILQ_CONCAT(&pool->comments, &cfile->comments);
 
 	if (type != SUBNET_DECL && type != SHARED_NET_DECL)
 		parse_error(cfile, "Dynamic pools are only valid inside "
@@ -776,7 +782,7 @@ parse_host_declaration(struct parse *cfile)
 
 	host = createMap();
 	host->kind = HOST_DECL;
-	TAILQ_CONCAT(&host->comments, &cfile->comments, next);
+	TAILQ_CONCAT(&host->comments, &cfile->comments);
 
 	name = parse_host_name(cfile);
 	if (!name)
@@ -906,7 +912,7 @@ parse_host_declaration(struct parse *cfile)
 			option = parse_option_name(cfile, ISC_TRUE, &known);
 			if (!known)
 				parse_error(cfile, "unknown option %s.%s",
-					    option->space, option->name);
+					    option->space->old, option->old);
 			expr = createMap();
 			if (!parse_option_data(expr, cfile, option))
 				parse_error(cfile, "can't parse option data");
@@ -1008,6 +1014,7 @@ parse_class_declaration(struct parse *cfile, int type)
 	if (pc && (type == CLASS_TYPE_CLASS)) {
 		new = ISC_FALSE;
 		class = pc;
+		pc = NULL;
 	} else if (!pc && (type != CLASS_TYPE_CLASS))
 		parse_error(cfile, "no class named %s", val);
 
@@ -1092,7 +1099,7 @@ parse_class_declaration(struct parse *cfile, int type)
 		class = createMap();
 		class->kind = CLASS_DECL;
 		class->skip = ISC_TRUE;
-		TAILQ_CONCAT(&class->comments, &cfile->comments, next);
+		TAILQ_CONCAT(&class->comments, &cfile->comments);
 		cfile->issue_counter++;
 		if (type == CLASS_TYPE_SUBCLASS) {
 			struct element *sub;
@@ -1279,7 +1286,7 @@ parse_shared_net_declaration(struct parse *cfile)
 	share = createMap();
 	share->skip = ISC_TRUE;
 	share->kind = SHARED_NET_DECL;
-	TAILQ_CONCAT(&share->comments, &cfile->comments, next);
+	TAILQ_CONCAT(&share->comments, &cfile->comments);
 
 	/* Get the name of the shared network... */
 	token = peek_token(&val, NULL, cfile);
@@ -1430,7 +1437,7 @@ parse_subnet_declaration(struct parse *cfile)
 
 	subnet = createMap();
 	subnet->kind = SUBNET_DECL;
-	TAILQ_CONCAT(&subnet->comments, &cfile->comments, next);
+	TAILQ_CONCAT(&subnet->comments, &cfile->comments);
 
 	/* Find parent */
 	for (i = cfile->stack_top; i > 0; --i) {
@@ -1499,7 +1506,7 @@ parse_subnet6_declaration(struct parse *cfile) {
 
 	subnet = createMap();
 	subnet->kind = SUBNET_DECL;
-	TAILQ_CONCAT(&subnet->comments, &cfile->comments, next);
+	TAILQ_CONCAT(&subnet->comments, &cfile->comments);
 
 	/* Find parent */
 	for (i = cfile->stack_top; i > 0; --i) {
@@ -1563,7 +1570,7 @@ parse_group_declaration(struct parse *cfile)
 	group = createMap();
 	group->skip = ISC_TRUE;
 	group->kind = GROUP_DECL;
-	TAILQ_CONCAT(&group->comments, &cfile->comments, next);
+	TAILQ_CONCAT(&group->comments, &cfile->comments);
 
 	token = peek_token(&val, NULL, cfile);
 	if (is_identifier(token) || token == STRING) {
@@ -1626,7 +1633,7 @@ parse_fixed_addr_param(struct parse *cfile, enum dhcp_token type) {
 	struct string *address;
 
 	addresses = createList();
-	TAILQ_CONCAT(&addresses->comments, &cfile->comments, next);
+	TAILQ_CONCAT(&addresses->comments, &cfile->comments);
 
 	do {
 		address = NULL;
@@ -1640,7 +1647,7 @@ parse_fixed_addr_param(struct parse *cfile, enum dhcp_token type) {
 			parse_error(cfile, "can't parse fixed address");
 		addr = createString(address);
 		/* Take the comment for resolution into multiple addresses */
-		TAILQ_CONCAT(&addr->comments, &cfile->comments, next);
+		TAILQ_CONCAT(&addr->comments, &cfile->comments);
 		listPush(addresses, addr);
 		token = peek_token(&val, NULL, cfile);
 		if (token == COMMA)
@@ -1754,7 +1761,7 @@ parse_address_range(struct parse *cfile, int type, size_t where)
 	appendString(range, taddr);
 
 	r = createString(range);
-	TAILQ_CONCAT(&r->comments, &cfile->comments, next);
+	TAILQ_CONCAT(&r->comments, &cfile->comments);
 
 	mapSet(pool, r, "pool");
 }
@@ -1852,7 +1859,7 @@ parse_address_range6(struct parse *cfile, int type, size_t where)
 		pool = cfile->stack[where];
 
 	range = createString(lo);
-	TAILQ_CONCAT(&range->comments, &cfile->comments, next);
+	TAILQ_CONCAT(&range->comments, &cfile->comments);
 	if (is_temporary) {
 		range->skip = ISC_TRUE;
 		cfile->issue_counter++;
@@ -1921,7 +1928,7 @@ parse_prefix6(struct parse *cfile, int type, size_t where)
 		pool = cfile->stack[where];
 
 	prefix = createString(lo);
-	TAILQ_CONCAT(&prefix->comments, &cfile->comments, next);
+	TAILQ_CONCAT(&prefix->comments, &cfile->comments);
 	mapSet(pool, prefix, "prefix");
 	mapSet(pool, createInt(bits), "delegated-len");
 	plen = get_prefix_length(lo->content, hi->content);
@@ -1977,7 +1984,7 @@ parse_fixed_prefix6(struct parse *cfile, size_t host_decl)
 		parse_error(cfile, "semicolon expected.");
 
 	prefix = createString(ia);
-	TAILQ_CONCAT(&prefix->comments, &cfile->comments, next);
+	TAILQ_CONCAT(&prefix->comments, &cfile->comments);
 	listPush(prefixes, prefix);
 }
 
@@ -2022,7 +2029,7 @@ parse_pool6_statement(struct parse *cfile, int type)
 
 	pool = createMap();
 	pool->kind = POOL_DECL;
-	TAILQ_CONCAT(&pool->comments, &cfile->comments, next);
+	TAILQ_CONCAT(&pool->comments, &cfile->comments);
 
 	if (type != SUBNET_DECL)
 		parse_error(cfile, "pool6s are only valid inside "
@@ -2314,7 +2321,7 @@ parse_server_duid_conf(struct parse *cfile) {
 
 	sv_duid = createString(duid);
 	sv_duid->skip = ISC_TRUE;
-	TAILQ_CONCAT(&sv_duid->comments, &cfile->comments, next);
+	TAILQ_CONCAT(&sv_duid->comments, &cfile->comments);
 	cfile->issue_counter++;
 	mapSet(cfile->stack[cfile->stack_top], sv_duid, "server-duid");
 }
@@ -2380,6 +2387,7 @@ addrmask(const struct string *address, const struct string *netmask)
 		return NULL;
 
 	memcpy(&mask, netmask->content, 4);
+	mask = ntohl(mask);
 	for (plen = 0; plen <= 32; ++plen)
 		if (~mask == bitmasks[plen])
 			break;
