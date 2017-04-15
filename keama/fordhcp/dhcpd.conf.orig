@@ -43,7 +43,7 @@ if exists user-class {
 # i don't think we use this anymore.  i'd like to remake the key before
 # using it again anyway.
 
-include "fordhcp/dhcpd.omapi.key";
+include "/etc/dhcpd.omapi.key";
 
 omapi-port 500;
 omapi-key OM_KEY;
@@ -84,11 +84,11 @@ omapi-key OM_KEY;
 # Client-Network Includes
 #
 
-include "fordhcp/dhcpd.stubs.conf";
-include "fordhcp/dhcpd.voip.conf";
-include "fordhcp/dhcpd.wvlan.conf";
-include "fordhcp/dhcpd.emp-wireless-149-20.conf";
-include "fordhcp/dhcpd.office-149-20.conf";
-include "fordhcp/dhcpd.office-static-149-20.conf";
-include "fordhcp/dhcpd.voip-149-20.conf";
-include "fordhcp/dhcpd.staging.conf";
+include "/etc/dhcpd.stubs.conf";
+include "/etc/dhcpd.voip.conf";
+include "/etc/dhcpd.wvlan.conf";
+include "/etc/dhcpd.emp-wireless-149-20.conf";
+include "/etc/dhcpd.office-149-20.conf";
+include "/etc/dhcpd.office-static-149-20.conf";
+include "/etc/dhcpd.voip-149-20.conf";
+include "/etc/dhcpd.staging.conf";

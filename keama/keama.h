@@ -236,22 +236,36 @@ enum option_status {
 	kea_unknown = 0,	/* known only by ISC DHCP */
 	isc_dhcp_unknown = 1,	/* known only by Kea */
 	known = 2,		/* known by both ISC DHCP and Kea */
-	special = 3		/* requires special processing */
+	special = 3,		/* requires special processing */
+	dynamic = 4		/* dynamic entry */
 };
 
-struct option_def {
+struct option_def {			/* ISC DHCP option definition */
 	const char *name;		/* option name */
-	const char *format;		/* ISC DHCP format string */
-	const char *space;		/* ISC DHCP space (aka universe) */
+	const char *format;		/* format string */
+	const char *space;		/* space (aka universe) */
 	unsigned code;			/* code point */
 	enum option_status status;	/* status */
 };
 
+struct space_def {			/* ISC DHCP space definition */
+	const char *old;		/* ISC DHCP space name */
+	const char *name;		/* Kea space name */
+	enum option_status status;	/* status */
+};
+
+struct space {
+	const char *old;		/* ISC DHCP space name */
+	const char *name;		/* Kea space name */
+	enum option_status status;	/* status */
+	TAILQ_ENTRY(space) next;	/* next space */
+};
+
 struct option {
-	const char *old;		/* old option name */
-	const char *name;		/* option name */
+	const char *old;		/* ISC DHCP option name */
+	const char *name;		/* Kea option name */
 	const char *format;		/* ISC DHCP format string */
-	const char *space;		/* ISC DHCP space (aka universe) */
+	const struct space *space;	/* space (aka universe) */
 	unsigned code;			/* code point */
 	enum option_status status;	/* status */
 	TAILQ_ENTRY(option) next;	/* next option */
@@ -367,10 +381,12 @@ isc_boolean_t parse_config_statement(struct parse *, struct option *,
 				     enum statement_op);
 
 /* options.c */
+void spaces_init(void);
 void options_init(void);
-const char *option_map_space(const char *);
+struct space *space_lookup(const char *);
 struct option *option_lookup_name(const char *, const char *);
 struct option *option_lookup_code(const char *, unsigned);
+void push_space(struct space *);
 void push_option(struct option *);
 struct comments *get_config_comments(unsigned);
 

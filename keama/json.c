@@ -44,11 +44,11 @@ json_parse(struct parse *cfile)
 	switch (token) {
 	case NUMBER:
 		elem = createInt(atoll(val));
-		TAILQ_CONCAT(&elem->comments, &cfile->comments, next);
+		TAILQ_CONCAT(&elem->comments, &cfile->comments);
 		break;
 	case STRING:
 		elem = createString(makeString(-1, val));
-		TAILQ_CONCAT(&elem->comments, &cfile->comments, next);
+		TAILQ_CONCAT(&elem->comments, &cfile->comments);
 		break;
 	case NAME:
 		if (strcmp(val, "null") == 0)
@@ -60,7 +60,7 @@ json_parse(struct parse *cfile)
 			elem->skip = ISC_TRUE;
 		} else
 			parse_error(cfile, "unknown name %s", val);
-		TAILQ_CONCAT(&elem->comments, &cfile->comments, next);
+		TAILQ_CONCAT(&elem->comments, &cfile->comments);
 		break;
 	case LBRACKET:
 		elem = json_list_parse(cfile);
@@ -86,7 +86,7 @@ json_list_parse(struct parse *cfile)
 	isc_boolean_t done = ISC_FALSE;
 
 	list = createList();
-	TAILQ_CONCAT(&list->comments, &cfile->comments, next);
+	TAILQ_CONCAT(&list->comments, &cfile->comments);
 	stackPush(cfile, list);
 	do {
 		token = peek_token(&val, NULL, cfile);
@@ -127,7 +127,7 @@ json_map_parse(struct parse *cfile)
 	isc_boolean_t done = ISC_FALSE;
 
 	map = createMap();
-	TAILQ_CONCAT(&map->comments, &cfile->comments, next);
+	TAILQ_CONCAT(&map->comments, &cfile->comments);
 	stackPush(cfile, map);
 	do {
 		token = peek_token(&val, NULL, cfile);

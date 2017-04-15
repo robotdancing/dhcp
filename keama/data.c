@@ -353,7 +353,7 @@ resetBy(struct element *e, struct element *o)
 	e->skip = o->skip;
 	e->key = o->key;
 	o->key = NULL;
-	TAILQ_CONCAT(&e->comments, &o->comments, next);
+	TAILQ_CONCAT(&e->comments, &o->comments);
 
 	switch (e->type) {
 	case ELEMENT_INTEGER:
@@ -370,11 +370,11 @@ resetBy(struct element *e, struct element *o)
 		break;
 	case ELEMENT_LIST:
 		TAILQ_INIT(&e->value.list_value);
-		TAILQ_CONCAT(&e->value.list_value, &o->value.list_value, next);
+		TAILQ_CONCAT(&e->value.list_value, &o->value.list_value);
 		break;
 	case ELEMENT_MAP:
 		TAILQ_INIT(&e->value.map_value);
-		TAILQ_CONCAT(&e->value.map_value, &o->value.map_value, next);
+		TAILQ_CONCAT(&e->value.map_value, &o->value.map_value);
 		break;
 	default:
 		assert(0);
@@ -396,7 +396,7 @@ listGet(struct element *l, int i)
 	assert(elem->key == NULL);
 
 	for (unsigned j = i; j > 0; --j) {
-		elem = TAILQ_NEXT(elem, next);
+		elem = TAILQ_NEXT(elem);
 		assert(elem != NULL);
 		assert(elem->key == NULL);
 	}
@@ -413,7 +413,7 @@ listSet(struct element *l, struct element *e, int i)
 	assert(i >= 0);
 
 	if (i == 0) {
-		TAILQ_INSERT_HEAD(&l->value.list_value, e, next);
+		TAILQ_INSERT_HEAD(&l->value.list_value, e);
 	} else {
 		struct element *prev;
 		
@@ -422,12 +422,12 @@ listSet(struct element *l, struct element *e, int i)
 		assert(prev->key == NULL);
 
 		for (unsigned j = i; j > 1; --j) {
-			prev = TAILQ_NEXT(prev, next);
+			prev = TAILQ_NEXT(prev);
 			assert(prev != NULL);
 			assert(prev->key == NULL);
 		}
 
-		TAILQ_INSERT_AFTER(&l->value.list_value, prev, e, next);
+		TAILQ_INSERT_AFTER(&l->value.list_value, prev, e);
 	}
 }
 
@@ -438,7 +438,7 @@ listPush(struct element *l, struct element *e)
 	assert(l->type == ELEMENT_LIST);
 	assert(e != NULL);
 
-	TAILQ_INSERT_TAIL(&l->value.list_value, e, next);
+	TAILQ_INSERT_TAIL(&l->value.list_value, e);
 }
 
 void
@@ -455,12 +455,12 @@ listRemove(struct element *l, int i)
 	assert(elem->key == NULL);
 
 	for (unsigned j = i; j > 0; --j) {
-		elem = TAILQ_NEXT(elem, next);
+		elem = TAILQ_NEXT(elem);
 		assert(elem != NULL);
 		assert(elem->key == NULL);
 	}
 
-	TAILQ_REMOVE(&l->value.list_value, elem, next);
+	TAILQ_REMOVE(&l->value.list_value, elem);
 }
 
 size_t
@@ -473,7 +473,7 @@ listSize(const struct element *l)
 	assert(l->type == ELEMENT_LIST);
 
 	cnt = 0;
-	TAILQ_FOREACH(elem, &l->value.list_value, next) {
+	TAILQ_FOREACH(elem, &l->value.list_value) {
 		assert(elem->key == NULL);
 		cnt++;
 	}
@@ -489,7 +489,7 @@ concat(struct element *l, struct element *o)
 	assert(o != NULL);
 	assert(o->type == ELEMENT_LIST);
 
-	TAILQ_CONCAT(&l->value.list_value, &o->value.list_value, next);
+	TAILQ_CONCAT(&l->value.list_value, &o->value.list_value);
 }
 
 struct element *
@@ -501,7 +501,7 @@ mapGet(struct element *m, const char *k)
 	assert(m->type == ELEMENT_MAP);
 	assert(k != NULL);
 
-	TAILQ_FOREACH(elem, &m->value.map_value, next) {
+	TAILQ_FOREACH(elem, &m->value.map_value) {
 		assert(elem->key != NULL);
 		if (strcmp(elem->key, k) == 0)
 			break;
@@ -522,7 +522,7 @@ mapSet(struct element *m, struct element *e, const char *k)
 #endif
 	e->key = strdup(k);
 	assert(e->key != NULL);
-	TAILQ_INSERT_TAIL(&m->value.map_value, e, next);
+	TAILQ_INSERT_TAIL(&m->value.map_value, e);
 }
 
 void
@@ -534,14 +534,14 @@ mapRemove(struct element *m, const char *k)
 	assert(m->type == ELEMENT_MAP);
 	assert(k != NULL);
 
-	TAILQ_FOREACH(elem, &m->value.map_value, next) {
+	TAILQ_FOREACH(elem, &m->value.map_value) {
 		assert(elem->key != NULL);
 		if (strcmp(elem->key, k) == 0)
 			break;
 	}
 
 	assert(elem != NULL);
-	TAILQ_REMOVE(&m->value.map_value, elem, next);
+	TAILQ_REMOVE(&m->value.map_value, elem);
 }
 
 isc_boolean_t
@@ -553,7 +553,7 @@ mapContains(const struct element *m, const char *k)
 	assert(m->type == ELEMENT_MAP);
 	assert(k != NULL);
 
-	TAILQ_FOREACH(elem, &m->value.map_value, next) {
+	TAILQ_FOREACH(elem, &m->value.map_value) {
 		assert(elem->key != NULL);
 		if (strcmp(elem->key, k) == 0)
 			break;
@@ -572,7 +572,7 @@ mapSize(const struct element *m)
 	assert(m->type == ELEMENT_MAP);
 
 	cnt = 0;
-	TAILQ_FOREACH(elem, &m->value.map_value, next) {
+	TAILQ_FOREACH(elem, &m->value.map_value) {
 		assert(elem->key != NULL);
 		cnt++;
 	}
@@ -590,11 +590,11 @@ merge(struct element *m, struct element *o)
 	assert(o != NULL);
 	assert(o->type == ELEMENT_MAP);
 
-	TAILQ_FOREACH(elem, &o->value.map_value, next) {
+	TAILQ_FOREACH(elem, &o->value.map_value) {
 		assert(elem->key != NULL);
-		TAILQ_REMOVE(&o->value.map_value, elem, next);
+		TAILQ_REMOVE(&o->value.map_value, elem);
 		if (!mapContains(m, elem->key)) {
-			TAILQ_INSERT_TAIL(&m->value.map_value, elem, next);
+			TAILQ_INSERT_TAIL(&m->value.map_value, elem);
 		}
 	}
 }
@@ -719,7 +719,7 @@ printList(FILE *fp, const struct list *l, isc_boolean_t skip, unsigned indent)
 
 	fprintf(fp, "[\n");
 	first = ISC_TRUE;
-	TAILQ_FOREACH(elem, l, next) {
+	TAILQ_FOREACH(elem, l) {
 		isc_boolean_t skip_elem = skip;
 		assert(elem->key == NULL);
 		if (!skip)
@@ -727,7 +727,7 @@ printList(FILE *fp, const struct list *l, isc_boolean_t skip, unsigned indent)
 		if (!first)
 			fprintf(fp, ",\n");
 		first = ISC_FALSE;
-		TAILQ_FOREACH(comment, &elem->comments, next) {
+		TAILQ_FOREACH(comment, &elem->comments) {
 			addIndent(fp, skip_elem, indent + 2);
 			fprintf(fp, "%s\n", comment->line);
 		}
@@ -756,7 +756,7 @@ printMap(FILE *fp, const struct map *m, isc_boolean_t skip, unsigned indent)
 
 	fprintf(fp, "{\n");
 	first = ISC_TRUE;
-	TAILQ_FOREACH(elem, m, next) {
+	TAILQ_FOREACH(elem, m) {
 		isc_boolean_t skip_elem = skip;
 		assert(elem->key != NULL);
 		if (!skip)
@@ -764,7 +764,7 @@ printMap(FILE *fp, const struct map *m, isc_boolean_t skip, unsigned indent)
 		if (!first)
 			fprintf(fp, ",\n");
 		first = ISC_FALSE;
-		TAILQ_FOREACH(comment, &elem->comments, next) {
+		TAILQ_FOREACH(comment, &elem->comments) {
 			addIndent(fp, skip_elem, indent + 2);
 			fprintf(fp, "%s\n", comment->line);
 		}
@@ -858,10 +858,10 @@ copy(struct element *e)
 	result->kind = e->kind;
 	result->skip = e->skip;
 	/* don't copy key */
-	TAILQ_FOREACH(comment, &e->comments, next) {
+	TAILQ_FOREACH(comment, &e->comments) {
 		/* share comment content */
 		comment = createComment(comment->line);
-		TAILQ_INSERT_TAIL(&result->comments, comment, next);
+		TAILQ_INSERT_TAIL(&result->comments, comment);
 	}
 	return result;
 }
@@ -885,7 +885,7 @@ copyMap(struct element *m)
 	struct element *item;
 
 	result = createMap();
-	TAILQ_FOREACH(item, &m->value.map_value, next)
+	TAILQ_FOREACH(item, &m->value.map_value)
 		mapSet(result, copy(item), item->key);
 	return result;
 }

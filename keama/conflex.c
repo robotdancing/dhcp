@@ -103,7 +103,7 @@ end_parse(struct parse *cfile)
 	}
 
 	if (cfile->saved_state != NULL)
-		free(cfile->saved_state );
+		free(cfile->saved_state);
 	cfile->saved_state = NULL;
 
 	cfile->stack_size = 0;
@@ -441,7 +441,7 @@ skip_to_eol(struct parse *cfile)
 			buf[cc] = c;
 	}
 	comment = createComment(buf);
-	TAILQ_INSERT_TAIL(&cfile->comments, comment, next);
+	TAILQ_INSERT_TAIL(&cfile->comments, comment);
 }
 
 static enum dhcp_token

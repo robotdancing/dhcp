@@ -133,6 +133,8 @@ main(int argc, char **argv) {
 			fprintf(output, "\n");
 		}
 	} else {
+		spaces_init();
+		options_init();
 		cnt = conf_file_parse(cfile);
 		if (cfile->stack_top > 0) {
 			print(output, cfile->stack[0], 0, 0);
