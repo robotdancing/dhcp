@@ -78,8 +78,7 @@ host sphynx.isc.org {
 
 host ycam-bullet-1 {
   hardware ethernet 00:22:C0:10:0D:63;
-# duplicate address
-# fixed-address 149.20.50.12;
+  fixed-address 149.20.50.12;
 }
 
 host ycam-bullet-2 {

@@ -786,8 +786,8 @@ parse_option_space_decl(struct parse *cfile)
 	int tsize = 1, lsize = 1;
 
 	skip_token(&val, NULL, cfile);  /* Discard the SPACE token,
-						     which was checked by the
-						     caller. */
+					   which was checked by the
+					   caller. */
 	token = next_token(&val, NULL, cfile);
 	if (!is_identifier(token))
 		parse_error(cfile, "expecting identifier.");
@@ -1138,7 +1138,8 @@ parse_option_code_definition(struct parse *cfile, struct option *option)
 		no_more_in_record = ISC_TRUE;
 		break;
 	case STRING_TOKEN:
-		type = "binary";
+		/* can be binary too */
+		type = "string";
 		goto no_arrays;
 
 	case ENCAPSULATE:
@@ -3618,17 +3619,17 @@ parse_option_data(struct element *expr,
 		skip_token(&val, &len, cfile);
 		item = makeString(len, val);
 		concatString(saved, item);
+		/* Kea todo: handle ISC DHCP binary format */
 		if (is_identifier(token)) {
 			if ((len == 3) && (memcmp(val, "off", 3) == 0)) {
 				val = "false";
 				len = 5;
 				canon_bool = ISC_TRUE;
-			} else if ((len == 2) && (memcmp(val, "on", 2) == 0)) {
+			} else if (token == ON) {
 				val = "true";
 				len = 4;
 				canon_bool = ISC_TRUE;
-			} else if ((len == 6) &&
-				   (memcmp(val, "ignore", 6) == 0))
+			} else if (token == IGNORE)
 				has_ignore = ISC_TRUE;
 		}
 		item = makeString(len, val);
