@@ -616,7 +616,7 @@ get_config_comments(unsigned code)
 		comment = createComment("/// max-lease-time is not supported");
 	lease_time:
 		TAILQ_INSERT_TAIL(&comments, comment);
-		comment = createComment("/// use default-lease-time insted");
+		comment = createComment("/// use default-lease-time instead");
 		TAILQ_INSERT_TAIL(&comments, comment);
 		comment = createComment("/// Reference Kea #5219");
 		TAILQ_INSERT_TAIL(&comments, comment);

@@ -305,7 +305,7 @@ void get_permit(struct parse *, struct element *);
 void parse_pool_statement(struct parse *, int);
 void parse_lbrace(struct parse *);
 void parse_host_declaration(struct parse *);
-int parse_class_declaration(struct parse *, int);
+void parse_class_declaration(struct parse *, int);
 void parse_shared_net_declaration(struct parse *);
 void parse_subnet_declaration(struct parse *);
 void parse_subnet6_declaration(struct parse *);
@@ -373,12 +373,15 @@ isc_boolean_t parse_expression(struct element *, struct parse *,
 			       struct element *, enum expr_op);
 isc_boolean_t parse_option_data(struct element *, struct parse *,
 				struct option *);
-isc_boolean_t parse_option_statement(struct parse *, struct option *,
-				     enum statement_op);
+isc_boolean_t parse_option_statement(struct element *, struct parse *,
+				     struct option *, enum statement_op);
 isc_boolean_t parse_config_data(struct element *, struct parse *,
 				struct option *);
-isc_boolean_t parse_config_statement(struct parse *, struct option *,
-				     enum statement_op);
+isc_boolean_t parse_config_statement(struct element *, struct parse *,
+				     struct option *, enum statement_op);
+isc_boolean_t is_boolean_expression(struct element *);
+isc_boolean_t is_data_expression(struct element *);
+isc_boolean_t is_numeric_expression(struct element *);
 
 /* options.c */
 void spaces_init(void);
@@ -395,4 +398,11 @@ struct element *json_parse(struct parse *);
 struct element *json_list_parse(struct parse *);
 struct element *json_map_parse(struct parse *);
 
-/* options.c */
+/* reduce.c */
+const char *print_boolean_expression(struct element *, isc_boolean_t *);
+struct element *reduce_boolean_expression(struct element *);
+const char *print_data_expression(struct element *, isc_boolean_t *);
+struct element *reduce_data_expression(struct element *, isc_boolean_t *);
+const char *print_numeric_expression(struct element *, isc_boolean_t *);
+struct element *reduce_numeric_expression(struct element *);
+const char *print_expression(struct element *, isc_boolean_t *);

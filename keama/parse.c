@@ -59,9 +59,6 @@ static void putShort(unsigned char *obuf, int32_t val);
 static void putUChar(unsigned char *obuf, uint32_t val);
 */
 
-static isc_boolean_t is_boolean_expression(struct element *);
-static isc_boolean_t is_data_expression(struct element *);
-static isc_boolean_t is_numeric_expression(struct element *);
 /*
 static isc_boolean_t is_compound_expression(struct element *);
 */
@@ -436,12 +433,12 @@ parse_hardware_param(struct parse *cfile)
 		size_t used;
 		if (i == 0) {
 			(void)snprintf(buf, sizeof(buf),
-				       "%2.2x", t->content[i]);
+				       "%02hhx", t->content[i]);
 			continue;
 		}
 		used = strlen(buf);
 		(void)snprintf(buf + used, sizeof(buf) - used,
-			       ":%2.2x", t->content[i]);
+			       ":%02hhx", t->content[i]);
 	}
 	if (ether)
 		r = makeString(-1, buf);
@@ -531,6 +528,7 @@ parse_numeric_aggregate(struct parse *cfile, unsigned char *buf,
 		}
 	} while (++count != *max);
 
+	*max = count;
 	if (bufp)
 		r = makeString(count * size / 8, (char *)bufp);
 
@@ -1217,9 +1215,7 @@ struct string *
 parse_base64(struct parse *cfile)
 {
 	const char *val;
-	unsigned l;
-	unsigned i, j, k;
-	unsigned acc = 0;
+	unsigned i;
 	static unsigned char
 		from64[] = {64, 64, 64, 64, 64, 64, 64, 64,  /*  \"#$%&' */
 			     64, 64, 64, 62, 64, 64, 64, 63,  /* ()*+,-./ */
@@ -1233,25 +1229,21 @@ parse_base64(struct parse *cfile)
 			     33, 34, 35, 36, 37, 38, 39, 40,  /* hijklmno */
 			     41, 42, 43, 44, 45, 46, 47, 48,  /* pqrstuvw */
 			     49, 50, 51, 64, 64, 64, 64, 64}; /* xyz{|}~  */
-	struct element *bufs;
 	struct string *t;
-	struct string *data;
-	char *buf;
-	unsigned cc = 0;
-	isc_boolean_t terminated = ISC_FALSE;
+	struct string *r;
 	isc_boolean_t valid_base64;
-	size_t it;
 	
-	bufs = createList();
+	r = makeString(0, NULL);
 
 	/* It's possible for a + or a / to cause a base64 quantity to be
 	   tokenized into more than one token, so we have to parse them all
 	   in before decoding. */
 	do {
+		unsigned l;
+
 		(void)next_token(&val, &l, cfile);
 		t = makeString(l, val);
-		cc += l;
-		listPush(bufs, createString(t));
+		concatString(r, t);
 		(void)peek_token(&val, NULL, cfile);
 		valid_base64 = ISC_TRUE;
 		for (i = 0; val[i]; i++) {
@@ -1266,79 +1258,7 @@ parse_base64(struct parse *cfile)
 		}
 	} while (valid_base64);
 
-	l = (cc * 3) / 4;
-	buf = (char *)malloc(l);
-	if (buf == NULL)
-		parse_error(cfile, "can't allocate buffer for base64 data.");
-	memset(buf, 0, l);
-	data = makeString(l, buf);
-	free(buf);
-
-	j = k = 0;
-	for (it = 0; it < listSize(bufs); it++) {
-	    t = stringValue(listGet(bufs, it));
-	    for (i = 0; i < t->length; i++) {
-		unsigned foo = t->content[i];
-
-		if (terminated && foo != '=')
-			parse_error(cfile,
-				    "stuff after base64 '=' terminator: %s.",
-				    t->content + i);
-		if ((foo < ' ') || (foo > 'z')) {
-		    bad64:
-			parse_error(cfile,
-				    "invalid base64 character %d.",
-				    t->content[i]);
-			goto out;
-		}
-		if (foo == '=')
-			terminated = ISC_TRUE;
-		else {
-			foo = from64[foo - ' '];
-			if (foo == 64)
-				goto bad64;
-			acc = (acc << 6) + foo;
-			switch (k % 4) {
-			case 0:
-				break;
-			case 1:
-				data->content[j++] = (acc >> 4);
-				acc = acc & 0x0f;
-				break;
-				
-			case 2:
-				data->content[j++] = (acc >> 2);
-				acc = acc & 0x03;
-				break;
-			case 3:
-				data->content[j++] = acc;
-				acc = 0;
-				break;
-			}
-		}
-		k++;
-	    }
-	}
-	if ((k % 4) && acc)
-		parse_error(cfile,
-			    "partial base64 value left over: %d.",
-			    acc);
-	data->length = j;
-    out:
-	do {
-		struct element *b;
-
-		b = listGet(bufs, 0);
-		listRemove(bufs, 0);
-		t = stringValue(b);
-		if (t->content != NULL)
-			free(t->content);
-		free(b);
-	} while (listSize(bufs) > 0);
-	if (data->length > 0)
-		return data;
-	else
-		return NULL;
+	return r;
 }
 
 /*
@@ -1364,9 +1284,9 @@ parse_cshl(struct parse *cfile)
 			parse_error(cfile, "expecting hexadecimal number.");
 		convert_num(cfile, &ibuf, val, 16, 8);
 		if (first)
-			snprintf(tbuf, sizeof(tbuf), "%2.2x", ibuf);
+			snprintf(tbuf, sizeof(tbuf), "%02hhx", ibuf);
 		else
-			snprintf(tbuf, sizeof(tbuf), ":%2.2x", ibuf);
+			snprintf(tbuf, sizeof(tbuf), ":%02hhx", ibuf);
 		first = ISC_FALSE;
 		appendString(data, tbuf);
 
@@ -1493,7 +1413,7 @@ parse_executable_statement(struct element *result,
 			*lose = ISC_TRUE;
 			return ISC_FALSE;
 		}
-		return parse_option_statement(cfile, option,
+		return parse_option_statement(result, cfile, option,
 					      send_option_statement);
 
 	case SUPERSEDE:
@@ -1505,7 +1425,7 @@ parse_executable_statement(struct element *result,
 			*lose = ISC_TRUE;
 			return ISC_FALSE;
 		}
-		return parse_option_statement(cfile, option,
+		return parse_option_statement(result, cfile, option,
 					      supersede_option_statement);
 
 	case ALLOW:
@@ -1533,7 +1453,7 @@ parse_executable_statement(struct element *result,
 			*lose = ISC_TRUE;
 			return ISC_FALSE;
 		}
-		return parse_option_statement(cfile, option,
+		return parse_option_statement(result, cfile, option,
 					      default_option_statement);
 	case PREPEND:
 		skip_token(&val, NULL, cfile);
@@ -1543,7 +1463,7 @@ parse_executable_statement(struct element *result,
 			*lose = ISC_TRUE;
 			return ISC_FALSE;
 		}
-		return parse_option_statement(cfile, option,
+		return parse_option_statement(result, cfile, option,
 					      prepend_option_statement);
 	case APPEND:
 		skip_token(&val, NULL, cfile);
@@ -1553,7 +1473,7 @@ parse_executable_statement(struct element *result,
 			*lose = ISC_TRUE;
 			return ISC_FALSE;
 		}
-		return parse_option_statement(cfile, option,
+		return parse_option_statement(result, cfile, option,
 					      append_option_statement);
 
 	case ON:
@@ -1832,7 +1752,7 @@ parse_executable_statement(struct element *result,
 				result->skip = ISC_TRUE;
 				cfile->issue_counter++;
 				return parse_config_statement
-					      (cfile, option,
+					      (result, cfile, option,
 					       supersede_option_statement);
 			}
 		}
@@ -2539,16 +2459,16 @@ parse_non_binary(struct element *expr,
 			return ISC_FALSE;;
 		}
 		nexp = createMap();
+		/* push infos to get it back trying to reduce it */
 		mapSet(nexp,
-		       createString(makeString(-1, option->space->name)),
-		       "space");
+		       createString(makeString(-1, option->space->old)),
+		       "universe");
 		mapSet(nexp,
 		       createString(makeString(-1, option->name)),
 		       "name");
 		nexp->skip = ISC_TRUE;
 		cfile->issue_counter++;
 		mapSet(expr, nexp, "exists");
-		/* Kea todo: we have it in classification */
 		break;
 
 	case STATIC:
@@ -2850,8 +2770,8 @@ parse_non_binary(struct element *expr,
 		}
 		nexp = createMap();
 		mapSet(nexp,
-		       createString(makeString(-1, option->space->name)),
-		       "space");
+		       createString(makeString(-1, option->space->old)),
+		       "universe");
 		mapSet(nexp,
 		       createString(makeString(-1, option->name)),
 		       "name");
@@ -2911,6 +2831,7 @@ parse_non_binary(struct element *expr,
 
 	case TOKEN_NULL:
 		skip_token(&val, NULL, cfile);
+		/* can look at context to return directly ""? */
 		nexp = createNull();
 		nexp->skip = ISC_TRUE;
 		cfile->issue_counter++;
@@ -2970,14 +2891,12 @@ parse_non_binary(struct element *expr,
 		if (token != LPAREN)
 			parse_error(cfile, "left parenthesis expected.");
 
-		arg = createMap();
-		if (!parse_data_expression(arg, cfile, lose)) {
+		if (!parse_data_expression(nexp, cfile, lose)) {
 			if (!*lose)
 				parse_error(cfile,
 					    "expecting data expression.");
 			return ISC_FALSE;
 		}
-		mapSet(nexp, arg, "expression");
 
 		token = next_token(&val, NULL, cfile);
 		if (token != COMMA)
@@ -3018,10 +2937,8 @@ parse_non_binary(struct element *expr,
 		if (token != LPAREN)
 			parse_error(cfile, "left parenthesis expected.");
 
-		arg = createMap();
-		if (!parse_numeric_expression(arg, cfile, lose))
+		if (!parse_numeric_expression(nexp, cfile, lose))
 			parse_error(cfile, "expecting numeric expression.");
-		mapSet(nexp, arg, "expression");
 
 		token = next_token(&val, NULL, cfile);
 		if (token != COMMA)
@@ -3358,10 +3275,12 @@ parse_non_binary(struct element *expr,
 		}
 
 		skip_token(&val, NULL, cfile);
-		nexp = createString(data);
+		nexp = createMap();
 		nexp->skip = ISC_TRUE;
 		cfile->issue_counter++;
 		mapSet(expr, nexp, "funcall");
+		chain = createString(data);
+		mapSet(nexp, chain, "name");
 
 		/* Now parse the argument list. */
 		chain = createList();
@@ -3672,8 +3591,10 @@ parse_option_data(struct element *expr,
 {
 	const char *val;
 	enum dhcp_token token;
+	unsigned len;
 	struct string *data;
 	struct string *saved;
+	struct string *item;
 	struct element *elem;
 	struct comment *comment;
 	isc_boolean_t canon_bool = ISC_FALSE;
@@ -3694,25 +3615,24 @@ parse_option_data(struct element *expr,
 			appendString(saved, ",");
 			continue;
 		}
-		skip_token(&val, NULL, cfile);
-		appendString(saved, val);
+		skip_token(&val, &len, cfile);
+		item = makeString(len, val);
+		concatString(saved, item);
 		if (is_identifier(token)) {
-			if ((strcasecmp(val, "true") == 0) ||
-			    (strcasecmp(val, "on") == 0)) {
-				if (strcmp(val, "true") != 0) {
-					val = "true";
-					canon_bool = ISC_TRUE;
-				}
-			} else if ((strcasecmp(val, "false") == 0) ||
-				   (strcasecmp(val, "off") == 0)) {
-				if (strcmp(val, "false") != 0) {
-					val = "false";
-					canon_bool = ISC_TRUE;
-				}
-			} else if (strcasecmp(val, "ignore") == 0)
+			if ((len == 3) && (memcmp(val, "off", 3) == 0)) {
+				val = "false";
+				len = 5;
+				canon_bool = ISC_TRUE;
+			} else if ((len == 2) && (memcmp(val, "on", 2) == 0)) {
+				val = "true";
+				len = 4;
+				canon_bool = ISC_TRUE;
+			} else if ((len == 6) &&
+				   (memcmp(val, "ignore", 6) == 0))
 				has_ignore = ISC_TRUE;
 		}
-		appendString(data, val);
+		item = makeString(len, val);
+		concatString(data, item);
 	}
 				
 	if (canon_bool) {
@@ -3745,7 +3665,8 @@ parse_option_data(struct element *expr,
    starts as above and ends in a SEMI. */
 
 isc_boolean_t
-parse_option_statement(struct parse *cfile,
+parse_option_statement(struct element *result,
+		       struct parse *cfile,
 		       struct option *option,
 		       enum statement_op op)
 {
@@ -3758,7 +3679,7 @@ parse_option_statement(struct parse *cfile,
 	size_t where;
 
 	if (option->space == space_lookup("server"))
-		return parse_config_statement(cfile, option, op);
+		return parse_config_statement(result, cfile, option, op);
 
 	opt_data = createMap();
 	TAILQ_CONCAT(&opt_data->comments, &cfile->comments);
@@ -3805,8 +3726,13 @@ parse_option_statement(struct parse *cfile,
 			return ISC_FALSE;
 		}
 		mapSet(opt_data, createBool(ISC_FALSE), "csv-format");
-		/* Stringify numeric expressions */
-		if (expr->type == ELEMENT_INTEGER) {
+		/* Stringify scalar expressions */
+		if (expr->type == ELEMENT_BOOLEAN) {
+			if (boolValue(expr))
+				resetString(expr, makeString(-1, "true"));
+			else
+				resetString(expr, makeString(-1, "false"));
+		} else if (expr->type == ELEMENT_INTEGER) {
 			char buf[80];
 
 			snprintf(buf, sizeof(buf), "%lld",
@@ -3826,6 +3752,12 @@ parse_option_statement(struct parse *cfile,
 	}
 
 	parse_semi(cfile);
+
+	if (result != NULL) {
+		opt_data->skip = ISC_TRUE;
+		mapSet(result, opt_data, "option");
+		return ISC_TRUE;
+	}
 
 	for (where = cfile->stack_top; where > 0; --where) {
 		if (cfile->stack[where]->kind == PARAMETER)
@@ -3989,7 +3921,8 @@ parse_config_data(struct element *expr,
 /* Specialized version of parse_option_statement for config options */
 
 isc_boolean_t
-parse_config_statement(struct parse *cfile,
+parse_config_statement(struct element *result,
+		       struct parse *cfile,
 		       struct option *option,
 		       enum statement_op op)
 {
@@ -4053,6 +3986,12 @@ parse_config_statement(struct parse *cfile,
 	}
 
 	parse_semi(cfile);
+
+	if (result != NULL) {
+		config->skip = ISC_TRUE;
+		mapSet(result, config, "config");
+		return ISC_TRUE;
+	}
 
 	for (where = cfile->stack_top; where > 0; --where) {
 		if ((cfile->stack[where]->kind == PARAMETER) ||
@@ -4450,7 +4389,7 @@ putUChar(unsigned char *obuf, uint32_t val)
 */
 /* From common/tree.c */
 
-static isc_boolean_t
+isc_boolean_t
 is_boolean_expression(struct element *expr)
 {
 	return ((expr->type == ELEMENT_BOOLEAN) ||
@@ -4468,28 +4407,27 @@ is_boolean_expression(struct element *expr)
 		mapContains(expr, "static"));
 }
 
-static isc_boolean_t
+isc_boolean_t
 is_data_expression(struct element *expr)
 {
 	return ((expr->type == ELEMENT_INTEGER) ||
 		(expr->type == ELEMENT_STRING) ||
 		mapContains(expr, "substring") ||
 		mapContains(expr, "suffix") ||
-		mapContains(expr, "lcase") ||
-		mapContains(expr, "ucase") ||
+		mapContains(expr, "lowercase") ||
+		mapContains(expr, "uppercase") ||
 		mapContains(expr, "option") ||
 		mapContains(expr, "hardware") ||
-		mapContains(expr, "const-data") ||
 		mapContains(expr, "packet") ||
 		mapContains(expr, "concat") ||
 		mapContains(expr, "encapsulate") ||
 		mapContains(expr, "encode-int8") ||
 		mapContains(expr, "encode-int16") ||
 		mapContains(expr, "encode-int32") ||
-		mapContains(expr, "host-lookup") ||
+		mapContains(expr, "gethostbyname") ||
 		mapContains(expr, "binary-to-ascii") ||
 		mapContains(expr, "filename") ||
-		mapContains(expr, "sname") ||
+		mapContains(expr, "server-name") ||
 		mapContains(expr, "reverse") ||
 		mapContains(expr, "pick-first-value") ||
 		mapContains(expr, "host-decl-name") ||
@@ -4500,14 +4438,13 @@ is_data_expression(struct element *expr)
 	        mapContains(expr, "v6relay"));
 }
 
-static isc_boolean_t
+isc_boolean_t
 is_numeric_expression(struct element *expr)
 {
 	return ((expr->type == ELEMENT_INTEGER) ||
 		mapContains(expr, "extract-int8") ||
 		mapContains(expr, "extract-int16") ||
 		mapContains(expr, "extract-int32") ||
-		mapContains(expr, "const-int") ||
 		mapContains(expr, "lease-time") ||
 		mapContains(expr, "add") ||
 		mapContains(expr, "subtract") ||

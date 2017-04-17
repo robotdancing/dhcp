@@ -269,6 +269,7 @@ void printList(FILE *fp, const struct list *l,
 void printMap(FILE *fp, const struct map *m,
 	      isc_boolean_t skip, unsigned indent);
 void printString(FILE *fp, const struct string *s);
+isc_boolean_t skip_to_end(const struct element *e);
 
 struct element *copy(struct element *e);
 struct element *copyList(struct element *l);
