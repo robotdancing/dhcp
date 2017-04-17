@@ -35,6 +35,8 @@
 
 isc_boolean_t got_authoritative = ISC_FALSE;
 
+static void add_match_class(struct parse *, struct element *,
+			    struct element *);
 static void new_network_interface(struct parse *, struct element *);
 static struct string *addrmask(const struct string *, const struct string *);
 static int get_prefix_length(const char *, const char *);
@@ -483,7 +485,7 @@ parse_statement(struct parse *cfile, int type, int declaration)
 			parse_error(cfile, "unknown option %s.%s",
 				    option->space->old, option->old);
 	finish_option:
-		parse_option_statement(cfile, option,
+		parse_option_statement(NULL, cfile, option,
 				       supersede_option_statement);
 		return declaration;
 		break;
@@ -531,7 +533,7 @@ parse_statement(struct parse *cfile, int type, int declaration)
 		
 		et->skip = ISC_TRUE;
 		cfile->issue_counter++;
-		mapSet(cfile->stack[cfile->stack_top], et, "statements");
+		mapSet(cfile->stack[cfile->stack_top], et, "statement");
 	}
 
 	return 0;
@@ -958,7 +960,7 @@ parse_host_declaration(struct parse *cfile)
 /* class-declaration :== STRING LBRACE parameters declarations RBRACE
 */
 
-int
+void
 parse_class_declaration(struct parse *cfile, int type)
 {
 	const char *val;
@@ -1098,9 +1100,12 @@ parse_class_declaration(struct parse *cfile, int type)
 		/* Allocate the class structure... */
 		class = createMap();
 		class->kind = CLASS_DECL;
-		class->skip = ISC_TRUE;
+		if (type != CLASS_TYPE_CLASS) {
+			class->skip = ISC_TRUE;
+			cfile->issue_counter++;
+		}
 		TAILQ_CONCAT(&class->comments, &cfile->comments);
-		cfile->issue_counter++;
+
 		if (type == CLASS_TYPE_SUBCLASS) {
 			struct element *sub;
 
@@ -1146,7 +1151,7 @@ parse_class_declaration(struct parse *cfile, int type)
 		if (token == SEMI) {
 			skip_token(&val, NULL, cfile);
 
-			return 1;
+			return;
 		}
 	}
 
@@ -1174,12 +1179,9 @@ parse_class_declaration(struct parse *cfile, int type)
 			parse_semi(cfile);
 			continue;
 		} else if (token == MATCH) {
-			if (pc) {
+			if (pc)
 				parse_error(cfile,
 					    "invalid match in subclass.");
-				skip_to_semi(cfile);
-				break;
-			}
 			skip_token(&val, NULL, cfile);
 			token = peek_token(&val, NULL, cfile);
 			if (token != IF)
@@ -1195,11 +1197,8 @@ parse_class_declaration(struct parse *cfile, int type)
 					parse_error(cfile,
 						    "expecting boolean expr.");
 			} else {
-				expr->skip = ISC_TRUE;
-				cfile->issue_counter++;
-				mapSet(class, expr, "match");
+				add_match_class(cfile, class, expr);
 				parse_semi(cfile);
-				/* kea todo: translate match into test */
 			}
 		} else if (token == SPAWN) {
 			skip_token(&val, NULL, cfile);
@@ -1264,8 +1263,33 @@ parse_class_declaration(struct parse *cfile, int type)
 		listPush(classes, class);
 
 	cfile->stack_top--;
+}
 
-	return 1;
+static void
+add_match_class(struct parse *cfile,
+		struct element *class,
+		struct element *expr)
+{
+	struct element *rmatch;
+	struct comment *comment;
+	struct string *msg;
+	isc_boolean_t lose = ISC_FALSE;
+
+	msg = makeString(-1, "/// from: match ");
+	appendString(msg, print_boolean_expression(expr, &lose));
+	if (!lose)
+		comment = createComment(msg->content);
+
+	rmatch = reduce_boolean_expression(expr);
+	if ((rmatch == NULL) || (rmatch->type != ELEMENT_STRING)) {
+		expr->skip = ISC_TRUE;
+		cfile->issue_counter++;
+		TAILQ_INSERT_TAIL(&expr->comments, comment);
+		mapSet(class, expr, "match");
+	} else {
+		TAILQ_INSERT_TAIL(&rmatch->comments, comment);
+		mapSet(class, rmatch, "test");
+	}
 }
 
 /* shared-network-declaration :==

@@ -721,9 +721,16 @@ printList(FILE *fp, const struct list *l, isc_boolean_t skip, unsigned indent)
 	first = ISC_TRUE;
 	TAILQ_FOREACH(elem, l) {
 		isc_boolean_t skip_elem = skip;
+
 		assert(elem->key == NULL);
-		if (!skip)
+		if (!skip) {
 			skip_elem = elem->skip;
+			if (skip_to_end(elem)) {
+				if (!first)
+					fprintf(fp, "\n");
+				first = ISC_TRUE;
+			}
+		}
 		if (!first)
 			fprintf(fp, ",\n");
 		first = ISC_FALSE;
@@ -758,9 +765,16 @@ printMap(FILE *fp, const struct map *m, isc_boolean_t skip, unsigned indent)
 	first = ISC_TRUE;
 	TAILQ_FOREACH(elem, m) {
 		isc_boolean_t skip_elem = skip;
+
 		assert(elem->key != NULL);
-		if (!skip)
+		if (!skip) {
 			skip_elem = elem->skip;
+			if (skip_to_end(elem)) {
+				if (!first)
+					fprintf(fp, "\n");
+				first = ISC_TRUE;
+			}
+		}
 		if (!first)
 			fprintf(fp, ",\n");
 		first = ISC_FALSE;
@@ -820,6 +834,17 @@ printString(FILE *fp, const struct string *s)
 		}
 	}
 	fprintf(fp, "\"");
+}
+
+isc_boolean_t
+skip_to_end(const struct element *e)
+{
+	do {
+		if (!e->skip)
+			return ISC_FALSE;
+		e = TAILQ_NEXT(e);
+	} while (e != NULL);
+	return ISC_TRUE;
 }
 
 struct element *
