@@ -3,7 +3,22 @@
 # to /etc between these two systems without modifications.
 #
 
-# Removed already defined PXE
+# Local PXE support.  For our netboot OS installer
+option space PXE;
+option PXE.mtftp-ip             code 1 = ip-address;
+option PXE.mtftp-oport          code 2 = unsigned integer 16;
+option PXE.mtftp-sport          code 3 = unsigned integer 16;
+option PXE.mtftp-tmout          code 4 = unsigned integer 8;
+option PXE.mtftp-delay          code 5 = unsigned integer 8;
+option PXE.discovery-control    code 6 = unsigned integer 8;
+option PXE.discovery-mcast-addr code 7 = unsigned integer 8;
+
+# These are 'site local' options the PXELinux bootloader uses.
+option space pxelinux;
+option pxelinux.magic           code 208 = string;
+option pxelinux.configfile      code 209 = text;
+option pxelinux.pathprefix      code 210 = text;
+option pxelinux.reboottime      code 211 = unsigned integer 32;
 
 class "pxeclients" {
         match if substring (option vendor-class-identifier, 0, 9) = "PXEClient";

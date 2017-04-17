@@ -34,7 +34,12 @@
 #include <string.h>
 
 isc_boolean_t got_authoritative = ISC_FALSE;
+isc_boolean_t use_client_id = ISC_FALSE;
+isc_boolean_t use_flex_id = ISC_FALSE;
+isc_boolean_t use_hw_address = ISC_FALSE;
+struct element *last_subnet = NULL;
 
+static void add_host_reservation_identifiers(struct parse *, const char *);
 static void add_match_class(struct parse *, struct element *,
 			    struct element *);
 static void new_network_interface(struct parse *, struct element *);
@@ -263,6 +268,12 @@ parse_statement(struct parse *cfile, int type, int declaration)
 		return 1;
 
 	case HARDWARE:
+		if (!use_hw_address) {
+			add_host_reservation_identifiers(cfile,
+							 "hw-address");
+			use_hw_address = ISC_TRUE;
+		}
+
 		skip_token(&val, NULL, cfile);
 		if (!host_decl) {
 			for (i = cfile->stack_top; i > 0; --i) {
@@ -840,6 +851,12 @@ parse_host_declaration(struct parse *cfile)
 		if (token == UID) {
 			struct string *client_id;
 
+			if (!use_client_id) {
+				add_host_reservation_identifiers(cfile,
+								 "client-id");
+				use_client_id = ISC_TRUE;
+			}
+
 			skip_token(&val, NULL, cfile);
 
 			if (mapContains(host, "client-id"))
@@ -874,6 +891,12 @@ parse_host_declaration(struct parse *cfile)
 			struct option *option;
 			struct element *expr;
 			int relays;
+
+			if (!use_flex_id) {
+				add_host_reservation_identifiers(cfile,
+								 "flex-id");
+				use_flex_id = ISC_TRUE;
+			}
 
 			if (mapContains(host, "host-identifier"))
 				parse_error(cfile,
@@ -933,6 +956,7 @@ parse_host_declaration(struct parse *cfile)
 
 	cfile->stack_top--;
 	if (!deleted) {
+		struct element *where;
 		struct element *hosts;
 		size_t parent;
 		size_t i;
@@ -948,13 +972,34 @@ parse_host_declaration(struct parse *cfile)
 		if (kind == 0)
 			parse_error(cfile, "can't find a place to put "
 				    "host %s declaration", name->content);
-		hosts = mapGet(cfile->stack[parent], "reservations");
+		if (kind == ROOT_GROUP) {
+			if (last_subnet == NULL)
+				parse_error(cfile, "no last parent (%s)",
+					    name->content);
+			where = last_subnet;
+		} else
+			where = cfile->stack[parent];
+
+		hosts = mapGet(where, "reservations");
 		if (hosts == NULL) {
 			hosts = createList();
-			mapSet(cfile->stack[parent], hosts, "reservations");
+			mapSet(where, hosts, "reservations");
 		}
 		listPush(hosts, host);
 	}
+}
+
+static void
+add_host_reservation_identifiers(struct parse *cfile, const char *id)
+{
+	struct element *ids;
+
+	ids = mapGet(cfile->stack[1], "host-reservation-identifiers");
+	if (ids == NULL) {
+		ids = createList();
+		mapSet(cfile->stack[1], ids, "host-reservation-identifiers");
+	}
+	listPush(ids, createString(makeString(-1, id)));
 }
 
 /* class-declaration :== STRING LBRACE parameters declarations RBRACE
@@ -1462,6 +1507,7 @@ parse_subnet_declaration(struct parse *cfile)
 	subnet = createMap();
 	subnet->kind = SUBNET_DECL;
 	TAILQ_CONCAT(&subnet->comments, &cfile->comments);
+	last_subnet = subnet;
 
 	/* Find parent */
 	for (i = cfile->stack_top; i > 0; --i) {
@@ -1531,6 +1577,7 @@ parse_subnet6_declaration(struct parse *cfile) {
 	subnet = createMap();
 	subnet->kind = SUBNET_DECL;
 	TAILQ_CONCAT(&subnet->comments, &cfile->comments);
+	last_subnet = subnet;
 
 	/* Find parent */
 	for (i = cfile->stack_top; i > 0; --i) {
