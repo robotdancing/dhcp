@@ -354,7 +354,7 @@ struct option_def configs[] = {
 	{ "local-port", "S",			"server",  32, 0},
 	{ "limited-broadcast-address", "I",	"server",  33, 0},
 	{ "remote-port", "S",			"server",  34, 0},
-	{ "local-address", "I",			"server",  35, 3},
+	{ "local-address", "I",			"server",  35, 0},
 	{ "omapi-key", "d",			"server",  36, 0},
 	{ "stash-agent-options", "f",		"server",  37, 0},
 	{ "ddns-ttl", "T",			"server",  38, 0},
@@ -385,7 +385,7 @@ struct option_def configs[] = {
 	{ "ignore-client-uids", "f",		"server",  82, 3},
 	{ "log-threshold-low", "B",		"server",  83, 0},
 	{ "log-threshold-high", "B",		"server",  84, 0},
-	{ "echo-client-id", "f",		"server",  85, 5},
+	{ "echo-client-id", "f",		"server",  85, 3},
 	{ "server-id-check", "f",		"server",  86, 0},
 	{ "prefix-length-mode", "Nprefix_length_modes.",
 						"server",  87, 0},
@@ -778,6 +778,14 @@ get_config_comments(unsigned code)
 				       "(so not supported) feature");
 		TAILQ_INSERT_TAIL(&comments, comment);
                 break;
+
+	case 35: /* local-address */
+		comment = createComment("/// local-address is not supported");
+		TAILQ_INSERT_TAIL(&comments, comment);
+		comment = createComment("/// Kea equivalent feature is "
+					"to specify an interface address");
+		TAILQ_INSERT_TAIL(&comments, comment);
+		break;
 
 	case 36: /* omapi-key */
 		comment = createComment("/// omapi-key is an internal "

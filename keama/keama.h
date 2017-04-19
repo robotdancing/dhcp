@@ -282,14 +282,14 @@ void parse_error(struct parse *, const char *, ...)
 /* conflex.c */
 struct parse *new_parse(int, char *, size_t, const char *, int);
 void end_parse(struct parse *);
-void save_parse_state(struct parse *cfile);
-void restore_parse_state(struct parse *cfile);
+void save_parse_state(struct parse *);
+void restore_parse_state(struct parse *);
 enum dhcp_token next_token(const char **, unsigned *, struct parse *);
 enum dhcp_token peek_token(const char **, unsigned *, struct parse *);
 enum dhcp_token next_raw_token(const char **rval, unsigned *rlen,
-			       struct parse *cfile);
+			       struct parse *);
 enum dhcp_token peek_raw_token(const char **rval, unsigned *rlen,
-			       struct parse *cfile);
+			       struct parse *);
 /*
  * Use skip_token when we are skipping a token we have previously
  * used peek_token on as we know what the result will be in this case.
@@ -342,6 +342,7 @@ void parse_option_space_decl(struct parse *);
 void parse_option_code_definition(struct parse *, struct option *);
 struct string *parse_base64(struct parse *);
 struct string *parse_cshl(struct parse *);
+struct string *parse_hexa(struct parse *, struct string *);
 isc_boolean_t parse_executable_statements(struct element *,
 					  struct parse *, isc_boolean_t *,
 					  enum expression_context);
