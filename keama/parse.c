@@ -36,7 +36,6 @@ static void config_sname(struct element *, struct parse *);
 static void config_next_server(struct element *, struct parse *);
 static void config_qualifying_suffix(struct element *, struct parse *);
 static void config_enable_updates(struct element *, struct parse *);
-static void config_local_address(struct element *, struct parse *);
 static void config_ddns_update_style(struct element *, struct parse *);
 static void config_preferred_lifetime(struct element *, struct parse *);
 static void config_match_client_id(struct element *, struct parse *);
@@ -954,6 +953,7 @@ parse_option_code_definition(struct parse *cfile, struct option *option)
 	struct string *encapsulated;
 	struct string *datatype;
 	struct string *saved;
+	struct string *format;
 	struct element *optdef;
 	
 	/* Put the option in the definition */
@@ -1014,11 +1014,15 @@ parse_option_code_definition(struct parse *cfile, struct option *option)
 	if (token == LBRACE) {
 		recordp = 1;
 		token = next_token(&val, NULL, cfile);
+		if (arrayp)
+			appendString(saved, " ");
 		appendString(saved, "[");
 	}
 
 	/* At this point we're expecting a data type. */
 	datatype = makeString(0, NULL);
+	/* We record the format essentially for the binary one */
+	format = makeString(0, NULL);
     next_type:
 	if (saved->length > 0)
 		appendString(saved, " ");
@@ -1049,6 +1053,7 @@ parse_option_code_definition(struct parse *cfile, struct option *option)
 		if ((recordp) && (token == LBRACE))
 			parse_error(cfile,
 				    "only uniform array inside record.");
+		appendString(saved, "array of");
 		if (token == LBRACE) {
 			struct comment *comment;
 
@@ -1058,11 +1063,12 @@ parse_option_code_definition(struct parse *cfile, struct option *option)
 			def->skip = ISC_TRUE;
 			not_supported = ISC_TRUE;
 			cfile->issue_counter++;
+			appendString(saved, " [");
 		}
-		appendString(saved, "array of");
 		goto next_type;
 	case BOOLEAN:
 		type = "boolean";
+		appendString(format, "f");
 		break;
 	case INTEGER:
 		is_signed = ISC_TRUE;
@@ -1072,13 +1078,31 @@ parse_option_code_definition(struct parse *cfile, struct option *option)
 			parse_error(cfile, "expecting number.");
 		switch (atoi(val)) {
 		case 8:
-			type = is_signed ? "int8" : "uint8";
+			if (is_signed) {
+				type = "int8";
+				appendString(format, "b");
+			} else {
+				type = "uint8";
+				appendString(format, "B");
+			}
 			break;
 		case 16:
-			type = is_signed ? "int16" : "uint16";
+			if (is_signed) {
+				type = "int16";
+				appendString(format, "s");
+			} else {
+				type = "uint16";
+				appendString(format, "S");
+			}
 			break;
 		case 32:
-			type = is_signed ? "int32" : "uint32";
+			if (is_signed) {
+				type = "int32";
+				appendString(format, "l");
+			} else {
+				type = "uint32";
+				appendString(format, "L");
+			}
 			break;
 		default:
 			parse_error(cfile,
@@ -1098,31 +1122,40 @@ parse_option_code_definition(struct parse *cfile, struct option *option)
 
 	case IP_ADDRESS:
 		type = "ipv4-address";
+		appendString(format, "I");
 		break;
 	case IP6_ADDRESS:
 		type = "ipv6-address";
+		appendString(format, "6");
 		break;
 	case DOMAIN_NAME:
 		type = "fqdn";
+		appendString(format, "d");
 		goto no_arrays;
 	case DOMAIN_LIST:
 		/* Consume optional compression indicator. */
 		token = peek_token(&val, NULL, cfile);
-		appendString(saved, "list of ");
+		appendString(format, "D");
 		if (token == COMPRESSED) {
 			struct comment *comment;
 
+			if (local_family == AF_INET6)
+				parse_error(cfile, "domain list in DHCPv6 "
+					    "MUST NOT be compressed");
 			skip_token(&val, NULL, cfile);
 			comment = createComment("/// unsupported "
 						"compressed fqdn list");
 			TAILQ_INSERT_TAIL(&def->comments, comment);
+			comment = createComment("/// Reference #5087");
+			TAILQ_INSERT_TAIL(&def->comments, comment);
 			def->skip = ISC_TRUE;
 			not_supported = ISC_TRUE;
 			cfile->issue_counter++;
-			type = "compressed fqdn";
+			appendString(format, "c");
 			appendString(saved, "compressed ");
-		} else
-			type = "fqdn";
+		}
+		type = "fqdn";
+		appendString(saved, "list of ");
 		if (arrayp)
 			parse_error(cfile, "arrays of text strings not %s",
 				    "yet supported.");
@@ -1131,6 +1164,7 @@ parse_option_code_definition(struct parse *cfile, struct option *option)
 		break;
 	case TEXT:
 		type = "string";
+		appendString(format, "t");
 	no_arrays:
 		if (arrayp)
 			parse_error(cfile, "arrays of text strings not %s",
@@ -1140,6 +1174,7 @@ parse_option_code_definition(struct parse *cfile, struct option *option)
 	case STRING_TOKEN:
 		/* can be binary too */
 		type = "string";
+		appendString(format, "X");
 		goto no_arrays;
 
 	case ENCAPSULATE:
@@ -1149,12 +1184,16 @@ parse_option_code_definition(struct parse *cfile, struct option *option)
 				    "expecting option space identifier");
 		encapsulated = makeString(-1, val);
 		has_encapsulation = ISC_TRUE;
+		appendString(format, "E");
+		appendString(format, val);
+		appendString(format, ".");
 		appendString(saved, "encapsulate ");
 		appendString(saved, val);
 		break;
 
 	case ZEROLEN:
 		type = "empty";
+		appendString(format, "Z");
 		if (arrayp)
 			parse_error(cfile, "array incompatible with zerolen.");
 		no_more_in_record = ISC_TRUE;
@@ -1168,13 +1207,15 @@ parse_option_code_definition(struct parse *cfile, struct option *option)
 
 	if (recordp) {
 		token = next_token(&val, NULL, cfile);
-		if (arrayp > recordp)
-			arrayp = 0;
 		if (token == COMMA) {
-			if (no_more_in_record)
+			if (no_more_in_record) {
+				char last;
+
+				last = format->content[format->length - 1];
 				parse_error(cfile,
 					    "%s must be at end of record.",
-					    type);
+					    last == 't' ? "text" : "string");
+			}
 			token = next_token(&val, NULL, cfile);
 			appendString(saved, ",");
 			appendString(datatype, ", ");
@@ -1188,8 +1229,11 @@ parse_option_code_definition(struct parse *cfile, struct option *option)
 	if (has_encapsulation && arrayp)
 		parse_error(cfile,
 			    "Arrays of encapsulations don't make sense.");
-	if (arrayp)
+	if (arrayp) {
 		mapSet(def, createBool(arrayp), "array");
+		appendString(format, (arrayp > recordp) ? "a" : "A");
+	}
+	option->format = format->content;
 	if (recordp) {
 		mapSet(def, createString(datatype), "record-types");
 		mapSet(def, createString(makeString(-1, "record")), "type");
@@ -1294,6 +1338,38 @@ parse_cshl(struct parse *cfile)
 		token = peek_token(&val, NULL, cfile);
 		if (token != COLON)
 			break;
+		skip_token(&val, NULL, cfile);
+	}
+
+	return data;
+}
+
+/* Same but without colons in output */
+
+struct string *
+parse_hexa(struct parse *cfile, struct string *saved)
+{
+	uint8_t ibuf;
+	char tbuf[4];
+	struct string *data;
+	enum dhcp_token token;
+	const char *val;
+
+	data = makeString(0, NULL);
+
+	for (;;) {
+		token = next_token(&val, NULL, cfile);
+		if (token != NUMBER && token != NUMBER_OR_NAME)
+			parse_error(cfile, "expecting hexadecimal number.");
+		appendString(saved, val);
+		convert_num(cfile, &ibuf, val, 16, 8);
+		snprintf(tbuf, sizeof(tbuf), "%02hhx", ibuf);
+		appendString(data, tbuf);
+
+		token = peek_token(&val, NULL, cfile);
+		if (token != COLON)
+			break;
+		appendString(saved, val);
 		skip_token(&val, NULL, cfile);
 	}
 
@@ -3591,6 +3667,7 @@ parse_option_data(struct element *expr,
 		  struct option *option)
 {
 	const char *val;
+	const char *fmt;
 	enum dhcp_token token;
 	unsigned len;
 	struct string *data;
@@ -3603,8 +3680,33 @@ parse_option_data(struct element *expr,
 
 	data = makeString(0, NULL);
 	saved = makeString(0, NULL);
+	fmt =  option->format;
+	/* The format should never be NULL but in case set it to a loop */
+	if (fmt == NULL)
+		fmt = "Ba";
 
+	/* Handle ISC DHCP binary data */
+	if ((*fmt == 'E') || (*fmt == 'X')) {
+		token = peek_token(&val, NULL, cfile);
+		if (token == NUMBER_OR_NAME || token == NUMBER) {
+			data = parse_hexa(cfile, saved);
+			mapSet(expr, createBool(ISC_FALSE), "csv-format");
+		} else if (token == STRING) {
+			skip_token(&val, &len, cfile);
+			data = makeString(len, val);
+		} else
+			parse_error(cfile, "expecting string "
+				    "or hexadecimal data.");
+		mapSet(expr, createString(data), "data");
+		return ISC_TRUE;
+	}
+
+	/* Just collect data expecting ISC DHCP and Kea are compatible */
 	for (;;) {
+		if (*fmt == 'A')
+			fmt = option->format;
+		if ((*fmt == 'a') && (fmt != option->format))
+			fmt -= 1;
 		token = peek_token(&val, NULL, cfile);
 		if (token == END_OF_FILE)
 			parse_error(cfile, "unexpected end of file");
@@ -3614,13 +3716,14 @@ parse_option_data(struct element *expr,
 			skip_token(&val, NULL, cfile);
 			appendString(data, ", ");
 			appendString(saved, ",");
+			fmt++;
 			continue;
 		}
 		skip_token(&val, &len, cfile);
+			
 		item = makeString(len, val);
-		concatString(saved, item);
-		/* Kea todo: handle ISC DHCP binary format */
-		if (is_identifier(token)) {
+		/* Translate booleans */
+		if ((*fmt == 'f') && is_identifier(token)) {
 			if ((len == 3) && (memcmp(val, "off", 3) == 0)) {
 				val = "false";
 				len = 5;
@@ -3632,8 +3735,16 @@ parse_option_data(struct element *expr,
 			} else if (token == IGNORE)
 				has_ignore = ISC_TRUE;
 		}
-		item = makeString(len, val);
+		/* Handle terminating binary */
+		if ((*fmt == 'X') &&
+		    (token == NUMBER_OR_NAME || token == NUMBER))
+			item = parse_hexa(cfile, saved);
+		else {
+			concatString(saved, item);
+			item = makeString(len, val);
+		}
 		concatString(data, item);
+		fmt++;
 	}
 				
 	if (canon_bool) {
@@ -4037,9 +4148,6 @@ parse_config_statement(struct element *result,
 	case 30: /* ddns-updates */
 		config_enable_updates(config, cfile);
 		break;
-	case 35: /* local-address */
-		config_local_address(config, cfile);
-		break;
 	case 39: /* ddns-update-style */
 		config_ddns_update_style(config, cfile);
 		break;
@@ -4215,25 +4323,126 @@ config_next_server(struct element *config, struct parse *cfile)
 static void
 config_qualifying_suffix(struct element *config, struct parse *cfile)
 {
-	/* Kea todo */
+	struct element *value;
+	size_t scope;
+
+	value = mapGet(config, "value");
+
+	for (scope = cfile->stack_top; scope > 0; --scope)
+		if ((cfile->stack[scope]->kind != PARAMETER) ||
+		    (cfile->stack[scope]->kind != POOL_DECL))
+			break;
+	if (scope != ROOT_GROUP) {
+		struct comment *comment;
+
+		comment = createComment("/// not global qualifying-suffix "
+					"is not supported");
+		TAILQ_INSERT_TAIL(&value->comments, comment);
+		value->skip = ISC_TRUE;
+		cfile->issue_counter++;
+		mapSet(cfile->stack[scope], value, "qualifying-suffix");
+	} else {
+		struct element *d2;
+
+		d2 = mapGet(cfile->stack[1], "dhcp-ddns");
+		if (d2 == NULL) {
+			d2 = createMap();
+			mapSet(d2, createBool(ISC_FALSE), "enable-updates");
+			mapSet(cfile->stack[1], d2, "dhcp-ddns");
+		}
+		mapSet(d2, value, "qualifying-suffix");
+	}
 }
 
 static void
 config_enable_updates(struct element *config, struct parse *cfile)
 {
-	/* Kea todo */ /* check scope */
-}
+	struct element *value;
+	size_t scope;
 
-static void
-config_local_address(struct element *config, struct parse *cfile)
-{
-	/* Kea todo */
+	value = mapGet(config, "value");
+
+	for (scope = cfile->stack_top; scope > 0; --scope)
+		if ((cfile->stack[scope]->kind != PARAMETER) ||
+		    (cfile->stack[scope]->kind != POOL_DECL))
+			break;
+	if (scope != ROOT_GROUP) {
+		struct comment *comment;
+
+		comment = createComment("/// not global enable-updates "
+					"is not supported");
+		TAILQ_INSERT_TAIL(&value->comments, comment);
+		value->skip = ISC_TRUE;
+		cfile->issue_counter++;
+		mapSet(cfile->stack[scope], value, "enable-updates");
+	} else {
+		struct element *d2;
+
+		d2 = mapGet(cfile->stack[1], "dhcp-ddns");
+		if (d2 == NULL) {
+			d2 = createMap();
+			mapSet(cfile->stack[1], d2, "dhcp-ddns");
+		} else if (mapContains(d2, "enable-updates"))
+			mapRemove(d2, "enable-updates");
+		mapSet(d2, value, "enable-updates");
+	}
 }
 
 static void
 config_ddns_update_style(struct element *config, struct parse *cfile)
 {
-	/* Kea todo */ /* check standard/none and fails on others */
+	struct element *value;
+	isc_boolean_t enable;
+	size_t scope;
+
+	value = mapGet(config, "value");
+	if (strcmp(stringValue(value)->content, "standard") == 0)
+		enable = ISC_TRUE;
+	else if (strcmp(stringValue(value)->content, "none") == 0)
+		enable = ISC_FALSE;
+	else {
+		struct string *msg;
+		struct comment *comment;
+
+		for (scope = cfile->stack_top; scope > 0; --scope)
+			if ((cfile->stack[scope]->kind != PARAMETER) ||
+			    (cfile->stack[scope]->kind != POOL_DECL))
+				break;
+		msg = makeString(-1, "/// Unsupported ddns-update-style ");
+		concatString(msg, stringValue(value));
+		comment = createComment(msg->content);
+		TAILQ_INSERT_TAIL(&value->comments, comment);
+		value->skip = ISC_TRUE;
+		cfile->issue_counter++;
+		mapSet(cfile->stack[scope], value, "ddns-update-style");
+	}
+
+	for (scope = cfile->stack_top; scope > 0; --scope)
+		if ((cfile->stack[scope]->kind != PARAMETER) ||
+		    (cfile->stack[scope]->kind != POOL_DECL))
+			break;
+	if (scope != ROOT_GROUP) {
+		struct comment *comment;
+
+		comment = createComment("/// not global ddns-update-style "
+					"is not supported");
+		TAILQ_INSERT_TAIL(&value->comments, comment);
+		value->skip = ISC_TRUE;
+		cfile->issue_counter++;
+		mapSet(cfile->stack[scope], value, "ddns-update-style");
+	} else {
+		struct element *d2;
+
+		/* map ddns-update-style into enable-updates */
+		value = createBool(enable);
+		d2 = mapGet(cfile->stack[1], "dhcp-ddns");
+		if (d2 == NULL) {
+			d2 = createMap();
+			mapSet(cfile->stack[1], d2, "dhcp-ddns");
+		} else if (mapContains(d2, "enable-updates"))
+			mapRemove(d2, "enable-updates");
+		mapSet(d2, value, "enable-updates");
+	}
 }
 
 static void
