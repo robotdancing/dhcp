@@ -40,8 +40,6 @@ static void config_ddns_update_style(struct element *, struct parse *);
 static void config_preferred_lifetime(struct element *, struct parse *);
 static void config_match_client_id(struct element *, struct parse *);
 static void config_echo_client_id(struct element *, struct parse *);
-static void config_timers(struct element *, struct parse *);
-static void config_expired_leases_processing(struct element *, struct parse *);
 
 /*
 static uint32_t getULong(const unsigned char *buf);
@@ -956,6 +954,11 @@ parse_option_code_definition(struct parse *cfile, struct option *option)
 	struct string *format;
 	struct element *optdef;
 	
+	if (option->space->status == special) {
+		parse_vendor_code_definition(cfile, option);
+		return;
+	}
+
 	/* Put the option in the definition */
 	def = createMap();
 	mapSet(def,
@@ -976,10 +979,9 @@ parse_option_code_definition(struct parse *cfile, struct option *option)
 	if (option->code == 0) {
 		struct option *from_code;
 
+		option->code = code;
 		from_code = option_lookup_code(option->space->old, code);
-		if (from_code == NULL)
-			option->code = code;
-		else
+		if (from_code != NULL)
 			option->status = from_code->status;
 	}
 
@@ -993,6 +995,8 @@ parse_option_code_definition(struct parse *cfile, struct option *option)
 		TAILQ_INSERT_TAIL(&def->comments, comment);
 		def->skip = ISC_TRUE;
 		cfile->issue_counter++;
+		/* Avoid option-data per name */
+		option->status = kea_unknown;
 	}
 
 	token = next_token(&val, NULL, cfile);
@@ -1137,20 +1141,10 @@ parse_option_code_definition(struct parse *cfile, struct option *option)
 		token = peek_token(&val, NULL, cfile);
 		appendString(format, "D");
 		if (token == COMPRESSED) {
-			struct comment *comment;
-
 			if (local_family == AF_INET6)
 				parse_error(cfile, "domain list in DHCPv6 "
 					    "MUST NOT be compressed");
 			skip_token(&val, NULL, cfile);
-			comment = createComment("/// unsupported "
-						"compressed fqdn list");
-			TAILQ_INSERT_TAIL(&def->comments, comment);
-			comment = createComment("/// Reference #5087");
-			TAILQ_INSERT_TAIL(&def->comments, comment);
-			def->skip = ISC_TRUE;
-			not_supported = ISC_TRUE;
-			cfile->issue_counter++;
 			appendString(format, "c");
 			appendString(saved, "compressed ");
 		}
@@ -1189,6 +1183,8 @@ parse_option_code_definition(struct parse *cfile, struct option *option)
 		appendString(format, ".");
 		appendString(saved, "encapsulate ");
 		appendString(saved, val);
+		if (datatype->length == 0)
+			type = "empty";
 		break;
 
 	case ZEROLEN:
@@ -1250,6 +1246,60 @@ parse_option_code_definition(struct parse *cfile, struct option *option)
 		mapSet(cfile->stack[1], optdef, "option-def");
 	}
 	listPush(optdef, def);
+}
+
+/*
+ * Specialized version of parse_option_code_definition for vendor options
+ * DHCPv4 vivso (code 125, space vendor) and DHCPv6 vendor-opts (17,
+ * space vsio). The syntax is a subnet:
+ * vcd :== NUMBER EQUALS ENCAPSULATE identifier SEMI
+ */
+
+void
+parse_vendor_code_definition(struct parse *cfile, struct option *option)
+{
+	const char *val;
+	enum dhcp_token token;
+	struct string *id;
+	struct string *space;
+	struct space *universe;
+	struct string *name;
+	struct element *vendor;
+
+	space = makeString(-1, "vendor-");
+
+	/* Parse the option code / vendor id. */
+	token = next_token(&val, NULL, cfile);
+	if (token != NUMBER)
+		parse_error(cfile, "expecting option code number.");
+	id = makeString(-1, val);
+	appendString(space, val);
+
+
+	token = next_token(&val, NULL, cfile);
+	if (token != EQUAL)
+		parse_error(cfile, "expecting \"=\"");
+	token = next_token(&val, NULL, cfile);
+	if (token != ENCAPSULATE)
+		parse_error(cfile, "expecting encapsulate");
+	token = next_token(&val, NULL, cfile);
+	if (!is_identifier(token))
+		parse_error(cfile, "expecting option space identifier");
+	universe = space_lookup(val);
+	if (universe == NULL)
+		parse_error(cfile, "unknown option space %s", val);
+	/* Map the universe to vendor-<code> */
+	universe->name = space->content;
+	/* Create the vendor option */
+	vendor = createMap();
+	if (local_family == AF_INET)
+		name = makeString(-1, "vivso-suboptions");
+	else
+		name = makeString(-1, "vendor-opts");
+	mapSet(vendor, createString(name), "name");
+	mapSet(vendor, createString(id), "data");
+	universe->vendor = vendor;
+	parse_semi(cfile);
 }
 
 /*
@@ -1402,8 +1452,8 @@ parse_executable_statements(struct element *statements,
 
 		statement = createMap();
 		TAILQ_CONCAT(&statement->comments, &cfile->comments);
-		if (!parse_executable_statement(statement, cfile,
-						lose, case_context))
+		if (!parse_executable_statement(statement, cfile, lose,
+						case_context, ISC_FALSE))
 			break;
 		TAILQ_CONCAT(&statement->comments, &cfile->comments);
 		listPush(statements, statement);
@@ -1417,7 +1467,8 @@ parse_executable_statements(struct element *statements,
 isc_boolean_t
 parse_executable_statement(struct element *result,
 			   struct parse *cfile, isc_boolean_t *lose,
-			   enum expression_context case_context)
+			   enum expression_context case_context,
+			   isc_boolean_t direct)
 {
 	enum dhcp_token token;
 	const char *val;
@@ -1829,7 +1880,7 @@ parse_executable_statement(struct element *result,
 				result->skip = ISC_TRUE;
 				cfile->issue_counter++;
 				return parse_config_statement
-					      (result, cfile, option,
+					      (NULL, cfile, option,
 					       supersede_option_statement);
 			}
 		}
@@ -3661,6 +3712,40 @@ new_rhs:
 	goto new_rhs;
 }	
 
+/* Escape embedded commas (should do leading/trailing spaces too) */
+struct string *
+escape_option_string(unsigned len, const char *val)
+{
+	struct string *result;
+	struct string *add;
+	unsigned i;
+	char s[2];
+
+	result = makeString(0, NULL);
+	add = makeString(0, NULL);
+#if 0
+	if (len > 0) {
+		if (isspace(val[0]))
+			parse_error(cfile, "loading space in %s", val);
+		if (isspace(val[len - 1]))
+			parse_error(cfile, "traiing space in %s", val);
+#endif
+	for (i = 0; i < len; i++) {
+		if (val[i] == ',') {
+			add->length = 2;
+			add->content = "\\,";
+		} else {
+			add->length = 1;
+			s[0] = val[i];
+			s[1] = 0;
+			add->content = s;
+		}
+		concatString(result, add);
+	}
+	free(add);
+	return result;
+}
+
 isc_boolean_t
 parse_option_data(struct element *expr,
 		  struct parse *cfile,
@@ -3670,6 +3755,7 @@ parse_option_data(struct element *expr,
 	const char *fmt;
 	enum dhcp_token token;
 	unsigned len;
+	struct string *format;
 	struct string *data;
 	struct string *saved;
 	struct string *item;
@@ -3680,10 +3766,11 @@ parse_option_data(struct element *expr,
 
 	data = makeString(0, NULL);
 	saved = makeString(0, NULL);
-	fmt =  option->format;
-	/* The format should never be NULL but in case set it to a loop */
-	if (fmt == NULL)
-		fmt = "Ba";
+	format = makeString(0, NULL);
+	appendString(format, option->format);
+	/* To be sure we should never go outside it... */
+	appendString(format, "Ba");
+	fmt =  format->content;
 
 	/* Handle ISC DHCP binary data */
 	if ((*fmt == 'E') || (*fmt == 'X')) {
@@ -3704,8 +3791,8 @@ parse_option_data(struct element *expr,
 	/* Just collect data expecting ISC DHCP and Kea are compatible */
 	for (;;) {
 		if (*fmt == 'A')
-			fmt = option->format;
-		if ((*fmt == 'a') && (fmt != option->format))
+			fmt = format->content;
+		if ((*fmt == 'a') && (fmt != format->content))
 			fmt -= 1;
 		token = peek_token(&val, NULL, cfile);
 		if (token == END_OF_FILE)
@@ -3739,7 +3826,11 @@ parse_option_data(struct element *expr,
 		if ((*fmt == 'X') &&
 		    (token == NUMBER_OR_NAME || token == NUMBER))
 			item = parse_hexa(cfile, saved);
-		else {
+		/* STRING can return embedded unexpected characters */
+		else if (token == STRING) {
+			concatString(saved, item);
+			item = escape_option_string(len, val);
+		} else {
 			concatString(saved, item);
 			item = makeString(len, val);
 		}
@@ -3884,6 +3975,54 @@ parse_option_statement(struct element *result,
 	if (opt_data_list == NULL) {
 		opt_data_list = createList();
 		mapSet(cfile->stack[where], opt_data_list, "option-data");
+	}
+	if (!opt_data->skip && (option->space->vendor != NULL)) {
+		size_t i;
+		isc_boolean_t already = ISC_FALSE;
+		struct string *vo_name;
+		struct string *vo_data;
+		struct element *opt;
+
+		vo_name = stringValue(mapGet(option->space->vendor, "name"));
+		vo_data = stringValue(mapGet(option->space->vendor, "data"));
+		for (i = 0; i < listSize(opt_data_list); i++) {
+			struct element *name;
+			struct element *data;
+
+			opt = listGet(opt_data_list, 0);
+			if (opt == NULL)
+				parse_error(cfile, "null option-data at %u",
+					    (unsigned) i);
+			name = mapGet(opt, "name");
+			if (name == NULL)
+				continue;
+			if (name->type != ELEMENT_STRING)
+				parse_error(cfile, "bad name in option-data "
+					    "at %u: unexpected type %s",
+					    (unsigned) i,
+					    type2name(name->type));
+			if (!eqString(stringValue(name), vo_name))
+				continue;
+			data = mapGet(opt, "data");
+			/* Can be expression too */
+			if (data == NULL)
+				continue;
+			if (data->type != ELEMENT_STRING)
+				parse_error(cfile, "bad data in option-data "
+					    "at %u: unexpected type %s",
+					    (unsigned) i,
+					    type2name(data->type));
+			if (eqString(stringValue(data), vo_data)) {
+				already = ISC_TRUE;
+				break;
+			}
+		}
+		if (!already) {
+			opt = createMap();
+			mapSet(opt, createString(vo_name), "name");
+			mapSet(opt, createString(vo_data), "data");
+			listPush(opt_data_list, opt);
+		}
 	}
 	listPush(opt_data_list, opt_data);
 
@@ -4131,7 +4270,6 @@ parse_config_statement(struct element *result,
 		break;
 	case 15: /* filename */
 		config_file(config, cfile);
-		/* Kea todo: DHCPv4 file (vs boot-file-name option) */
 		break;
 	case 16: /* server-name */
 		config_sname(config, cfile);
@@ -4160,12 +4298,6 @@ parse_config_statement(struct element *result,
 	case 85: /* echo-client-id */
 		config_echo_client_id(config, cfile);
 		break;
-	case 88: /* dhcpv6-set-tee-times */
-		config_timers(config, cfile);
-		break;
-	case 89: /* abandon-lease-time */
-		config_expired_leases_processing(config, cfile);
-		break;
 	default:
 		parse_error(cfile, "unsupported config option %s (%u)",
 			    option->name, option->code);
@@ -4179,13 +4311,13 @@ config_valid_lifetime(struct element *config, struct parse *cfile)
 {
 	struct element *value;
 	struct comment *comment;
-	size_t where;
+	size_t scope;
 	isc_boolean_t pop_from_pool = ISC_FALSE;
 
 	value = mapGet(config, "value");
 
-	for (where = cfile->stack_top; where > 0; --where) {
-		int kind = cfile->stack[where]->kind;
+	for (scope = cfile->stack_top; scope > 0; --scope) {
+		int kind = cfile->stack[scope]->kind;
 
 		if (kind == PARAMETER)
 			continue;
@@ -4210,7 +4342,7 @@ config_valid_lifetime(struct element *config, struct parse *cfile)
 				       "an internal pool scope");
 		TAILQ_INSERT_TAIL(&value->comments, comment);
 	}
-	mapSet(cfile->stack[where], value, "valid-lifetime");
+	mapSet(cfile->stack[scope], value, "valid-lifetime");
 }
 
 static void
@@ -4218,7 +4350,7 @@ config_file(struct element *config, struct parse *cfile)
 {
 	struct element *value;
 	struct comment *comment;
-	size_t where;
+	size_t scope;
 	isc_boolean_t popped = ISC_FALSE;
 
 	if (local_family != AF_INET)
@@ -4226,8 +4358,8 @@ config_file(struct element *config, struct parse *cfile)
 
 	value = mapGet(config, "value");
 
-	for (where = cfile->stack_top; where > 0; --where) {
-		int kind = cfile->stack[where]->kind;
+	for (scope = cfile->stack_top; scope > 0; --scope) {
+		int kind = cfile->stack[scope]->kind;
 
 		if (kind == PARAMETER)
 			continue;
@@ -4247,7 +4379,7 @@ config_file(struct element *config, struct parse *cfile)
 		value->skip = ISC_TRUE;
 		cfile->issue_counter++;
 	}
-	mapSet(cfile->stack[where], value, "boot-file-name");
+	mapSet(cfile->stack[scope], value, "boot-file-name");
 }
 
 static void
@@ -4255,7 +4387,7 @@ config_sname(struct element *config, struct parse *cfile)
 {
 	struct element *value;
 	struct comment *comment;
-	size_t where;
+	size_t scope;
 	isc_boolean_t popped = ISC_FALSE;
 
 	if (local_family != AF_INET)
@@ -4263,8 +4395,8 @@ config_sname(struct element *config, struct parse *cfile)
 
 	value = mapGet(config, "value");
 
-	for (where = cfile->stack_top; where > 0; --where) {
-		int kind = cfile->stack[where]->kind;
+	for (scope = cfile->stack_top; scope > 0; --scope) {
+		int kind = cfile->stack[scope]->kind;
 
 		if (kind == PARAMETER)
 			continue;
@@ -4284,7 +4416,7 @@ config_sname(struct element *config, struct parse *cfile)
 		value->skip = ISC_TRUE;
 		cfile->issue_counter++;
 	}
-	mapSet(cfile->stack[where], value, "server-hostname");
+	mapSet(cfile->stack[scope], value, "server-hostname");
 }
 
 static void
@@ -4292,7 +4424,7 @@ config_next_server(struct element *config, struct parse *cfile)
 {
 	struct element *value;
 	struct comment *comment;
-	size_t where;
+	size_t scope;
 	isc_boolean_t popped = ISC_FALSE;
 
 	if (local_family != AF_INET)
@@ -4300,8 +4432,8 @@ config_next_server(struct element *config, struct parse *cfile)
 
 	value = mapGet(config, "value");
 
-	for (where = cfile->stack_top; where > 0; --where) {
-		int kind = cfile->stack[where]->kind;
+	for (scope = cfile->stack_top; scope > 0; --scope) {
+		int kind = cfile->stack[scope]->kind;
 
 		if (kind == PARAMETER)
 			continue;
@@ -4317,7 +4449,7 @@ config_next_server(struct element *config, struct parse *cfile)
 					"an internal unsupported scope");
 		TAILQ_INSERT_TAIL(&value->comments, comment);
 	}
-	mapSet(cfile->stack[where], value, "next-server");
+	mapSet(cfile->stack[scope], value, "next-server");
 }
 
 static void
@@ -4450,7 +4582,7 @@ config_preferred_lifetime(struct element *config, struct parse *cfile)
 {
 	struct element *value;
 	struct comment *comment;
-	size_t where;
+	size_t scope;
 	isc_boolean_t pop_from_pool = ISC_FALSE;
 
 	if (local_family != AF_INET6)
@@ -4458,8 +4590,8 @@ config_preferred_lifetime(struct element *config, struct parse *cfile)
 
 	value = mapGet(config, "value");
 
-	for (where = cfile->stack_top; where > 0; --where) {
-		int kind = cfile->stack[where]->kind;
+	for (scope = cfile->stack_top; scope > 0; --scope) {
+		int kind = cfile->stack[scope]->kind;
 
 		if (kind == PARAMETER)
 			continue;
@@ -4484,37 +4616,84 @@ config_preferred_lifetime(struct element *config, struct parse *cfile)
 				       "an internal pool scope");
 		TAILQ_INSERT_TAIL(&value->comments, comment);
 	}
-	mapSet(cfile->stack[where], value, "preferred-lifetime");
+	mapSet(cfile->stack[scope], value, "preferred-lifetime");
+	/* derive T1 and T2 */
+	mapSet(cfile->stack[scope],
+	       createInt(intValue(value) / 2),
+	       "renew-timer");
+	mapSet(cfile->stack[scope],
+	       createInt(intValue(value) * 4 / 5),
+	       "rebind-timer");
 }
 
 static void
 config_match_client_id(struct element *config, struct parse *cfile)
 {
-	/* Kea todo */
+	struct element *value;
+	struct comment *comment;
+	size_t scope;
+	isc_boolean_t pop_from_pool = ISC_FALSE;
+
 	if (local_family != AF_INET)
-		parse_error(cfile, "match-client-id is DHCPv4 only");
-	/* global and subnet4 */
+		parse_error(cfile, "ignore-client-uids is DHCPv4 only");
+
+	value = mapGet(config, "value");
+
+	for (scope = cfile->stack_top; scope > 0; --scope) {
+		int kind = cfile->stack[scope]->kind;
+
+		if (kind == PARAMETER)
+			continue;
+		if ((kind == ROOT_GROUP) ||
+		    (kind == SHARED_NET_DECL) ||
+		    (kind == SUBNET_DECL) ||
+		    (kind == GROUP_DECL))
+			break;
+		if (kind == POOL_DECL) {
+			pop_from_pool = ISC_TRUE;
+			continue;
+		}
+		comment = createComment("/// match-client-id in unsupported "
+					"scope");
+		TAILQ_INSERT_TAIL(&value->comments, comment);
+		value->skip = ISC_TRUE;
+		cfile->issue_counter++;
+		break;
+	}
+	if (pop_from_pool) {
+		comment= createComment("/// match-client-id moved from "
+				       "an internal pool scope");
+		TAILQ_INSERT_TAIL(&value->comments, comment);
+	}
+	mapSet(cfile->stack[scope], value, "match-client-id");
 }
 
 static void
 config_echo_client_id(struct element *config, struct parse *cfile)
 {
-	/* Kea todo */
+	struct element *value;
+	struct comment *comment;
+	size_t scope;
+
 	if (local_family != AF_INET)
 		parse_error(cfile, "echo-client-id is DHCPv4 only");
-	/* global only */
-}
 
-static void
-config_timers(struct element *config, struct parse *cfile)
-{
-	/* Kea todo */
-}
+	value = mapGet(config, "value");
 
-static void
-config_expired_leases_processing(struct element *config, struct parse *cfile)
-{
-	/* Kea todo */
+	for (scope = cfile->stack_top; scope > 0; --scope) {
+		int kind = cfile->stack[scope]->kind;
+
+		if (kind == PARAMETER)
+			continue;
+		if (kind == ROOT_GROUP)
+			break;
+		comment = createComment("/// not global echo-client-id "
+					"is not supported");
+		TAILQ_INSERT_TAIL(&value->comments, comment);
+		value->skip = ISC_TRUE;
+		cfile->issue_counter++;
+	}
+	mapSet(cfile->stack[scope], value, "echo-client-id");
 }
 
 /* parse_error moved to keama.c */
