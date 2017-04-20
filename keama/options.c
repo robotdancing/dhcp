@@ -38,12 +38,13 @@ struct space_def space_defs[] = {
 	{ "nwip", "nwip", 0},
 	{ "agent", "dhcp-agent-options-space", 2},
 	{ "vendor-class", "_vivco_", 0},
-	{ "vendor", "_vivso_", 0},
+	{ "vendor", "_vivso_", 3},
 	{ "isc", "_isc_", 0},
 	{ "", "vendor-encapsulated-options-space", 1},
 	{ "_docsis3_", "vendor-4491", 1},
 	{ "dhcp6", "dhcp6", 2},
-	{ "vsio", "vendor-opts-space", 2},
+	{ "vsio", "_vendor-opts-space_", 3},
+	{ "_vsio_", "vendor-opts-space", 1},
 	{ "isc6", "_isc6_", 0},
 	{ "_rsoo_", "rsoo-opts", 1},
 	{ "_isc6_", "vendor-2495", 1},
@@ -389,8 +390,8 @@ struct option_def configs[] = {
 	{ "server-id-check", "f",		"server",  86, 0},
 	{ "prefix-length-mode", "Nprefix_length_modes.",
 						"server",  87, 0},
-	{ "dhcpv6-set-tee-times", "f",		"server",  88, 3},
-	{ "abandon-lease-time", "T",		"server",  89, 3},
+	{ "dhcpv6-set-tee-times", "f",		"server",  88, 0},
+	{ "abandon-lease-time", "T",		"server",  89, 0},
 	{ NULL, NULL, NULL, 0, 0 }
 };
 
@@ -997,6 +998,24 @@ get_config_comments(unsigned code)
 					"simpler?)");
                 TAILQ_INSERT_TAIL(&comments, comment);
                 break;
+	case 88: /* dhcpv6-set-tee-times */
+		comment = createComment("/// dhcpv6-set-tee-times is a "
+					"transitional (so not supported) "
+					"feature");
+		TAILQ_INSERT_TAIL(&comments, comment);
+		comment = createComment("/// T1 and T2 are .5 and .8 times "
+					"preferred-lifetime");
+		TAILQ_INSERT_TAIL(&comments, comment);
+		break;
+	case 89: /* abandon-lease-time */
+		comment = createComment("/// abandon-lease-time is not "
+					"supported");
+		TAILQ_INSERT_TAIL(&comments, comment);
+		comment = createComment("/// Kea support equivalent (and "
+					"richer) expired-lease-processing "
+					"and decline-probation-period");
+		TAILQ_INSERT_TAIL(&comments, comment);
+		break;
 	}
 	return &comments;
 }

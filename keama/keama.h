@@ -258,6 +258,7 @@ struct space {
 	const char *old;		/* ISC DHCP space name */
 	const char *name;		/* Kea space name */
 	enum option_status status;	/* status */
+	struct element *vendor;		/* vendor option */
 	TAILQ_ENTRY(space) next;	/* next space */
 };
 
@@ -340,6 +341,7 @@ struct option *parse_option_name(struct parse *, isc_boolean_t,
 				 isc_boolean_t *);
 void parse_option_space_decl(struct parse *);
 void parse_option_code_definition(struct parse *, struct option *);
+void parse_vendor_code_definition(struct parse *, struct option *);
 struct string *parse_base64(struct parse *);
 struct string *parse_cshl(struct parse *);
 struct string *parse_hexa(struct parse *, struct string *);
@@ -348,7 +350,8 @@ isc_boolean_t parse_executable_statements(struct element *,
 					  enum expression_context);
 isc_boolean_t parse_executable_statement(struct element *,
 					 struct parse *, isc_boolean_t *,
-					 enum expression_context);
+					 enum expression_context,
+					 isc_boolean_t);
 isc_boolean_t parse_zone(struct element *, struct parse *);
 isc_boolean_t parse_key(struct element *, struct parse *);
 isc_boolean_t parse_on_statement(struct element *, struct parse *,
@@ -372,6 +375,7 @@ isc_boolean_t parse_non_binary(struct element *, struct parse *,
 isc_boolean_t parse_expression(struct element *, struct parse *,
 			       isc_boolean_t *, enum expression_context,
 			       struct element *, enum expr_op);
+struct string *escape_option_string(unsigned, const char *);
 isc_boolean_t parse_option_data(struct element *, struct parse *,
 				struct option *);
 isc_boolean_t parse_option_statement(struct element *, struct parse *,
