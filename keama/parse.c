@@ -3142,14 +3142,17 @@ parse_non_binary(struct element *expr,
 		if (context == context_numeric ||
 		    context == context_data_or_numeric) {
 			skip_token(&val, NULL, cfile);
+			/* can also return a const-int */
 			resetInt(expr, atoi(val));
 			break;
 		}
 
 	case NUMBER_OR_NAME:
+		/* Return a const-data to make a difference with
+		   a string literal. */
 		data = makeString(-1, "0x");
 		concatString(data, parse_hexa(cfile, NULL));
-		resetString(expr, data);
+		mapSet(expr, createString(data), "const-data");
 		break;
 
 	case NS_FORMERR:
@@ -4845,6 +4848,7 @@ is_data_expression(struct element *expr)
 		mapContains(expr, "uppercase") ||
 		mapContains(expr, "option") ||
 		mapContains(expr, "hardware") ||
+		mapContains(expr, "const-data") ||
 		mapContains(expr, "packet") ||
 		mapContains(expr, "concat") ||
 		mapContains(expr, "encapsulate") ||
@@ -4872,6 +4876,7 @@ is_numeric_expression(struct element *expr)
 		mapContains(expr, "extract-int8") ||
 		mapContains(expr, "extract-int16") ||
 		mapContains(expr, "extract-int32") ||
+		mapContains(expr, "const-int") ||
 		mapContains(expr, "lease-time") ||
 		mapContains(expr, "add") ||
 		mapContains(expr, "subtract") ||

@@ -301,7 +301,7 @@ enum dhcp_token peek_raw_token(const char **rval, unsigned *rlen,
 size_t conf_file_parse(struct parse *);
 void read_conf_file(struct parse *, const char *, int);
 size_t conf_file_subparse(struct parse *, int);
-int parse_statement(struct parse *, int, int);
+isc_boolean_t parse_statement(struct parse *, int, isc_boolean_t);
 void get_permit(struct parse *, struct element *);
 void parse_pool_statement(struct parse *, int);
 void parse_lbrace(struct parse *);
@@ -311,6 +311,7 @@ void parse_shared_net_declaration(struct parse *);
 void parse_subnet_declaration(struct parse *);
 void parse_subnet6_declaration(struct parse *);
 void parse_group_declaration(struct parse *);
+void dissolve_group(struct parse *, struct element *);
 struct element *parse_fixed_addr_param(struct parse *, enum dhcp_token);
 void parse_address_range(struct parse *, int, size_t);
 void parse_address_range6(struct parse *, int, size_t);

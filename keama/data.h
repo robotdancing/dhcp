@@ -275,9 +275,17 @@ struct element *copy(struct element *e);
 struct element *copyList(struct element *l);
 struct element *copyMap(struct element *m);
 
-/* Inheritance */
-isc_boolean_t derive(struct element *parent,
-		     struct element *child,
-		     const char *param);
+/* Handle */
+TAILQ_HEAD(handles, handle);
+
+struct handle {
+	unsigned order;			/* order */
+	char *key;			/* key */
+	struct element *value;		/* value */
+	struct handles values;		/* children */
+	TAILQ_ENTRY(handle) next;	/* siblings */
+};
+
+struct handle* mapPop(struct element *);
 
 #endif /* DATA_H */
