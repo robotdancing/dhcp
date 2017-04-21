@@ -98,6 +98,7 @@ conf_file_parse(struct parse *cfile)
 
 		mapRemove(cfile->stack[1], "reservations");
 		orphans = createList();
+		orphans->kind = HOST_DECL;
 		while (listSize(hosts) > 0) {
 			host = listGet(hosts, 0);
 			listRemove(hosts, 0);
@@ -108,6 +109,7 @@ conf_file_parse(struct parse *cfile)
 				dest = mapGet(where, "reservations");
 			if (dest == NULL) {
 				dest = createList();
+				dest->kind = HOST_DECL;
 				mapSet(where, dest, "reservations");
 			}
 			listPush(dest, host);
@@ -180,7 +182,7 @@ conf_file_subparse(struct parse *cfile, int type)
 {
 	const char *val;
 	enum dhcp_token token;
-	int declaration = 0;
+	isc_boolean_t declaration = ISC_FALSE;
 
 	for (;;) {
 		token = peek_token(&val, NULL, cfile);
@@ -224,8 +226,8 @@ conf_file_subparse(struct parse *cfile, int type)
 		 | USER_CLASS class-declaration
 		 | RANGE address-range-declaration */
 
-int
-parse_statement(struct parse *cfile, int type, int declaration)
+isc_boolean_t
+parse_statement(struct parse *cfile, int type, isc_boolean_t declaration)
 {
 	enum dhcp_token token;
 	const char *val;
@@ -762,6 +764,7 @@ parse_pool_statement(struct parse *cfile, int type)
 	pools = mapGet(cfile->stack[cfile->stack_top], "pools");
 	if (pools == NULL) {
 		pools = createList();
+		pools->kind = POOL_DECL;
 		mapSet(cfile->stack[cfile->stack_top], pools, "pools");
 	} else if ((type == SHARED_NET_DECL) && (listSize(pools) > 0)) {
 		cfile->stack[cfile->stack_top]->skip = ISC_TRUE;
@@ -1034,6 +1037,7 @@ parse_host_declaration(struct parse *cfile)
 		hosts = mapGet(where, "reservations");
 		if (hosts == NULL) {
 			hosts = createList();
+			hosts->kind = HOST_DECL;
 			mapSet(where, hosts, "reservations");
 		}
 		listPush(hosts, host);
@@ -1086,6 +1090,7 @@ parse_class_declaration(struct parse *cfile, int type)
 	classes = mapGet(cfile->stack[1], "client-classes");
 	if (classes == NULL) {
 		classes = createList();
+		classes->kind = CLASS_DECL;
 		mapSet(cfile->stack[1], classes, "client-classes");
 	} else {
 		int i;
@@ -1480,12 +1485,14 @@ parse_shared_net_declaration(struct parse *cfile)
 		subnets = mapGet(cfile->stack[1], "subnet4");
 		if (subnets == NULL) {
 			subnets = createList();
+			subnets->kind = SUBNET_DECL;
 			mapSet(cfile->stack[1], subnets, "subnet4");
 		}
 	} else {
 		subnets = mapGet(cfile->stack[1], "subnet6");
 		if (subnets == NULL) {
 			subnets = createList();
+			subnets->kind = SUBNET_DECL;
 			mapSet(cfile->stack[1], subnets, "subnet6");
 		}
 	}
@@ -1588,6 +1595,7 @@ parse_subnet_declaration(struct parse *cfile)
 		subnets = mapGet(cfile->stack[1], "subnet4");
 		if (subnets == NULL) {
 			subnets = createList();
+			subnets->kind = SUBNET_DECL;
 			mapSet(cfile->stack[1], subnets, "subnet4");
 		}
 	}
@@ -1674,6 +1682,7 @@ parse_subnet6_declaration(struct parse *cfile)
 		subnets = mapGet(cfile->stack[1], "subnet6");
 		if (subnets == NULL) {
 			subnets = createList();
+			subnets->kind = SUBNET_DECL;
 			mapSet(cfile->stack[1], subnets, "subnet6");
 		}
 	}
@@ -1727,10 +1736,13 @@ parse_group_declaration(struct parse *cfile)
 	isc_boolean_t dynamicp = ISC_FALSE;
 	isc_boolean_t staticp = ISC_FALSE;
 
+	if (mapContains(cfile->stack[cfile->stack_top], "group"))
+		parse_error(cfile, "another group is already open");
 	group = createMap();
 	group->skip = ISC_TRUE;
 	group->kind = GROUP_DECL;
 	TAILQ_CONCAT(&group->comments, &cfile->comments);
+	mapSet(cfile->stack[cfile->stack_top], group, "group");
 
 	token = peek_token(&val, NULL, cfile);
 	if (is_identifier(token) || token == STRING) {
@@ -1773,11 +1785,228 @@ parse_group_declaration(struct parse *cfile)
 
 	cfile->stack_top--;
 
-	if (name && !deletedp) {
+	if (name && !deletedp)
 		mapSet(group, createString(name), "name");
-		/* Kea todo */
+	dissolve_group(cfile, group);
+}
+
+void
+dissolve_group(struct parse *cfile, struct element *group)
+{
+	struct handle *handle;
+	struct element *parent;
+	struct element *item;
+	/*struct element *decl;*/
+	struct element *param;
+	struct handle *hosts = NULL;
+	struct handle *shares = NULL;
+	struct handle *subnets = NULL;
+	struct handle *classes = NULL;
+	struct handle *pools = NULL;
+	struct handle *pdpools = NULL;
+	struct handle *downs = NULL;
+	struct comment *comment;
+	const char *key;
+	const char *name = NULL;
+	unsigned order = 0;
+	isc_boolean_t marked = ISC_FALSE;
+
+	/* check that group is on its parent */
+
+	parent = cfile->stack[cfile->stack_top];
+	item = mapGet(parent, "group");
+	if (item == NULL)
+		parse_error(cfile, "no group in parent");
+	if (item != group)
+		parse_error(cfile, "got a different group from parent");
+
+	/* classify content */
+	while (mapSize(group) > 0) {
+		handle = mapPop(group);
+		if ((handle == NULL) || (handle->key == NULL) ||
+		    (handle->value == NULL))
+		    parse_error(cfile, "can't get group item at %u",
+				order);
+		handle->order = order++;
+		switch (handle->value->kind) {
+		case TOPLEVEL:
+		case ROOT_GROUP:
+		case GROUP_DECL:
+		badkind:
+			parse_error(cfile, "impossible group item (kind %d) "
+				    "for %s at order %u",
+				    handle->value->kind, handle->key, order);
+
+		case HOST_DECL:
+			if (strcmp(handle->key, "reservations") != 0)
+				parse_error(cfile, "expected reservations "
+					    "got %s at %u",
+					    handle->key, order);
+			if (hosts != NULL)
+				parse_error(cfile, "got reservations twice "
+					    "at %u and %u",
+					    hosts->order, order);
+			hosts = handle;
+			handle = NULL;
+			break;
+
+		case SHARED_NET_DECL:
+			if (strcmp(handle->key, "shared-network") != 0)
+				parse_error(cfile, "expected shared-network "
+					    "got %s at %u",
+					    handle->key, order);
+			if (shares == NULL)
+				shares = handle;
+			else
+				TAILQ_INSERT_TAIL(&shares->values, handle);
+			handle = NULL;
+			break;
+
+		case SUBNET_DECL:
+			key = local_family == AF_INET ? "subnet4" : "subnet6";
+			if (strcmp(handle->key, key) != 0)
+				parse_error(cfile, "expected %s got %s at %u",
+					    key, handle->key, order);
+			if (subnets != NULL)
+				parse_error(cfile, "got %s twice at %u and %u",
+					    key, subnets->order, order);
+			subnets = handle;
+			handle = NULL;
+			break;
+
+		case CLASS_DECL:
+			if (strcmp(handle->key, "client-classes") != 0)
+				parse_error(cfile, "expected client-classes "
+					    "got %s at %u",
+					    handle->key, order);
+			if (classes == NULL)
+				classes = handle;
+			else
+				TAILQ_INSERT_TAIL(&classes->values, handle);
+			handle = NULL;
+                        break;
+
+		case POOL_DECL:
+			if (strcmp(handle->key, "pools") == 0) {
+				if (pools != NULL)
+					parse_error(cfile, "got pools twice "
+						    "at %u and %u",
+						    pools->order, order);
+				pools = handle;
+			} else if (strcmp(handle->key, "pd-pools") == 0) {
+                                if (pdpools != NULL)
+                                        parse_error(cfile, "got pd-pools "
+						    "twice at %u and %u",
+                                                    pdpools->order, order);
+                                pdpools = handle;
+			} else
+				
+			handle = NULL;
+			break;
+		default:
+			if (handle->value->kind != PARAMETER)
+				goto badkind;
+		}
+		if (handle == NULL)
+			continue;
+
+		/* we have a parameter */
+		param = handle->value;
+		/* group name */
+		if (strcmp(handle->key, "name") == 0) {
+			name = stringValue(param)->content;
+			continue;
+		}
+		/* unexpected values */
+		if ((strcmp(handle->key, "reservations") == 0) ||
+		    (strcmp(handle->key, "group") == 0) ||
+		    (strcmp(handle->key, "shared-network") == 0) ||
+		    (strcmp(handle->key, "subnets") == 0) ||
+		    (strcmp(handle->key, "subnet4") == 0) ||
+		    (strcmp(handle->key, "subnet6") == 0) ||
+		    (strcmp(handle->key, "subnet") == 0) ||
+		    (strcmp(handle->key, "client-classes") == 0) ||
+		    (strcmp(handle->key, "hw-address") == 0) ||
+		    (strcmp(handle->key, "ip-address") == 0) ||
+		    (strcmp(handle->key, "extra-ip-addresses") == 0) ||
+		    (strcmp(handle->key, "ip-addresses") == 0) ||
+		    (strcmp(handle->key, "prefixes") == 0) ||
+		    (strcmp(handle->key, "pool") == 0) ||
+		    (strcmp(handle->key, "prefix") == 0) ||
+		    (strcmp(handle->key, "delegated-len") == 0) ||
+		    (strcmp(handle->key, "prefix-len") == 0) ||
+		    (strcmp(handle->key, "prefix-highest") == 0) ||
+		    (strcmp(handle->key, "option-def") == 0) ||
+		    (strcmp(handle->key, "hostname") == 0) ||
+		    (strcmp(handle->key, "client-id") == 0) ||
+		    (strcmp(handle->key, "host-identifier") == 0) ||
+		    (strcmp(handle->key, "flex-id") == 0) ||
+		    (strcmp(handle->key, "test") == 0) ||
+		    (strcmp(handle->key, "dhcp-ddns") == 0) ||
+		    (strcmp(handle->key, "host-reservation-identifiers") == 0))
+			parse_error(cfile, "unexpected parameter %s "
+				    "in group at %u",
+				    handle->key, order);
+		/* to parent at group position */
+		if ((strcmp(handle->key, "authoritative") == 0) ||
+		    (strcmp(handle->key, "option-space") == 0) ||
+		    (strcmp(handle->key, "server-duid") == 0) ||
+		    (strcmp(handle->key, "statement") == 0) ||
+		    (strcmp(handle->key, "config") == 0) ||
+		    (strcmp(handle->key, "ddns-update-style") == 0) ||
+		    (strcmp(handle->key, "echo-client-id") == 0)) {
+			if (!marked) {
+				struct string *msg;
+
+				marked = ISC_TRUE;
+				msg = makeString(-1, "/// moved from group");
+				if (name != NULL)
+					appendString(msg, " ");
+				appendString(msg, name);
+				comment = createComment(msg->content);
+				TAILQ_INSERT_TAIL(&param->comments, comment);
+			}
+			TAILQ_INSERT_AFTER(&parent->value.map_value,
+					   group, param);
+			continue;
+		}
+		/* To reconsider: qualifying-suffix, enable-updates */
+		if ((strcmp(handle->key, "option-data") == 0) ||
+		    (strcmp(handle->key, "allow") == 0) ||
+		    (strcmp(handle->key, "deny") == 0) ||
+		    (strcmp(handle->key, "interface") == 0) ||
+		    (strcmp(handle->key, "valid-lifetime") == 0) ||
+		    (strcmp(handle->key, "boot-file-name") == 0) ||
+		    (strcmp(handle->key, "server-hostname") == 0) ||
+		    (strcmp(handle->key, "next-server") == 0) ||
+		    (strcmp(handle->key, "preferred-lifetime") == 0) ||
+		    (strcmp(handle->key, "match-client-id") == 0)) {
+			if (downs == NULL)
+				downs = handle;
+			else
+				TAILQ_INSERT_TAIL(&downs->values, handle);
+			continue;
+		}
+		/* unknown */
+		if (!marked) {
+			struct string *msg;
+
+			marked = ISC_TRUE;
+			msg = makeString(-1, "/// moved from group");
+			if (name != NULL)
+				appendString(msg, " ");
+			appendString(msg, name);
+			comment = createComment(msg->content);
+			TAILQ_INSERT_TAIL(&param->comments, comment);
+		}
+		comment = createComment("/// unhandled parameter");
+		TAILQ_INSERT_TAIL(&param->comments, comment);
+		param->skip = ISC_TRUE;
+		cfile->issue_counter++;
+		TAILQ_INSERT_AFTER(&parent->value.map_value, group, param);
 	}
-	cfile->issue_counter++;
+	/* to finish */
+	TAILQ_REMOVE(&parent->value.map_value, group);
 }
 
 /* fixed-addr-parameter :== ip-addrs-or-hostnames SEMI
@@ -1899,6 +2128,7 @@ parse_address_range(struct parse *cfile, int type, size_t where)
 		pools = mapGet(group, "pools");
 		if (pools == NULL) {
 			pools = createList();
+			pools->kind = POOL_DECL;
 			mapSet(group, pools, "pools");
 		}
 		listPush(pools, pool);
@@ -2016,6 +2246,7 @@ parse_address_range6(struct parse *cfile, int type, size_t where)
 		pools = mapGet(group, "pools");
 		if (pools == NULL) {
 			pools = createList();
+			pools->kind = POOL_DECL;
 			mapSet(group, pools, "pools");
 		}
 		listPush(pools, pool);
@@ -2085,6 +2316,7 @@ parse_prefix6(struct parse *cfile, int type, size_t where)
 		pools = mapGet(group, "pd-pools");
 		if (pools == NULL) {
 			pools = createList();
+			pools->kind = POOL_DECL;
 			mapSet(group, pools, "pd-pools");
 		}
 		listPush(pools, pool);
@@ -2203,6 +2435,7 @@ parse_pool6_statement(struct parse *cfile, int type)
 	pools = mapGet(cfile->stack[cfile->stack_top], "pools");
 	if (pools == NULL) {
 		pools = createList();
+		pools->kind = POOL_DECL;
 		mapSet(cfile->stack[cfile->stack_top], pools, "pools");
 	}
 	listPush(pools, pool);
@@ -2247,7 +2480,7 @@ parse_pool6_statement(struct parse *cfile, int type)
 			done = ISC_TRUE;
 			break;
 
-		      case END_OF_FILE:
+		case END_OF_FILE:
 			/*
 			 * We can get to END_OF_FILE if, for instance,
 			 * the parse_statement() reads all available tokens
@@ -2255,7 +2488,7 @@ parse_pool6_statement(struct parse *cfile, int type)
 			 */
 			parse_error(cfile, "unexpected end of file");
 
-		      default:
+		default:
 			declaration = parse_statement(cfile, POOL_DECL,
 						      declaration);
 			break;

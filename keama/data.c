@@ -883,8 +883,8 @@ copy(struct element *e)
 	result->kind = e->kind;
 	result->skip = e->skip;
 	/* don't copy key */
+	/* copy comments */
 	TAILQ_FOREACH(comment, &e->comments) {
-		/* share comment content */
 		comment = createComment(comment->line);
 		TAILQ_INSERT_TAIL(&result->comments, comment);
 	}
@@ -915,24 +915,28 @@ copyMap(struct element *m)
 	return result;
 }
 
-isc_boolean_t
-derive(struct element *parent, struct element *child, const char *param)
+struct handle *
+mapPop(struct element *m)
 {
-	struct element *x;
-	struct element *y;
+	struct element *item;
+	struct handle *h;
 
-	assert(parent != NULL);
-	assert(parent->type == ELEMENT_MAP);
-	assert(child != NULL);
-	assert(child->type == ELEMENT_MAP);
-	assert(param != NULL);
+	assert(m != NULL);
+	assert(m->type == ELEMENT_MAP);
 
-	x = mapGet(parent, param);
-	if (x == NULL)
-		return ISC_FALSE;
-	y = mapGet(child, param);
-	if (y != NULL)
-		return ISC_FALSE;
-	mapSet(child, x, param);
-	return ISC_TRUE;
+	h = (struct handle *)malloc(sizeof(struct handle));
+	assert(h != NULL);
+	memset(h, 0, sizeof(struct handle));
+	TAILQ_INIT(&h->values);
+
+	item = TAILQ_FIRST(&m->value.map_value);
+	assert(item != NULL);
+	assert(item->key != NULL);
+	h->key = strdup(item->key);
+	assert(h->key != NULL);
+	h->value = item;
+
+	TAILQ_REMOVE(&m->value.map_value, item);
+
+	return h;
 }

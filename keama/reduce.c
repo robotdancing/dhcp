@@ -953,6 +953,20 @@ print_data_expression(struct element *expr, isc_boolean_t *lose)
 	if (mapContains(expr, "hardware"))
 		return "hardware";
 
+	/* const-data */
+	if (mapContains(expr, "const-data")) {
+		struct element *arg;
+
+		arg = mapGet(expr, "const-data");
+		if ((arg == NULL) || (arg->type != ELEMENT_STRING)) {
+			*lose = ISC_TRUE;
+			appendString(result, "???");
+			return result->content;
+		}
+		concatString(result, stringValue(arg));
+		return result->content;
+	}
+
 	/* packet */
 	if (mapContains(expr, "packet")) {
 		struct element *arg;
@@ -1584,6 +1598,22 @@ reduce_data_expression(struct element *expr, isc_boolean_t *literalp)
 		result = makeString(-1,
 			    "concat(substring(pkt4.htype,-1,all),pkt4.mac)");
 		return createString(result);
+	}
+
+	/* const-data */
+	if (mapContains(expr, "const-data")) {
+		/*
+		 * syntax := { "const-data": <string> }
+		 * semantic: embedded string value
+		 */
+		struct element *arg;
+
+		arg = mapGet(expr, "const-data");
+		if ((arg == NULL) || (arg->type != ELEMENT_STRING)) {
+			debug("can't get const-data argument");
+			return NULL;
+		}
+		return createString(stringValue(arg));
 	}
 
 	/* packet */
@@ -2321,6 +2351,22 @@ print_numeric_expression(struct element *expr, isc_boolean_t *lose)
 		return result->content;
 	}
 
+	/* const-int */
+	if (mapContains(expr, "const-int")) {
+		struct element *arg;
+		char buf[20];
+
+		arg = mapGet(expr, "const-int");
+		if ((arg == NULL) || (arg->type != ELEMENT_INTEGER)) {
+			*lose = ISC_TRUE;
+			appendString(result, "???");
+			return result->content;
+		}
+		snprintf(buf, sizeof(buf), "%lld", (long long)intValue(arg));
+		result = makeString(-1, buf);
+		return result->content;
+	}
+
 	/* lease-time */
 	if (mapContains(expr, "lease-time"))
 		return "lease-time";
@@ -2682,6 +2728,22 @@ reduce_numeric_expression(struct element *expr)
 		memcpy(&val, stringValue(arg)->content, 4);
 		val = ntohl(val);
 		return createInt(val);
+	}
+
+	/* const-int */
+	if (mapContains(expr, "const-int")) {
+		/*
+		 * syntax := { "const-int": <integer> }
+		 * semantic: embedded integer value
+		 */
+		struct element *arg;
+
+		arg = mapGet(expr, "const-int");
+		if ((arg == NULL) || (arg->type != ELEMENT_INTEGER)) {
+			debug("can't get const-int argument");
+			return NULL;
+		}
+		return createInt(intValue(arg));
 	}
 
 	/* lease-time */
