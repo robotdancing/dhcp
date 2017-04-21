@@ -1,0 +1,90 @@
+# txhuuhl DHCPD Config File.
+# Generated 2012-04-23-08:52 with gendhcpd.pl by University House Lake Road.
+
+shared-network txhuuhl {
+    authoritative;
+
+#  include "/etc/dhcp3/folder.dhcpd/events.dhcpd";
+
+# WANIP for txhuuhl not configured
+
+#dhcpd-snmp=txhuuhl-cust0,68.234.172.21-68.234.175.254
+    subnet 68.234.172.0 netmask 255.255.252.0 {
+        option routers 68.234.172.1;
+        option subnet-mask 255.255.252.0;
+        option broadcast-address 68.234.175.255;
+        option domain-name "client.pavlovmedia.net";
+        option domain-name-servers 66.253.214.16, 50.30.184.16;
+        default-lease-time 14400;
+        max-lease-time 28800;
+	min-lease-time 3600;
+        pool {
+#           failover peer "NATIONAL";
+            deny members of "ruckus";
+            deny members of "ubnt";
+            deny dynamic bootp clients;
+            range 68.234.172.21 68.234.175.254;
+        }
+    }
+
+#dhcpd-snmp=txhuuhl-cust1,66.253.158.3-66.253.159.254
+    subnet 66.253.158.0 netmask 255.255.254.0 {
+        option routers 66.253.158.1;
+        option subnet-mask 255.255.254.0;
+        option broadcast-address 66.253.159.255;
+        option domain-name "client.pavlovmedia.net";
+        option domain-name-servers 66.253.214.16, 50.30.184.16;
+        default-lease-time 14400;
+        max-lease-time 28800;
+	min-lease-time 3600;
+        pool {
+#           failover peer "NATIONAL";
+            deny members of "ruckus";
+            deny members of "ubnt";
+            deny dynamic bootp clients;
+            range 66.253.158.3 66.253.158.7;
+        }
+
+	# Office Router
+	host 66-253-158-8 {
+	    hardware ethernet 00:19:cb:56:bc:40;
+	    fixed-address 66.253.158.8;
+	}
+
+	# Slingbox
+	host 66-253-158-10 {
+		hardware ethernet 00:13:b6:04:b2:51;
+		fixed-address 66.253.158.10;
+	}
+
+        pool {
+#           failover peer "NATIONAL";
+            deny members of "ruckus";
+            deny members of "ubnt";
+            deny dynamic bootp clients;
+            range 66.253.158.9 66.253.159.254;
+        }
+    }
+
+    subnet 10.145.56.0 netmask 255.255.255.0 {
+        }
+    
+    subnet 10.145.57.0 netmask 255.255.255.0 {
+    }
+    
+#dhcpd-snmp=txhuuhl-ruckus,10.145.58.100-10.145.58.239
+        subnet 10.145.58.0 netmask 255.255.255.0 {
+            option routers 10.145.58.1;
+            option subnet-mask 255.255.255.0;
+            option broadcast-address 10.145.58.255;
+            pool {
+#               failover peer "NATIONAL";
+                allow members of "ruckus";
+                allow members of "ubnt";
+                deny dynamic bootp clients;
+                #default-lease-time dTruk;
+                #max-lease-time mdTruk;
+                range 10.145.58.100 10.145.58.239;
+            }
+        }
+}

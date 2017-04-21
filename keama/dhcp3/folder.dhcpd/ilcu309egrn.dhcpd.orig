@@ -1,0 +1,59 @@
+# ilcu309egrn DHCPD Config File.
+# Generated 2013-08-23-08:17 with gendhcpd.pl by 309 East Green.
+
+shared-network ilcu309egrn {
+    authoritative;
+
+# WANIP for ilcu309egrn not configured
+
+#dhcpd-snmp=ilcu309egrn-cust0,68.234.168.21-68.234.171.254
+    subnet 68.234.168.0 netmask 255.255.252.0 {
+        option routers 68.234.168.1;
+        option subnet-mask 255.255.252.0;
+        option broadcast-address 68.234.171.255;
+        option domain-name "client.pavlovmedia.net";
+        option domain-name-servers 66.253.214.16, 50.30.184.16;
+        default-lease-time 14400;
+        max-lease-time 28800;
+        min-lease-time 3600;
+	pool {
+            failover peer "NATIONAL";
+            deny members of "ruckus";
+            deny members of "ubnt";
+            deny dynamic bootp clients;
+            range 68.234.168.21 68.234.171.254;
+        }
+   #OfficeRouter 
+	host 68-234-168-8 {
+		hardware ethernet 00:25:45:D0:29:13;
+		fixed-address 68.234.168.8;
+        }
+   #UPS
+        host 68-234-168-11 {
+            hardware ethernet 00:C0:B7:52:BC:FC;
+            fixed-address 68.234.168.11;
+        }
+}
+    subnet 10.145.8.0 netmask 255.255.255.0 {
+        }
+    
+    subnet 10.145.9.0 netmask 255.255.255.0 {
+    }
+    
+#dhcpd-snmp=ilcu309egrn-ruckus,10.145.10.100-10.145.10.239
+        subnet 10.145.10.0 netmask 255.255.255.0 {
+            option routers 10.145.10.1;
+            option subnet-mask 255.255.255.0;
+            option broadcast-address 10.145.10.255;
+            pool {
+                failover peer "NATIONAL";
+                allow members of "ruckus";
+                allow members of "ubnt";
+                deny dynamic bootp clients;
+                default-lease-time 86400;
+        	max-lease-time 259200;
+        	min-lease-time 14400;
+		range 10.145.10.100 10.145.10.239;
+            }
+        }
+}

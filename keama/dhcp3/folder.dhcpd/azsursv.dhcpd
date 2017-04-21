@@ -1,0 +1,51 @@
+# azsursv DHCPD Config File.
+# Generated 2012-02-29-16:05 with gendhcpd.pl by Residences at Stadium Village.
+
+shared-network azsursv {
+    authoritative;
+
+#  include "/etc/dhcp3/folder.dhcpd/events.dhcpd";
+
+# WANIP for azsursv not configured
+
+#dhcpd-snmp=azsursv-cust0,96.63.220.21-96.63.223.254
+    subnet 96.63.220.0 netmask 255.255.252.0 {
+        option routers 96.63.220.1;
+        option subnet-mask 255.255.252.0;
+        option broadcast-address 96.63.223.255;
+        option domain-name "client.pavlovmedia.net";
+        option domain-name-servers 66.253.214.16, 50.30.184.16;
+        default-lease-time 14400;
+        max-lease-time 28800;
+	min-lease-time 3600;
+        pool {
+#           failover peer "NATIONAL";
+            deny members of "ruckus";
+            deny members of "ubnt";
+            deny dynamic bootp clients;
+            range 96.63.220.21 96.63.223.254;
+        }
+    }
+
+    subnet 10.152.36.0 netmask 255.255.255.0 {
+        }
+    
+    subnet 10.152.37.0 netmask 255.255.255.0 {
+    }
+    
+#dhcpd-snmp=azsursv-ruckus,10.152.38.100-10.152.38.239
+        subnet 10.152.38.0 netmask 255.255.255.0 {
+            option routers 10.152.38.1;
+            option subnet-mask 255.255.255.0;
+            option broadcast-address 10.152.38.255;
+            pool {
+#               failover peer "NATIONAL";
+                allow members of "ruckus";
+                allow members of "ubnt";
+                deny dynamic bootp clients;
+                #default-lease-time dTruk;
+                #max-lease-time mdTruk;
+                range 10.152.38.100 10.152.38.239;
+            }
+        }
+}

@@ -1,0 +1,45 @@
+# ilcu512sto DHCPD Config File.
+# Generated 2012-08-20-15:20 with gendhcpd.pl by 512 Stoughton.
+
+shared-network ilcu512sto {
+    authoritative;
+
+#  include "/etc/dhcp3/folder.dhcpd/events.dhcpd";
+
+# WANIP for ilcu512sto not configured
+
+#dhcpd-snmp=ilcu512sto-cust0,173.230.18.133-173.230.18.158
+    subnet 173.230.18.128 netmask 255.255.255.224 {
+        option routers 173.230.18.129;
+        option subnet-mask 255.255.255.224;
+        option broadcast-address 173.230.18.159;
+        option domain-name "client.pavlovmedia.net";
+        option domain-name-servers 66.253.214.16, 50.30.184.16;
+        default-lease-time 14400;
+        max-lease-time 28800;
+	min-lease-time 3600;
+        pool {
+            failover peer "NATIONAL";
+            deny members of "ruckus";
+            deny members of "ubnt";
+            deny dynamic bootp clients;
+            range 173.230.18.133 173.230.18.158;
+        }
+    }
+
+#dhcpd-snmp=ilcu512sto-ruckus,10.159.152.100-10.159.152.239
+        subnet 10.159.152.0 netmask 255.255.255.0 {
+            option routers 10.159.152.1;
+            option subnet-mask 255.255.255.0;
+            option broadcast-address 10.159.152.255;
+            pool {
+                failover peer "NATIONAL";
+                allow members of "ruckus";
+                allow members of "ubnt";
+                deny dynamic bootp clients;
+                #default-lease-time dTruk;
+                #max-lease-time mdTruk;
+                range 10.159.152.100 10.159.152.239;
+            }
+        }
+}

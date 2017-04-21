@@ -1,0 +1,44 @@
+# ilcu1103euc DHCPD Config File.
+# Generated 2010-11-11-14:26 with gendhcpd.pl by AUTObpeterson.
+
+shared-network ilcu1103euc {
+    authoritative;
+
+#  include "/etc/dhcp3/folder.dhcpd/events.dhcpd";
+
+    subnet 96.63.195.76 netmask 255.255.255.255 {
+    }
+
+#dhcpd-snmp=ilcu1103euc-cust0,173.230.23.101-173.230.23.126
+    subnet 173.230.23.96 netmask 255.255.255.224 {
+        option routers 173.230.23.97;
+        option subnet-mask 255.255.255.224;
+        option broadcast-address 173.230.23.127;
+        option domain-name "client.pavlovmedia.net";
+        option domain-name-servers 66.253.214.16, 50.30.184.16;
+#        default-lease-time dTlease0;
+#        max-lease-time mdTlease0;
+        pool {
+            failover peer "NATIONAL";
+            deny members of "ruckus";
+            deny dynamic bootp clients;
+            range 173.230.23.101 173.230.23.126;
+        }
+    }
+
+#dhcpd-snmp=ilcu1103euc-ruckus,10.159.162.100-10.159.162.239
+    subnet 10.159.162.0 netmask 255.255.255.0 {
+        option routers 10.159.162.1;
+        option subnet-mask 255.255.255.0;
+        option broadcast-address 10.159.162.255;
+        pool {
+            failover peer "NATIONAL";
+            allow members of "ruckus";
+            deny dynamic bootp clients;
+#            default-lease-time dTruk;
+#            max-lease-time mdTruk;
+            range 10.159.162.100 10.159.162.239;
+        }
+#  include "/etc/dhcp3/bootp/ilcu1103euc.bootp";
+    }
+}

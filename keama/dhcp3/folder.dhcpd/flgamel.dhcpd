@@ -1,0 +1,60 @@
+# flgamel DHCPD Config File.
+# Generated 2012-02-20-13:32 with gendhcpd.pl by District on 62nd.
+
+shared-network flgamel {
+    authoritative;
+
+#dhcpd-snmp=flgamel-cust0,66.253.132.21-66.253.135.254
+    subnet 66.253.132.0 netmask 255.255.252.0 {
+        option routers 66.253.132.1;
+        option subnet-mask 255.255.252.0;
+        option broadcast-address 66.253.135.255;
+        option domain-name "client.pavlovmedia.net";
+        option domain-name-servers 66.253.214.16, 50.30.184.16;
+        default-lease-time 14400;
+        max-lease-time 28800;
+	min-lease-time 3600;
+        pool {
+#           failover peer "NATIONAL";
+            deny members of "ruckus";
+            deny members of "ubnt";
+            deny dynamic bootp clients;
+            range 66.253.132.21 66.253.135.254;
+        }
+	#office Router
+        host 66-253-132-8 {
+            hardware ethernet 94:10:3E:0B:D3:0D;
+            fixed-address 66.253.132.8;
+	}
+    }
+
+    subnet 10.148.8.0 netmask 255.255.255.0 {
+        }
+    
+    subnet 10.148.9.0 netmask 255.255.255.0 {
+    }
+    
+#dhcpd-snmp=flgamel-ruckus,10.148.10.100-10.148.10.239
+        subnet 10.148.10.0 netmask 255.255.255.0 {
+            option routers 10.148.10.1;
+            option subnet-mask 255.255.255.0;
+            option broadcast-address 10.148.10.255;
+            pool {
+#               failover peer "NATIONAL";
+                allow members of "ruckus";
+                allow members of "ubnt";
+                deny dynamic bootp clients;
+                #default-lease-time dTruk;
+                #max-lease-time mdTruk;
+                range 10.148.10.100 10.148.10.239;
+
+            }
+
+		#Slingbox
+		host 00-13-b6-38-65-95 {
+			hardware ethernet 00:13:b6:38:65:95;
+			fixed-address 10.148.10.6;
+		}
+#    include "/etc/dhcp3/bootp/flgamel.bootp";
+        }
+}

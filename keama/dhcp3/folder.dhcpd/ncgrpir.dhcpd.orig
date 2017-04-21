@@ -1,0 +1,147 @@
+# ncgrpir DHCPD Config File.
+# Generated 2012-08-06-10:25 with gendhcpd.pl by Pirates Cove.
+
+shared-network ncgrpir {
+    authoritative;
+
+#  include "/etc/dhcp3/folder.dhcpd/events.dhcpd";
+
+# WANIP for ncgrpir not configured
+
+#dhcpd-snmp=ncgrpir-cust0,50.30.240.21-50.30.243.254
+    subnet 50.30.240.0 netmask 255.255.252.0 {
+        option routers 50.30.240.1;
+        option subnet-mask 255.255.252.0;
+        option broadcast-address 50.30.243.255;
+        option domain-name "client.pavlovmedia.net";
+        option domain-name-servers 66.253.214.16, 50.30.184.16;
+        default-lease-time 14400;
+        max-lease-time 28800;
+	min-lease-time 3600;
+        pool {
+            failover peer "NATIONAL";
+            deny members of "ruckus";
+            deny members of "ubnt";
+            deny dynamic bootp clients;
+            range 50.30.240.21 50.30.243.254;
+        }
+	#DVR1
+	host 50-30-240-170 {
+		hardware ethernet 00:27:0e:28:18:9e;
+		fixed-address 50.30.240.170;
+	}
+        #DVR2
+        host 50-30-240-169 {
+                hardware ethernet 00:27:0e:28:14:91;
+                fixed-address 50.30.240.169;
+        }
+        #Zap2It
+        host 50-30-240-20 {
+                hardware ethernet 00:0f:ea:65:ba:03;
+                fixed-address 50.30.240.20;
+        }
+        #LabRouter
+        host 50-30-240-13 {
+                hardware ethernet 00:0c:41:b7:7c:0b;
+                fixed-address 50.30.240.13;
+        }
+        #Slingbox
+        host 50-30-240-10 {
+                hardware ethernet 00:13:b6:0b:fa:79;
+                fixed-address 50.30.240.10;
+        }
+        #LabComputer
+        host 50-30-240-9 {
+                hardware ethernet 00:21:29:71:e5:48;
+                fixed-address 50.30.240.9;
+        }
+        #OfficeRouter
+        host 50-30-240-8 {
+                hardware ethernet 00:01:cf:6f:54:cf;
+                fixed-address 50.30.240.8;
+        }
+
+
+
+    }
+
+#dhcpd-snmp=ncgrpir-cust1,50.30.246.3-50.30.246.254
+    subnet 50.30.246.0 netmask 255.255.255.0 {
+        option routers 50.30.246.1;
+        option subnet-mask 255.255.255.0;
+        option broadcast-address 50.30.246.255;
+        option domain-name "client.pavlovmedia.net";
+        option domain-name-servers 66.253.214.16, 50.30.184.16;
+        default-lease-time 14400;
+        max-lease-time 28800;
+	min-lease-time 3600;
+        pool {
+            failover peer "NATIONAL";
+            deny members of "ruckus";
+            deny members of "ubnt";
+            deny dynamic bootp clients;
+            range 50.30.246.3 50.30.246.254;
+        }
+    }
+
+    subnet 10.144.0.0 netmask 255.255.255.0 {
+        }
+    
+    subnet 10.144.1.0 netmask 255.255.255.0 {
+    }
+    
+#dhcpd-snmp=ncgrpir-ruckus,10.144.2.100-10.144.2.239
+        subnet 10.144.2.0 netmask 255.255.255.0 {
+            option routers 10.144.2.1;
+            option subnet-mask 255.255.255.0;
+            option broadcast-address 10.144.2.255;
+            pool {
+                failover peer "NATIONAL";
+                allow members of "ruckus";
+                allow members of "ubnt";
+                deny dynamic bootp clients;
+                #default-lease-time dTruk;
+                #max-lease-time mdTruk;
+                range 10.144.2.100 10.144.2.239;
+            }
+	#NorthAP
+	host 10-144-2-17 {
+		hardware ethernet c4:10:8a:35:7a:70;
+		fixed-address 10.144.2.17;
+	}
+	#SouthAP
+	host 10-144-2-16 {
+		hardware ethernet c4:10:8a:35:64:90;
+		fixed-address 10.144.2.16;
+	}
+	#EastAP
+	host 10-144-2-13 {
+		hardware ethernet c4:10:8a:35:7f:00;
+		fixed-address 10.144.2.13;
+	}
+	#WestAP
+	host 10-144-2-12 {
+		hardware ethernet c4:10:8a:35:7b:20;
+		fixed-address 10.144.2.12;
+	}
+	#ClubhouseAP
+	host 10-144-2-11 {
+		hardware ethernet c4:10:8a:35:6a:40;
+		fixed-address 10.144.2.11;
+	}
+	#LabAP
+	host 10-144-2-10 {
+		hardware ethernet c4:10:8a:35:7e:b0;
+		fixed-address 10.144.2.10;
+	}
+
+
+
+
+
+
+
+
+        }
+
+}

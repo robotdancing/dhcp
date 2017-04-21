@@ -1,0 +1,94 @@
+# aztegmo DHCPD Config File.
+# Generated 2012-02-29-15:38 with gendhcpd.pl by Domain at Tempe.
+
+shared-network aztegmo {
+    authoritative;
+
+#  include "/etc/dhcp3/folder.dhcpd/events.dhcpd";
+
+# WANIP for aztegmo not configured
+
+#dhcpd-snmp=aztegmo-cust0,50.30.216.21-50.30.219.254
+    subnet 50.30.216.0 netmask 255.255.252.0 {
+        option routers 50.30.216.1;
+        option subnet-mask 255.255.252.0;
+        option broadcast-address 50.30.219.255;
+        option domain-name "client.pavlovmedia.net";
+        option domain-name-servers 66.253.214.16, 50.30.184.16;
+        default-lease-time 14400;
+        max-lease-time 28800;
+	min-lease-time 3600;
+        pool {
+            failover peer "NATIONAL";
+            deny members of "ruckus";
+            deny members of "ubnt";
+            deny dynamic bootp clients;
+            range 50.30.216.21 50.30.219.254;
+        }
+	#TeleGuide
+		host 50-30-214-12{
+			hardware ethernet 00:01:E1:08:A4:39;
+			fixed-address 50.30.214.12;
+		}
+    }
+
+#dhcpd-snmp=aztegmo-cust1,50.30.214.3-50.30.215.254
+    subnet 50.30.214.0 netmask 255.255.254.0 {
+        option routers 50.30.214.1;
+        option subnet-mask 255.255.254.0;
+        option broadcast-address 50.30.215.255;
+        option domain-name "client.pavlovmedia.net";
+        option domain-name-servers 66.253.214.16, 50.30.184.16;
+        default-lease-time 14400;
+        max-lease-time 28800;
+	min-lease-time 3600;
+        pool {
+            failover peer "NATIONAL";
+            deny members of "ruckus";
+            deny members of "ubnt";
+            deny dynamic bootp clients;
+            range 50.30.214.3 50.30.215.254;
+        }
+    }
+
+#dhcpd-snmp=aztegmo-cust2,50.30.244.3-50.30.244.254
+    subnet 50.30.244.0 netmask 255.255.255.0 {
+        option routers 50.30.244.1;
+        option subnet-mask 255.255.255.0;
+        option broadcast-address 50.30.244.255;
+        option domain-name "client.pavlovmedia.net";
+        option domain-name-servers 66.253.214.16, 50.30.184.16;
+        default-lease-time 14400;
+        max-lease-time 28800;
+	min-lease-time 3600;
+        pool {
+            failover peer "NATIONAL";
+            deny members of "ruckus";
+            deny members of "ubnt";
+            deny dynamic bootp clients;
+            range 50.30.244.3 50.30.244.254;
+        }
+    }
+
+    subnet 10.152.8.0 netmask 255.255.255.0 {
+        }
+    
+    subnet 10.152.9.0 netmask 255.255.255.0 {
+    }
+    
+#dhcpd-snmp=aztegmo-ruckus,10.152.10.100-10.152.10.239
+        subnet 10.152.10.0 netmask 255.255.255.0 {
+            option routers 10.152.10.1;
+            option subnet-mask 255.255.255.0;
+            option broadcast-address 10.152.10.255;
+            pool {
+                failover peer "NATIONAL";
+                allow members of "ruckus";
+                allow members of "ubnt";
+                deny dynamic bootp clients;
+                #default-lease-time dTruk;
+                #max-lease-time mdTruk;
+                range 10.152.10.100 10.152.10.239;
+            }
+        }
+}

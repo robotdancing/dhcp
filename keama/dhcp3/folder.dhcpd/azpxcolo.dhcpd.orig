@@ -1,0 +1,25 @@
+# msoxlpl DHCPD Config File.
+
+shared-network azpxcolo-servers {
+    authoritative;
+
+#  include "/etc/dhcp3/folder.dhcpd/events.dhcpd";
+
+    subnet 50.30.208.64 netmask 255.255.255.224 {
+        option routers 50.30.208.65;
+        option subnet-mask 255.255.255.224;
+        option broadcast-address 50.30.208.95;
+        option domain-name "pavlovmedia.net";
+        option domain-name-servers 66.253.214.16, 50.30.184.16;
+        default-lease-time 14400;
+        max-lease-time 28800;
+	min-lease-time 3600;
+        pool {
+            failover peer "NATIONAL";
+            deny members of "ruckus";
+            deny members of "ubnt";
+            deny dynamic bootp clients;
+            range 50.30.208.90 50.30.208.94;
+        }
+    }
+}

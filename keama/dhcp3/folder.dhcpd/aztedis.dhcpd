@@ -1,0 +1,74 @@
+# aztedis DHCPD Config File.
+# Generated 2013-07-22-09:07 with gendhcpd.pl by District on Apache.
+
+shared-network aztedis {
+    authoritative;
+
+# WANIP for aztedis not configured
+
+#dhcpd-snmp=aztedis-cust0,76.10.8.21-76.10.11.254
+    subnet 76.10.8.0 netmask 255.255.252.0 {
+        option routers 76.10.8.1;
+        option subnet-mask 255.255.252.0;
+        option broadcast-address 76.10.11.255;
+        option domain-name "client.pavlovmedia.net";
+        option domain-name-servers 66.253.214.16, 50.30.184.16;
+        default-lease-time 14400;
+        max-lease-time 28800;
+        min-lease-time 3600;
+	pool {
+#           failover peer "NATIONAL";
+            deny members of "ruckus";
+            deny members of "ubnt";
+            deny dynamic bootp clients;
+            range 76.10.8.21 76.10.11.254;
+        }
+	#Slingbox
+        host 76-10-8-10 {
+                hardware ethernet 00:13:b6:0c:32:c5;
+                fixed-address 76.10.8.10;
+	}
+    }
+
+#dhcpd-snmp=aztedis-cust1,66.253.248.3-66.253.249.254
+    subnet 66.253.248.0 netmask 255.255.254.0 {
+        option routers 66.253.248.1;
+        option subnet-mask 255.255.254.0;
+        option broadcast-address 66.253.249.255;
+        option domain-name "client.pavlovmedia.net";
+        option domain-name-servers 66.253.214.16, 50.30.184.16;
+        default-lease-time 14400;
+        max-lease-time 28800;
+        min-lease-time 3600;
+	pool {
+#           failover peer "NATIONAL";
+            deny members of "ruckus";
+            deny members of "ubnt";
+            deny dynamic bootp clients;
+            range 66.253.248.3 66.253.249.254;
+        }
+    }
+
+    subnet 10.144.20.0 netmask 255.255.255.0 {
+        }
+    
+    subnet 10.144.21.0 netmask 255.255.255.0 {
+    }
+    
+#dhcpd-snmp=aztedis-ruckus,10.144.22.20-10.144.22.250
+        subnet 10.144.22.0 netmask 255.255.255.0 {
+            option routers 10.144.22.1;
+            option subnet-mask 255.255.255.0;
+            option broadcast-address 10.144.22.255;
+            pool {
+#               failover peer "NATIONAL";
+                allow members of "ruckus";
+                allow members of "ubnt";
+                deny dynamic bootp clients;
+                default-lease-time 86400;
+        	max-lease-time 259200;
+        	min-lease-time 14400;
+		range 10.144.22.20 10.144.22.250;
+            }
+        }
+}

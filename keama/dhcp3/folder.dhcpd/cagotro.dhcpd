@@ -1,0 +1,76 @@
+# cagotro DHCPD Config File.
+# Generated 2013-05-11-01:04 with gendhcpd.pl by Tropicana.
+
+shared-network cagotro {
+    authoritative;
+
+    subnet 216.171.49.1 netmask 255.255.255.255 {
+    }
+
+    subnet 10.144.36.0 netmask 255.255.255.0 {
+        }
+#dhcpd-snmp=cagotro-cam,10.144.37.5-10.144.37.254
+    subnet 10.144.37.0 netmask 255.255.255.0 {
+    option routers 10.144.37.1;
+            option subnet-mask 255.255.255.0;
+            option broadcast-address 10.144.37.255;
+
+  #CameraDVR
+        host 10-144-37-5 {
+            hardware ethernet DC:9F:DB:81:EE:E7;
+            fixed-address 10.144.37.5;
+	}
+
+ #CameraGardensIDF4
+        host 10-144-37-40 {
+            hardware ethernet DC:9F:DB:28:CB:44;
+            fixed-address 10.144.37.40;
+        }
+
+ #CameraGardensIDF2
+        host 10-144-37-20 {
+            hardware ethernet DC:9F:DB:28:CB:29;
+            fixed-address 10.144.37.20;
+        }
+
+ #CameraGardensIDF1
+        host 10-144-37-10 {
+            hardware ethernet DC:9F:DB:28:C8:F0;
+            fixed-address 10.144.37.10;
+        }
+
+ #CameraGardensIDF3
+        host 10-144-37-30 {
+            hardware ethernet DC:9F:DB:28:CB:6B;
+            fixed-address 10.144.37.30;
+        }
+
+ #CameraGardensMDF
+        host 10-144-37-11 {
+            hardware ethernet DC:9F:DB:28:C9:BD;
+            fixed-address 10.144.37.11;
+        }
+
+
+
+
+
+             }   
+    
+#dhcpd-snmp=cagotro-ruckus,10.144.38.80-10.144.38.239
+        subnet 10.144.38.0 netmask 255.255.255.0 {
+            option routers 10.144.38.1;
+            option subnet-mask 255.255.255.0;
+            option broadcast-address 10.144.38.255;
+            pool {
+#               failover peer "NATIONAL";
+                allow members of "ruckus";
+                allow members of "ubnt";
+                deny dynamic bootp clients;
+                default-lease-time 86400;
+        	max-lease-time 259200;
+        	min-lease-time 14400;
+		range 10.144.38.80 10.144.38.239;
+            }
+        }
+}

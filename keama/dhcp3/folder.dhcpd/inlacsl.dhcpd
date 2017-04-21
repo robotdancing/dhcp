@@ -1,0 +1,113 @@
+# inlacsl DHCPD Config File.
+# Generated 2012-08-06-16:33 with gendhcpd.pl by Campus Suites on the Lake.
+
+shared-network inlacsl {
+    authoritative;
+
+# WANIP for inlacsl not configured
+
+#dhcpd-snmp=inlacsl-cust0,68.234.144.21-68.234.147.254
+    subnet 68.234.144.0 netmask 255.255.252.0 {
+        option routers 68.234.144.1;
+        option subnet-mask 255.255.252.0;
+        option broadcast-address 68.234.147.255;
+        option domain-name "client.pavlovmedia.net";
+        option domain-name-servers 66.253.214.16, 50.30.184.16;
+        default-lease-time 14400;
+        max-lease-time 28800;
+	min-lease-time 3600;
+        pool {
+#           failover peer "NATIONAL";
+            deny members of "ruckus";
+            deny members of "ubnt";
+            deny dynamic bootp clients;
+            range 68.234.144.21 68.234.147.254;
+        }
+
+	#slingbox
+	host 68-234-144-10 {
+	 hardware ethernet 00:13:b6:04:9e:d0;
+	 fixed-address 68.234.144.10;
+	}
+
+        #Office Device
+        host 68-234-144-227 {
+         hardware ethernet 00:03:31:86:20:00;
+         fixed-address 68.234.144.227;
+        }
+        #Security Camera
+        host 68-234-144-217 {
+         hardware ethernet 00:d0:89:01:e5:38;
+         fixed-address 68.234.144.217;
+        }
+        #PIX
+        host 68-234-144-72 {
+         hardware ethernet 00:11:92:c5:6c:ef;
+         fixed-address 68.234.144.72;
+        }
+        #Polycom
+        host 68-234-144-20 {
+         hardware ethernet 00:e0:db:08:6e:15;
+         fixed-address 68.234.144.20;
+        }
+        #Router Lab
+        host 68-234-144-9 {
+         hardware ethernet 00:24:b2:7e:6d:ed;
+         fixed-address 68.234.144.9;
+        }
+        #Rotuer Office
+        host 68-234-144-8 {
+         hardware ethernet 00:b0:64:bc:54:80;
+         fixed-address 68.234.144.8;
+        }
+
+        #Trendnet
+        host 68-234-144-17 {
+         hardware ethernet d8:eb:97:b0:c7:2b;
+         fixed-address 68.234.144.17;
+        }
+
+
+    }
+
+#dhcpd-snmp=inlacsl-cust1,68.234.182.3-68.234.183.254
+    subnet 68.234.182.0 netmask 255.255.254.0 {
+        option routers 68.234.182.1;
+        option subnet-mask 255.255.254.0;
+        option broadcast-address 68.234.183.255;
+        option domain-name "client.pavlovmedia.net";
+        option domain-name-servers 66.253.214.16, 50.30.184.16;
+        default-lease-time 14400;
+        max-lease-time 28800;
+	min-lease-time 3600;
+        pool {
+#           failover peer "NATIONAL";
+            deny members of "ruckus";
+            deny members of "ubnt";
+            deny dynamic bootp clients;
+            range 68.234.182.3 68.234.183.254;
+        }
+    }
+
+    subnet 10.150.92.0 netmask 255.255.255.0 {
+        }
+    
+    subnet 10.150.93.0 netmask 255.255.255.0 {
+    }
+    
+#dhcpd-snmp=inlacsl-ruckus,10.150.94.100-10.150.94.239
+        subnet 10.150.94.0 netmask 255.255.255.0 {
+            option routers 10.150.94.1;
+            option subnet-mask 255.255.255.0;
+            option broadcast-address 10.150.94.255;
+            pool {
+#               failover peer "NATIONAL";
+                allow members of "ruckus";
+                allow members of "ubnt";
+                deny dynamic bootp clients;
+                #default-lease-time dTruk;
+                #max-lease-time mdTruk;
+                range 10.150.94.100 10.150.94.239;
+            }
+        }
+}

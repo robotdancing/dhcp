@@ -71,21 +71,19 @@ new_parse(int file, char *inbuf, size_t buflen, const char *name, int eolp)
 		struct stat sb;
 
 		if (fstat(file, &sb) < 0) {
-			fprintf(stderr, "can't stat input");
+			fprintf(stderr, "can't stat input\n");
 			exit(1);
 		}
 
-		if (sb.st_size == 0) {
-			fprintf(stderr, "empty input");
-			exit(1);
-		}
+		if (sb.st_size == 0)
+			return tmp;
 
 		tmp->bufsiz = tmp->buflen = (size_t) sb.st_size;
 		tmp->inbuf = mmap(NULL, tmp->bufsiz, PROT_READ, MAP_SHARED,
 				  file, 0);
 
 		if (tmp->inbuf == MAP_FAILED) {
-			fprintf(stderr, "can't map input");
+			fprintf(stderr, "can't map input\n");
 			exit(1);
 		}
 	}

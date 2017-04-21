@@ -1,0 +1,62 @@
+# ilcupre DHCPD Config File.
+# Generated 2012-07-30-13:44 with gendhcpd.pl by Presby Hall.
+
+shared-network ilcupre {
+    authoritative;
+
+# WANIP for ilcupre not configured
+
+#dhcpd-snmp=ilcupre-cust0,66.253.228.21-66.253.229.254
+    subnet 66.253.228.0 netmask 255.255.254.0 {
+        option routers 66.253.228.1;
+        option subnet-mask 255.255.254.0;
+        option broadcast-address 66.253.229.255;
+        option domain-name "client.pavlovmedia.net";
+        option domain-name-servers 66.253.214.16, 50.30.184.16;
+        default-lease-time 14400;
+        max-lease-time 28800;
+        min-lease-time 3600;
+        pool {
+            failover peer "NATIONAL";
+            deny members of "ruckus";
+            deny members of "ubnt";
+            deny dynamic bootp clients;
+            range 66.253.228.81 66.253.229.254;
+        }
+        # Office-Router
+        host 66-253-228-8 {
+            hardware ethernet 84:1b:5e:2d:38:b8;
+            fixed-address 66.253.228.8;
+        }
+        #Slingbox
+        host 66-253-228-10 {
+            hardware ethernet 00:13:B6:38:51:F2;
+            fixed-address 66.253.228.10;
+        }
+
+#  include "/etc/dhcp3/dhcp_hosts/ilcupre.hosts";
+
+    }
+
+    subnet 10.144.136.0 netmask 255.255.255.0 {
+        }
+    
+    subnet 10.144.137.0 netmask 255.255.255.0 {
+    }
+    
+#dhcpd-snmp=ilcupre-ruckus,10.144.138.100-10.144.138.239
+        subnet 10.144.138.0 netmask 255.255.255.0 {
+            option routers 10.144.138.1;
+            option subnet-mask 255.255.255.0;
+            option broadcast-address 10.144.138.255;
+            pool {
+                failover peer "NATIONAL";
+                allow members of "ruckus";
+                allow members of "ubnt";
+                deny dynamic bootp clients;
+                #default-lease-time dTruk;
+                #max-lease-time mdTruk;
+                range 10.144.138.100 10.144.138.239;
+            }
+        }
+}

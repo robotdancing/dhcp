@@ -1,0 +1,52 @@
+# njcamer DHCPD Config File.
+# Generated 2012-06-04-11:10 with gendhcpd.pl by Meridian Terrace.
+
+shared-network njcamer {
+    authoritative;
+
+#  include "/etc/dhcp3/folder.dhcpd/events.dhcpd";
+
+# WANIP for njcamer not configured
+
+#dhcpd-snmp=njcamer-cust0,68.180.104.21-68.180.105.254
+    subnet 68.180.104.0 netmask 255.255.254.0 {
+        option routers 68.180.104.1;
+        option subnet-mask 255.255.254.0;
+        option broadcast-address 68.180.105.255;
+        option domain-name "client.pavlovmedia.net";
+        #option domain-name-servers 66.253.214.16, 50.30.184.16;
+	option domain-name-servers 66.253.214.16, 50.30.184.16;
+        default-lease-time 14400;
+        max-lease-time 28800;
+	min-lease-time 3600;
+        pool {
+            failover peer "NATIONAL";
+            deny members of "ruckus";
+            deny members of "ubnt";
+            deny dynamic bootp clients;
+            range 68.180.104.21 68.180.105.254;
+        }
+    }
+
+    subnet 10.146.148.0 netmask 255.255.255.0 {
+        }
+    
+    subnet 10.146.149.0 netmask 255.255.255.0 {
+    }
+    
+#dhcpd-snmp=njcamer-ruckus,10.146.150.100-10.146.150.239
+        subnet 10.146.150.0 netmask 255.255.255.0 {
+            option routers 10.146.150.1;
+            option subnet-mask 255.255.255.0;
+            option broadcast-address 10.146.150.255;
+            pool {
+                failover peer "NATIONAL";
+                allow members of "ruckus";
+                allow members of "ubnt";
+                deny dynamic bootp clients;
+                #default-lease-time dTruk;
+                #max-lease-time mdTruk;
+                range 10.146.150.100 10.146.150.239;
+            }
+        }
+}

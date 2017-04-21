@@ -1,0 +1,49 @@
+# msstlap DHCPD Config File.
+# Generated 2012-03-26-09:17 with gendhcpd.pl by Lakeside Place.
+
+shared-network msstlap {
+    authoritative;
+
+# WANIP for msstlap not configured
+
+#dhcpd-snmp=msstlap-cust0,96.63.244.21-96.63.247.254
+    subnet 96.63.244.0 netmask 255.255.252.0 {
+        option routers 96.63.244.1;
+        option subnet-mask 255.255.252.0;
+        option broadcast-address 96.63.247.255;
+        option domain-name "client.pavlovmedia.net";
+        option domain-name-servers 66.253.214.16, 50.30.184.16;
+        default-lease-time 14400;
+        max-lease-time 28800;
+	min-lease-time 3600;
+        pool {
+            failover peer "NATIONAL";
+            deny members of "ruckus";
+            deny members of "ubnt";
+            deny dynamic bootp clients;
+            range 96.63.244.21 96.63.247.254;
+        }
+    }
+
+    subnet 10.149.128.0 netmask 255.255.255.0 {
+        }
+    
+    subnet 10.149.129.0 netmask 255.255.255.0 {
+    }
+    
+#dhcpd-snmp=msstlap-ruckus,10.149.130.100-10.149.130.239
+        subnet 10.149.130.0 netmask 255.255.255.0 {
+            option routers 10.149.130.1;
+            option subnet-mask 255.255.255.0;
+            option broadcast-address 10.149.130.255;
+            pool {
+                failover peer "NATIONAL";
+                allow members of "ruckus";
+                allow members of "ubnt";
+                deny dynamic bootp clients;
+                #default-lease-time dTruk;
+                #max-lease-time mdTruk;
+                range 10.149.130.100 10.149.130.239;
+            }
+        }
+}

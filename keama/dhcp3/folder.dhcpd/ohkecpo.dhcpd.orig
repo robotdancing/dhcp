@@ -1,0 +1,76 @@
+# ohkecpo DHCPD Config File.
+# Generated 2012-02-17-11:12 with gendhcpd.pl by Campus Pointe.
+
+shared-network ohkecpo {
+    authoritative;
+
+#dhcpd-snmp=ohkecpo-cust0,96.63.252.21-96.63.255.254
+    subnet 96.63.252.0 netmask 255.255.252.0 {
+        option routers 96.63.252.1;
+        option subnet-mask 255.255.252.0;
+        option broadcast-address 96.63.255.255;
+        option domain-name "client.pavlovmedia.net";
+        option domain-name-servers 66.253.214.16, 50.30.184.16;
+        default-lease-time 14400;
+        max-lease-time 28800;
+	min-lease-time 3600;
+        pool {
+            failover peer "NATIONAL";
+            deny members of "ruckus";
+            deny members of "ubnt";
+            deny dynamic bootp clients;
+            range 96.63.252.21 96.63.255.254;
+        }
+        # slingbox
+        host 96-63-252-10 {
+            hardware ethernet 00:13:b6:38:63:aa;
+            fixed-address 96.63.252.10;
+        }
+	# camera crap
+        host 96-63-252-27 {
+            hardware ethernet 00:11:14:0D:61:06;
+            fixed-address 96.63.252.27;
+        }
+    }
+
+#dhcpd-snmp=ohkecpo-cust1,216.171.46.3-216.171.46.254
+    subnet 216.171.46.0 netmask 255.255.255.0 {
+        option routers 216.171.46.1;
+        option subnet-mask 255.255.255.0;
+        option broadcast-address 216.171.46.255;
+        option domain-name "client.pavlovmedia.net";
+        option domain-name-servers 66.253.214.16, 50.30.184.16;
+        default-lease-time 14400;
+        max-lease-time 28800;
+	min-lease-time 3600;
+        pool {
+            failover peer "NATIONAL";
+            deny members of "ruckus";
+            deny members of "ubnt";
+            deny dynamic bootp clients;
+            range 216.171.46.3 216.171.46.254;
+        }
+    }
+
+    subnet 10.150.68.0 netmask 255.255.255.0 {
+        }
+    
+    subnet 10.150.69.0 netmask 255.255.255.0 {
+    }
+    
+#dhcpd-snmp=ohkecpo-ruckus,10.150.70.100-10.150.70.239
+        subnet 10.150.70.0 netmask 255.255.255.0 {
+            option routers 10.150.70.1;
+            option subnet-mask 255.255.255.0;
+            option broadcast-address 10.150.70.255;
+            pool {
+                failover peer "NATIONAL";
+                allow members of "ruckus";
+                allow members of "ubnt";
+                deny dynamic bootp clients;
+                #default-lease-time dTruk;
+                #max-lease-time mdTruk;
+                range 10.150.70.100 10.150.70.239;
+            }
+        }
+}

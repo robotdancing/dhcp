@@ -1,0 +1,74 @@
+# ilcub310 DHCPD Config File.
+# Generated 2012-07-12-17:31 with gendhcpd.pl by Burnham 310.
+
+shared-network ilcub310 {
+    authoritative;
+
+#  include "/etc/dhcp3/folder.dhcpd/events.dhcpd";
+
+# WANIP for ilcub310 not configured
+
+#dhcpd-snmp=ilcub310-cust0,50.30.140.21-50.30.143.254
+    subnet 50.30.140.0 netmask 255.255.252.0 {
+        option routers 50.30.140.1;
+        option subnet-mask 255.255.252.0;
+        option broadcast-address 50.30.143.255;
+        option domain-name "client.pavlovmedia.net";
+        option domain-name-servers 66.253.214.16, 50.30.184.16;
+        default-lease-time 14400;
+        max-lease-time 28800;
+    min-lease-time 3600;
+        pool {
+            failover peer "NATIONAL";
+            deny members of "ruckus";
+            deny members of "ubnt";
+            deny dynamic bootp clients;
+            range 50.30.140.21 50.30.143.254;
+        }
+    # Office
+        host 50-30-140-8 {
+            hardware ethernet 84:1b:5e:2f:07:29;
+            fixed-address 50.30.140.8;
+        }
+    }
+
+    subnet 10.144.116.0 netmask 255.255.255.0 {
+        }
+
+    subnet 10.144.117.0 netmask 255.255.255.0 {
+        option routers 10.144.117.1;
+        option subnet-mask 255.255.255.0;
+        option broadcast-address 10.144.117.255;
+        option domain-name-servers 10.144.117.1;
+        default-lease-time 14400;
+        max-lease-time 28800;
+
+#  include "/etc/dhcp3/dhcp_hosts/ilcub310_subnet01.hosts";
+    }
+
+#dhcpd-snmp=ilcub310-ruckus,10.144.118.100-10.144.118.239
+        subnet 10.144.118.0 netmask 255.255.255.0 {
+            option routers 10.144.118.1;
+            option subnet-mask 255.255.255.0;
+            option broadcast-address 10.144.118.255;
+            option domain-name-servers 10.144.118.1;
+            default-lease-time 14400;
+            max-lease-time 28800;
+            pool {
+                failover peer "NATIONAL";
+                allow members of "ruckus";
+                allow members of "ubnt";
+                deny dynamic bootp clients;
+                #default-lease-time dTruk;
+                #max-lease-time mdTruk;
+                range 10.144.118.100 10.144.118.239;
+            }
+        # Unifi
+            host 10-144-118-6 {
+                hardware ethernet d0:27:88:3b:55:af;
+                fixed-address 10.144.118.6;
+            }
+
+#  include "/etc/dhcp3/dhcp_hosts/ilcub310_subnet02.hosts";
+        }
+}

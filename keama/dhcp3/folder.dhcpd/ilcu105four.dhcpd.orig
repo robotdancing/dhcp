@@ -1,0 +1,44 @@
+# ilcu105four DHCPD Config File.
+# Generated 2010-11-11-14:26 with gendhcpd.pl by AUTObpeterson.
+
+shared-network ilcu105four {
+    authoritative;
+
+#  include "/etc/dhcp3/folder.dhcpd/events.dhcpd";
+
+    subnet 96.63.202.13 netmask 255.255.255.255 {
+    }
+
+#dhcpd-snmp=ilcu105four-cust0,173.230.17.69-173.230.17.126
+    subnet 173.230.17.64 netmask 255.255.255.192 {
+        option routers 173.230.17.65;
+        option subnet-mask 255.255.255.192;
+        option broadcast-address 173.230.17.127;
+        option domain-name "client.pavlovmedia.net";
+        option domain-name-servers 66.253.214.16, 50.30.184.16;
+#        default-lease-time dTlease0;
+#        max-lease-time mdTlease0;
+        pool {
+            failover peer "NATIONAL";
+            deny members of "ruckus";
+            deny dynamic bootp clients;
+            range 173.230.17.69 173.230.17.126;
+        }
+    }
+
+#dhcpd-snmp=ilcu105four-ruckus,10.159.115.100-10.159.115.239
+    subnet 10.159.115.0 netmask 255.255.255.0 {
+        option routers 10.159.115.1;
+        option subnet-mask 255.255.255.0;
+        option broadcast-address 10.159.115.255;
+        pool {
+            failover peer "NATIONAL";
+            allow members of "ruckus";
+            deny dynamic bootp clients;
+#            default-lease-time dTruk;
+#            max-lease-time mdTruk;
+            range 10.159.115.100 10.159.115.239;
+        }
+#  include "/etc/dhcp3/bootp/ilcu105four.bootp";
+    }
+}

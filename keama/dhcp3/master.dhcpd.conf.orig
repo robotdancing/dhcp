@@ -1,0 +1,52 @@
+# NATIONAL DHCPD Secondary Failover Peer Unique Configuration
+# 2010-12-14 ~bpeterson
+# !                           !
+# !        DO NOT EDIT        !
+# !                           !
+# All dhcp configuration files are handled by cfengine at
+#  meles.srv.pavlovmedia.corp
+# Non-unique configuration is contained in dhcp3/common.dhcpd
+# Individual dhcp scopes are defined by sitecode as shared networks in
+#  dhcp3/folder.dhcpd/$SITECODE.dhcpd
+# Files are included into the dhcpd.conf with include statements in
+#  dhcp3/folder.dhcpd/includes.dhcpd
+
+server-identifier 68.234.128.73;
+
+next-server 50.30.208.80;
+
+# TODO: Maybe make the port/peer port different
+failover peer "NATIONAL" {
+    primary;
+    address 68.234.128.73;
+    port 647;
+    peer address 50.30.208.80;
+    peer port 647;
+    max-response-delay 60;
+    max-unacked-updates 10;
+    load balance max seconds 3;
+    mclt 1800;
+    # 300 was original
+    # 3600 is recommended
+    split 128;
+}
+
+#Current OpeNMS server
+subnet 66.253.253.184 netmask 255.255.255.255 {
+    host tigris {
+        hardware ethernet 00:30:48:fe:ce:14;
+        fixed-address 66.253.253.184;
+    }
+}
+
+#Old OpenNMS server
+#subnet 66.253.253.209 netmask 255.255.255.255 {
+#    host Canis {
+#        hardware ethernet 00:06:0D:BE:9C:B3;
+#        fixed-address 66.253.253.209;
+#    }
+#}
+
+lease-file-name "/mnt/dhcpd_ramdb/dhcpd.leases";
+
+include "dhcp3/common.dhcpd";

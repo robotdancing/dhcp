@@ -1,0 +1,45 @@
+# ilcu511wchu DHCPD Config File.
+# Generated 2012-08-20-13:29 with gendhcpd.pl by 511 W Church.
+
+shared-network ilcu511wchu {
+    authoritative;
+
+#  include "/etc/dhcp3/folder.dhcpd/events.dhcpd";
+
+# WANIP for ilcu511wchu not configured
+
+#dhcpd-snmp=ilcu511wchu-cust0,96.63.200.165-96.63.200.190
+    subnet 96.63.200.160 netmask 255.255.255.224 {
+        option routers 96.63.200.161;
+        option subnet-mask 255.255.255.224;
+        option broadcast-address 96.63.200.191;
+        option domain-name "client.pavlovmedia.net";
+        option domain-name-servers 66.253.214.16, 50.30.184.16;
+        default-lease-time 14400;
+        max-lease-time 28800;
+	min-lease-time 3600;
+        pool {
+            failover peer "NATIONAL";
+            deny members of "ruckus";
+            deny members of "ubnt";
+            deny dynamic bootp clients;
+            range 96.63.200.165 96.63.200.190;
+        }
+    }
+
+#dhcpd-snmp=ilcu511wchu-ruckus,10.159.7.100-10.159.7.239
+        subnet 10.159.7.0 netmask 255.255.255.0 {
+            option routers 10.159.7.1;
+            option subnet-mask 255.255.255.0;
+            option broadcast-address 10.159.7.255;
+            pool {
+                failover peer "NATIONAL";
+                allow members of "ruckus";
+                allow members of "ubnt";
+                deny dynamic bootp clients;
+                #default-lease-time dTruk;
+                #max-lease-time mdTruk;
+                range 10.159.7.100 10.159.7.239;
+            }
+        }
+}

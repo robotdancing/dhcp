@@ -1,0 +1,63 @@
+# inblbra DHCPD Config File.
+# Generated 2012-03-20-13:14 with gendhcpd.pl by Bradford Place.
+
+shared-network inblbra {
+    authoritative;
+
+#  include "/etc/dhcp3/folder.dhcpd/events.dhcpd";
+
+# WANIP for inblbra not configured
+
+#dhcpd-snmp=inblbra-cust0,96.63.224.21-96.63.227.254
+    subnet 96.63.224.0 netmask 255.255.252.0 {
+        option routers 96.63.224.1;
+        option subnet-mask 255.255.252.0;
+        option broadcast-address 96.63.227.255;
+        option domain-name "client.pavlovmedia.net";
+        option domain-name-servers 66.253.214.16, 50.30.184.16;
+        default-lease-time 14400;
+        max-lease-time 28800;
+	min-lease-time 3600;
+        pool {
+            failover peer "NATIONAL";
+            deny members of "ruckus";
+            deny members of "ubnt";
+            deny dynamic bootp clients;
+            range 96.63.224.21 96.63.227.254;
+        }
+	# Office Router
+        host 96-63-224-8 {
+            #hardware ethernet D0:C2:82:E6:1E:45;
+	    hardware ethernet 74:44:01:37:4D:87;
+            fixed-address 96.63.224.8;
+        }
+	# Lab Router
+        host 96-63-224-9 {
+            #hardware ethernet 00:1c:10:93:23:2d;
+ 	    hardware ethernet 84:1c:5e:e6:92:de;
+            fixed-address 96.63.224.9;
+        }
+    }
+
+    subnet 10.150.64.0 netmask 255.255.255.0 {
+        }
+    
+    subnet 10.150.65.0 netmask 255.255.255.0 {
+    }
+    
+#dhcpd-snmp=inblbra-ruckus,10.150.66.100-10.150.66.239
+        subnet 10.150.66.0 netmask 255.255.255.0 {
+            option routers 10.150.66.1;
+            option subnet-mask 255.255.255.0;
+            option broadcast-address 10.150.66.255;
+            pool {
+                failover peer "NATIONAL";
+                allow members of "ruckus";
+                allow members of "ubnt";
+                deny dynamic bootp clients;
+                #default-lease-time dTruk;
+                #max-lease-time mdTruk;
+                range 10.150.66.100 10.150.66.239;
+            }
+        }
+}

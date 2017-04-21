@@ -1,0 +1,62 @@
+# arfahpl DHCPD Config File.
+# Generated 2012-04-20-14:31 with gendhcpd.pl by Hill Place.
+
+shared-network arfahpl {
+    authoritative;
+
+#  include "/etc/dhcp3/folder.dhcpd/events.dhcpd";
+
+    subnet 98.172.7.138 netmask 255.255.255.255 {
+    }
+
+#dhcpd-snmp=arfahpl-cust0,68.180.64.21-68.180.67.254
+    subnet 68.180.64.0 netmask 255.255.252.0 {
+        option routers 68.180.64.1;
+        option subnet-mask 255.255.252.0;
+        option broadcast-address 68.180.67.255;
+        option domain-name "client.pavlovmedia.net";
+        option domain-name-servers 66.253.214.16, 50.30.184.16;
+        default-lease-time 14400;
+        max-lease-time 28800;
+	min-lease-time 3600;
+        pool {
+#           failover peer "NATIONAL";
+            deny members of "ruckus";
+            deny members of "ubnt";
+            deny dynamic bootp clients;
+            range 68.180.64.21 68.180.67.254;
+        }
+        #Office
+        host 68-180-64-8 {
+            hardware ethernet 1c:aa:07:ed:a2:e4;
+            fixed-address 68.180.64.8;
+        }
+        #Lab
+        host 68-180-64-9 {
+            hardware ethernet 00:0c:42:5c:23:c8;
+            fixed-address 68.180.64.9;
+        }
+    }
+
+    subnet 10.149.120.0 netmask 255.255.255.0 {
+        }
+    
+    subnet 10.149.121.0 netmask 255.255.255.0 {
+    }
+    
+#dhcpd-snmp=arfahpl-ruckus,10.149.122.100-10.149.122.239
+        subnet 10.149.122.0 netmask 255.255.255.0 {
+            option routers 10.149.122.1;
+            option subnet-mask 255.255.255.0;
+            option broadcast-address 10.149.122.255;
+            pool {
+#               failover peer "NATIONAL";
+                allow members of "ruckus";
+                allow members of "ubnt";
+                deny dynamic bootp clients;
+                #default-lease-time dTruk;
+                #max-lease-time mdTruk;
+                range 10.149.122.100 10.149.122.239;
+            }
+        }
+}

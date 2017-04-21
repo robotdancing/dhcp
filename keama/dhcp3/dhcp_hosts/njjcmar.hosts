@@ -1,0 +1,2061 @@
+        host 0004edf4cd4e {
+                hardware ethernet 00:04:ed:f4:cd:52;
+                option host-name "0004edf4cd4e";
+                fixed-address 173.230.64.21;
+        }
+        host 0004edf4cd66 {
+                hardware ethernet 00:04:ed:f4:cd:6a;
+                option host-name "0004edf4cd66";
+                fixed-address 173.230.64.22;
+        }
+        host 0004edf4cdfe {
+                hardware ethernet 00:04:ed:f4:ce:02;
+                option host-name "0004edf4cdfe";
+                fixed-address 173.230.64.23;
+        }
+        host 0004edf4ce06 {
+                hardware ethernet 00:04:ed:f4:ce:0a;
+                option host-name "0004edf4ce06";
+                fixed-address 173.230.64.24;
+        }
+        host 0004edf4ce0e {
+                hardware ethernet 00:04:ed:f4:ce:12;
+                option host-name "0004edf4ce0e";
+                fixed-address 173.230.64.25;
+        }
+        host 0004edf4ce16 {
+                hardware ethernet 00:04:ed:f4:ce:1a;
+                option host-name "0004edf4ce16";
+                fixed-address 173.230.64.26;
+        }
+        host 0004edf4ce36 {
+                hardware ethernet 00:04:ed:f4:ce:3a;
+                option host-name "0004edf4ce36";
+                fixed-address 173.230.64.27;
+        }
+        host 0004edf4ce3e {
+                hardware ethernet 00:04:ed:f4:ce:42;
+                option host-name "0004edf4ce3e";
+                fixed-address 173.230.64.28;
+        }
+        host 0004edf4ce46 {
+                hardware ethernet 00:04:ed:f4:ce:4a;
+                option host-name "0004edf4ce46";
+                fixed-address 173.230.64.29;
+        }
+        host 0004edf4ce56 {
+                hardware ethernet 00:04:ed:f4:ce:5a;
+                option host-name "0004edf4ce56";
+                fixed-address 173.230.64.30;
+        }
+        host 0004edf4ce5e {
+                hardware ethernet 00:04:ed:f4:ce:62;
+                option host-name "0004edf4ce5e";
+                fixed-address 173.230.64.31;
+        }
+        host 0004edf4ce76 {
+                hardware ethernet 00:04:ed:f4:ce:7a;
+                option host-name "0004edf4ce76";
+                fixed-address 173.230.64.32;
+        }
+        host 0004edf4cebe {
+                hardware ethernet 00:04:ed:f4:ce:c2;
+                option host-name "0004edf4cebe";
+                fixed-address 173.230.64.33;
+        }
+        host 0004edf4cef6 {
+                hardware ethernet 00:04:ed:f4:ce:fa;
+                option host-name "0004edf4cef6";
+                fixed-address 173.230.64.34;
+        }
+        host 0004edf4cefe {
+                hardware ethernet 00:04:ed:f4:cf:02;
+                option host-name "0004edf4cefe";
+                fixed-address 173.230.64.35;
+        }
+        host 0004edf4cf16 {
+                hardware ethernet 00:04:ed:f4:cf:1a;
+                option host-name "0004edf4cf16";
+                fixed-address 173.230.64.36;
+        }
+        host 0004edf4cf26 {
+                hardware ethernet 00:04:ed:f4:cf:2a;
+                option host-name "0004edf4cf26";
+                fixed-address 173.230.64.37;
+        }
+        host 0004edf4cf46 {
+                hardware ethernet 00:04:ed:f4:cf:4a;
+                option host-name "0004edf4cf46";
+                fixed-address 173.230.64.38;
+        }
+        host 0004edf4cf4e {
+                hardware ethernet 00:04:ed:f4:cf:52;
+                option host-name "0004edf4cf4e";
+                fixed-address 173.230.64.39;
+        }
+        host 0004edf4cf56 {
+                hardware ethernet 00:04:ed:f4:cf:5a;
+                option host-name "0004edf4cf56";
+                fixed-address 173.230.64.40;
+        }
+        host 0004edf4cf6e {
+                hardware ethernet 00:04:ed:f4:cf:72;
+                option host-name "0004edf4cf6e";
+                fixed-address 173.230.64.41;
+        }
+        host 0004edf4cf76 {
+                hardware ethernet 00:04:ed:f4:cf:7a;
+                option host-name "0004edf4cf76";
+                fixed-address 173.230.64.42;
+        }
+        host 0004edf4cf7e {
+                hardware ethernet 00:04:ed:f4:cf:82;
+                option host-name "0004edf4cf7e";
+                fixed-address 173.230.64.43;
+        }
+        host 0004edf4cf86 {
+                hardware ethernet 00:04:ed:f4:cf:8a;
+                option host-name "0004edf4cf86";
+                fixed-address 173.230.64.44;
+        }
+        host 0004edf4cf96 {
+                hardware ethernet 00:04:ed:f4:cf:9a;
+                option host-name "0004edf4cf96";
+                fixed-address 173.230.64.45;
+        }
+        host 0004edf4cf9e {
+                hardware ethernet 00:04:ed:f4:cf:a2;
+                option host-name "0004edf4cf9e";
+                fixed-address 173.230.64.46;
+        }
+        host 0004edf4cfa6 {
+                hardware ethernet 00:04:ed:f4:cf:aa;
+                option host-name "0004edf4cfa6";
+                fixed-address 173.230.64.47;
+        }
+        host 0004edf4cfc6 {
+                hardware ethernet 00:04:ed:f4:cf:ca;
+                option host-name "0004edf4cfc6";
+                fixed-address 173.230.64.48;
+        }
+        host 0004edf4cfe6 {
+                hardware ethernet 00:04:ed:f4:cf:ea;
+                option host-name "0004edf4cfe6";
+                fixed-address 173.230.64.49;
+        }
+        host 0004edf4cff6 {
+                hardware ethernet 00:04:ed:f4:cf:fa;
+                option host-name "0004edf4cff6";
+                fixed-address 173.230.64.50;
+        }
+        host 0004edf4cffe {
+                hardware ethernet 00:04:ed:f4:d0:02;
+                option host-name "0004edf4cffe";
+                fixed-address 173.230.64.51;
+        }
+        host 0004edf4d00e {
+                hardware ethernet 00:04:ed:f4:d0:12;
+                option host-name "0004edf4d00e";
+                fixed-address 173.230.64.52;
+        }
+        host 0004edf4d016 {
+                hardware ethernet 00:04:ed:f4:d0:1a;
+                option host-name "0004edf4d016";
+                fixed-address 173.230.64.53;
+        }
+        host 0004edf4d026 {
+                hardware ethernet 00:04:ed:f4:d0:2a;
+                option host-name "0004edf4d026";
+                fixed-address 173.230.64.54;
+        }
+        host 0004edf4d03e {
+                hardware ethernet 00:04:ed:f4:d0:42;
+                option host-name "0004edf4d03e";
+                fixed-address 173.230.64.55;
+        }
+        host 0004edf4d04e {
+                hardware ethernet 00:04:ed:f4:d0:52;
+                option host-name "0004edf4d04e";
+                fixed-address 173.230.64.56;
+        }
+        host 0004edf4d06e {
+                hardware ethernet 00:04:ed:f4:d0:72;
+                option host-name "0004edf4d06e";
+                fixed-address 173.230.64.57;
+        }
+        host 0004edf4d086 {
+                hardware ethernet 00:04:ed:f4:d0:8a;
+                option host-name "0004edf4d086";
+                fixed-address 173.230.64.58;
+        }
+        host 0004edf4d08e {
+                hardware ethernet 00:04:ed:f4:d0:92;
+                option host-name "0004edf4d08e";
+                fixed-address 173.230.64.59;
+        }
+        host 0004edf4d0c6 {
+                hardware ethernet 00:04:ed:f4:d0:ca;
+                option host-name "0004edf4d0c6";
+                fixed-address 173.230.64.60;
+        }
+        host 0004edf4d0e6 {
+                hardware ethernet 00:04:ed:f4:d0:ea;
+                option host-name "0004edf4d0e6";
+                fixed-address 173.230.64.61;
+        }
+        host 0004edf4d14e {
+                hardware ethernet 00:04:ed:f4:d1:52;
+                option host-name "0004edf4d14e";
+                fixed-address 173.230.64.62;
+        }
+        host 0004edf4d16e {
+                hardware ethernet 00:04:ed:f4:d1:72;
+                option host-name "0004edf4d16e";
+                fixed-address 173.230.64.63;
+        }
+        host 0004edf4d17e {
+                hardware ethernet 00:04:ed:f4:d1:82;
+                option host-name "0004edf4d17e";
+                fixed-address 173.230.64.64;
+        }
+        host 0004edf4d186 {
+                hardware ethernet 00:04:ed:f4:d1:8a;
+                option host-name "0004edf4d186";
+                fixed-address 173.230.64.65;
+        }
+        host 0004edf4d1ae {
+                hardware ethernet 00:04:ed:f4:d1:b2;
+                option host-name "0004edf4d1ae";
+                fixed-address 173.230.64.66;
+        }
+        host 0004edf4d1c6 {
+                hardware ethernet 00:04:ed:f4:d1:ca;
+                option host-name "0004edf4d1c6";
+                fixed-address 173.230.64.67;
+        }
+        host 0004edf4d1ce {
+                hardware ethernet 00:04:ed:f4:d1:d2;
+                option host-name "0004edf4d1ce";
+                fixed-address 173.230.64.68;
+        }
+        host 0004edf4d1e6 {
+                hardware ethernet 00:04:ed:f4:d1:ea;
+                option host-name "0004edf4d1e6";
+                fixed-address 173.230.64.69;
+        }
+        host 0004edf4d25e {
+                hardware ethernet 00:04:ed:f4:d2:62;
+                option host-name "0004edf4d25e";
+                fixed-address 173.230.64.70;
+        }
+        host 0004edf4d26e {
+                hardware ethernet 00:04:ed:f4:d2:72;
+                option host-name "0004edf4d26e";
+                fixed-address 173.230.64.71;
+        }
+        host 0004edf4d296 {
+                hardware ethernet 00:04:ed:f4:d2:9a;
+                option host-name "0004edf4d296";
+                fixed-address 173.230.64.72;
+        }
+        host 0004edf4d2b6 {
+                hardware ethernet 00:04:ed:f4:d2:ba;
+                option host-name "0004edf4d2b6";
+                fixed-address 173.230.64.73;
+        }
+        host 0004edf4d2be {
+                hardware ethernet 00:04:ed:f4:d2:c2;
+                option host-name "0004edf4d2be";
+                fixed-address 173.230.64.74;
+        }
+        host 0004edf4d2ce {
+                hardware ethernet 00:04:ed:f4:d2:d2;
+                option host-name "0004edf4d2ce";
+                fixed-address 173.230.64.75;
+        }
+        host 0004edf4d2de {
+                hardware ethernet 00:04:ed:f4:d2:e2;
+                option host-name "0004edf4d2de";
+                fixed-address 173.230.64.76;
+        }
+        host 0004edf4d306 {
+                hardware ethernet 00:04:ed:f4:d3:0a;
+                option host-name "0004edf4d306";
+                fixed-address 173.230.64.77;
+        }
+        host 0004edf4d31e {
+                hardware ethernet 00:04:ed:f4:d3:22;
+                option host-name "0004edf4d31e";
+                fixed-address 173.230.64.78;
+        }
+        host 0004edf4d326 {
+                hardware ethernet 00:04:ed:f4:d3:2a;
+                option host-name "0004edf4d326";
+                fixed-address 173.230.64.79;
+        }
+        host 0004edf4d32e {
+                hardware ethernet 00:04:ed:f4:d3:32;
+                option host-name "0004edf4d32e";
+                fixed-address 173.230.64.80;
+        }
+        host 0004edf4d336 {
+                hardware ethernet 00:04:ed:f4:d3:3a;
+                option host-name "0004edf4d336";
+                fixed-address 173.230.64.81;
+        }
+        host 0004edf4d346 {
+                hardware ethernet 00:04:ed:f4:d3:4a;
+                option host-name "0004edf4d346";
+                fixed-address 173.230.64.82;
+        }
+        host 0004edf4d34e {
+                hardware ethernet 00:04:ed:f4:d3:52;
+                option host-name "0004edf4d34e";
+                fixed-address 173.230.64.83;
+        }
+        host 0004edf4d356 {
+                hardware ethernet 00:04:ed:f4:d3:5a;
+                option host-name "0004edf4d356";
+                fixed-address 173.230.64.84;
+        }
+        host 0004edf4d35e {
+                hardware ethernet 00:04:ed:f4:d3:62;
+                option host-name "0004edf4d35e";
+                fixed-address 173.230.64.85;
+        }
+        host 0004edf4d386 {
+                hardware ethernet 00:04:ed:f4:d3:8a;
+                option host-name "0004edf4d386";
+                fixed-address 173.230.64.86;
+        }
+        host 0004edf4d38e {
+                hardware ethernet 00:04:ed:f4:d3:92;
+                option host-name "0004edf4d38e";
+                fixed-address 173.230.64.87;
+        }
+        host 0004edf4d396 {
+                hardware ethernet 00:04:ed:f4:d3:9a;
+                option host-name "0004edf4d396";
+                fixed-address 173.230.64.88;
+        }
+        host 0004edf4d40e {
+                hardware ethernet 00:04:ed:f4:d4:12;
+                option host-name "0004edf4d40e";
+                fixed-address 173.230.64.89;
+        }
+        host 0004edf4d41e {
+                hardware ethernet 00:04:ed:f4:d4:22;
+                option host-name "0004edf4d41e";
+                fixed-address 173.230.64.90;
+        }
+        host 0004edf4d436 {
+                hardware ethernet 00:04:ed:f4:d4:3a;
+                option host-name "0004edf4d436";
+                fixed-address 173.230.64.91;
+        }
+        host 0004edf4d596 {
+                hardware ethernet 00:04:ed:f4:d5:9a;
+                option host-name "0004edf4d596";
+                fixed-address 173.230.64.92;
+        }
+        host 0004edf4d59e {
+                hardware ethernet 00:04:ed:f4:d5:a2;
+                option host-name "0004edf4d59e";
+                fixed-address 173.230.64.93;
+        }
+        host 0004edf4d5ae {
+                hardware ethernet 00:04:ed:f4:d5:b2;
+                option host-name "0004edf4d5ae";
+                fixed-address 173.230.64.94;
+        }
+        host 0004edf4d5be {
+                hardware ethernet 00:04:ed:f4:d5:c2;
+                option host-name "0004edf4d5be";
+                fixed-address 173.230.64.95;
+        }
+        host 0004edf4d5c6 {
+                hardware ethernet 00:04:ed:f4:d5:ca;
+                option host-name "0004edf4d5c6";
+                fixed-address 173.230.64.96;
+        }
+        host 0004edf4d5de {
+                hardware ethernet 00:04:ed:f4:d5:e2;
+                option host-name "0004edf4d5de";
+                fixed-address 173.230.64.97;
+        }
+        host 0004edf4d5f6 {
+                hardware ethernet 00:04:ed:f4:d5:fa;
+                option host-name "0004edf4d5f6";
+                fixed-address 173.230.64.98;
+        }
+        host 0004edf4d5fe {
+                hardware ethernet 00:04:ed:f4:d6:02;
+                option host-name "0004edf4d5fe";
+                fixed-address 173.230.64.99;
+        }
+        host 0004edf4d676 {
+                hardware ethernet 00:04:ed:f4:d6:7a;
+                option host-name "0004edf4d676";
+                fixed-address 173.230.64.100;
+        }
+        host 0004edf4d67e {
+                hardware ethernet 00:04:ed:f4:d6:82;
+                option host-name "0004edf4d67e";
+                fixed-address 173.230.64.101;
+        }
+        host 0004edf4d68e {
+                hardware ethernet 00:04:ed:f4:d6:92;
+                option host-name "0004edf4d68e";
+                fixed-address 173.230.64.102;
+        }
+        host 0004edf4d69e {
+                hardware ethernet 00:04:ed:f4:d6:a2;
+                option host-name "0004edf4d69e";
+                fixed-address 173.230.64.103;
+        }
+        host 0004edf4d6a6 {
+                hardware ethernet 00:04:ed:f4:d6:aa;
+                option host-name "0004edf4d6a6";
+                fixed-address 173.230.64.104;
+        }
+        host 0004edf4d6ae {
+                hardware ethernet 00:04:ed:f4:d6:b2;
+                option host-name "0004edf4d6ae";
+                fixed-address 173.230.64.105;
+        }
+        host 0004edf4d6c6 {
+                hardware ethernet 00:04:ed:f4:d6:ca;
+                option host-name "0004edf4d6c6";
+                fixed-address 173.230.64.106;
+        }
+        host 0004edf4d6ce {
+                hardware ethernet 00:04:ed:f4:d6:d2;
+                option host-name "0004edf4d6ce";
+                fixed-address 173.230.64.107;
+        }
+        host 0004edf4d6d6 {
+                hardware ethernet 00:04:ed:f4:d6:da;
+                option host-name "0004edf4d6d6";
+                fixed-address 173.230.64.108;
+        }
+        host 0004edf9bb7b {
+                hardware ethernet 00:04:ed:f9:bb:7f;
+                option host-name "0004edf9bb7b";
+                fixed-address 173.230.64.109;
+        }
+        host 0004edf9bb83 {
+                hardware ethernet 00:04:ed:f9:bb:87;
+                option host-name "0004edf9bb83";
+                fixed-address 173.230.64.110;
+        }
+        host 0004edf9bb93 {
+                hardware ethernet 00:04:ed:f9:bb:97;
+                option host-name "0004edf9bb93";
+                fixed-address 173.230.64.111;
+        }
+        host 0004edf9bb9b {
+                hardware ethernet 00:04:ed:f9:bb:9f;
+                option host-name "0004edf9bb9b";
+                fixed-address 173.230.64.112;
+        }
+        host 0004edf9bbb3 {
+                hardware ethernet 00:04:ed:f9:bb:b7;
+                option host-name "0004edf9bbb3";
+                fixed-address 173.230.64.113;
+        }
+        host 0004edf9bc63 {
+                hardware ethernet 00:04:ed:f9:bc:67;
+                option host-name "0004edf9bc63";
+                fixed-address 173.230.64.114;
+        }
+        host 0004edf9bc73 {
+                hardware ethernet 00:04:ed:f9:bc:77;
+                option host-name "0004edf9bc73";
+                fixed-address 173.230.64.115;
+        }
+        host 0004edf9bc7b {
+                hardware ethernet 00:04:ed:f9:bc:7f;
+                option host-name "0004edf9bc7b";
+                fixed-address 173.230.64.116;
+        }
+        host 0004edf9bc83 {
+                hardware ethernet 00:04:ed:f9:bc:87;
+                option host-name "0004edf9bc83";
+                fixed-address 173.230.64.117;
+        }
+        host 0004edf9bc8b {
+                hardware ethernet 00:04:ed:f9:bc:8f;
+                option host-name "0004edf9bc8b";
+                fixed-address 173.230.64.118;
+        }
+        host 0004edf9bc93 {
+                hardware ethernet 00:04:ed:f9:bc:97;
+                option host-name "0004edf9bc93";
+                fixed-address 173.230.64.119;
+        }
+        host 0004edf9bc9b {
+                hardware ethernet 00:04:ed:f9:bc:9f;
+                option host-name "0004edf9bc9b";
+                fixed-address 173.230.64.120;
+        }
+        host 0004edf9bca3 {
+                hardware ethernet 00:04:ed:f9:bc:a7;
+                option host-name "0004edf9bca3";
+                fixed-address 173.230.64.121;
+        }
+        host 0004edf9bcab {
+                hardware ethernet 00:04:ed:f9:bc:af;
+                option host-name "0004edf9bcab";
+                fixed-address 173.230.64.122;
+        }
+        host 0004edf9bcb3 {
+                hardware ethernet 00:04:ed:f9:bc:b7;
+                option host-name "0004edf9bcb3";
+                fixed-address 173.230.64.123;
+        }
+        host 0004edf9bcbb {
+                hardware ethernet 00:04:ed:f9:bc:bf;
+                option host-name "0004edf9bcbb";
+                fixed-address 173.230.64.124;
+        }
+        host 0004edf9bcc3 {
+                hardware ethernet 00:04:ed:f9:bc:c7;
+                option host-name "0004edf9bcc3";
+                fixed-address 173.230.64.125;
+        }
+        host 0004edf9bcd3 {
+                hardware ethernet 00:04:ed:f9:bc:d7;
+                option host-name "0004edf9bcd3";
+                fixed-address 173.230.64.126;
+        }
+        host 0004edf9bce3 {
+                hardware ethernet 00:04:ed:f9:bc:e7;
+                option host-name "0004edf9bce3";
+                fixed-address 173.230.64.127;
+        }
+        host 0004edf9bceb {
+                hardware ethernet 00:04:ed:f9:bc:ef;
+                option host-name "0004edf9bceb";
+                fixed-address 173.230.64.128;
+        }
+        host 0004edf9bcf3 {
+                hardware ethernet 00:04:ed:f9:bc:f7;
+                option host-name "0004edf9bcf3";
+                fixed-address 173.230.64.129;
+        }
+        host 0004edf9bcfb {
+                hardware ethernet 00:04:ed:f9:bc:ff;
+                option host-name "0004edf9bcfb";
+                fixed-address 173.230.64.130;
+        }
+        host 0004edf9bd03 {
+                hardware ethernet 00:04:ed:f9:bd:07;
+                option host-name "0004edf9bd03";
+                fixed-address 173.230.64.131;
+        }
+        host 0004edf9bd1b {
+                hardware ethernet 00:04:ed:f9:bd:1f;
+                option host-name "0004edf9bd1b";
+                fixed-address 173.230.64.132;
+        }
+        host 0004edf9bd3b {
+                hardware ethernet 00:04:ed:f9:bd:3f;
+                option host-name "0004edf9bd3b";
+                fixed-address 173.230.64.133;
+        }
+        host 0004edf9bd43 {
+                hardware ethernet 00:04:ed:f9:bd:47;
+                option host-name "0004edf9bd43";
+                fixed-address 173.230.64.134;
+        }
+        host 0004edf9bd5b {
+                hardware ethernet 00:04:ed:f9:bd:5f;
+                option host-name "0004edf9bd5b";
+                fixed-address 173.230.64.135;
+        }
+        host 0004edf9bd63 {
+                hardware ethernet 00:04:ed:f9:bd:67;
+                option host-name "0004edf9bd63";
+                fixed-address 173.230.64.136;
+        }
+        host 0004edf9bd7b {
+                hardware ethernet 00:04:ed:f9:bd:7f;
+                option host-name "0004edf9bd7b";
+                fixed-address 173.230.64.137;
+        }
+        host 0004edf9bd83 {
+                hardware ethernet 00:04:ed:f9:bd:87;
+                option host-name "0004edf9bd83";
+                fixed-address 173.230.64.138;
+        }
+        host 0004edf9bd8b {
+                hardware ethernet 00:04:ed:f9:bd:8f;
+                option host-name "0004edf9bd8b";
+                fixed-address 173.230.64.139;
+        }
+        host 0004edf9bdab {
+                hardware ethernet 00:04:ed:f9:bd:af;
+                option host-name "0004edf9bdab";
+                fixed-address 173.230.64.140;
+        }
+        host 0004edf9bdb3 {
+                hardware ethernet 00:04:ed:f9:bd:b7;
+                option host-name "0004edf9bdb3";
+                fixed-address 173.230.64.141;
+        }
+        host 0004edf9bdbb {
+                hardware ethernet 00:04:ed:f9:bd:bf;
+                option host-name "0004edf9bdbb";
+                fixed-address 173.230.64.142;
+        }
+        host 0004edf9bdc3 {
+                hardware ethernet 00:04:ed:f9:bd:c7;
+                option host-name "0004edf9bdc3";
+                fixed-address 173.230.64.143;
+        }
+        host 0004edf9bdcb {
+                hardware ethernet 00:04:ed:f9:bd:cf;
+                option host-name "0004edf9bdcb";
+                fixed-address 173.230.64.144;
+        }
+        host 0004edf9bdd3 {
+                hardware ethernet 00:04:ed:f9:bd:d7;
+                option host-name "0004edf9bdd3";
+                fixed-address 173.230.64.145;
+        }
+        host 0004edf9bddb {
+                hardware ethernet 00:04:ed:f9:bd:df;
+                option host-name "0004edf9bddb";
+                fixed-address 173.230.64.146;
+        }
+        host 0004edf9bde3 {
+                hardware ethernet 00:04:ed:f9:bd:e7;
+                option host-name "0004edf9bde3";
+                fixed-address 173.230.64.147;
+        }
+        host 0004edf9be0b {
+                hardware ethernet 00:04:ed:f9:be:0f;
+                option host-name "0004edf9be0b";
+                fixed-address 173.230.64.148;
+        }
+        host 0004edf9be1b {
+                hardware ethernet 00:04:ed:f9:be:1f;
+                option host-name "0004edf9be1b";
+                fixed-address 173.230.64.149;
+        }
+        host 0004edf9be33 {
+                hardware ethernet 00:04:ed:f9:be:37;
+                option host-name "0004edf9be33";
+                fixed-address 173.230.64.150;
+        }
+        host 0004edf9be43 {
+                hardware ethernet 00:04:ed:f9:be:47;
+                option host-name "0004edf9be43";
+                fixed-address 173.230.64.151;
+        }
+        host 0004edf9be53 {
+                hardware ethernet 00:04:ed:f9:be:57;
+                option host-name "0004edf9be53";
+                fixed-address 173.230.64.152;
+        }
+        host 0004edf9be73 {
+                hardware ethernet 00:04:ed:f9:be:77;
+                option host-name "0004edf9be73";
+                fixed-address 173.230.64.153;
+        }
+        host 0004edf9be7b {
+                hardware ethernet 00:04:ed:f9:be:7f;
+                option host-name "0004edf9be7b";
+                fixed-address 173.230.64.154;
+        }
+        host 0004edf9be83 {
+                hardware ethernet 00:04:ed:f9:be:87;
+                option host-name "0004edf9be83";
+                fixed-address 173.230.64.155;
+        }
+        host 0004edf9be8b {
+                hardware ethernet 00:04:ed:f9:be:8f;
+                option host-name "0004edf9be8b";
+                fixed-address 173.230.64.156;
+        }
+        host 0004edf9be93 {
+                hardware ethernet 00:04:ed:f9:be:97;
+                option host-name "0004edf9be93";
+                fixed-address 173.230.64.157;
+        }
+        host 0004edf9be9b {
+                hardware ethernet 00:04:ed:f9:be:9f;
+                option host-name "0004edf9be9b";
+                fixed-address 173.230.64.158;
+        }
+        host 0004edf9bea3 {
+                hardware ethernet 00:04:ed:f9:be:a7;
+                option host-name "0004edf9bea3";
+                fixed-address 173.230.64.159;
+        }
+        host 0004edf9bed3 {
+                hardware ethernet 00:04:ed:f9:be:d7;
+                option host-name "0004edf9bed3";
+                fixed-address 173.230.64.160;
+        }
+        host 0004edf9bef3 {
+                hardware ethernet 00:04:ed:f9:be:f7;
+                option host-name "0004edf9bef3";
+                fixed-address 173.230.64.161;
+        }
+        host 0004edf9befb {
+                hardware ethernet 00:04:ed:f9:be:ff;
+                option host-name "0004edf9befb";
+                fixed-address 173.230.64.162;
+        }
+        host 0004edf9bf03 {
+                hardware ethernet 00:04:ed:f9:bf:07;
+                option host-name "0004edf9bf03";
+                fixed-address 173.230.64.163;
+        }
+        host 0004edf9bf13 {
+                hardware ethernet 00:04:ed:f9:bf:17;
+                option host-name "0004edf9bf13";
+                fixed-address 173.230.64.164;
+        }
+        host 0004edf9bf1b {
+                hardware ethernet 00:04:ed:f9:bf:1f;
+                option host-name "0004edf9bf1b";
+                fixed-address 173.230.64.165;
+        }
+        host 0004edf9bf33 {
+                hardware ethernet 00:04:ed:f9:bf:37;
+                option host-name "0004edf9bf33";
+                fixed-address 173.230.64.166;
+        }
+        host 0004edf9bf3b {
+                hardware ethernet 00:04:ed:f9:bf:3f;
+                option host-name "0004edf9bf3b";
+                fixed-address 173.230.64.167;
+        }
+        host 0004edf9bf4b {
+                hardware ethernet 00:04:ed:f9:bf:4f;
+                option host-name "0004edf9bf4b";
+                fixed-address 173.230.64.168;
+        }
+        host 0004edf9bf63 {
+                hardware ethernet 00:04:ed:f9:bf:67;
+                option host-name "0004edf9bf63";
+                fixed-address 173.230.64.169;
+        }
+        host 0004edf9bf6b {
+                hardware ethernet 00:04:ed:f9:bf:6f;
+                option host-name "0004edf9bf6b";
+                fixed-address 173.230.64.170;
+        }
+        host 0004edf9bf73 {
+                hardware ethernet 00:04:ed:f9:bf:77;
+                option host-name "0004edf9bf73";
+                fixed-address 173.230.64.171;
+        }
+        host 0004edf9bf7b {
+                hardware ethernet 00:04:ed:f9:bf:7f;
+                option host-name "0004edf9bf7b";
+                fixed-address 173.230.64.172;
+        }
+        host 0004edf9bf83 {
+                hardware ethernet 00:04:ed:f9:bf:87;
+                option host-name "0004edf9bf83";
+                fixed-address 173.230.64.173;
+        }
+        host 0004edf9bf93 {
+                hardware ethernet 00:04:ed:f9:bf:97;
+                option host-name "0004edf9bf93";
+                fixed-address 173.230.64.174;
+        }
+        host 0004edf9bfa3 {
+                hardware ethernet 00:04:ed:f9:bf:a7;
+                option host-name "0004edf9bfa3";
+                fixed-address 173.230.64.175;
+        }
+        host 0004edf9bfab {
+                hardware ethernet 00:04:ed:f9:bf:af;
+                option host-name "0004edf9bfab";
+                fixed-address 173.230.64.176;
+        }
+        host 0004edf9bfb3 {
+                hardware ethernet 00:04:ed:f9:bf:b7;
+                option host-name "0004edf9bfb3";
+                fixed-address 173.230.64.177;
+        }
+        host 0004edf9bfbb {
+                hardware ethernet 00:04:ed:f9:bf:bf;
+                option host-name "0004edf9bfbb";
+                fixed-address 173.230.64.178;
+        }
+        host 0004edf9bfd3 {
+                hardware ethernet 00:04:ed:f9:bf:d7;
+                option host-name "0004edf9bfd3";
+                fixed-address 173.230.64.179;
+        }
+        host 0004edf9bfe3 {
+                hardware ethernet 00:04:ed:f9:bf:e7;
+                option host-name "0004edf9bfe3";
+                fixed-address 173.230.64.180;
+        }
+        host 0004edf9c00b {
+                hardware ethernet 00:04:ed:f9:c0:0f;
+                option host-name "0004edf9c00b";
+                fixed-address 173.230.64.181;
+        }
+        host 0004edf9c013 {
+                hardware ethernet 00:04:ed:f9:c0:17;
+                option host-name "0004edf9c013";
+                fixed-address 173.230.64.182;
+        }
+        host 0004edf9c01b {
+                hardware ethernet 00:04:ed:f9:c0:1f;
+                option host-name "0004edf9c01b";
+                fixed-address 173.230.64.183;
+        }
+        host 0004edf9c023 {
+                hardware ethernet 00:04:ed:f9:c0:27;
+                option host-name "0004edf9c023";
+                fixed-address 173.230.64.184;
+        }
+        host 0004edf9c02b {
+                hardware ethernet 00:04:ed:f9:c0:2f;
+                option host-name "0004edf9c02b";
+                fixed-address 173.230.64.185;
+        }
+        host 0004edf9c033 {
+                hardware ethernet 00:04:ed:f9:c0:37;
+                option host-name "0004edf9c033";
+                fixed-address 173.230.64.186;
+        }
+        host 0004edf9c05b {
+                hardware ethernet 00:04:ed:f9:c0:5f;
+                option host-name "0004edf9c05b";
+                fixed-address 173.230.64.187;
+        }
+        host 0004edf9c063 {
+                hardware ethernet 00:04:ed:f9:c0:67;
+                option host-name "0004edf9c063";
+                fixed-address 173.230.64.188;
+        }
+        host 0004edf9c06b {
+                hardware ethernet 00:04:ed:f9:c0:6f;
+                option host-name "0004edf9c06b";
+                fixed-address 173.230.64.189;
+        }
+        host 0004edf9c073 {
+                hardware ethernet 00:04:ed:f9:c0:77;
+                option host-name "0004edf9c073";
+                fixed-address 173.230.64.190;
+        }
+        host 0004edf9c08b {
+                hardware ethernet 00:04:ed:f9:c0:8f;
+                option host-name "0004edf9c08b";
+                fixed-address 173.230.64.191;
+        }
+        host 0004edf9c093 {
+                hardware ethernet 00:04:ed:f9:c0:97;
+                option host-name "0004edf9c093";
+                fixed-address 173.230.64.192;
+        }
+        host 0004edf9c0a3 {
+                hardware ethernet 00:04:ed:f9:c0:a7;
+                option host-name "0004edf9c0a3";
+                fixed-address 173.230.64.193;
+        }
+        host 0004edf9c0b3 {
+                hardware ethernet 00:04:ed:f9:c0:b7;
+                option host-name "0004edf9c0b3";
+                fixed-address 173.230.64.194;
+        }
+        host 0004edf9c0bb {
+                hardware ethernet 00:04:ed:f9:c0:bf;
+                option host-name "0004edf9c0bb";
+                fixed-address 173.230.64.195;
+        }
+        host 0004edf9c0cb {
+                hardware ethernet 00:04:ed:f9:c0:cf;
+                option host-name "0004edf9c0cb";
+                fixed-address 173.230.64.196;
+        }
+        host 0004edf9c0d3 {
+                hardware ethernet 00:04:ed:f9:c0:d7;
+                option host-name "0004edf9c0d3";
+                fixed-address 173.230.64.197;
+        }
+        host 0004edf9c0e3 {
+                hardware ethernet 00:04:ed:f9:c0:e7;
+                option host-name "0004edf9c0e3";
+                fixed-address 173.230.64.198;
+        }
+        host 0004edf9c10b {
+                hardware ethernet 00:04:ed:f9:c1:0f;
+                option host-name "0004edf9c10b";
+                fixed-address 173.230.64.199;
+        }
+        host 0004edf9c123 {
+                hardware ethernet 00:04:ed:f9:c1:27;
+                option host-name "0004edf9c123";
+                fixed-address 173.230.64.200;
+        }
+        host 0004edf9c12b {
+                hardware ethernet 00:04:ed:f9:c1:2f;
+                option host-name "0004edf9c12b";
+                fixed-address 173.230.64.201;
+        }
+        host 0004edf9c133 {
+                hardware ethernet 00:04:ed:f9:c1:37;
+                option host-name "0004edf9c133";
+                fixed-address 173.230.64.202;
+        }
+        host 0004edf9c143 {
+                hardware ethernet 00:04:ed:f9:c1:47;
+                option host-name "0004edf9c143";
+                fixed-address 173.230.64.203;
+        }
+        host 0004edf9c153 {
+                hardware ethernet 00:04:ed:f9:c1:57;
+                option host-name "0004edf9c153";
+                fixed-address 173.230.64.204;
+        }
+        host 0004edf9c15b {
+                hardware ethernet 00:04:ed:f9:c1:5f;
+                option host-name "0004edf9c15b";
+                fixed-address 173.230.64.205;
+        }
+        host 0004edf9c16b {
+                hardware ethernet 00:04:ed:f9:c1:6f;
+                option host-name "0004edf9c16b";
+                fixed-address 173.230.64.206;
+        }
+        host 0004edf9c173 {
+                hardware ethernet 00:04:ed:f9:c1:77;
+                option host-name "0004edf9c173";
+                fixed-address 173.230.64.207;
+        }
+        host 0004edf9c18b {
+                hardware ethernet 00:04:ed:f9:c1:8f;
+                option host-name "0004edf9c18b";
+                fixed-address 173.230.64.208;
+        }
+        host 0004edf9c1a3 {
+                hardware ethernet 00:04:ed:f9:c1:a7;
+                option host-name "0004edf9c1a3";
+                fixed-address 173.230.64.209;
+        }
+        host 0004edf9c1ab {
+                hardware ethernet 00:04:ed:f9:c1:af;
+                option host-name "0004edf9c1ab";
+                fixed-address 173.230.64.210;
+        }
+        host 0004edf9c1bb {
+                hardware ethernet 00:04:ed:f9:c1:bf;
+                option host-name "0004edf9c1bb";
+                fixed-address 173.230.64.211;
+        }
+        host 0004edf9c1c3 {
+                hardware ethernet 00:04:ed:f9:c1:c7;
+                option host-name "0004edf9c1c3";
+                fixed-address 173.230.64.212;
+        }
+        host 0004edf9c1d3 {
+                hardware ethernet 00:04:ed:f9:c1:d7;
+                option host-name "0004edf9c1d3";
+                fixed-address 173.230.64.213;
+        }
+        host 0004edf9c1db {
+                hardware ethernet 00:04:ed:f9:c1:df;
+                option host-name "0004edf9c1db";
+                fixed-address 173.230.64.214;
+        }
+        host 0004edf9c1e3 {
+                hardware ethernet 00:04:ed:f9:c1:e7;
+                option host-name "0004edf9c1e3";
+                fixed-address 173.230.64.215;
+        }
+        host 0004edf9c1eb {
+                hardware ethernet 00:04:ed:f9:c1:ef;
+                option host-name "0004edf9c1eb";
+                fixed-address 173.230.64.216;
+        }
+        host 0004edf9c1f3 {
+                hardware ethernet 00:04:ed:f9:c1:f7;
+                option host-name "0004edf9c1f3";
+                fixed-address 173.230.64.217;
+        }
+        host 0004edf9c203 {
+                hardware ethernet 00:04:ed:f9:c2:07;
+                option host-name "0004edf9c203";
+                fixed-address 173.230.64.218;
+        }
+        host 0004edf9c213 {
+                hardware ethernet 00:04:ed:f9:c2:17;
+                option host-name "0004edf9c213";
+                fixed-address 173.230.64.219;
+        }
+        host 0004edf9c21b {
+                hardware ethernet 00:04:ed:f9:c2:1f;
+                option host-name "0004edf9c21b";
+                fixed-address 173.230.64.220;
+        }
+        host 0004edf9c223 {
+                hardware ethernet 00:04:ed:f9:c2:27;
+                option host-name "0004edf9c223";
+                fixed-address 173.230.64.221;
+        }
+        host 0004edf9c243 {
+                hardware ethernet 00:04:ed:f9:c2:47;
+                option host-name "0004edf9c243";
+                fixed-address 173.230.64.222;
+        }
+        host 0004edf9c24b {
+                hardware ethernet 00:04:ed:f9:c2:4f;
+                option host-name "0004edf9c24b";
+                fixed-address 173.230.64.223;
+        }
+        host 0004edf9c25b {
+                hardware ethernet 00:04:ed:f9:c2:5f;
+                option host-name "0004edf9c25b";
+                fixed-address 173.230.64.224;
+        }
+        host 0004edf9c27b {
+                hardware ethernet 00:04:ed:f9:c2:7f;
+                option host-name "0004edf9c27b";
+                fixed-address 173.230.64.225;
+        }
+        host 0004edf9c283 {
+                hardware ethernet 00:04:ed:f9:c2:87;
+                option host-name "0004edf9c283";
+                fixed-address 173.230.64.226;
+        }
+        host 0004edf9c28b {
+                hardware ethernet 00:04:ed:f9:c2:8f;
+                option host-name "0004edf9c28b";
+                fixed-address 173.230.64.227;
+        }
+        host 0004edf9fd1a {
+                hardware ethernet 00:04:ed:f9:fd:1e;
+                option host-name "0004edf9fd1a";
+                fixed-address 173.230.64.228;
+        }
+        host 0004edf9fd22 {
+                hardware ethernet 00:04:ed:f9:fd:26;
+                option host-name "0004edf9fd22";
+                fixed-address 173.230.64.229;
+        }
+        host 0004edf9fd2a {
+                hardware ethernet 00:04:ed:f9:fd:2e;
+                option host-name "0004edf9fd2a";
+                fixed-address 173.230.64.230;
+        }
+        host 0004edf9fd42 {
+                hardware ethernet 00:04:ed:f9:fd:46;
+                option host-name "0004edf9fd42";
+                fixed-address 173.230.64.231;
+        }
+        host 0004edf9fd5a {
+                hardware ethernet 00:04:ed:f9:fd:5e;
+                option host-name "0004edf9fd5a";
+                fixed-address 173.230.64.232;
+        }
+        host 0004edf9fd62 {
+                hardware ethernet 00:04:ed:f9:fd:66;
+                option host-name "0004edf9fd62";
+                fixed-address 173.230.64.233;
+        }
+        host 0004edf9fd6a {
+                hardware ethernet 00:04:ed:f9:fd:6e;
+                option host-name "0004edf9fd6a";
+                fixed-address 173.230.64.234;
+        }
+        host 0004edf9fd72 {
+                hardware ethernet 00:04:ed:f9:fd:76;
+                option host-name "0004edf9fd72";
+                fixed-address 173.230.64.235;
+        }
+        host 0004edf9fd7a {
+                hardware ethernet 00:04:ed:f9:fd:7e;
+                option host-name "0004edf9fd7a";
+                fixed-address 173.230.64.236;
+        }
+        host 0004edf9fd8a {
+                hardware ethernet 00:04:ed:f9:fd:8e;
+                option host-name "0004edf9fd8a";
+                fixed-address 173.230.64.237;
+        }
+        host 0004edf9fd92 {
+                hardware ethernet 00:04:ed:f9:fd:96;
+                option host-name "0004edf9fd92";
+                fixed-address 173.230.64.238;
+        }
+        host 0004edf9fd9a {
+                hardware ethernet 00:04:ed:f9:fd:9e;
+                option host-name "0004edf9fd9a";
+                fixed-address 173.230.64.239;
+        }
+        host 0004edf9fda2 {
+                hardware ethernet 00:04:ed:f9:fd:a6;
+                option host-name "0004edf9fda2";
+                fixed-address 173.230.64.240;
+        }
+        host 0004edf9fdd2 {
+                hardware ethernet 00:04:ed:f9:fd:d6;
+                option host-name "0004edf9fdd2";
+                fixed-address 173.230.64.241;
+        }
+        host 0004edf9fdda {
+                hardware ethernet 00:04:ed:f9:fd:de;
+                option host-name "0004edf9fdda";
+                fixed-address 173.230.64.242;
+        }
+        host 0004edfa4934 {
+                hardware ethernet 00:04:ed:fa:49:38;
+                option host-name "0004edfa4934";
+                fixed-address 173.230.64.243;
+        }
+        host 0004edfa4944 {
+                hardware ethernet 00:04:ed:fa:49:48;
+                option host-name "0004edfa4944";
+                fixed-address 173.230.64.244;
+        }
+        host 0004edfa494c {
+                hardware ethernet 00:04:ed:fa:49:50;
+                option host-name "0004edfa494c";
+                fixed-address 173.230.64.245;
+        }
+        host 0004edfa495c {
+                hardware ethernet 00:04:ed:fa:49:60;
+                option host-name "0004edfa495c";
+                fixed-address 173.230.64.246;
+        }
+        host 0004edfa496c {
+                hardware ethernet 00:04:ed:fa:49:70;
+                option host-name "0004edfa496c";
+                fixed-address 173.230.64.247;
+        }
+        host 0004edfa4974 {
+                hardware ethernet 00:04:ed:fa:49:78;
+                option host-name "0004edfa4974";
+                fixed-address 173.230.64.248;
+        }
+        host 0004edfa49cc {
+                hardware ethernet 00:04:ed:fa:49:d0;
+                option host-name "0004edfa49cc";
+                fixed-address 173.230.64.249;
+        }
+        host 0004edfa49dc {
+                hardware ethernet 00:04:ed:fa:49:e0;
+                option host-name "0004edfa49dc";
+                fixed-address 173.230.64.250;
+        }
+        host 0004edfa49e4 {
+                hardware ethernet 00:04:ed:fa:49:e8;
+                option host-name "0004edfa49e4";
+                fixed-address 173.230.64.251;
+        }
+        host 0004edfa49fc {
+                hardware ethernet 00:04:ed:fa:4a:00;
+                option host-name "0004edfa49fc";
+                fixed-address 173.230.64.252;
+        }
+        host 0004edfa4a04 {
+                hardware ethernet 00:04:ed:fa:4a:08;
+                option host-name "0004edfa4a04";
+                fixed-address 173.230.64.253;
+        }
+        host 0004edfa4a0c {
+                hardware ethernet 00:04:ed:fa:4a:10;
+                option host-name "0004edfa4a0c";
+                fixed-address 173.230.64.254;
+		
+		 }
+		   host 0004edf4ce1e {
+                hardware ethernet 00:04:ed:f4:ce:22;
+                option host-name "0004edf4ce1e";
+                fixed-address 173.230.65.0;
+        }
+        host 0004edf4ce4e {
+                hardware ethernet 00:04:ed:f4:ce:52;
+                option host-name "0004edf4ce4e";
+                fixed-address 173.230.65.1;
+        }
+        host 0004edf4ce7e {
+                hardware ethernet 00:04:ed:f4:ce:82;
+                option host-name "0004edf4ce7e";
+                fixed-address 173.230.65.2;
+        }
+        host 0004edf4ce86 {
+                hardware ethernet 00:04:ed:f4:ce:8a;
+                option host-name "0004edf4ce86";
+                fixed-address 173.230.65.3;
+        }
+        host 0004edf4ce8e {
+                hardware ethernet 00:04:ed:f4:ce:92;
+                option host-name "0004edf4ce8e";
+                fixed-address 173.230.65.4;
+        }
+        host 0004edf4ce96 {
+                hardware ethernet 00:04:ed:f4:ce:9a;
+                option host-name "0004edf4ce96";
+                fixed-address 173.230.65.5;
+        }
+        host 0004edf4ceae {
+                hardware ethernet 00:04:ed:f4:ce:b2;
+                option host-name "0004edf4ceae";
+                fixed-address 173.230.65.6;
+        }
+        host 0004edf4cf2e {
+                hardware ethernet 00:04:ed:f4:cf:32;
+                option host-name "0004edf4cf2e";
+                fixed-address 173.230.65.7;
+        }
+        host 0004edf4cf36 {
+                hardware ethernet 00:04:ed:f4:cf:3a;
+                option host-name "0004edf4cf36";
+                fixed-address 173.230.65.8;
+        }
+        host 0004edf4cf3e {
+                hardware ethernet 00:04:ed:f4:cf:42;
+                option host-name "0004edf4cf3e";
+                fixed-address 173.230.65.9;
+        }
+        host 0004edf4cf66 {
+                hardware ethernet 00:04:ed:f4:cf:6a;
+                option host-name "0004edf4cf66";
+                fixed-address 173.230.65.10;
+        }
+        host 0004edf4cf8e {
+                hardware ethernet 00:04:ed:f4:cf:92;
+                option host-name "0004edf4cf8e";
+                fixed-address 173.230.65.11;
+        }
+        host 0004edf4d01e {
+                hardware ethernet 00:04:ed:f4:d0:22;
+                option host-name "0004edf4d01e";
+                fixed-address 173.230.65.12;
+        }
+        host 0004edf4d02e {
+                hardware ethernet 00:04:ed:f4:d0:32;
+                option host-name "0004edf4d02e";
+                fixed-address 173.230.65.13;
+        }
+        host 0004edf4d036 {
+                hardware ethernet 00:04:ed:f4:d0:3a;
+                option host-name "0004edf4d036";
+                fixed-address 173.230.65.14;
+        }
+        host 0004edf4d046 {
+                hardware ethernet 00:04:ed:f4:d0:4a;
+                option host-name "0004edf4d046";
+                fixed-address 173.230.65.15;
+        }
+        host 0004edf4d05e {
+                hardware ethernet 00:04:ed:f4:d0:62;
+                option host-name "0004edf4d05e";
+                fixed-address 173.230.65.16;
+        }
+        host 0004edf4d076 {
+                hardware ethernet 00:04:ed:f4:d0:7a;
+                option host-name "0004edf4d076";
+                fixed-address 173.230.65.17;
+        }
+        host 0004edf4d07e {
+                hardware ethernet 00:04:ed:f4:d0:82;
+                option host-name "0004edf4d07e";
+                fixed-address 173.230.65.18;
+        }
+        host 0004edf4d0ae {
+                hardware ethernet 00:04:ed:f4:d0:b2;
+                option host-name "0004edf4d0ae";
+                fixed-address 173.230.65.19;
+        }
+        host 0004edf4d0b6 {
+                hardware ethernet 00:04:ed:f4:d0:ba;
+                option host-name "0004edf4d0b6";
+                fixed-address 173.230.65.20;
+        }
+        host 0004edf4d0fe {
+                hardware ethernet 00:04:ed:f4:d1:02;
+                option host-name "0004edf4d0fe";
+                fixed-address 173.230.65.21;
+        }
+        host 0004edf4d146 {
+                hardware ethernet 00:04:ed:f4:d1:4a;
+                option host-name "0004edf4d146";
+                fixed-address 173.230.65.22;
+        }
+        host 0004edf4d166 {
+                hardware ethernet 00:04:ed:f4:d1:6a;
+                option host-name "0004edf4d166";
+                fixed-address 173.230.65.23;
+        }
+        host 0004edf4d18e {
+                hardware ethernet 00:04:ed:f4:d1:92;
+                option host-name "0004edf4d18e";
+                fixed-address 173.230.65.24;
+        }
+        host 0004edf4d1be {
+                hardware ethernet 00:04:ed:f4:d1:c2;
+                option host-name "0004edf4d1be";
+                fixed-address 173.230.65.25;
+        }
+        host 0004edf4d256 {
+                hardware ethernet 00:04:ed:f4:d2:5a;
+                option host-name "0004edf4d256";
+                fixed-address 173.230.65.26;
+        }
+        host 0004edf4d266 {
+                hardware ethernet 00:04:ed:f4:d2:6a;
+                option host-name "0004edf4d266";
+                fixed-address 173.230.65.27;
+        }
+        host 0004edf4d276 {
+                hardware ethernet 00:04:ed:f4:d2:7a;
+                option host-name "0004edf4d276";
+                fixed-address 173.230.65.28;
+        }
+        host 0004edf4d27e {
+                hardware ethernet 00:04:ed:f4:d2:82;
+                option host-name "0004edf4d27e";
+                fixed-address 173.230.65.29;
+        }
+        host 0004edf4d286 {
+                hardware ethernet 00:04:ed:f4:d2:8a;
+                option host-name "0004edf4d286";
+                fixed-address 173.230.65.30;
+        }
+        host 0004edf4d28e {
+                hardware ethernet 00:04:ed:f4:d2:92;
+                option host-name "0004edf4d28e";
+                fixed-address 173.230.65.31;
+        }
+        host 0004edf4d29e {
+                hardware ethernet 00:04:ed:f4:d2:a2;
+                option host-name "0004edf4d29e";
+                fixed-address 173.230.65.32;
+        }
+        host 0004edf4d2a6 {
+                hardware ethernet 00:04:ed:f4:d2:aa;
+                option host-name "0004edf4d2a6";
+                fixed-address 173.230.65.33;
+        }
+        host 0004edf4d2ae {
+                hardware ethernet 00:04:ed:f4:d2:b2;
+                option host-name "0004edf4d2ae";
+                fixed-address 173.230.65.34;
+        }
+        host 0004edf4d2d6 {
+                hardware ethernet 00:04:ed:f4:d2:da;
+                option host-name "0004edf4d2d6";
+                fixed-address 173.230.65.35;
+        }
+        host 0004edf4d2e6 {
+                hardware ethernet 00:04:ed:f4:d2:ea;
+                option host-name "0004edf4d2e6";
+                fixed-address 173.230.65.36;
+        }
+        host 0004edf4d2ee {
+                hardware ethernet 00:04:ed:f4:d2:f2;
+                option host-name "0004edf4d2ee";
+                fixed-address 173.230.65.37;
+        }
+        host 0004edf4d2f6 {
+                hardware ethernet 00:04:ed:f4:d2:fa;
+                option host-name "0004edf4d2f6";
+                fixed-address 173.230.65.38;
+        }
+        host 0004edf4d2fe {
+                hardware ethernet 00:04:ed:f4:d3:02;
+                option host-name "0004edf4d2fe";
+                fixed-address 173.230.65.39;
+        }
+        host 0004edf4d316 {
+                hardware ethernet 00:04:ed:f4:d3:1a;
+                option host-name "0004edf4d316";
+                fixed-address 173.230.65.40;
+        }
+        host 0004edf4d36e {
+                hardware ethernet 00:04:ed:f4:d3:72;
+                option host-name "0004edf4d36e";
+                fixed-address 173.230.65.41;
+        }
+        host 0004edf4d37e {
+                hardware ethernet 00:04:ed:f4:d3:82;
+                option host-name "0004edf4d37e";
+                fixed-address 173.230.65.42;
+        }
+        host 0004edf4d43e {
+                hardware ethernet 00:04:ed:f4:d4:42;
+                option host-name "0004edf4d43e";
+                fixed-address 173.230.65.43;
+        }
+        host 0004edf4d50e {
+                hardware ethernet 00:04:ed:f4:d5:12;
+                option host-name "0004edf4d50e";
+                fixed-address 173.230.65.44;
+        }
+        host 0004edf4d53e {
+                hardware ethernet 00:04:ed:f4:d5:42;
+                option host-name "0004edf4d53e";
+                fixed-address 173.230.65.45;
+        }
+        host 0004edf4d57e {
+                hardware ethernet 00:04:ed:f4:d5:82;
+                option host-name "0004edf4d57e";
+                fixed-address 173.230.65.46;
+        }
+        host 0004edf4d586 {
+                hardware ethernet 00:04:ed:f4:d5:8a;
+                option host-name "0004edf4d586";
+                fixed-address 173.230.65.47;
+        }
+        host 0004edf4d5a6 {
+                hardware ethernet 00:04:ed:f4:d5:aa;
+                option host-name "0004edf4d5a6";
+                fixed-address 173.230.65.48;
+        }
+        host 0004edf4d5b6 {
+                hardware ethernet 00:04:ed:f4:d5:ba;
+                option host-name "0004edf4d5b6";
+                fixed-address 173.230.65.49;
+        }
+        host 0004edf4d5d6 {
+                hardware ethernet 00:04:ed:f4:d5:da;
+                option host-name "0004edf4d5d6";
+                fixed-address 173.230.65.50;
+        }
+        host 0004edf4d5ee {
+                hardware ethernet 00:04:ed:f4:d5:f2;
+                option host-name "0004edf4d5ee";
+                fixed-address 173.230.65.51;
+        }
+        host 0004edf4d616 {
+                hardware ethernet 00:04:ed:f4:d6:1a;
+                option host-name "0004edf4d616";
+                fixed-address 173.230.65.52;
+        }
+        host 0004edf4d626 {
+                hardware ethernet 00:04:ed:f4:d6:2a;
+                option host-name "0004edf4d626";
+                fixed-address 173.230.65.53;
+        }
+        host 0004edf4d62e {
+                hardware ethernet 00:04:ed:f4:d6:32;
+                option host-name "0004edf4d62e";
+                fixed-address 173.230.65.54;
+        }
+        host 0004edf4d666 {
+                hardware ethernet 00:04:ed:f4:d6:6a;
+                option host-name "0004edf4d666";
+                fixed-address 173.230.65.55;
+        }
+        host 0004edf4d686 {
+                hardware ethernet 00:04:ed:f4:d6:8a;
+                option host-name "0004edf4d686";
+                fixed-address 173.230.65.56;
+        }
+        host 0004edf4d696 {
+                hardware ethernet 00:04:ed:f4:d6:9a;
+                option host-name "0004edf4d696";
+                fixed-address 173.230.65.57;
+        }
+        host 0004edf4d6b6 {
+                hardware ethernet 00:04:ed:f4:d6:ba;
+                option host-name "0004edf4d6b6";
+                fixed-address 173.230.65.58;
+        }
+        host 0004edf4d6de {
+                hardware ethernet 00:04:ed:f4:d6:e2;
+                option host-name "0004edf4d6de";
+                fixed-address 173.230.65.59;
+        }
+        host 0004edf9bb6b {
+                hardware ethernet 00:04:ed:f9:bb:6f;
+                option host-name "0004edf9bb6b";
+                fixed-address 173.230.65.60;
+        }
+        host 0004edf9bba3 {
+                hardware ethernet 00:04:ed:f9:bb:a7;
+                option host-name "0004edf9bba3";
+                fixed-address 173.230.65.61;
+        }
+        host 0004edf9bc5b {
+                hardware ethernet 00:04:ed:f9:bc:5f;
+                option host-name "0004edf9bc5b";
+                fixed-address 173.230.65.62;
+        }
+        host 0004edf9bc6b {
+                hardware ethernet 00:04:ed:f9:bc:6f;
+                option host-name "0004edf9bc6b";
+                fixed-address 173.230.65.63;
+        }
+        host 0004edf9bcdb {
+                hardware ethernet 00:04:ed:f9:bc:df;
+                option host-name "0004edf9bcdb";
+                fixed-address 173.230.65.64;
+        }
+        host 0004edf9bd13 {
+                hardware ethernet 00:04:ed:f9:bd:17;
+                option host-name "0004edf9bd13";
+                fixed-address 173.230.65.65;
+        }
+        host 0004edf9bd23 {
+                hardware ethernet 00:04:ed:f9:bd:27;
+                option host-name "0004edf9bd23";
+                fixed-address 173.230.65.66;
+        }
+        host 0004edf9bd2b {
+                hardware ethernet 00:04:ed:f9:bd:2f;
+                option host-name "0004edf9bd2b";
+                fixed-address 173.230.65.67;
+        }
+        host 0004edf9bd33 {
+                hardware ethernet 00:04:ed:f9:bd:37;
+                option host-name "0004edf9bd33";
+                fixed-address 173.230.65.68;
+        }
+        host 0004edf9bd53 {
+                hardware ethernet 00:04:ed:f9:bd:57;
+                option host-name "0004edf9bd53";
+                fixed-address 173.230.65.69;
+        }
+        host 0004edf9bd73 {
+                hardware ethernet 00:04:ed:f9:bd:77;
+                option host-name "0004edf9bd73";
+                fixed-address 173.230.65.70;
+        }
+        host 0004edf9bd93 {
+                hardware ethernet 00:04:ed:f9:bd:97;
+                option host-name "0004edf9bd93";
+                fixed-address 173.230.65.71;
+        }
+        host 0004edf9bd9b {
+                hardware ethernet 00:04:ed:f9:bd:9f;
+                option host-name "0004edf9bd9b";
+                fixed-address 173.230.65.72;
+        }
+        host 0004edf9bda3 {
+                hardware ethernet 00:04:ed:f9:bd:a7;
+                option host-name "0004edf9bda3";
+                fixed-address 173.230.65.73;
+        }
+        host 0004edf9bdeb {
+                hardware ethernet 00:04:ed:f9:bd:ef;
+                option host-name "0004edf9bdeb";
+                fixed-address 173.230.65.74;
+        }
+        host 0004edf9bdfb {
+                hardware ethernet 00:04:ed:f9:bd:ff;
+                option host-name "0004edf9bdfb";
+                fixed-address 173.230.65.75;
+        }
+        host 0004edf9be03 {
+                hardware ethernet 00:04:ed:f9:be:07;
+                option host-name "0004edf9be03";
+                fixed-address 173.230.65.76;
+        }
+        host 0004edf9be23 {
+                hardware ethernet 00:04:ed:f9:be:27;
+                option host-name "0004edf9be23";
+                fixed-address 173.230.65.77;
+        }
+        host 0004edf9be2b {
+                hardware ethernet 00:04:ed:f9:be:2f;
+                option host-name "0004edf9be2b";
+                fixed-address 173.230.65.78;
+        }
+        host 0004edf9be3b {
+                hardware ethernet 00:04:ed:f9:be:3f;
+                option host-name "0004edf9be3b";
+                fixed-address 173.230.65.79;
+        }
+        host 0004edf9be4b {
+                hardware ethernet 00:04:ed:f9:be:4f;
+                option host-name "0004edf9be4b";
+                fixed-address 173.230.65.80;
+        }
+        host 0004edf9be5b {
+                hardware ethernet 00:04:ed:f9:be:5f;
+                option host-name "0004edf9be5b";
+                fixed-address 173.230.65.81;
+        }
+        host 0004edf9be6b {
+                hardware ethernet 00:04:ed:f9:be:6f;
+                option host-name "0004edf9be6b";
+                fixed-address 173.230.65.82;
+        }
+        host 0004edf9beb3 {
+                hardware ethernet 00:04:ed:f9:be:b7;
+                option host-name "0004edf9beb3";
+                fixed-address 173.230.65.83;
+        }
+        host 0004edf9bebb {
+                hardware ethernet 00:04:ed:f9:be:bf;
+                option host-name "0004edf9bebb";
+                fixed-address 173.230.65.84;
+        }
+        host 0004edf9bec3 {
+                hardware ethernet 00:04:ed:f9:be:c7;
+                option host-name "0004edf9bec3";
+                fixed-address 173.230.65.85;
+        }
+        host 0004edf9becb {
+                hardware ethernet 00:04:ed:f9:be:cf;
+                option host-name "0004edf9becb";
+                fixed-address 173.230.65.86;
+        }
+        host 0004edf9bedb {
+                hardware ethernet 00:04:ed:f9:be:df;
+                option host-name "0004edf9bedb";
+                fixed-address 173.230.65.87;
+        }
+        host 0004edf9bee3 {
+                hardware ethernet 00:04:ed:f9:be:e7;
+                option host-name "0004edf9bee3";
+                fixed-address 173.230.65.88;
+        }
+        host 0004edf9beeb {
+                hardware ethernet 00:04:ed:f9:be:ef;
+                option host-name "0004edf9beeb";
+                fixed-address 173.230.65.89;
+        }
+        host 0004edf9bf0b {
+                hardware ethernet 00:04:ed:f9:bf:0f;
+                option host-name "0004edf9bf0b";
+                fixed-address 173.230.65.90;
+        }
+        host 0004edf9bf2b {
+                hardware ethernet 00:04:ed:f9:bf:2f;
+                option host-name "0004edf9bf2b";
+                fixed-address 173.230.65.91;
+        }
+        host 0004edf9bf43 {
+                hardware ethernet 00:04:ed:f9:bf:47;
+                option host-name "0004edf9bf43";
+                fixed-address 173.230.65.92;
+        }
+        host 0004edf9bf53 {
+                hardware ethernet 00:04:ed:f9:bf:57;
+                option host-name "0004edf9bf53";
+                fixed-address 173.230.65.93;
+        }
+        host 0004edf9bf5b {
+                hardware ethernet 00:04:ed:f9:bf:5f;
+                option host-name "0004edf9bf5b";
+                fixed-address 173.230.65.94;
+        }
+        host 0004edf9bf8b {
+                hardware ethernet 00:04:ed:f9:bf:8f;
+                option host-name "0004edf9bf8b";
+                fixed-address 173.230.65.95;
+        }
+        host 0004edf9bf9b {
+                hardware ethernet 00:04:ed:f9:bf:9f;
+                option host-name "0004edf9bf9b";
+                fixed-address 173.230.65.96;
+        }
+        host 0004edf9bfc3 {
+                hardware ethernet 00:04:ed:f9:bf:c7;
+                option host-name "0004edf9bfc3";
+                fixed-address 173.230.65.97;
+        }
+        host 0004edf9bfcb {
+                hardware ethernet 00:04:ed:f9:bf:cf;
+                option host-name "0004edf9bfcb";
+                fixed-address 173.230.65.98;
+        }
+        host 0004edf9bfdb {
+                hardware ethernet 00:04:ed:f9:bf:df;
+                option host-name "0004edf9bfdb";
+                fixed-address 173.230.65.99;
+        }
+        host 0004edf9bfeb {
+                hardware ethernet 00:04:ed:f9:bf:ef;
+                option host-name "0004edf9bfeb";
+                fixed-address 173.230.65.100;
+        }
+        host 0004edf9bff3 {
+                hardware ethernet 00:04:ed:f9:bf:f7;
+                option host-name "0004edf9bff3";
+                fixed-address 173.230.65.101;
+        }
+        host 0004edf9bffb {
+                hardware ethernet 00:04:ed:f9:bf:ff;
+                option host-name "0004edf9bffb";
+                fixed-address 173.230.65.102;
+        }
+        host 0004edf9c003 {
+                hardware ethernet 00:04:ed:f9:c0:07;
+                option host-name "0004edf9c003";
+                fixed-address 173.230.65.103;
+        }
+        host 0004edf9c043 {
+                hardware ethernet 00:04:ed:f9:c0:47;
+                option host-name "0004edf9c043";
+                fixed-address 173.230.65.104;
+        }
+        host 0004edf9c053 {
+                hardware ethernet 00:04:ed:f9:c0:57;
+                option host-name "0004edf9c053";
+                fixed-address 173.230.65.105;
+        }
+        host 0004edf9c083 {
+                hardware ethernet 00:04:ed:f9:c0:87;
+                option host-name "0004edf9c083";
+                fixed-address 173.230.65.106;
+        }
+        host 0004edf9c09b {
+                hardware ethernet 00:04:ed:f9:c0:9f;
+                option host-name "0004edf9c09b";
+                fixed-address 173.230.65.107;
+        }
+        host 0004edf9c0ab {
+                hardware ethernet 00:04:ed:f9:c0:af;
+                option host-name "0004edf9c0ab";
+                fixed-address 173.230.65.108;
+        }
+        host 0004edf9c0c3 {
+                hardware ethernet 00:04:ed:f9:c0:c7;
+                option host-name "0004edf9c0c3";
+                fixed-address 173.230.65.109;
+        }
+        host 0004edf9c0db {
+                hardware ethernet 00:04:ed:f9:c0:df;
+                option host-name "0004edf9c0db";
+                fixed-address 173.230.65.110;
+        }
+        host 0004edf9c0eb {
+                hardware ethernet 00:04:ed:f9:c0:ef;
+                option host-name "0004edf9c0eb";
+                fixed-address 173.230.65.111;
+        }
+        host 0004edf9c0f3 {
+                hardware ethernet 00:04:ed:f9:c0:f7;
+                option host-name "0004edf9c0f3";
+                fixed-address 173.230.65.112;
+        }
+        host 0004edf9c0fb {
+                hardware ethernet 00:04:ed:f9:c0:ff;
+                option host-name "0004edf9c0fb";
+                fixed-address 173.230.65.113;
+        }
+        host 0004edf9c103 {
+                hardware ethernet 00:04:ed:f9:c1:07;
+                option host-name "0004edf9c103";
+                fixed-address 173.230.65.114;
+        }
+        host 0004edf9c113 {
+                hardware ethernet 00:04:ed:f9:c1:17;
+                option host-name "0004edf9c113";
+                fixed-address 173.230.65.115;
+        }
+        host 0004edf9c11b {
+                hardware ethernet 00:04:ed:f9:c1:1f;
+                option host-name "0004edf9c11b";
+                fixed-address 173.230.65.116;
+        }
+        host 0004edf9c13b {
+                hardware ethernet 00:04:ed:f9:c1:3f;
+                option host-name "0004edf9c13b";
+                fixed-address 173.230.65.117;
+        }
+        host 0004edf9c163 {
+                hardware ethernet 00:04:ed:f9:c1:67;
+                option host-name "0004edf9c163";
+                fixed-address 173.230.65.118;
+        }
+        host 0004edf9c17b {
+                hardware ethernet 00:04:ed:f9:c1:7f;
+                option host-name "0004edf9c17b";
+                fixed-address 173.230.65.119;
+        }
+        host 0004edf9c193 {
+                hardware ethernet 00:04:ed:f9:c1:97;
+                option host-name "0004edf9c193";
+                fixed-address 173.230.65.120;
+        }
+        host 0004edf9c19b {
+                hardware ethernet 00:04:ed:f9:c1:9f;
+                option host-name "0004edf9c19b";
+                fixed-address 173.230.65.121;
+        }
+        host 0004edf9c1b3 {
+                hardware ethernet 00:04:ed:f9:c1:b7;
+                option host-name "0004edf9c1b3";
+                fixed-address 173.230.65.122;
+        }
+        host 0004edf9c1cb {
+                hardware ethernet 00:04:ed:f9:c1:cf;
+                option host-name "0004edf9c1cb";
+                fixed-address 173.230.65.123;
+        }
+        host 0004edf9c1fb {
+                hardware ethernet 00:04:ed:f9:c1:ff;
+                option host-name "0004edf9c1fb";
+                fixed-address 173.230.65.124;
+        }
+        host 0004edf9c20b {
+                hardware ethernet 00:04:ed:f9:c2:0f;
+                option host-name "0004edf9c20b";
+                fixed-address 173.230.65.125;
+        }
+        host 0004edf9c22b {
+                hardware ethernet 00:04:ed:f9:c2:2f;
+                option host-name "0004edf9c22b";
+                fixed-address 173.230.65.126;
+        }
+        host 0004edf9c233 {
+                hardware ethernet 00:04:ed:f9:c2:37;
+                option host-name "0004edf9c233";
+                fixed-address 173.230.65.127;
+        }
+        host 0004edf9c23b {
+                hardware ethernet 00:04:ed:f9:c2:3f;
+                option host-name "0004edf9c23b";
+                fixed-address 173.230.65.128;
+        }
+        host 0004edf9c253 {
+                hardware ethernet 00:04:ed:f9:c2:57;
+                option host-name "0004edf9c253";
+                fixed-address 173.230.65.129;
+        }
+        host 0004edf9c263 {
+                hardware ethernet 00:04:ed:f9:c2:67;
+                option host-name "0004edf9c263";
+                fixed-address 173.230.65.130;
+        }
+        host 0004edf9c26b {
+                hardware ethernet 00:04:ed:f9:c2:6f;
+                option host-name "0004edf9c26b";
+                fixed-address 173.230.65.131;
+        }
+        host 0004edf9c273 {
+                hardware ethernet 00:04:ed:f9:c2:77;
+                option host-name "0004edf9c273";
+                fixed-address 173.230.65.132;
+        }
+        host 0004edf9c293 {
+                hardware ethernet 00:04:ed:f9:c2:97;
+                option host-name "0004edf9c293";
+                fixed-address 173.230.65.133;
+        }
+        host 0004edf9fd32 {
+                hardware ethernet 00:04:ed:f9:fd:36;
+                option host-name "0004edf9fd32";
+                fixed-address 173.230.65.134;
+        }
+        host 0004edf9fd3a {
+                hardware ethernet 00:04:ed:f9:fd:3e;
+                option host-name "0004edf9fd3a";
+                fixed-address 173.230.65.135;
+        }
+        host 0004edf9fd52 {
+                hardware ethernet 00:04:ed:f9:fd:56;
+                option host-name "0004edf9fd52";
+                fixed-address 173.230.65.136;
+        }
+        host 0004edf9fdb2 {
+                hardware ethernet 00:04:ed:f9:fd:b6;
+                option host-name "0004edf9fdb2";
+                fixed-address 173.230.65.137;
+        }
+        host 0004edf9fdc2 {
+                hardware ethernet 00:04:ed:f9:fd:c6;
+                option host-name "0004edf9fdc2";
+                fixed-address 173.230.65.138;
+        }
+        host 0004edf9fdca {
+                hardware ethernet 00:04:ed:f9:fd:ce;
+                option host-name "0004edf9fdca";
+                fixed-address 173.230.65.139;
+        }
+        host 0004edf9fde2 {
+                hardware ethernet 00:04:ed:f9:fd:e6;
+                option host-name "0004edf9fde2";
+                fixed-address 173.230.65.140;
+        }
+        host 0004edf9fdfa {
+                hardware ethernet 00:04:ed:f9:fd:fe;
+                option host-name "0004edf9fdfa";
+                fixed-address 173.230.65.141;
+        }
+        host 0004edf9fe0a {
+                hardware ethernet 00:04:ed:f9:fe:0e;
+                option host-name "0004edf9fe0a";
+                fixed-address 173.230.65.142;
+        }
+        host 0004edfa492c {
+                hardware ethernet 00:04:ed:fa:49:30;
+                option host-name "0004edfa492c";
+                fixed-address 173.230.65.143;
+        }
+        host 0004edfa493c {
+                hardware ethernet 00:04:ed:fa:49:40;
+                option host-name "0004edfa493c";
+                fixed-address 173.230.65.144;
+        }
+        host 0004edfa4954 {
+                hardware ethernet 00:04:ed:fa:49:58;
+                option host-name "0004edfa4954";
+                fixed-address 173.230.65.145;
+        }
+        host 0004edfa4964 {
+                hardware ethernet 00:04:ed:fa:49:68;
+                option host-name "0004edfa4964";
+                fixed-address 173.230.65.146;
+        }
+        host 0004edfa49ec {
+                hardware ethernet 00:04:ed:fa:49:f0;
+                option host-name "0004edfa49ec";
+                fixed-address 173.230.65.147;
+        }
+        host 0004edfa49f4 {
+                hardware ethernet 00:04:ed:fa:49:f8;
+                option host-name "0004edfa49f4";
+                fixed-address 173.230.65.148;
+        }
+        host 0004edffe04a {
+                hardware ethernet 00:04:ed:ff:e0:4e;
+                option host-name "0004edffe04a";
+                fixed-address 173.230.65.149;
+        }
+        host 0004edffe14a {
+                hardware ethernet 00:04:ed:ff:e1:4e;
+                option host-name "0004edffe14a";
+                fixed-address 173.230.65.150;
+        }
+        host 0004edffe68a {
+                hardware ethernet 00:04:ed:ff:e6:8e;
+                option host-name "0004edffe68a";
+                fixed-address 173.230.65.151;
+        }
+        host 0004edffe77a {
+                hardware ethernet 00:04:ed:ff:e7:7e;
+                option host-name "0004edffe77a";
+                fixed-address 173.230.65.152;
+        }
+
+
+        host 0004edf4d5e6 {
+                hardware ethernet 00:04:ed:f4:d5:ea;
+                option host-name "00:04:ed:f4:d5:e6";
+                fixed-address 173.230.65.153;
+        }
+
+        host 0004edf4d30e {
+                hardware ethernet 00:04:ED:F4:D3:12;
+                option host-name "00:04:ed:f4:d3:0e";
+                fixed-address 173.230.65.154;
+        }
+        host 0004edfa4a14 {
+                hardware ethernet 00:04:ED:FA:4A:18;
+                option host-name "00:04:ed:fa:4a:14";
+                fixed-address 173.230.65.155;
+        }
+        host 0004edfa49d4 {
+                hardware ethernet 00:04:ED:FA:49:D8;
+                option host-name "00:04:ed:fa:49:d4";
+                fixed-address 173.230.65.156;
+        }
+        host 0004edf9be13 {
+                hardware ethernet 00:04:ED:F9:BE:17;
+                option host-name "00:04:ed:f9:be:13";
+                fixed-address 173.230.65.157;
+        }
+        host 0004edf9bd0b {
+                hardware ethernet 00:04:ED:F9:BD:0F;
+                option host-name "00:04:ed:f9:bd:0b";
+                fixed-address 173.230.65.158;
+        }
+        host  0004edf9bb73 {
+                hardware ethernet 00:04:ED:F9:BB:77;
+                option host-name "00:04:ed:f9:bb:73";
+                fixed-address 173.230.65.159;
+        }
+        host  0004edf4d1a6 {
+                hardware ethernet 00:04:ED:F4:D1:AA;
+                option host-name "00:04:ed:f4:d1:a6";
+                fixed-address 173.230.65.160;
+        }
+        host 0004edf4ce6e {
+                hardware ethernet 00:04:ED:F4:CE:72;
+                option host-name "00:04:ed:f4:ce:6e";
+                fixed-address 173.230.65.161;
+        }
+        host 0004edf4d066 {
+                hardware ethernet 00:04:ED:F4:D0:6A;
+                option host-name "00:04:ed:f4:d0:66";
+                fixed-address 173.230.65.162;
+        }
+        host 0004edf4d176 {
+                hardware ethernet 00:04:ED:F4:D1:7A;
+                option host-name "00:04:ed:f4:d1:76";
+                fixed-address 173.230.65.163;
+        }
+        host 0004edf4d2c6 {
+                hardware ethernet 00:04:ED:F4:D2:CA;
+                option host-name "00:04:ed:f4:d2:c6";
+                fixed-address 173.230.65.164;
+        }
+        host  0004edf4d58e{
+                hardware ethernet 00:04:ED:F4:D5:92;
+                option host-name "00:04:ed:f4:d5:8e";
+                fixed-address 173.230.65.165;
+        }
+        host 0004edf9c07b {
+                hardware ethernet 00:04:ED:F9:C0:7F;
+                option host-name "00:04:ed:f9:c0:7b";
+                fixed-address 173.230.65.166;
+        }
+        host 0004edf9bbab {
+                hardware ethernet 00:04:ED:F9:BB:AF;
+                option host-name "00:04:ed:f9:bb:ab";
+                fixed-address 173.230.65.167;
+        }
+        host 0004edf9bb8b{
+                hardware ethernet 00:04:ED:F9:BB:8F;
+                option host-name "00:04:ed:f9:bb:8b";
+                fixed-address 173.230.65.168;
+        }
+        host 0004edf4cfae {
+                hardware ethernet 00:04:ED:F4:CF:B2;
+                option host-name "00:04:ed:f4:cf:ae";
+                fixed-address 173.230.65.169;
+        }
+        host 0004edf9c04b {
+                hardware ethernet 00:04:ED:F9:C0:4F;
+                option host-name "00:04:ed:f9:c0:4b";
+                fixed-address 173.230.65.170;
+        }
+        host 0004edf9bccb {
+                hardware ethernet 00:04:ED:F9:BC:CF;
+                option host-name "00:04:ed:f9:bc:cb";
+                fixed-address 173.230.65.171;
+        }
+        host 0004edf4d376 {
+                hardware ethernet 00:04:ED:F4:D3:7A;
+                option host-name "00:04:ed:f4:d3:76";
+                fixed-address 173.230.65.172;
+        }
+        host 0004edf4ce9e {
+                hardware ethernet 00:04:ED:F4:CE:A2;
+                option host-name "00:04:ed:f4:ce:9e";
+                fixed-address 173.230.65.173;
+        }
+        host 0004edf4d22e {
+                hardware ethernet 00:04:ED:F4:D2:32;
+                option host-name "00:04:ed:f4:d2:2e";
+                fixed-address 173.230.65.174;
+        }
+        host 0004edf9bd4b {
+                hardware ethernet 00:04:ED:F9:BD:4F;
+                option host-name "00:04:ed:f9:bd:4b";
+                fixed-address 173.230.65.175;
+        }
+
+	host 0004edffe5aa {
+                hardware ethernet 00:04:ED:FF:E5:AE;
+                option host-name "00:04:ed:ff:e5:aa";
+                fixed-address 173.230.65.176;
+        }
+

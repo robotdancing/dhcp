@@ -1,0 +1,57 @@
+# txcsppl DHCPD Config File.
+# Generated 2012-03-21-12:54 with gendhcpd.pl by Parkway Place.
+
+shared-network txcsppl {
+    authoritative;
+
+#  include "/etc/dhcp3/folder.dhcpd/events.dhcpd";
+
+# WANIP for txcsppl not configured
+
+#dhcpd-snmp=txcsppl-cust0,96.63.236.21-96.63.239.254
+    subnet 96.63.236.0 netmask 255.255.252.0 {
+        option routers 96.63.236.1;
+        option subnet-mask 255.255.252.0;
+        option broadcast-address 96.63.239.255;
+        option domain-name "client.pavlovmedia.net";
+        option domain-name-servers 66.253.214.16, 50.30.184.16;
+        default-lease-time 14400;
+        max-lease-time 28800;
+	min-lease-time 3600;
+        pool {
+            failover peer "NATIONAL";
+            deny members of "ruckus";
+            deny members of "ubnt";
+            deny dynamic bootp clients;
+            range 96.63.236.21 96.63.239.254;
+        }
+	
+	#Lab
+        host 96-63-236-9 {
+            hardware ethernet e8:40:40:80:90:25;
+            fixed-address 96.63.236.9;
+        }
+    }
+
+    subnet 10.145.92.0 netmask 255.255.255.0 {
+        }
+    
+    subnet 10.145.93.0 netmask 255.255.255.0 {
+    }
+    
+#dhcpd-snmp=txcsppl-ruckus,10.145.94.100-10.145.94.239
+        subnet 10.145.94.0 netmask 255.255.255.0 {
+            option routers 10.145.94.1;
+            option subnet-mask 255.255.255.0;
+            option broadcast-address 10.145.94.255;
+            pool {
+                failover peer "NATIONAL";
+                allow members of "ruckus";
+                allow members of "ubnt";
+                deny dynamic bootp clients;
+                #default-lease-time dTruk;
+                #max-lease-time mdTruk;
+                range 10.145.94.100 10.145.94.239;
+            }
+        }
+}

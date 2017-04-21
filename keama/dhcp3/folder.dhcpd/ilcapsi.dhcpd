@@ -1,0 +1,51 @@
+# ilcapsi DHCPD Config File.
+# Generated 2012-03-15-09:08 with gendhcpd.pl by Pointe at SIU.
+
+shared-network ilcapsi {
+    authoritative;
+
+# WANIP for ilcapsi not configured
+
+#dhcpd-snmp=ilcapsi-cust0,68.234.188.21-68.234.191.254
+    subnet 68.234.188.0 netmask 255.255.252.0 {
+        option routers 68.234.188.1;
+        option subnet-mask 255.255.252.0;
+        option broadcast-address 68.234.191.255;
+        option domain-name "client.pavlovmedia.net";
+        option domain-name-servers 66.253.214.16, 50.30.184.16;
+        #default-lease-time dTlease0;
+        #max-lease-time mdTlease0;
+        pool {
+#           failover peer "NATIONAL";
+            deny members of "ruckus";
+            deny dynamic bootp clients;
+            range 68.234.188.21 68.234.191.254;
+        }
+	#Slingbox
+	host 68-234-188-10 {
+		hardware ethernet 00:13:B6:06:4F:B2;
+		fixed-address 68.234.188.10;
+	}
+    }
+
+    subnet 10.151.24.0 netmask 255.255.255.0 {
+        }
+    
+    subnet 10.151.25.0 netmask 255.255.255.0 {
+    }
+    
+#dhcpd-snmp=ilcapsi-ruckus,10.151.26.100-10.151.26.239
+        subnet 10.151.26.0 netmask 255.255.255.0 {
+            option routers 10.151.26.1;
+            option subnet-mask 255.255.255.0;
+            option broadcast-address 10.151.26.255;
+            pool {
+#               failover peer "NATIONAL";
+                allow members of "ruckus";
+                deny dynamic bootp clients;
+                #default-lease-time dTruk;
+                #max-lease-time mdTruk;
+                range 10.151.26.100 10.151.26.239;
+            }
+        }
+}

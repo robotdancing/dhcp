@@ -1,0 +1,69 @@
+# mareaor DHCPD Config File.
+# Generated 2012-02-16-18:10 with gendhcpd.pl by Alterra at Overlook.
+
+shared-network mareaor {
+    authoritative;
+
+#  include "/etc/dhcp3/folder.dhcpd/events.dhcpd";
+
+#dhcpd-snmp=mareaor-cust0,68.180.72.25-68.180.73.254
+    subnet 68.180.72.0 netmask 255.255.254.0 {
+        option routers 68.180.72.1;
+        option subnet-mask 255.255.254.0;
+        option broadcast-address 68.180.73.255;
+        option domain-name "client.pavlovmedia.net";
+        option domain-name-servers 66.253.214.16, 50.30.184.16;
+        default-lease-time 14400;
+        max-lease-time 28800;
+	min-lease-time 3600;
+        pool {
+            failover peer "NATIONAL";
+            deny members of "ruckus";
+            deny members of "ubnt";
+            deny dynamic bootp clients;
+            range 68.180.72.25 68.180.73.254;
+        }
+    }
+
+#dhcpd-snmp=mareaor-cust1,68.180.60.3-68.180.61.254
+    subnet 68.180.60.0 netmask 255.255.254.0 {
+        option routers 68.180.60.1;
+        option subnet-mask 255.255.254.0;
+        option broadcast-address 68.180.61.255;
+        option domain-name "client.pavlovmedia.net";
+        option domain-name-servers 66.253.214.16, 50.30.184.16;
+        default-lease-time 14400;
+        max-lease-time 28800;
+	min-lease-time 3600;
+        pool {
+            failover peer "NATIONAL";
+            deny members of "ruckus";
+            deny members of "ubnt";
+            deny dynamic bootp clients;
+            range 68.180.60.3 68.180.61.254;
+        }
+    }
+
+    subnet 10.153.0.0 netmask 255.255.255.0 {
+        }
+    
+    subnet 10.153.1.0 netmask 255.255.255.0 {
+    }
+    
+#dhcpd-snmp=mareaor-ruckus,10.153.2.100-10.153.2.239
+        subnet 10.153.2.0 netmask 255.255.255.0 {
+            option routers 10.153.2.1;
+            option subnet-mask 255.255.255.0;
+            option broadcast-address 10.153.2.255;
+            pool {
+                failover peer "NATIONAL";
+                allow members of "ruckus";
+                allow members of "ubnt";
+                deny dynamic bootp clients;
+                #default-lease-time dTruk;
+                #max-lease-time mdTruk;
+                range 10.153.2.100 10.153.2.239;
+            }
+#  include "/etc/dhcp3/bootp/mareaor.bootp";
+        }
+}

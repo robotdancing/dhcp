@@ -1,0 +1,74 @@
+# okwecol DHCPD Config File.
+# Generated 2014-08-25-21:20 with gendhcpd.pl by CEV Weatherford.
+
+shared-network okwecol {
+    authoritative;
+
+# WANIP for okwecol not configured
+
+#dhcpd-snmp=okwecol-cust0,68.180.98.21-68.180.99.223
+    subnet 68.180.98.0 netmask 255.255.254.0 {
+        option routers 68.180.98.1;
+        option subnet-mask 255.255.254.0;
+        option broadcast-address 68.180.99.255;
+        option domain-name "client.pavlovmedia.net";
+        option domain-name-servers 66.253.214.16, 50.30.184.16;
+        default-lease-time 14400;
+        max-lease-time 28800;
+        min-lease-time 3600;
+	pool {
+            failover peer "NATIONAL";
+            deny members of "ruckus";
+            deny members of "ubnt";
+            deny dynamic bootp clients;
+            range 68.180.98.21 68.180.99.223;
+        }
+	# Slingbox
+        host 68-180-98-10 {
+            hardware ethernet 00:13:B6:0C:A5:C1;
+            fixed-address 68.180.98.10;
+	}
+    }
+
+#dhcpd-snmp=okwecol-cust1,10.180.34.3-10.180.34.254
+    subnet 10.180.34.0 netmask 255.255.255.0 {
+        option routers 10.180.34.1;
+        option subnet-mask 255.255.255.0;
+        option broadcast-address 10.180.34.255;
+        option domain-name "client.pavlovmedia.net";
+        option domain-name-servers 66.253.214.16, 50.30.184.16;
+        default-lease-time 14400;
+        max-lease-time 28800;
+        min-lease-time 3600;
+	pool {
+            failover peer "NATIONAL";
+            deny members of "ruckus";
+            deny members of "ubnt";
+            deny dynamic bootp clients;
+            range 10.180.34.3 10.180.34.254;
+        }
+    }
+
+    subnet 10.145.28.0 netmask 255.255.255.0 {
+        }
+    
+    subnet 10.145.29.0 netmask 255.255.255.0 {
+    }
+    
+#dhcpd-snmp=okwecol-ruckus,10.145.30.100-10.145.30.239
+        subnet 10.145.30.0 netmask 255.255.255.0 {
+            option routers 10.145.30.1;
+            option subnet-mask 255.255.255.0;
+            option broadcast-address 10.145.30.255;
+            pool {
+                failover peer "NATIONAL";
+                allow members of "ruckus";
+                allow members of "ubnt";
+                deny dynamic bootp clients;
+                default-lease-time 86400;
+        	max-lease-time 259200;
+        	min-lease-time 14400;
+		range 10.145.30.100 10.145.30.239;
+            }
+        }
+}

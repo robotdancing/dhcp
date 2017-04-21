@@ -1,0 +1,64 @@
+# ilcu110ejohn DHCPD Config File.
+# Generated 2012-08-13-15:17 with gendhcpd.pl by 110 E John.
+
+shared-network ilcu110ejohn {
+    authoritative;
+
+#  include "/etc/dhcp3/folder.dhcpd/events.dhcpd";
+
+# WANIP for ilcu110ejohn not configured
+
+#dhcpd-snmp=ilcu110ejohn-cust0,173.230.8.133-173.230.8.142
+    subnet 173.230.8.128 netmask 255.255.255.240 {
+        option routers 173.230.8.129;
+        option subnet-mask 255.255.255.240;
+        option broadcast-address 173.230.8.143;
+        option domain-name "client.pavlovmedia.net";
+        option domain-name-servers 66.253.214.16, 50.30.184.16;
+        default-lease-time 14400;
+        max-lease-time 28800;
+	min-lease-time 3600;
+        pool {
+            failover peer "NATIONAL";
+            deny members of "ruckus";
+            deny members of "ubnt";
+            deny dynamic bootp clients;
+            range 173.230.8.133 173.230.8.142;
+        }
+    }
+
+#dhcpd-snmp=ilcu110ejohn-cust1,96.63.203.147-96.63.203.158
+    subnet 96.63.203.144 netmask 255.255.255.240 {
+        option routers 96.63.203.145;
+        option subnet-mask 255.255.255.240;
+        option broadcast-address 96.63.203.159;
+        option domain-name "client.pavlovmedia.net";
+        option domain-name-servers 66.253.214.16, 50.30.184.16;
+        default-lease-time 14400;
+        max-lease-time 28800;
+	min-lease-time 3600;
+        pool {
+            failover peer "NATIONAL";
+            deny members of "ruckus";
+            deny members of "ubnt";
+            deny dynamic bootp clients;
+            range 96.63.203.147 96.63.203.158;
+        }
+    }
+
+#dhcpd-snmp=ilcu110ejohn-ruckus,10.159.236.100-10.159.236.239
+        subnet 10.159.236.0 netmask 255.255.255.0 {
+            option routers 10.159.236.1;
+            option subnet-mask 255.255.255.0;
+            option broadcast-address 10.159.236.255;
+            pool {
+                failover peer "NATIONAL";
+                allow members of "ruckus";
+                allow members of "ubnt";
+                deny dynamic bootp clients;
+                #default-lease-time dTruk;
+                #max-lease-time mdTruk;
+                range 10.159.236.100 10.159.236.239;
+            }
+        }
+}

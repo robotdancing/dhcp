@@ -1,0 +1,29 @@
+# mnalfou DHCPD Config File.
+# Generated 2012-12-11-13:27 with gendhcpd.pl by Foundation Hall.
+
+shared-network mnalfou {
+    authoritative;
+
+    subnet 50.30.133.1 netmask 255.255.255.255 {
+    }
+
+    subnet 10.145.116.0 netmask 255.255.255.0 {
+        }
+    
+#dhcpd-snmp=mnalfou-ruckus,10.145.118.100-10.145.118.239
+        subnet 10.145.118.0 netmask 255.255.255.0 {
+            option routers 10.145.118.1;
+            option subnet-mask 255.255.255.0;
+            option broadcast-address 10.145.118.255;
+            pool {
+#               failover peer "NATIONAL";
+                allow members of "ruckus";
+                allow members of "ubnt";
+                deny dynamic bootp clients;
+                default-lease-time 86400;
+        	max-lease-time 259200;
+        	min-lease-time 14400;
+		range 10.145.118.100 10.145.118.239;
+            }
+        }
+}

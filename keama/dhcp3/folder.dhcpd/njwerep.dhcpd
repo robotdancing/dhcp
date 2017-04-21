@@ -1,0 +1,86 @@
+# njwerep DHCPD Config File.
+# Generated 2012-04-16-10:56 with gendhcpd.pl by Rivers Edge at Port Imperial.
+
+shared-network njwerep {
+    authoritative;
+
+#  include "/etc/dhcp3/folder.dhcpd/events.dhcpd";
+
+# WANIP for njwerep not configured
+
+#dhcpd-snmp=njwerep-cust0,66.253.246.21-66.253.246.254
+    subnet 66.253.246.0 netmask 255.255.255.0 {
+        option routers 66.253.246.1;
+        option subnet-mask 255.255.255.0;
+        option broadcast-address 66.253.246.255;
+        option domain-name "client.pavlovmedia.net";
+        option domain-name-servers 66.253.214.16, 50.30.184.16;
+        default-lease-time 14400;
+        max-lease-time 28800;
+	min-lease-time 3600;
+        pool {
+#           failover peer "NATIONAL";
+            deny members of "ruckus";
+            deny members of "ubnt";
+            deny dynamic bootp clients;
+            range 66.253.246.21 66.253.246.254;
+        }
+	# Slingbox
+        host 66-253-246-237 {
+            hardware ethernet 00:13:b6:30:26:09;
+            fixed-address 66.253.246.237;
+        }
+	# Office ATM 1
+        host 66-253-246-24 {
+            hardware ethernet c8:0a:a9:7e:3f:15;
+            fixed-address 66.253.246.24;
+        }
+	# Office ATM 2
+        host 66-253-246-25 {
+            hardware ethernet 00:a0:7c:1f:72:75;
+            fixed-address 66.253.246.25;
+        }
+	# Office ATM 3
+        host 66-253-246-23 {
+            hardware ethernet 00:21:79:c2:b9:9d;
+            fixed-address 66.253.246.23;
+        }
+	# CAW Pool-N
+        host 66-253-246-27 {
+            hardware ethernet 00:0c:42:97:23:e5;
+            fixed-address 66.253.246.27;
+        }
+	# CAW Pool-S
+        host 66-253-246-28 {
+            hardware ethernet 00:0c:42:97:25:41;
+            fixed-address 66.253.246.28;
+        }
+	# CAW Bar AP
+        host 66-253-246-82 {
+            hardware ethernet 00:0c:42:f7:dc:f8;
+            fixed-address 66.253.246.82;
+        }
+    }
+
+    subnet 10.146.136.0 netmask 255.255.255.0 {
+        }
+    
+    subnet 10.146.137.0 netmask 255.255.255.0 {
+    }
+    
+#dhcpd-snmp=njwerep-ruckus,10.146.138.100-10.146.138.239
+        subnet 10.146.138.0 netmask 255.255.255.0 {
+            option routers 10.146.138.1;
+            option subnet-mask 255.255.255.0;
+            option broadcast-address 10.146.138.255;
+            pool {
+#               failover peer "NATIONAL";
+                allow members of "ruckus";
+                allow members of "ubnt";
+                deny dynamic bootp clients;
+                #default-lease-time dTruk;
+                #max-lease-time mdTruk;
+                range 10.146.138.100 10.146.138.239;
+            }
+        }
+}

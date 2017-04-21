@@ -1,0 +1,127 @@
+# msstmsu DHCPD Config File.
+# Generated 2012-02-20-07:59 with gendhcpd.pl by Pointe at MSU.
+
+shared-network msstmsu {
+    authoritative;
+
+# WANIP for msstmsu not configured
+
+#dhcpd-snmp=msstmsu-cust0,68.180.48.21-68.180.51.223
+    subnet 68.180.48.0 netmask 255.255.252.0 {
+        option routers 68.180.48.1;
+        option subnet-mask 255.255.252.0;
+        option broadcast-address 68.180.51.255;
+        option domain-name "client.pavlovmedia.net";
+        option domain-name-servers 66.253.214.16, 50.30.184.16;
+        default-lease-time 7200;
+        max-lease-time 14400;
+        pool {
+            failover peer "NATIONAL";
+            deny members of "ruckus";
+            deny dynamic bootp clients;
+            range 68.180.48.21 68.180.51.223;
+        }
+	host 68-180-48-160 {
+		hardware ethernet A8:70:A5:01:16:CD;
+		fixed-address 68.180.48.160;
+	}
+
+	#Slingbox
+	host 68-180-48-10 {
+ 		hardware ethernet 00:13:B6:04:B6:1D;
+		fixed-address 68.180.48.10;
+	}
+
+    }
+
+#dhcpd-snmp=msstmsu-cust1,68.180.63.3-68.180.63.254
+    subnet 68.180.63.0 netmask 255.255.255.0 {
+        option routers 68.180.63.1;
+        option subnet-mask 255.255.255.0;
+        option broadcast-address 68.180.63.255;
+        option domain-name "client.pavlovmedia.net";
+        option domain-name-servers 66.253.214.16, 50.30.184.16;
+        default-lease-time 7200;
+        max-lease-time 14400;
+        pool {
+            failover peer "NATIONAL";
+            deny members of "ruckus";
+            deny dynamic bootp clients;
+            range 68.180.63.3 68.180.63.254;
+        }
+    }
+
+#dhcpd-snmp=msstmsu-cust2,50.30.247.3-50.30.247.254
+    subnet 50.30.247.0 netmask 255.255.255.0 {
+        option routers 50.30.247.1;
+        option subnet-mask 255.255.255.0;
+        option broadcast-address 50.30.247.255;
+        option domain-name "client.pavlovmedia.net";
+        option domain-name-servers 66.253.214.16, 50.30.184.16;
+        default-lease-time 7200;
+        max-lease-time 14400;
+        pool {
+            failover peer "NATIONAL";
+            deny members of "ruckus";
+            deny dynamic bootp clients;
+            range 50.30.247.3 50.30.247.254;
+        }
+    }
+
+#dhcpd-snmp=msstmsu-cust3,216.171.51.3-216.171.51.254
+    subnet 216.171.51.0 netmask 255.255.255.0 {
+        option routers 216.171.51.1;
+        option subnet-mask 255.255.255.0;
+        option broadcast-address 216.171.51.255;
+        option domain-name "client.pavlovmedia.net";
+        option domain-name-servers 66.253.214.16, 50.30.184.16;
+        default-lease-time 7200;
+        max-lease-time 14400; 
+        pool {
+            failover peer "NATIONAL";
+            deny members of "ruckus";
+            deny dynamic bootp clients;
+            range 216.171.51.3 216.171.51.254;
+        }
+    }
+
+#dhcpd-snmp=msstmsu-cust4,68.180.80.3-68.180.81.254
+    subnet 68.180.80.0 netmask 255.255.254.0 {
+        option routers 68.180.80.1;
+        option subnet-mask 255.255.254.0;
+        option broadcast-address 68.180.81.255;
+        option domain-name "client.pavlovmedia.net";
+        option domain-name-servers 66.253.214.16, 50.30.184.16;
+        default-lease-time 14400;
+        max-lease-time 28800;
+	min-lease-time 3600;
+        pool {
+            failover peer "NATIONAL";
+            deny members of "ruckus";
+            deny dynamic bootp clients;
+            range 68.180.80.3 68.180.81.254;
+        }
+    }
+
+    subnet 10.145.152.0 netmask 255.255.255.0 {
+        }
+    
+    subnet 10.145.153.0 netmask 255.255.255.0 {
+    }
+    
+#dhcpd-snmp=msstmsu-ruckus,10.145.154.100-10.145.154.239
+        subnet 10.145.154.0 netmask 255.255.255.0 {
+            option routers 10.145.154.1;
+            option subnet-mask 255.255.255.0;
+            option broadcast-address 10.145.154.255;
+            pool {
+                failover peer "NATIONAL";
+                allow members of "ruckus";
+                deny dynamic bootp clients;
+                #default-lease-time dTruk;
+                #max-lease-time mdTruk;
+                range 10.145.154.50 10.145.154.200;
+            }
+#  include "/etc/dhcp3/bootp/msstmsu.bootp";
+        }
+}

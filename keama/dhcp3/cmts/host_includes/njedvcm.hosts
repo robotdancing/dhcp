@@ -1,0 +1,4 @@
+    host 00-E0-6F-66-82-6C { hardware ethernet 00:E0:6F:66:82:6C; filename "PV_1.5md-512ku_cpe1_DOC11.bin"; }
+    host 00-11-E3-80-7D-F4 { hardware ethernet 00:11:E3:80:7D:F4; filename "HBN_6.0md-1.5mu_cpe1.bin"; }
+    host 00-11-E3-93-1A-9E { hardware ethernet 00:11:E3:93:1A:9E; filename "PV_15md-3mu_cpe1_DOC11.bin"; }
+    host 00-E0-6F-37-FA-EC { hardware ethernet 00:E0:6F:37:FA:EC; filename "PV_15md-3mu_cpe1_DOC11.bin"; }

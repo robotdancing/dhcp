@@ -299,7 +299,7 @@ enum dhcp_token peek_raw_token(const char **rval, unsigned *rlen,
 
 /* confparse.c */
 size_t conf_file_parse(struct parse *);
-size_t read_conf_file(struct parse *, const char *, int);
+void read_conf_file(struct parse *, const char *, int);
 size_t conf_file_subparse(struct parse *, int);
 int parse_statement(struct parse *, int, int);
 void get_permit(struct parse *, struct element *);

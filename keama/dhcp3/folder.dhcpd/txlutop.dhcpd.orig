@@ -1,0 +1,52 @@
+# txlutop DHCPD Config File.
+# Generated 2013-05-29-09:57 with gendhcpd.pl by Overton Park.
+
+shared-network txlutop {
+    authoritative;
+
+#  include "/etc/dhcp3/folder.dhcpd/events.dhcpd";
+
+# WANIP for txlutop not configured
+
+#dhcpd-snmp=txlutop-cust0,173.230.88.21-173.230.91.254
+    subnet 173.230.88.0 netmask 255.255.252.0 {
+        option routers 173.230.88.1;
+        option subnet-mask 255.255.252.0;
+        option broadcast-address 173.230.91.255;
+        option domain-name "client.pavlovmedia.net";
+        option domain-name-servers 66.253.214.16, 50.30.184.16;
+        default-lease-time 14400;
+        max-lease-time 28800;
+        min-lease-time 3600;
+	pool {
+            failover peer "NATIONAL";
+            deny members of "ruckus";
+            deny members of "ubnt";
+            deny dynamic bootp clients;
+            range 173.230.88.21 173.230.91.254;
+        }
+    }
+
+    subnet 10.144.24.0 netmask 255.255.255.0 {
+        }
+    
+    subnet 10.144.25.0 netmask 255.255.255.0 {
+    }
+    
+#dhcpd-snmp=txlutop-ruckus,10.144.26.100-10.144.26.239
+        subnet 10.144.26.0 netmask 255.255.255.0 {
+            option routers 10.144.26.1;
+            option subnet-mask 255.255.255.0;
+            option broadcast-address 10.144.26.255;
+            pool {
+                failover peer "NATIONAL";
+                allow members of "ruckus";
+                allow members of "ubnt";
+                deny dynamic bootp clients;
+                default-lease-time 86400;
+        	max-lease-time 259200;
+        	min-lease-time 14400;
+		range 10.144.26.100 10.144.26.239;
+            }
+        }
+}

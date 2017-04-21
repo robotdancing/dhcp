@@ -1,0 +1,75 @@
+# lalacap DHCPD Config File.
+# Generated 2012-04-05-13:38 with gendhcpd.pl by Quarters at Rue Principal.
+
+shared-network lalacap {
+    authoritative;
+
+#  include "/etc/dhcp3/folder.dhcpd/events.dhcpd";
+
+# WANIP for lalacap not configured
+
+#dhcpd-snmp=lalacap-cust0,68.180.124.21-68.180.125.254
+    subnet 68.180.124.0 netmask 255.255.254.0 {
+        option routers 68.180.124.1;
+        option subnet-mask 255.255.254.0;
+        option broadcast-address 68.180.125.255;
+        option domain-name "client.pavlovmedia.net";
+        option domain-name-servers 66.253.214.16, 50.30.184.16;
+        default-lease-time 14400;
+        max-lease-time 28800;
+	min-lease-time 3600;
+        pool {
+            failover peer "NATIONAL";
+            deny members of "ruckus";
+            deny members of "ubnt";
+            deny dynamic bootp clients;
+            range 68.180.124.21 68.180.125.254;
+        }
+	    host 68-180-124-8 {
+	    hardware ethernet 00:12:80:31:95:66;
+	    fixed-address 68.180.124.8;
+	}
+	
+    }
+
+#dhcpd-snmp=lalacap-cust1,68.180.126.3-68.180.126.254
+    subnet 68.180.126.0 netmask 255.255.255.0 {
+        option routers 68.180.126.1;
+        option subnet-mask 255.255.255.0;
+        option broadcast-address 68.180.126.255;
+        option domain-name "client.pavlovmedia.net";
+        option domain-name-servers 66.253.214.16, 50.30.184.16;
+        default-lease-time 14400;
+        max-lease-time 28800;
+	min-lease-time 3600;
+        pool {
+            failover peer "NATIONAL";
+            deny members of "ruckus";
+            deny members of "ubnt";
+            deny dynamic bootp clients;
+            range 68.180.126.3 68.180.126.254;
+        }
+    }
+
+    subnet 10.145.16.0 netmask 255.255.255.0 {
+        }
+    
+    subnet 10.145.17.0 netmask 255.255.255.0 {
+    }
+    
+#dhcpd-snmp=lalacap-ruckus,10.145.18.100-10.145.18.239
+        subnet 10.145.18.0 netmask 255.255.255.0 {
+            option routers 10.145.18.1;
+            option subnet-mask 255.255.255.0;
+            option broadcast-address 10.145.18.255;
+            pool {
+                failover peer "NATIONAL";
+                allow members of "ruckus";
+                allow members of "ubnt";
+                deny dynamic bootp clients;
+                #default-lease-time dTruk;
+                #max-lease-time mdTruk;
+                range 10.145.18.100 10.145.18.239;
+            }
+        }
+}

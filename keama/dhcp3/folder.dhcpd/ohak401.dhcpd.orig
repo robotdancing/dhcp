@@ -1,0 +1,70 @@
+# ohak401 DHCPD Config File.
+# Generated 2013-10-15-13:21 with gendhcpd.pl by 401 Lofts.
+
+shared-network ohak401 {
+    authoritative;
+
+# WANIP for ohak401 not configured
+
+#dhcpd-snmp=ohak401-cust0,216.171.34.21-216.171.35.223
+    subnet 216.171.34.0 netmask 255.255.254.0 {
+        option routers 216.171.34.1;
+        option subnet-mask 255.255.254.0;
+        option broadcast-address 216.171.35.255;
+        option domain-name "client.pavlovmedia.net";
+        option domain-name-servers 66.253.214.16, 50.30.184.16;
+        default-lease-time 7200;
+        max-lease-time 14400;
+        min-lease-time 3600;
+	pool {
+            failover peer "NATIONAL";
+            deny members of "ruckus";
+            deny members of "ubnt";
+            deny dynamic bootp clients;
+            range 216.171.34.21 216.171.35.223;
+        }
+    }
+
+#dhcpd-snmp=ohak401-cust1,10.180.11.3-10.180.11.254
+    subnet 10.180.11.0 netmask 255.255.255.0 {
+        option routers 10.180.11.1;
+        option subnet-mask 255.255.255.0;
+        option broadcast-address 10.180.11.255;
+        option domain-name "client.pavlovmedia.net";
+        option domain-name-servers 66.253.214.16, 50.30.184.16;
+        default-lease-time 3600;
+        max-lease-time 7200;
+        min-lease-time 3600;
+        pool {
+           #failover peer "NATIONAL";
+            deny members of "ruckus";
+            deny members of "ubnt";
+            deny dynamic bootp clients;
+            range 10.180.11.3 10.180.11.254;
+        }
+
+    }
+
+    subnet 10.146.132.0 netmask 255.255.255.0 {
+        }
+    
+    subnet 10.146.133.0 netmask 255.255.255.0 {
+    }
+    
+#dhcpd-snmp=ohak401-ruckus,10.146.134.100-10.146.134.239
+        subnet 10.146.134.0 netmask 255.255.255.0 {
+            option routers 10.146.134.1;
+            option subnet-mask 255.255.255.0;
+            option broadcast-address 10.146.134.255;
+            pool {
+                failover peer "NATIONAL";
+                allow members of "ruckus";
+                allow members of "ubnt";
+                deny dynamic bootp clients;
+                default-lease-time 86400;
+        	max-lease-time 259200;
+        	min-lease-time 14400;
+		range 10.146.134.100 10.146.134.239;
+            }
+        }
+}

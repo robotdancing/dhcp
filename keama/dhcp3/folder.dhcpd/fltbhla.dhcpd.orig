@@ -1,0 +1,51 @@
+# fltbhla DHCPD Config File.
+# Generated 2012-04-03-08:15 with gendhcpd.pl by Hawks Landing.
+
+shared-network fltbhla {
+    authoritative;
+
+#  include "/etc/dhcp3/folder.dhcpd/events.dhcpd";
+
+# WANIP for fltbhla not configured
+
+#dhcpd-snmp=fltbhla-cust0,67.79.132.21-67.79.133.254
+    subnet 67.79.132.0 netmask 255.255.254.0 {
+        option routers 67.79.132.1;
+        option subnet-mask 255.255.254.0;
+        option broadcast-address 67.79.133.255;
+        option domain-name "client.pavlovmedia.net";
+        option domain-name-servers 66.253.214.16, 50.30.184.16;
+        default-lease-time 14400;
+        max-lease-time 28800;
+	min-lease-time 3600;
+        pool {
+            failover peer "NATIONAL";
+            deny members of "ruckus";
+            deny members of "ubnt";
+            deny dynamic bootp clients;
+            range 67.79.132.21 67.79.133.254;
+        }
+    }
+
+    subnet 10.149.104.0 netmask 255.255.255.0 {
+        }
+    
+    subnet 10.149.105.0 netmask 255.255.255.0 {
+    }
+    
+#dhcpd-snmp=fltbhla-ruckus,10.149.106.100-10.149.106.239
+        subnet 10.149.106.0 netmask 255.255.255.0 {
+            option routers 10.149.106.1;
+            option subnet-mask 255.255.255.0;
+            option broadcast-address 10.149.106.255;
+            pool {
+                failover peer "NATIONAL";
+                allow members of "ruckus";
+                allow members of "ubnt";
+                deny dynamic bootp clients;
+                #default-lease-time dTruk;
+                #max-lease-time mdTruk;
+                range 10.149.106.100 10.149.106.239;
+            }
+        }
+}

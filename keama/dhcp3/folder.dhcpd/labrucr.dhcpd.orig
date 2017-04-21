@@ -1,0 +1,55 @@
+# labrucr DHCPD Config File.
+# Generated 2013-10-29-17:34 with gendhcpd.pl by University Crescent.
+
+shared-network labrucr {
+    authoritative;
+
+# WANIP for labrucr not configured
+
+#dhcpd-snmp=labrucr-cust0,76.10.20.21-76.10.23.254
+    subnet 76.10.20.0 netmask 255.255.252.0 {
+        option routers 76.10.20.1;
+        option subnet-mask 255.255.252.0;
+        option broadcast-address 76.10.23.255;
+        option domain-name "client.pavlovmedia.net";
+        option domain-name-servers 66.253.214.16, 50.30.184.16;
+        default-lease-time 14400;
+        max-lease-time 28800;
+        min-lease-time 3600;
+	pool {
+            failover peer "NATIONAL";
+            deny members of "ruckus";
+            deny members of "ubnt";
+            deny dynamic bootp clients;
+            range 76.10.20.21 76.10.23.254;
+        }
+        # Office Router
+        host 76-10-20-8 {
+            hardware ethernet d8:67:d9:fe:09:a4;
+            fixed-address 76.10.20.8;
+        }
+    }
+
+    subnet 10.148.44.0 netmask 255.255.255.0 {
+        }
+    
+    subnet 10.148.45.0 netmask 255.255.255.0 {
+    }
+    
+#dhcpd-snmp=labrucr-ruckus,10.148.46.100-10.148.46.239
+        subnet 10.148.46.0 netmask 255.255.255.0 {
+            option routers 10.148.46.1;
+            option subnet-mask 255.255.255.0;
+            option broadcast-address 10.148.46.255;
+            pool {
+                failover peer "NATIONAL";
+                allow members of "ruckus";
+                allow members of "ubnt";
+                deny dynamic bootp clients;
+                default-lease-time 86400;
+        	max-lease-time 259200;
+        	min-lease-time 14400;
+		range 10.148.46.100 10.148.46.239;
+            }
+        }
+}

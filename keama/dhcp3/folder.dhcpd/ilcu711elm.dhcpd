@@ -1,0 +1,44 @@
+# ilcu711elm DHCPD Config File.
+# Generated 2010-11-11-14:36 with gendhcpd.pl by AUTObpeterson.
+
+shared-network ilcu711elm {
+    authoritative;
+
+#  include "/etc/dhcp3/folder.dhcpd/events.dhcpd";
+
+    subnet 66.253.150.115 netmask 255.255.255.255 {
+    }
+
+#dhcpd-snmp=ilcu711elm-cust0,173.230.11.197-173.230.11.222
+    subnet 173.230.11.192 netmask 255.255.255.224 {
+        option routers 173.230.11.193;
+        option subnet-mask 255.255.255.224;
+        option broadcast-address 173.230.11.223;
+        option domain-name "client.pavlovmedia.net";
+        option domain-name-servers 66.253.214.16, 50.30.184.16;
+#        default-lease-time dTlease0;
+#        max-lease-time mdTlease0;
+        pool {
+#           failover peer "NATIONAL";
+            deny members of "ruckus";
+            deny dynamic bootp clients;
+            range 173.230.11.197 173.230.11.222;
+        }
+    }
+
+#dhcpd-snmp=ilcu711elm-ruckus,10.159.208.100-10.159.208.239
+    subnet 10.159.208.0 netmask 255.255.255.0 {
+        option routers 10.159.208.1;
+        option subnet-mask 255.255.255.0;
+        option broadcast-address 10.159.208.255;
+        pool {
+#           failover peer "NATIONAL";
+            allow members of "ruckus";
+            deny dynamic bootp clients;
+#            default-lease-time dTruk;
+#            max-lease-time mdTruk;
+            range 10.159.208.100 10.159.208.239;
+        }
+#  include "/etc/dhcp3/bootp/ilcu711elm.bootp";
+    }
+}

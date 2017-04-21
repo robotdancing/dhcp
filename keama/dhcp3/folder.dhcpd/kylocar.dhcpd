@@ -1,0 +1,75 @@
+# kylocar DHCPD Config File.
+# Generated 2013-03-21-18:13 with gendhcpd.pl by Cardinal Towne @ The University of Louisville.
+
+shared-network kylocar {
+    authoritative;
+
+# WANIP for kylocar not configured
+
+#dhcpd-snmp=kylocar-cust0,68.234.140.21-68.234.143.254
+    subnet 68.234.140.0 netmask 255.255.252.0 {
+        option routers 68.234.140.1;
+        option subnet-mask 255.255.252.0;
+        option broadcast-address 68.234.143.255;
+        option domain-name "client.pavlovmedia.net";
+        option domain-name-servers 66.253.214.16, 50.30.184.16;
+        default-lease-time 7200;
+        max-lease-time 14440;
+        min-lease-time 1800;
+	pool {
+#           failover peer "NATIONAL";
+            deny members of "ruckus";
+            deny members of "ubnt";
+            deny dynamic bootp clients;
+            range 68.234.140.21 68.234.143.254;
+        }
+
+# Office IPA Server
+            host 68-234-141-8 {
+            hardware ethernet F0:4D:A2:F4:1D:B9;
+            fixed-address 68.234.141.8;
+	}
+    }
+
+#dhcpd-snmp=kylocar-cust1,68.234.193.3-68.234.193.254
+    subnet 68.234.193.0 netmask 255.255.255.0 {
+        option routers 68.234.193.1;
+        option subnet-mask 255.255.255.0;
+        option broadcast-address 68.234.193.255;
+        option domain-name "client.pavlovmedia.net";
+        option domain-name-servers 66.253.214.16, 50.30.184.16;
+        default-lease-time 7200;
+        max-lease-time 14440;
+        min-lease-time 1800;
+	pool {
+#           failover peer "NATIONAL";
+            deny members of "ruckus";
+            deny members of "ubnt";
+            deny dynamic bootp clients;
+            range 68.234.193.3 68.234.193.254;
+        }
+    }
+
+    subnet 10.147.128.0 netmask 255.255.255.0 {
+        }
+    
+    subnet 10.147.129.0 netmask 255.255.255.0 {
+    }
+    
+#dhcpd-snmp=kylocar-ruckus,10.147.130.100-10.147.130.239
+        subnet 10.147.130.0 netmask 255.255.255.0 {
+            option routers 10.147.130.1;
+            option subnet-mask 255.255.255.0;
+            option broadcast-address 10.147.130.255;
+            pool {
+#               failover peer "NATIONAL";
+                allow members of "ruckus";
+                allow members of "ubnt";
+                deny dynamic bootp clients;
+                default-lease-time 86400;
+        	max-lease-time 259200;
+        	min-lease-time 14400;
+		range 10.147.130.100 10.147.130.239;
+            }
+        }
+}

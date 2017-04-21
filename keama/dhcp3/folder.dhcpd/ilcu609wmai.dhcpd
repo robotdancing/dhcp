@@ -1,0 +1,45 @@
+# ilcu609wmai DHCPD Config File.
+# Generated 2012-08-21-10:36 with gendhcpd.pl by 609 W Main.
+
+shared-network ilcu609wmai {
+    authoritative;
+
+#  include "/etc/dhcp3/folder.dhcpd/events.dhcpd";
+
+# WANIP for ilcu609wmai not configured
+
+#dhcpd-snmp=ilcu609wmai-cust0,173.230.25.197-173.230.25.222
+    subnet 173.230.25.192 netmask 255.255.255.224 {
+        option routers 173.230.25.193;
+        option subnet-mask 255.255.255.224;
+        option broadcast-address 173.230.25.223;
+        option domain-name "client.pavlovmedia.net";
+        option domain-name-servers 66.253.214.16, 50.30.184.16;
+        default-lease-time 14400;
+        max-lease-time 28800;
+	min-lease-time 3600;
+        pool {
+#           failover peer "NATIONAL";
+            deny members of "ruckus";
+            deny members of "ubnt";
+            deny dynamic bootp clients;
+            range 173.230.25.197 173.230.25.222;
+        }
+    }
+
+#dhcpd-snmp=ilcu609wmai-ruckus,10.159.130.100-10.159.130.239
+        subnet 10.159.130.0 netmask 255.255.255.0 {
+            option routers 10.159.130.1;
+            option subnet-mask 255.255.255.0;
+            option broadcast-address 10.159.130.255;
+            pool {
+#               failover peer "NATIONAL";
+                allow members of "ruckus";
+                allow members of "ubnt";
+                deny dynamic bootp clients;
+                #default-lease-time dTruk;
+                #max-lease-time mdTruk;
+                range 10.159.130.100 10.159.130.239;
+            }
+        }
+}

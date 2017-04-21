@@ -621,8 +621,8 @@ convert_num(struct parse *cfile, unsigned char *buf, const char *str,
 			putLong(buf, -(long)val);
 			break;
 		default:
-			parse_error (cfile,
-				     "Unexpected integer size: %d\n", size);
+			parse_error(cfile,
+				    "Unexpected integer size: %d\n", size);
 			break;
 		}
 	} else {
@@ -637,8 +637,8 @@ convert_num(struct parse *cfile, unsigned char *buf, const char *str,
 			putULong (buf, val);
 			break;
 		default:
-			parse_error (cfile,
-				     "Unexpected integer size: %d\n", size);
+			parse_error(cfile,
+				    "Unexpected integer size: %d\n", size);
 		}
 	}
 }
@@ -824,23 +824,25 @@ parse_option_space_decl(struct parse *cfile)
 					    "expecting number 1, 2, 4.");
 
 			tsize = atoi(val);
-			p = createInt(tsize);
-
+			p = NULL;
 			if ((local_family == AF_INET) && (tsize != 1)) {
 				struct comment *comment;
 
-				comment = createComment("/// only code width "
+				comment = createComment("/// Only code width "
 							"1 is supported");
+				p = createInt(tsize);
 				TAILQ_INSERT_TAIL(&p->comments, comment);
 			} else if ((local_family == AF_INET6) &&
 				   (tsize != 2)) {
 				struct comment *comment;
 
-				comment = createComment("/// only code width "
+				comment = createComment("/// Only code width "
 							"2 is supported");
+				p = createInt(tsize);
 				TAILQ_INSERT_TAIL(&p->comments, comment);
 			}
-			mapSet(nu, p, "code-width");
+			if (p != NULL)
+				mapSet(nu, p, "code-width");
 			break;
 
 		case LENGTH:
@@ -860,25 +862,27 @@ parse_option_space_decl(struct parse *cfile)
 				parse_error(cfile, "expecting number 1 or 2.");
 
 			lsize = atoi(val);
-			p = createInt(lsize);
-
+			p = NULL;
 			if ((local_family == AF_INET) && (lsize != 1)) {
 				struct comment *comment;
 
-				comment = createComment("/// only length "
+				comment = createComment("/// Only length "
 							"width 1 is "
 							"supported");
+				p = createInt(lsize);
 				TAILQ_INSERT_TAIL(&p->comments, comment);
 			} else if ((local_family == AF_INET6) &&
 				   (lsize != 2)) {
 				struct comment *comment;
 
-				comment = createComment("/// only length "
+				comment = createComment("/// Only length "
 							"width 2 is "
 							"supported");
+				p = createInt(lsize);
 				TAILQ_INSERT_TAIL(&p->comments, comment);
 			}
-			mapSet(nu, p, "length-width");
+			if (p != NULL)
+				mapSet(nu, p, "length-width");
 			break;
 
 		case HASH:
@@ -897,7 +901,7 @@ parse_option_space_decl(struct parse *cfile)
 		}
 	} while (token != SEMI);
 
-	if (mapSize(nu) != 0)
+	if (mapSize(nu) > 1)
 		mapSet(cfile->stack[1], nu, "option-space");
 }
 
@@ -1411,7 +1415,8 @@ parse_hexa(struct parse *cfile, struct string *saved)
 		token = next_token(&val, NULL, cfile);
 		if (token != NUMBER && token != NUMBER_OR_NAME)
 			parse_error(cfile, "expecting hexadecimal number.");
-		appendString(saved, val);
+		if (saved != NULL)
+			appendString(saved, val);
 		convert_num(cfile, &ibuf, val, 16, 8);
 		snprintf(tbuf, sizeof(tbuf), "%02hhx", ibuf);
 		appendString(data, tbuf);
@@ -1419,7 +1424,8 @@ parse_hexa(struct parse *cfile, struct string *saved)
 		token = peek_token(&val, NULL, cfile);
 		if (token != COLON)
 			break;
-		appendString(saved, val);
+		if (saved != NULL)
+			appendString(saved, val);
 		skip_token(&val, NULL, cfile);
 	}
 
@@ -1470,6 +1476,7 @@ parse_executable_statement(struct element *result,
 			   enum expression_context case_context,
 			   isc_boolean_t direct)
 {
+	unsigned len;
 	enum dhcp_token token;
 	const char *val;
 	struct element *st;
@@ -1750,7 +1757,39 @@ parse_executable_statement(struct element *result,
 		break;
 
 	case EXECUTE:
-		parse_error(cfile, "ENABLE_EXECUTE is not portable");
+		skip_token(&val, NULL, cfile);
+		expr = createMap();
+
+		token = next_token(&val, NULL, cfile);
+		if (token != LPAREN)
+			parse_error(cfile, "left parenthesis expected.");
+
+		token = next_token(&val, &len, cfile);
+		if (token != STRING)
+			parse_error(cfile, "Expecting a quoted string.");
+		mapSet(expr, createString(makeString(len, val)), "command");
+
+		st = createList();
+
+		while((token = next_token(&val, NULL, cfile)) == COMMA) {
+			var = createMap();
+			if (parse_data_expression(var, cfile, lose)) {
+				if (!*lose)
+					parse_error(cfile,
+						    "expecting expression.");
+				skip_to_semi(cfile);
+				*lose = ISC_TRUE;
+				return ISC_FALSE;
+			}
+			listPush(st, var);
+		}
+		mapSet(expr, st, "arguments");
+
+		if (token != RPAREN)
+			parse_error(cfile, "right parenthesis expected.");
+		parse_semi(cfile);
+		mapSet(result, expr, "execute");
+		break;
 
 	case RETURN:
 		skip_token(&val, NULL, cfile);
@@ -1819,7 +1858,7 @@ parse_executable_statement(struct element *result,
 
 		token = next_token(&val, NULL, cfile);
 		if (token != SEMI)
-			parse_error (cfile, "semicolon expected.");
+			parse_error(cfile, "semicolon expected.");
 		break;
 
 	case PARSE_VENDOR_OPT:
@@ -3108,9 +3147,8 @@ parse_non_binary(struct element *expr,
 		}
 
 	case NUMBER_OR_NAME:
-		data = parse_cshl(cfile);
-		if (data == NULL)
-			return ISC_FALSE;
+		data = makeString(-1, "0x");
+		concatString(data, parse_hexa(cfile, NULL));
 		resetString(expr, data);
 		break;
 
@@ -3426,7 +3464,7 @@ parse_non_binary(struct element *expr,
 			token = next_token(&val, NULL, cfile);
 		} while (token == COMMA);
 		if (token != RPAREN)
-			parse_error (cfile, "Right parenthesis expected.");
+			parse_error(cfile, "Right parenthesis expected.");
 		mapSet(nexp, chain, "arguments");
 		break;
 	}
@@ -4464,11 +4502,11 @@ config_qualifying_suffix(struct element *config, struct parse *cfile)
 		if ((cfile->stack[scope]->kind != PARAMETER) ||
 		    (cfile->stack[scope]->kind != POOL_DECL))
 			break;
-	if (scope != ROOT_GROUP) {
+	if (cfile->stack[scope]->kind != ROOT_GROUP) {
 		struct comment *comment;
 
-		comment = createComment("/// not global qualifying-suffix "
-					"is not supported");
+		comment = createComment("/// Only global qualifying-suffix "
+					"is supported");
 		TAILQ_INSERT_TAIL(&value->comments, comment);
 		value->skip = ISC_TRUE;
 		cfile->issue_counter++;
@@ -4498,11 +4536,11 @@ config_enable_updates(struct element *config, struct parse *cfile)
 		if ((cfile->stack[scope]->kind != PARAMETER) ||
 		    (cfile->stack[scope]->kind != POOL_DECL))
 			break;
-	if (scope != ROOT_GROUP) {
+	if (cfile->stack[scope]->kind != ROOT_GROUP) {
 		struct comment *comment;
 
-		comment = createComment("/// not global enable-updates "
-					"is not supported");
+		comment = createComment("/// Only global enable-updates "
+					"is supported");
 		TAILQ_INSERT_TAIL(&value->comments, comment);
 		value->skip = ISC_TRUE;
 		cfile->issue_counter++;
@@ -4553,11 +4591,11 @@ config_ddns_update_style(struct element *config, struct parse *cfile)
 		if ((cfile->stack[scope]->kind != PARAMETER) ||
 		    (cfile->stack[scope]->kind != POOL_DECL))
 			break;
-	if (scope != ROOT_GROUP) {
+	if (cfile->stack[scope]->kind != ROOT_GROUP) {
 		struct comment *comment;
 
-		comment = createComment("/// not global ddns-update-style "
-					"is not supported");
+		comment = createComment("/// Only global ddns-update-style "
+					"is supported");
 		TAILQ_INSERT_TAIL(&value->comments, comment);
 		value->skip = ISC_TRUE;
 		cfile->issue_counter++;
@@ -4687,8 +4725,8 @@ config_echo_client_id(struct element *config, struct parse *cfile)
 			continue;
 		if (kind == ROOT_GROUP)
 			break;
-		comment = createComment("/// not global echo-client-id "
-					"is not supported");
+		comment = createComment("/// Only global echo-client-id "
+					"is supported");
 		TAILQ_INSERT_TAIL(&value->comments, comment);
 		value->skip = ISC_TRUE;
 		cfile->issue_counter++;

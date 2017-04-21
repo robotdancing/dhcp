@@ -1,0 +1,45 @@
+# njrapat DHCPD Config File.
+# Generated 2012-08-05-14:43 with gendhcpd.pl by Park Terrace.
+
+shared-network njrapat {
+    authoritative;
+
+#  include "/etc/dhcp3/folder.dhcpd/events.dhcpd";
+
+# WANIP for njrapat not configured
+
+#dhcpd-snmp=njrapat-cust0,66.253.174.21-66.253.175.254
+    subnet 66.253.174.0 netmask 255.255.254.0 {
+        option routers 66.253.174.1;
+        option subnet-mask 255.255.254.0;
+        option broadcast-address 66.253.175.255;
+        option domain-name "client.pavlovmedia.net";
+        option domain-name-servers 66.253.214.16, 50.30.184.16;
+        default-lease-time 14400;
+        max-lease-time 28800;
+	min-lease-time 3600;
+        pool {
+            failover peer "NATIONAL";
+            deny members of "ruckus";
+            deny members of "ubnt";
+            deny dynamic bootp clients;
+            range 66.253.174.21 66.253.175.254;
+        }
+    }
+
+#dhcpd-snmp=njrapat-ruckus,10.146.48.100-10.146.48.239
+        subnet 10.146.48.0 netmask 255.255.255.0 {
+            option routers 10.146.48.1;
+            option subnet-mask 255.255.255.0;
+            option broadcast-address 10.146.48.255;
+            pool {
+                failover peer "NATIONAL";
+                allow members of "ruckus";
+                allow members of "ubnt";
+                deny dynamic bootp clients;
+                #default-lease-time dTruk;
+                #max-lease-time mdTruk;
+                range 10.146.48.100 10.146.48.239;
+            }
+        }
+}
