@@ -1,0 +1,74 @@
+# txwagro DHCPD Config File.
+# Generated 2012-03-13-09:29 with gendhcpd.pl by Grove Waco.
+
+shared-network txwagro {
+    authoritative;
+
+# WANIP for txwagro not configured
+
+#dhcpd-snmp=txwagro-cust0,50.30.168.21-50.30.169.254
+    subnet 50.30.168.0 netmask 255.255.254.0 {
+        option routers 50.30.168.1;
+        option subnet-mask 255.255.254.0;
+        option broadcast-address 50.30.169.255;
+        option domain-name "client.pavlovmedia.net";
+        option domain-name-servers 66.253.214.16, 50.30.184.16;
+        default-lease-time 14400;
+        max-lease-time 28800;
+	min-lease-time 3600;
+        pool {
+            failover peer "NATIONAL";
+            deny members of "ruckus";
+            deny members of "ubnt";
+            deny dynamic bootp clients;
+            range 50.30.168.21 50.30.169.254;
+        }
+
+	#Slingbox
+		host 50-30-168-10 {
+			hardware ethernet 00:13:B6:08:CE:21;
+			fixed-address 50.30.168.10;
+			}
+    }
+
+#dhcpd-snmp=txwagro-cust1,50.30.190.3-50.30.190.254
+    subnet 50.30.190.0 netmask 255.255.255.0 {
+        option routers 50.30.190.1;
+        option subnet-mask 255.255.255.0;
+        option broadcast-address 50.30.190.255;
+        option domain-name "client.pavlovmedia.net";
+        option domain-name-servers 66.253.214.16, 50.30.184.16;
+        default-lease-time 14400;
+        max-lease-time 28800;
+	min-lease-time 3600;
+        pool {
+            failover peer "NATIONAL";
+            deny members of "ruckus";
+            deny members of "ubnt";
+            deny dynamic bootp clients;
+            range 50.30.190.3 50.30.190.254;
+        }
+    }
+
+    subnet 10.250.72.0 netmask 255.255.255.0 {
+        }
+    
+    subnet 10.250.73.0 netmask 255.255.255.0 {
+    }
+    
+#dhcpd-snmp=txwagro-ruckus,10.250.74.100-10.250.74.239
+        subnet 10.250.74.0 netmask 255.255.255.0 {
+            option routers 10.250.74.1;
+            option subnet-mask 255.255.255.0;
+            option broadcast-address 10.250.74.255;
+            pool {
+                failover peer "NATIONAL";
+                allow members of "ruckus";
+                allow members of "ubnt";
+                deny dynamic bootp clients;
+                #default-lease-time dTruk;
+                #max-lease-time mdTruk;
+                range 10.250.74.100 10.250.74.239;
+            }
+        }
+}

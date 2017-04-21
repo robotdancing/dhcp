@@ -1,0 +1,51 @@
+# ohcinhh DHCPD Config File.
+# Generated 2012-10-10-11:34 with gendhcpd.pl by Heritage Hill.
+
+shared-network ohcinhh {
+    authoritative;
+
+#  include "/etc/dhcp3/folder.dhcpd/events.dhcpd";
+
+    subnet 70.60.67.126 netmask 255.255.255.255 {
+    }
+
+#dhcpd-snmp=ohcinhh-cust0,10.180.0.21-10.180.7.254
+    subnet 10.180.0.0 netmask 255.255.248.0 {
+        option routers 10.180.0.1;
+        option subnet-mask 255.255.248.0;
+        option broadcast-address 10.180.7.255;
+        option domain-name "client.pavlovmedia.net";
+        option domain-name-servers 66.253.214.16, 50.30.184.16;
+        #default-lease-time dTlease0;
+        #max-lease-time mdTlease0;
+        pool {
+#           failover peer "NATIONAL";
+            deny members of "ruckus";
+            deny members of "ubnt";
+            deny dynamic bootp clients;
+            range 10.180.0.21 10.180.7.254;
+        }
+    }
+
+    subnet 10.250.132.0 netmask 255.255.255.0 {
+        }
+    
+    subnet 10.250.133.0 netmask 255.255.255.0 {
+    }
+    
+#dhcpd-snmp=ohcinhh-ruckus,10.250.134.100-10.250.134.239
+        subnet 10.250.134.0 netmask 255.255.255.0 {
+            option routers 10.250.134.1;
+            option subnet-mask 255.255.255.0;
+            option broadcast-address 10.250.134.255;
+            pool {
+#               failover peer "NATIONAL";
+                allow members of "ruckus";
+                allow members of "ubnt";
+                deny dynamic bootp clients;
+                #default-lease-time dTruk;
+                #max-lease-time mdTruk;
+                range 10.250.134.100 10.250.134.239;
+            }
+        }
+}

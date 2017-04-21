@@ -1,0 +1,7 @@
+    host 00-E0-6F-36-90-96 { hardware ethernet 00:E0:6F:36:90:96; filename "HBN_6.0md-1.5mu_cpe1.bin"; }
+    host 00-E0-6F-3B-BC-88 { hardware ethernet 00:E0:6F:3B:BC:88; filename "PV_3md-512ku_cpe1_DOC11.bin"; }
+    host 00-0E-9B-D0-78-34 { hardware ethernet 00:0E:9B:D0:78:34; filename "HBN_6.0md-1.5mu_cpe1.bin"; }
+    host 00-90-64-9E-5D-19 { hardware ethernet 00:90:64:9E:5D:19; filename "HBN_6.0md-1.5mu_cpe1.bin"; }
+    host 00-E0-6F-66-3D-18 { hardware ethernet 00:E0:6F:66:3D:18; filename "PV_15md-3mu_cpe1_DOC11.bin"; }
+    host 3C-75-4A-63-7B-AE { hardware ethernet 3C:75:4A:63:7B:AE; filename "PV_15md-3mu_cpe15_DOC11.bin"; }
+    host 00-11-E6-7B-69-01 { hardware ethernet 00:11:E6:7B:69:01; filename "PV_15md-3mu_cpe15_DOC11.bin"; }

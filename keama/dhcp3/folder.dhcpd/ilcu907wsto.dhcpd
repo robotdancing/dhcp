@@ -1,0 +1,44 @@
+# ilcu907wsto DHCPD Config File.
+# Generated 2010-11-11-14:36 with gendhcpd.pl by AUTObpeterson.
+
+shared-network ilcu907wsto {
+    authoritative;
+
+#  include "/etc/dhcp3/folder.dhcpd/events.dhcpd";
+
+    subnet 66.253.150.117 netmask 255.255.255.255 {
+    }
+
+#dhcpd-snmp=ilcu907wsto-cust0,173.230.11.37-173.230.11.62
+    subnet 173.230.11.32 netmask 255.255.255.224 {
+        option routers 173.230.11.33;
+        option subnet-mask 255.255.255.224;
+        option broadcast-address 173.230.11.63;
+        option domain-name "client.pavlovmedia.net";
+        option domain-name-servers 66.253.214.16, 50.30.184.16;
+#        default-lease-time dTlease0;
+#        max-lease-time mdTlease0;
+        pool {
+#           failover peer "NATIONAL";
+            deny members of "ruckus";
+            deny dynamic bootp clients;
+            range 173.230.11.37 173.230.11.62;
+        }
+    }
+
+#dhcpd-snmp=ilcu907wsto-ruckus,10.159.213.100-10.159.213.239
+    subnet 10.159.213.0 netmask 255.255.255.0 {
+        option routers 10.159.213.1;
+        option subnet-mask 255.255.255.0;
+        option broadcast-address 10.159.213.255;
+        pool {
+#           failover peer "NATIONAL";
+            allow members of "ruckus";
+            deny dynamic bootp clients;
+#            default-lease-time dTruk;
+#            max-lease-time mdTruk;
+            range 10.159.213.100 10.159.213.239;
+        }
+#  include "/etc/dhcp3/bootp/ilcu907wsto.bootp";
+    }
+}

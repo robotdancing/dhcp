@@ -1,0 +1,98 @@
+# cafrjco DHCPD Config File.
+# Generated 2012-03-05-17:29 with gendhcpd.pl by Jefferson Commons Fresno.
+
+shared-network cafrjco {
+    authoritative;
+
+#  include "/etc/dhcp3/folder.dhcpd/events.dhcpd";
+
+# WANIP for cafrjco not configured
+
+#dhcpd-snmp=cafrjco-cust0,68.180.92.21-68.180.93.254
+    subnet 68.180.92.0 netmask 255.255.254.0 {
+        option routers 68.180.92.1;
+        option subnet-mask 255.255.254.0;
+        option broadcast-address 68.180.93.255;
+        option domain-name "client.pavlovmedia.net";
+        option domain-name-servers 66.253.214.16, 50.30.184.16;
+        default-lease-time 14400;
+        max-lease-time 28800;
+	min-lease-time 3600;
+        pool {
+            failover peer "NATIONAL";
+            deny members of "ruckus";
+            deny members of "ubnt";
+            deny dynamic bootp clients;
+            range 68.180.92.21 68.180.93.254;
+        }
+	# Slingbox
+	host 68-180-92-10 {
+		hardware ethernet 00:13:B6:04:B6:1D;
+		fixed-address 68.180.92.10;
+
+	}
+
+
+
+    }
+
+#dhcpd-snmp=cafrjco-cust1,68.180.127.3-68.180.127.254
+    subnet 68.180.127.0 netmask 255.255.255.0 {
+        option routers 68.180.127.1;
+        option subnet-mask 255.255.255.0;
+        option broadcast-address 68.180.127.255;
+        option domain-name "client.pavlovmedia.net";
+        option domain-name-servers 66.253.214.16, 50.30.184.16;
+        default-lease-time 14400;
+        max-lease-time 28800;
+	min-lease-time 3600;
+        pool {
+            failover peer "NATIONAL";
+            deny members of "ruckus";
+            deny members of "ubnt";
+            deny dynamic bootp clients;
+            range 68.180.127.3 68.180.127.254;
+        }
+    }
+
+#dhcpd-snmp=cafrjco-cust2,173.230.122.3-173.230.122.254
+    subnet 173.230.122.0 netmask 255.255.255.0 {
+        option routers 173.230.122.1;
+        option subnet-mask 255.255.255.0;
+        option broadcast-address 173.230.122.255;
+        option domain-name "client.pavlovmedia.net";
+        option domain-name-servers 66.253.214.16, 50.30.184.16;
+        default-lease-time 14400;
+        max-lease-time 28800;
+	min-lease-time 3600;
+        pool {
+            failover peer "NATIONAL";
+            deny members of "ruckus";
+            deny members of "ubnt";
+            deny dynamic bootp clients;
+            range 173.230.122.3 173.230.122.254;
+        }
+    }
+
+    subnet 10.144.4.0 netmask 255.255.255.0 {
+        }
+    
+    subnet 10.144.5.0 netmask 255.255.255.0 {
+    }
+    
+#dhcpd-snmp=cafrjco-ruckus,10.144.6.100-10.144.6.239
+        subnet 10.144.6.0 netmask 255.255.255.0 {
+            option routers 10.144.6.1;
+            option subnet-mask 255.255.255.0;
+            option broadcast-address 10.144.6.255;
+            pool {
+                failover peer "NATIONAL";
+                allow members of "ruckus";
+                allow members of "ubnt";
+                deny dynamic bootp clients;
+                #default-lease-time dTruk;
+                #max-lease-time mdTruk;
+                range 10.144.6.100 10.144.6.239;
+            }
+        }
+}

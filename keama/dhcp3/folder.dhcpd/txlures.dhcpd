@@ -1,0 +1,50 @@
+# txlures DHCPD Config File.
+# Generated 2012-10-08-09:15 with gendhcpd.pl by Reserve on Frankford.
+
+shared-network txlures {
+    authoritative;
+
+#  include "/etc/dhcp3/folder.dhcpd/events.dhcpd";
+
+# WANIP for txlures not configured
+
+#dhcpd-snmp=txlures-cust0,68.234.216.21-68.234.223.254
+    subnet 68.234.216.0 netmask 255.255.248.0 {
+        option routers 68.234.216.1;
+        option subnet-mask 255.255.248.0;
+        option broadcast-address 68.234.223.255;
+        option domain-name "client.pavlovmedia.net";
+        option domain-name-servers 66.253.214.16, 50.30.184.16;
+        #default-lease-time dTlease0;
+        #max-lease-time mdTlease0;
+        pool {
+#           failover peer "NATIONAL";
+            deny members of "ruckus";
+            deny members of "ubnt";
+            deny dynamic bootp clients;
+            range 68.234.216.21 68.234.223.254;
+        }
+    }
+
+    subnet 10.145.52.0 netmask 255.255.255.0 {
+        }
+    
+    subnet 10.145.53.0 netmask 255.255.255.0 {
+    }
+    
+#dhcpd-snmp=txlures-ruckus,10.145.54.100-10.145.54.239
+        subnet 10.145.54.0 netmask 255.255.255.0 {
+            option routers 10.145.54.1;
+            option subnet-mask 255.255.255.0;
+            option broadcast-address 10.145.54.255;
+            pool {
+#               failover peer "NATIONAL";
+                allow members of "ruckus";
+                allow members of "ubnt";
+                deny dynamic bootp clients;
+                #default-lease-time dTruk;
+                #max-lease-time mdTruk;
+                range 10.145.54.100 10.145.54.239;
+            }
+        }
+}

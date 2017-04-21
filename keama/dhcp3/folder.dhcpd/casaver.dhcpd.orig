@@ -1,0 +1,90 @@
+# casaver DHCPD Config File.
+# Generated 2013-03-22-11:44 with gendhcpd.pl by CASAVER.
+
+shared-network casaver {
+    authoritative;
+
+#  include "/etc/dhcp3/folder.dhcpd/events.dhcpd";
+
+# WANIP for casaver not configured
+
+#dhcpd-snmp=casaver-cust0,66.253.176.21-66.253.177.254
+    subnet 66.253.176.0 netmask 255.255.254.0 {
+        option routers 66.253.176.1;
+        option subnet-mask 255.255.254.0;
+        option broadcast-address 66.253.177.255;
+        option domain-name "client.pavlovmedia.net";
+        option domain-name-servers 66.253.214.16, 50.30.184.16;
+        default-lease-time 14400;
+        max-lease-time 28800;
+        min-lease-time 3600;
+	pool {
+            failover peer "NATIONAL";
+            deny members of "ruckus";
+            deny members of "ubnt";
+            deny dynamic bootp clients;
+            range 66.253.176.21 66.253.177.254;
+        }
+    }
+
+#dhcpd-snmp=casaver-cust1,66.253.205.3-66.253.205.254
+    subnet 66.253.205.0 netmask 255.255.255.0 {
+        option routers 66.253.205.1;
+        option subnet-mask 255.255.255.0;
+        option broadcast-address 66.253.205.255;
+        option domain-name "client.pavlovmedia.net";
+        option domain-name-servers 66.253.214.16, 50.30.184.16;
+        default-lease-time 14400;
+        max-lease-time 28800;
+        min-lease-time 3600;
+	pool {
+            failover peer "NATIONAL";
+            deny members of "ruckus";
+            deny members of "ubnt";
+            deny dynamic bootp clients;
+            range 66.253.205.3 66.253.205.254;
+        }
+    }
+
+#dhcpd-snmp=casaver-cust2,66.253.213.3-66.253.213.254
+    subnet 66.253.213.0 netmask 255.255.255.0 {
+        option routers 66.253.213.1;
+        option subnet-mask 255.255.255.0;
+        option broadcast-address 66.253.213.255;
+        option domain-name "client.pavlovmedia.net";
+        option domain-name-servers 66.253.214.16, 50.30.184.16;
+        default-lease-time 14400;
+        max-lease-time 28800;
+        min-lease-time 3600;
+	pool {
+            failover peer "NATIONAL";
+            deny members of "ruckus";
+            deny members of "ubnt";
+            deny dynamic bootp clients;
+            range 66.253.213.3 66.253.213.254;
+        }
+    }
+
+    subnet 10.144.12.0 netmask 255.255.255.0 {
+        }
+    
+    subnet 10.144.13.0 netmask 255.255.255.0 {
+    }
+    
+#dhcpd-snmp=casaver-ruckus,10.144.14.100-10.144.14.239
+        subnet 10.144.14.0 netmask 255.255.255.0 {
+            option routers 10.144.14.1;
+            option subnet-mask 255.255.255.0;
+            option broadcast-address 10.144.14.255;
+            pool {
+                failover peer "NATIONAL";
+                allow members of "ruckus";
+                allow members of "ubnt";
+                deny dynamic bootp clients;
+                default-lease-time 86400;
+        	max-lease-time 259200;
+        	min-lease-time 14400;
+		range 10.144.14.100 10.144.14.239;
+            }
+        }
+}

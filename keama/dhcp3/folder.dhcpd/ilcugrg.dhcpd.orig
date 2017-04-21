@@ -1,0 +1,50 @@
+# ilcugrg DHCPD Config File.
+# Generated 2011-01-21-11:09 with gendhcpd.pl by bpeterson.
+
+shared-network ilcugrg {
+    authoritative;
+
+#  include "/etc/dhcp3/folder.dhcpd/events.dhcpd";
+
+    subnet 96.63.204.205 netmask 255.255.255.255 {
+    }
+
+#dhcpd-snmp=ilcugrg-cust0,216.171.6.21-216.171.6.254
+    subnet 216.171.6.0 netmask 255.255.255.0 {
+        option routers 216.171.6.1;
+        option subnet-mask 255.255.255.0;
+        option broadcast-address 216.171.6.255;
+        option domain-name "client.pavlovmedia.net";
+        option domain-name-servers 66.253.214.16, 50.30.184.16;
+        #default-lease-time dTlease0;
+        #max-lease-time mdTlease0;
+        pool {
+            failover peer "NATIONAL";
+            deny members of "ruckus";
+            deny dynamic bootp clients;
+            range 216.171.6.21 216.171.6.254;
+        }
+    }
+
+    subnet 10.151.88.0 netmask 255.255.255.0 {
+        }
+    
+    subnet 10.151.89.0 netmask 255.255.255.0 {
+    }
+    
+#dhcpd-snmp=ilcugrg-ruckus,10.151.90.100-10.151.90.239
+        subnet 10.151.90.0 netmask 255.255.255.0 {
+            option routers 10.151.90.1;
+            option subnet-mask 255.255.255.0;
+            option broadcast-address 10.151.90.255;
+            pool {
+                failover peer "NATIONAL";
+                allow members of "ruckus";
+                deny dynamic bootp clients;
+                #default-lease-time dTruk;
+                #max-lease-time mdTruk;
+                range 10.151.90.100 10.151.90.239;
+            }
+#  include "/etc/dhcp3/bootp/ilcugrg.bootp";
+        }
+}

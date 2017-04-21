@@ -1,0 +1,44 @@
+# njsetra DHCPD Config File.
+# Generated 2012-08-05-14:22 with gendhcpd.pl by Xchange at Secaucus Trailer.
+
+shared-network njsetra {
+    authoritative;
+
+#  include "/etc/dhcp3/folder.dhcpd/events.dhcpd";
+
+# WANIP for njsetra not configured
+
+#dhcpd-snmp=njsetra-cust0,66.253.131.5-66.253.131.62
+    subnet 66.253.131.0 netmask 255.255.255.192 {
+        option routers 66.253.131.1;
+        option subnet-mask 255.255.255.192;
+        option broadcast-address 66.253.131.63;
+        option domain-name "client.pavlovmedia.net";
+        option domain-name-servers 66.253.214.16, 50.30.184.16;
+        default-lease-time 14400;
+        max-lease-time 28800;
+	min-lease-time 3600;
+        pool {
+#           failover peer "NATIONAL";
+            deny members of "ruckus";
+            deny members of "ubnt";
+            deny dynamic bootp clients;
+            range 66.253.131.5 66.253.131.62;
+        }
+	
+	#TrailerDVR
+	host 66-253-131-60 {
+		hardware ethernet 00:1c:84:10:93:6a;
+		fixed-address 66.253.131.60;
+	}
+	#TrailerRuckus
+	host 66-253-131-61 {
+		hardware ethernet c0:c5:20:27:d5:00;
+		fixed-address 66.253.131.61;
+	}
+
+    }
+
+# Tunnel for njsetra not configured
+
+}

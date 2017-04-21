@@ -1,0 +1,10 @@
+#
+# commented out per Saska and Joi.  
+#on commit {
+#    set clientip = binary-to-ascii(10, 8, ".", leased-address);
+#    set clientmac = binary-to-ascii(16, 8, ":", substring(hardware, 1, 6));
+#    set tikip = binary-to-ascii(10, 8, ".", config-option routers);
+#
+#    ### DISABLED PER BOB SASKA, DO NOT ENABLE UNLESS YOU TALK TO ME
+#    #execute("/usr/local/bin/sendcommit", concat("", clientip), clientmac, tikip);
+#}

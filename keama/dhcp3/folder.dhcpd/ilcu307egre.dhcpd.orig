@@ -1,0 +1,44 @@
+# ilcu307egre DHCPD Config File.
+# Generated 2010-11-11-14:28 with gendhcpd.pl by AUTObpeterson.
+
+shared-network ilcu307egre {
+    authoritative;
+
+#  include "/etc/dhcp3/folder.dhcpd/events.dhcpd";
+
+    subnet 96.63.194.145 netmask 255.255.255.255 {
+    }
+
+#dhcpd-snmp=ilcu307egre-cust0,173.230.12.197-173.230.12.222
+    subnet 173.230.12.192 netmask 255.255.255.224 {
+        option routers 173.230.12.193;
+        option subnet-mask 255.255.255.224;
+        option broadcast-address 173.230.12.223;
+        option domain-name "client.pavlovmedia.net";
+        option domain-name-servers 66.253.214.16, 50.30.184.16;
+#        default-lease-time dTlease0;
+#        max-lease-time mdTlease0;
+        pool {
+            failover peer "NATIONAL";
+            deny members of "ruckus";
+            deny dynamic bootp clients;
+            range 173.230.12.197 173.230.12.222;
+        }
+    }
+
+#dhcpd-snmp=ilcu307egre-ruckus,10.159.201.100-10.159.201.239
+    subnet 10.159.201.0 netmask 255.255.255.0 {
+        option routers 10.159.201.1;
+        option subnet-mask 255.255.255.0;
+        option broadcast-address 10.159.201.255;
+        pool {
+            failover peer "NATIONAL";
+            allow members of "ruckus";
+            deny dynamic bootp clients;
+#            default-lease-time dTruk;
+#            max-lease-time mdTruk;
+            range 10.159.201.100 10.159.201.239;
+        }
+#  include "/etc/dhcp3/bootp/ilcu307egre.bootp";
+    }
+}

@@ -1,0 +1,50 @@
+# azchave DHCPD Config File.
+# Generated 2012-11-14-18:14 with gendhcpd.pl by Avenida.
+
+shared-network azchave {
+    authoritative;
+
+# WANIP for azchave not configured
+
+#dhcpd-snmp=azchave-cust0,76.10.12.21-76.10.15.254
+    subnet 76.10.12.0 netmask 255.255.252.0 {
+        option routers 76.10.12.1;
+        option subnet-mask 255.255.252.0;
+        option broadcast-address 76.10.15.255;
+        option domain-name "client.pavlovmedia.net";
+        option domain-name-servers 66.253.214.16, 50.30.184.16;
+        #default-lease-time dTlease0;
+        #max-lease-time mdTlease0;
+        pool {
+            failover peer "NATIONAL";
+            deny members of "ruckus";
+            deny members of "ubnt";
+            deny dynamic bootp clients;
+            range 76.10.14.0 76.10.15.254;
+        }
+#  include "/etc/dhcp3/dhcp_hosts/azchave.hosts";
+	
+    }
+
+    subnet 10.153.12.0 netmask 255.255.255.0 {
+        }
+    
+    subnet 10.153.13.0 netmask 255.255.255.0 {
+    }
+    
+#dhcpd-snmp=azchave-ruckus,10.153.14.100-10.153.14.239
+        subnet 10.153.14.0 netmask 255.255.255.0 {
+            option routers 10.153.14.1;
+            option subnet-mask 255.255.255.0;
+            option broadcast-address 10.153.14.255;
+            pool {
+                failover peer "NATIONAL";
+                allow members of "ruckus";
+                allow members of "ubnt";
+                deny dynamic bootp clients;
+                #default-lease-time dTruk;
+                #max-lease-time mdTruk;
+                range 10.153.14.100 10.153.14.239;
+            }
+        }
+}

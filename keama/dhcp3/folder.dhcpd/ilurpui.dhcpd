@@ -1,0 +1,75 @@
+# ilurpui DHCPD Config File.
+# Generated 2012-02-23-08:24 with gendhcpd.pl by Pointe at U of I.
+
+shared-network ilurpui {
+    authoritative;
+
+#  include "/etc/dhcp3/folder.dhcpd/events.dhcpd";
+
+# WANIP for ilurpui not configured
+
+#dhcpd-snmp=ilurpui-cust0,216.171.10.21-216.171.11.254
+    subnet 216.171.10.0 netmask 255.255.254.0 {
+        option routers 216.171.10.1;
+        option subnet-mask 255.255.254.0;
+        option broadcast-address 216.171.11.255;
+        option domain-name "client.pavlovmedia.net";
+        option domain-name-servers 66.253.214.16, 50.30.184.16;
+        #default-lease-time dTlease0;
+        #max-lease-time mdTlease0;
+        pool {
+#           failover peer "NATIONAL";
+            deny members of "ruckus";
+            deny dynamic bootp clients;
+            range 216.171.10.21 216.171.11.254;
+        }
+        #SecurityGate1
+        host 216-171-10-18 {
+            hardware ethernet 9C:B6:54:BE:F4:6C;
+	    fixed-address 216.171.10.18;
+	}
+	#SecurityGate2
+	host 216-171-10-19 {
+	    hardware ethernet 00:50:F9:57:84:6B;
+	    fixed-address 216.171.10.19;
+	}
+    }
+
+#dhcpd-snmp=ilurpui-cust1,66.253.179.3-66.253.179.254
+    subnet 66.253.179.0 netmask 255.255.255.0 {
+        option routers 66.253.179.1;
+        option subnet-mask 255.255.255.0;
+        option broadcast-address 66.253.179.255;
+        option domain-name "client.pavlovmedia.net";
+        option domain-name-servers 66.253.214.16, 50.30.184.16;
+        #default-lease-time dTlease0;
+        #max-lease-time mdTlease0;
+        pool {
+#           failover peer "NATIONAL";
+            deny members of "ruckus";
+            deny dynamic bootp clients;
+            range 66.253.179.3 66.253.179.254;
+        }
+    }
+
+    subnet 10.151.68.0 netmask 255.255.255.0 {
+        }
+    
+    subnet 10.151.69.0 netmask 255.255.255.0 {
+    }
+    
+#dhcpd-snmp=ilurpui-ruckus,10.151.70.100-10.151.70.239
+        subnet 10.151.70.0 netmask 255.255.255.0 {
+            option routers 10.151.70.1;
+            option subnet-mask 255.255.255.0;
+            option broadcast-address 10.151.70.255;
+            pool {
+#               failover peer "NATIONAL";
+                allow members of "ruckus";
+                deny dynamic bootp clients;
+                #default-lease-time dTruk;
+                #max-lease-time mdTruk;
+                range 10.151.70.100 10.151.70.239;
+            }
+        }
+}

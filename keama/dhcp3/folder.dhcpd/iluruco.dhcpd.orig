@@ -1,0 +1,53 @@
+# iluruco DHCPD Config File.
+# Generated 2010-11-22-12:34 with gendhcpd.pl by bpeterson.
+
+shared-network iluruco {
+    authoritative;
+
+#dhcpd-snmp=iluruco-cust0,216.171.12.21-216.171.15.254
+    subnet 216.171.12.0 netmask 255.255.252.0 {
+        option routers 216.171.12.1;
+        option subnet-mask 255.255.252.0;
+        option broadcast-address 216.171.15.255;
+        option domain-name "client.pavlovmedia.net";
+        option domain-name-servers 66.253.214.16, 50.30.184.16;
+#        default-lease-time dTlease0;
+#        max-lease-time mdTlease0;
+        pool {
+            failover peer "NATIONAL";
+            deny members of "ruckus";
+            deny dynamic bootp clients;
+            range 216.171.12.21 216.171.15.254;
+        }
+	#vendor_device
+	host 216-171-12-10 {
+		hardware ethernet D8:EB:97:b0:c8:31;
+		fixed-address 216.171.17.10;
+	}
+    }
+
+    subnet 10.151.76.0 netmask 255.255.255.0 {
+        }
+    
+        subnet 10.151.77.0 netmask 255.255.255.0 {
+        }
+    
+    #dhcpd-snmp=iluruco-ruckus,10.151.78.100-10.151.78.239
+        subnet 10.151.78.0 netmask 255.255.255.0 {
+            option routers 10.151.78.1;
+            option subnet-mask 255.255.255.0;
+            option broadcast-address 10.151.78.255;
+            pool {
+                failover peer "NATIONAL";
+                allow members of "ruckus";
+                deny dynamic bootp clients;
+    #            default-lease-time dTruk;
+    #            max-lease-time mdTruk;
+                range 10.151.78.100 10.151.78.239;
+            }
+   # Note!  The file below contained only comments! Uncommenting the include
+   # below will accomplish nothing!
+   # include "/etc/dhcp3/bootp/iluruco.bootp";
+        }
+    }
+    

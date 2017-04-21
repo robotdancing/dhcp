@@ -1,0 +1,51 @@
+# sccouoc DHCPD Config File.
+# Generated 2012-02-22-14:36 with gendhcpd.pl by University Oaks Columbia.
+
+shared-network sccouoc {
+    authoritative;
+
+#  include "/etc/dhcp3/folder.dhcpd/events.dhcpd";
+
+# WANIP for sccouoc not configured
+
+#dhcpd-snmp=sccouoc-cust0,173.230.48.21-173.230.51.254
+    subnet 173.230.48.0 netmask 255.255.252.0 {
+        option routers 173.230.48.1;
+        option subnet-mask 255.255.252.0;
+        option broadcast-address 173.230.51.255;
+        option domain-name "client.pavlovmedia.net";
+        option domain-name-servers 66.253.214.16, 50.30.184.16;
+        default-lease-time 14400;
+        max-lease-time 28800;
+	min-lease-time 3600;
+        pool {
+#           failover peer "NATIONAL";
+            deny members of "ruckus";
+            deny members of "ubnt";
+            deny dynamic bootp clients;
+            range 173.230.48.21 173.230.51.254;
+        }
+    }
+
+    subnet 10.144.8.0 netmask 255.255.255.0 {
+        }
+    
+    subnet 10.144.9.0 netmask 255.255.255.0 {
+    }
+    
+#dhcpd-snmp=sccouoc-ruckus,10.144.10.100-10.144.10.239
+        subnet 10.144.10.0 netmask 255.255.255.0 {
+            option routers 10.144.10.1;
+            option subnet-mask 255.255.255.0;
+            option broadcast-address 10.144.10.255;
+            pool {
+#               failover peer "NATIONAL";
+                allow members of "ruckus";
+                allow members of "ubnt";
+                deny dynamic bootp clients;
+                #default-lease-time dTruk;
+                #max-lease-time mdTruk;
+                range 10.144.10.100 10.144.10.239;
+            }
+        }
+}

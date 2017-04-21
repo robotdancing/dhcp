@@ -1,0 +1,32 @@
+# ilchept DHCPD Config File.
+# Generated 2012-08-04-15:03 with gendhcpd.pl by EP Tech.
+
+shared-network ilchept {
+    authoritative;
+
+#  include "/etc/dhcp3/folder.dhcpd/events.dhcpd";
+
+# WANIP for ilchept not configured
+
+#dhcpd-snmp=ilchept-cust0,66.253.181.205-66.253.181.206
+    subnet 66.253.181.200 netmask 255.255.255.248 {
+        option routers 66.253.181.201;
+        option subnet-mask 255.255.255.248;
+        option broadcast-address 66.253.181.207;
+        option domain-name "client.pavlovmedia.net";
+        option domain-name-servers 66.253.214.16, 50.30.184.16;
+        default-lease-time 14400;
+        max-lease-time 28800;
+	min-lease-time 3600;
+        pool {
+#           failover peer "NATIONAL";
+            deny members of "ruckus";
+            deny members of "ubnt";
+            deny dynamic bootp clients;
+            range 66.253.181.205 66.253.181.206;
+        }
+    }
+
+# Tunnel for ilchept not configured
+
+}

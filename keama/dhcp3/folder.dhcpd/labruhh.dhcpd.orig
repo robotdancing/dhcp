@@ -1,0 +1,74 @@
+# labruhh DHCPD Config File.
+# Generated 2012-02-16-17:38 with gendhcpd.pl by Campus Crossing Highland.
+
+shared-network labruhh {
+    authoritative;
+
+#dhcpd-snmp=labruhh-cust0,66.253.164.21-66.253.165.254
+    subnet 66.253.164.0 netmask 255.255.254.0 {
+        option routers 66.253.164.1;
+        option subnet-mask 255.255.254.0;
+        option broadcast-address 66.253.165.255;
+        option domain-name "client.pavlovmedia.net";
+        option domain-name-servers 66.253.214.16, 50.30.184.16;
+        default-lease-time 14400;
+        max-lease-time 28800;
+	min-lease-time 3600;
+        pool {
+            failover peer "NATIONAL";
+            deny members of "ruckus";
+            deny members of "ubnt";
+            deny dynamic bootp clients;
+            range 66.253.164.21 66.253.165.254;
+        }
+
+    # Slingbox
+        host 66-253-164-10 {
+            hardware ethernet 00:13:B6:0E:3A:AF;
+            fixed-address 66.253.164.10;
+        }
+
+    }
+
+#dhcpd-snmp=labruhh-cust1,216.171.50.3-216.171.50.254
+    subnet 216.171.50.0 netmask 255.255.255.0 {
+        option routers 216.171.50.1;
+        option subnet-mask 255.255.255.0;
+        option broadcast-address 216.171.50.255;
+        option domain-name "client.pavlovmedia.net";
+        option domain-name-servers 66.253.214.16, 50.30.184.16;
+        default-lease-time 14400;
+        max-lease-time 28800;
+	min-lease-time 3600;
+        pool {
+            failover peer "NATIONAL";
+            deny members of "ruckus";
+            deny members of "ubnt";
+            deny dynamic bootp clients;
+            range 216.171.50.3 216.171.50.254;
+        }
+    }
+
+    subnet 10.145.12.0 netmask 255.255.255.0 {
+        }
+    
+    subnet 10.145.13.0 netmask 255.255.255.0 {
+    }
+    
+#dhcpd-snmp=labruhh-ruckus,10.145.14.100-10.145.14.239
+        subnet 10.145.14.0 netmask 255.255.255.0 {
+            option routers 10.145.14.1;
+            option subnet-mask 255.255.255.0;
+            option broadcast-address 10.145.14.255;
+            pool {
+                failover peer "NATIONAL";
+                allow members of "ruckus";
+                allow members of "ubnt";
+                deny dynamic bootp clients;
+                #default-lease-time dTruk;
+                #max-lease-time mdTruk;
+                range 10.145.14.100 10.145.14.239;
+            }
+#  include "/etc/dhcp3/bootp/labruhh.bootp";
+        }
+}

@@ -1,0 +1,45 @@
+# ilur106scol DHCPD Config File.
+# Generated 2014-02-06-15:07 with gendhcpd.pl by ilur106scol.
+
+shared-network ilur106scol {
+    authoritative;
+
+    subnet 96.63.192.88 netmask 255.255.255.255 {
+    }
+
+#dhcpd-snmp=ilur106scol-cust0,173.230.112.133-173.230.112.190
+    subnet 173.230.112.128 netmask 255.255.255.192 {
+        option routers 173.230.112.129;
+        option subnet-mask 255.255.255.192;
+        option broadcast-address 173.230.112.191;
+        option domain-name "client.pavlovmedia.net";
+        option domain-name-servers 66.253.214.16, 50.30.184.16;
+        default-lease-time 14400;
+        max-lease-time 28800;
+        min-lease-time 3600;
+	pool {
+            failover peer "NATIONAL";
+            deny members of "ruckus";
+            deny members of "ubnt";
+            deny dynamic bootp clients;
+            range 173.230.112.133 173.230.112.190;
+        }
+    }
+
+#dhcpd-snmp=ilur106scol-ruckus,10.159.100.100-10.159.100.239
+        subnet 10.159.100.0 netmask 255.255.255.0 {
+            option routers 10.159.100.1;
+            option subnet-mask 255.255.255.0;
+            option broadcast-address 10.159.100.255;
+            pool {
+                failover peer "NATIONAL";
+                allow members of "ruckus";
+                allow members of "ubnt";
+                deny dynamic bootp clients;
+                default-lease-time 86400;
+        	max-lease-time 259200;
+        	min-lease-time 14400;
+		range 10.159.100.100 10.159.100.239;
+            }
+        }
+}

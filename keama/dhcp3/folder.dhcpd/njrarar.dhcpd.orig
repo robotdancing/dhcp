@@ -1,0 +1,57 @@
+# njrarar DHCPD Config File.
+# Generated 2012-02-21-20:27 with gendhcpd.pl by mroberts.
+
+shared-network njrarar {
+    authoritative;
+
+# WANIP for njrarar not configured
+
+#dhcpd-snmp=njrarar-cust0,68.180.106.21-68.180.107.254
+    subnet 68.180.106.0 netmask 255.255.254.0 {
+        option routers 68.180.106.1;
+        option subnet-mask 255.255.254.0;
+        option broadcast-address 68.180.107.255;
+        option domain-name "client.pavlovmedia.net";
+        option domain-name-servers 66.253.214.16, 50.30.184.16;
+        default-lease-time 14400;
+        max-lease-time 28800;
+	min-lease-time 3600;
+        pool {
+            failover peer "NATIONAL";
+            deny members of "ruckus";
+            deny members of "ubnt";
+            deny dynamic bootp clients;
+            range 68.180.107.1 68.180.107.254;
+        }
+
+	#slingbox
+		host 68-180-107-148 {
+			hardware ethernet 00:13:b6:38:6c:ce;
+			fixed-address 68.180.107.148;
+		}
+#  include "/etc/dhcp3/dhcp_hosts/njrarar.hosts";
+
+    }
+
+    subnet 10.146.160.0 netmask 255.255.255.0 {
+        }
+    
+    subnet 10.146.161.0 netmask 255.255.255.0 {
+    }
+    
+#dhcpd-snmp=njrarar-ruckus,10.146.162.100-10.146.162.239
+        subnet 10.146.162.0 netmask 255.255.255.0 {
+            option routers 10.146.162.1;
+            option subnet-mask 255.255.255.0;
+            option broadcast-address 10.146.162.255;
+            pool {
+                failover peer "NATIONAL";
+                allow members of "ruckus";
+                allow members of "ubnt";
+                deny dynamic bootp clients;
+                #default-lease-time dTruk;
+                #max-lease-time mdTruk;
+                range 10.146.162.100 10.146.162.239;
+            }
+        }
+}

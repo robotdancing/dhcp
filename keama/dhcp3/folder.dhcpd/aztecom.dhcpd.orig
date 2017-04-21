@@ -1,0 +1,57 @@
+# aztecom DHCPD Config File.
+# Generated 2012-02-28-16:45 with gendhcpd.pl by Villas on Apache.
+
+shared-network aztecom {
+    authoritative;
+
+#  include "/etc/dhcp3/folder.dhcpd/events.dhcpd";
+
+# WANIP for aztecom not configured
+
+#dhcpd-snmp=aztecom-cust0,50.30.210.21-50.30.211.254
+    subnet 50.30.210.0 netmask 255.255.254.0 {
+        option routers 50.30.210.1;
+        option subnet-mask 255.255.254.0;
+        option broadcast-address 50.30.211.255;
+        option domain-name "client.pavlovmedia.net";
+        option domain-name-servers 66.253.214.16, 50.30.184.16;
+        default-lease-time 14400;
+        max-lease-time 28800;
+	min-lease-time 3600;
+        pool {
+            failover peer "NATIONAL";
+            deny members of "ruckus";
+            deny members of "ubnt";
+            deny dynamic bootp clients;
+            range 50.30.210.21 50.30.211.254;
+        }
+        # Office Router
+        host 50-30-210-8 {
+            hardware ethernet 68:7f:74:0f:ab:4c;
+            fixed-address 50.30.210.8;
+        }
+
+    }
+
+    subnet 10.152.4.0 netmask 255.255.255.0 {
+        }
+    
+    subnet 10.152.5.0 netmask 255.255.255.0 {
+    }
+    
+#dhcpd-snmp=aztecom-ruckus,10.152.6.100-10.152.6.239
+        subnet 10.152.6.0 netmask 255.255.255.0 {
+            option routers 10.152.6.1;
+            option subnet-mask 255.255.255.0;
+            option broadcast-address 10.152.6.255;
+            pool {
+                failover peer "NATIONAL";
+                allow members of "ruckus";
+                allow members of "ubnt";
+                deny dynamic bootp clients;
+                #default-lease-time dTruk;
+                #max-lease-time mdTruk;
+                range 10.152.6.100 10.152.6.239;
+            }
+        }
+}

@@ -1,0 +1,74 @@
+# tnnapcl DHCPD Config File.
+# Generated 2013-10-15-14:27 with gendhcpd.pl by Park Central.
+
+shared-network tnnapcl {
+    authoritative;
+
+# WANIP for tnnapcl not configured
+
+#dhcpd-snmp=tnnapcl-cust0,68.234.187.21-68.234.187.223
+    subnet 68.234.187.0 netmask 255.255.255.0 {
+        option routers 68.234.187.1;
+        option subnet-mask 255.255.255.0;
+        option broadcast-address 68.234.187.255;
+        option domain-name "client.pavlovmedia.net";
+        option domain-name-servers 66.253.214.16, 50.30.184.16;
+        default-lease-time 14400;
+        max-lease-time 28800;
+        min-lease-time 3600;
+	pool {
+#           failover peer "NATIONAL";
+            deny members of "ruckus";
+            deny members of "ubnt";
+            deny dynamic bootp clients;
+            range 68.234.187.223 68.234.187.241;
+        }
+	
+#  include "/etc/dhcp3/dhcp_hosts/tnnapcl.hosts";
+    
+	}
+
+#dhcpd-snmp=tnnapcl-cust1,10.180.35.10-10.180.35.254
+    subnet 10.180.35.0 netmask 255.255.255.0 {
+        option routers 10.180.35.1;
+        option subnet-mask 255.255.255.0;
+        option broadcast-address 10.180.35.255;
+        option domain-name "client.pavlovmedia.net";
+        option domain-name-servers 66.253.214.16, 50.30.184.16;
+        default-lease-time 14400;
+        max-lease-time 28800;
+        min-lease-time 3600;
+        pool {
+#           failover peer "NATIONAL";
+            deny members of "ruckus";
+            deny members of "ubnt";
+            deny dynamic bootp clients;
+            range 10.180.35.10 10.180.35.254;
+	}
+
+	}
+
+
+    subnet 10.146.196.0 netmask 255.255.255.0 {
+        }
+    
+    subnet 10.146.197.0 netmask 255.255.255.0 {
+    }
+    
+#dhcpd-snmp=tnnapcl-ruckus,10.146.198.100-10.146.198.239
+        subnet 10.146.198.0 netmask 255.255.255.0 {
+            option routers 10.146.198.1;
+            option subnet-mask 255.255.255.0;
+            option broadcast-address 10.146.198.255;
+            pool {
+#               failover peer "NATIONAL";
+                allow members of "ruckus";
+                allow members of "ubnt";
+                deny dynamic bootp clients;
+                default-lease-time 86400;
+        	max-lease-time 259200;
+        	min-lease-time 14400;
+		range 10.146.198.100 10.146.198.239;
+            }
+        }
+}

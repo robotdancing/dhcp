@@ -1,0 +1,51 @@
+# mimpvbg DHCPD Config File.
+# Generated 2012-03-05-08:43 with gendhcpd.pl by Village at Bluegrass.
+
+shared-network mimpvbg {
+    authoritative;
+
+#  include "/etc/dhcp3/folder.dhcpd/events.dhcpd";
+
+# WANIP for mimpvbg not configured
+
+#dhcpd-snmp=mimpvbg-cust0,76.10.0.21-76.10.3.254
+    subnet 76.10.0.0 netmask 255.255.252.0 {
+        option routers 76.10.0.1;
+        option subnet-mask 255.255.252.0;
+        option broadcast-address 76.10.3.255;
+        option domain-name "client.pavlovmedia.net";
+        option domain-name-servers 66.253.214.16, 50.30.184.16;
+        default-lease-time 14400;
+        max-lease-time 28800;
+	min-lease-time 3600;
+        pool {
+            failover peer "NATIONAL";
+            deny members of "ruckus";
+            deny members of "ubnt";
+            deny dynamic bootp clients;
+            range 76.10.0.21 76.10.3.254;
+        }
+    }
+
+    subnet 10.150.40.0 netmask 255.255.255.0 {
+        }
+    
+    subnet 10.150.41.0 netmask 255.255.255.0 {
+    }
+    
+#dhcpd-snmp=mimpvbg-ruckus,10.150.42.100-10.150.42.239
+        subnet 10.150.42.0 netmask 255.255.255.0 {
+            option routers 10.150.42.1;
+            option subnet-mask 255.255.255.0;
+            option broadcast-address 10.150.42.255;
+            pool {
+                failover peer "NATIONAL";
+                allow members of "ruckus";
+                allow members of "ubnt";
+                deny dynamic bootp clients;
+                #default-lease-time dTruk;
+                #max-lease-time mdTruk;
+                range 10.150.42.100 10.150.42.239;
+            }
+        }
+}

@@ -1,0 +1,70 @@
+# gastupi DHCPD Config File.
+# Generated 2012-08-03-14:53 with gendhcpd.pl by University Pines.
+
+shared-network gastupi {
+    authoritative;
+
+#  include "/etc/dhcp3/folder.dhcpd/events.dhcpd";
+
+# WANIP for gastupi not configured
+
+#dhcpd-snmp=gastupi-cust0,68.180.4.21-68.180.5.254
+    subnet 68.180.4.0 netmask 255.255.254.0 {
+        option routers 68.180.4.1;
+        option subnet-mask 255.255.254.0;
+        option broadcast-address 68.180.5.255;
+        option domain-name "client.pavlovmedia.net";
+        option domain-name-servers 66.253.214.16, 50.30.184.16;
+        default-lease-time 14400;
+        max-lease-time 28800;
+	min-lease-time 3600;
+        pool {
+            failover peer "NATIONAL";
+            deny members of "ruckus";
+            deny members of "ubnt";
+            deny dynamic bootp clients;
+            range 68.180.4.21 68.180.5.254;
+        }
+    }
+
+#dhcpd-snmp=gastupi-cust1,68.180.38.3-68.180.39.254
+    subnet 68.180.38.0 netmask 255.255.254.0 {
+        option routers 68.180.38.1;
+        option subnet-mask 255.255.254.0;
+        option broadcast-address 68.180.39.255;
+        option domain-name "client.pavlovmedia.net";
+        option domain-name-servers 66.253.214.16, 50.30.184.16;
+        default-lease-time 14400;
+        max-lease-time 28800;
+	min-lease-time 3600;
+        pool {
+            failover peer "NATIONAL";
+            deny members of "ruckus";
+            deny members of "ubnt";
+            deny dynamic bootp clients;
+            range 68.180.38.3 68.180.39.254;
+        }
+    }
+
+    subnet 10.147.56.0 netmask 255.255.255.0 {
+        }
+    
+    subnet 10.147.57.0 netmask 255.255.255.0 {
+    }
+    
+#dhcpd-snmp=gastupi-ruckus,10.147.58.100-10.147.58.239
+        subnet 10.147.58.0 netmask 255.255.255.0 {
+            option routers 10.147.58.1;
+            option subnet-mask 255.255.255.0;
+            option broadcast-address 10.147.58.255;
+            pool {
+                failover peer "NATIONAL";
+                allow members of "ruckus";
+                allow members of "ubnt";
+                deny dynamic bootp clients;
+                #default-lease-time dTruk;
+                #max-lease-time mdTruk;
+                range 10.147.58.100 10.147.58.239;
+            }
+        }
+}

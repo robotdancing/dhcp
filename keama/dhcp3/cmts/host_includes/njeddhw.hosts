@@ -1,0 +1,17 @@
+    host 3C-75-4A-63-7B-6A { hardware ethernet 3C:75:4A:63:7B:6A; filename "PV_15md-3mu_cpe1_DOC11.bin"; }
+    host 00-E0-6F-2C-92-FC { hardware ethernet 00:E0:6F:2C:92:FC; filename "PV_15md-3mu_cpe1_DOC11.bin"; }
+    host 00-0E-5C-66-4E-D6 { hardware ethernet 00:0E:5C:66:4E:D6; filename "PV_10md-2mu_cpe3_DOC11.bin"; }
+    host 00-11-E3-18-A8-1B { hardware ethernet 00:11:E3:18:A8:1B; filename "PV_15md-3mu_cpe1_DOC11.bin"; }
+    host 3C-75-48-65-D7-74 { hardware ethernet 3C:75:48:65:D7:74; filename "PV_15md-3mu_cpe1_DOC11.bin"; }
+    host 3C-75-4A-63-CE-9E { hardware ethernet 3C:75:4A:63:CE:9E; filename "PV_15md-3mu_cpe1_DOC11.bin"; }
+    host A4-7A-A4-6A-8D-D1 { hardware ethernet A4:7A:A4:6A:8D:D1; filename "PV_15md-3mu_cpe1_DOC11.bin"; }
+    host A4-7A-A4-6A-8F-E7 { hardware ethernet A4:7A:A4:6A:8F:E7; filename "PV_15md-3mu_cpe1_DOC11.bin"; }
+    host 00-E0-6F-74-66-10 { hardware ethernet 00:E0:6F:74:66:10; filename "PV_15md-3mu_cpe1_DOC11.bin"; }
+    host A4-7A-A4-6B-3C-66 { hardware ethernet A4:7A:A4:6B:3C:66; filename "PV_15md-3mu_cpe1_DOC11.bin"; }
+    host A4-7A-A4-6B-3C-54 { hardware ethernet A4:7A:A4:6B:3C:54; filename "PV_15md-3mu_cpe1_DOC11.bin"; }
+    host A4-7A-A4-6B-3C-6C { hardware ethernet A4:7A:A4:6B:3C:6C; filename "PV_15md-3mu_cpe1_DOC11.bin"; }
+    host 00-23-ED-9D-33-B7 { hardware ethernet 00:23:ED:9D:33:B7; filename "PV_15md-3mu_cpe1_DOC11.bin"; }
+    host 3C-75-4A-65-D9-E8 { hardware ethernet 3C:75:4A:65:D9:E8; filename "PV_15md-3mu_cpe1_DOC11.bin"; }
+    host 3C-75-4A-63-CF-34 { hardware ethernet 3C:75:4A:63:CF:34; filename "PV_10md-2mu_cpe3_DOC11.bin"; }
+    host 00-23-A2-7A-1D-A0 { hardware ethernet 00:23:A2:7A:1D:A0; filename "PV_15md-3mu_cpe1_DOC11.bin"; }
+    host 00-23-ED-22-11-EE { hardware ethernet 00:23:ED:22:11:EE; filename "PV_15md-3mu_cpe1_DOC11.bin"; }

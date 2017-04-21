@@ -1,0 +1,87 @@
+# gakeucf DHCPD Config File.
+# Generated 2014-08-16-13:11 with gendhcpd.pl by University Club on Frey.
+
+shared-network gakeucf {
+    authoritative;
+
+# WANIP for gakeucf not configured
+
+#dhcpd-snmp=gakeucf-cust0,66.253.144.21-66.253.147.223
+    subnet 66.253.144.0 netmask 255.255.252.0 {
+        option routers 66.253.144.1;
+        option subnet-mask 255.255.252.0;
+        option broadcast-address 66.253.147.255;
+        option domain-name "client.pavlovmedia.net";
+        option domain-name-servers 66.253.214.16, 50.30.184.16;
+        default-lease-time 14400;
+        max-lease-time 28800;
+        min-lease-time 3600;
+	pool {
+#           failover peer "NATIONAL";
+            deny members of "ruckus";
+            deny members of "ubnt";
+            deny dynamic bootp clients;
+            range 66.253.144.21 66.253.147.223;
+        }
+    }
+
+#dhcpd-snmp=gakeucf-cust1,10.144.152.3-10.144.153.254
+    subnet 10.144.152.0 netmask 255.255.254.0 {
+        option routers 10.144.152.1;
+        option subnet-mask 255.255.254.0;
+        option broadcast-address 10.144.153.255;
+        option domain-name "client.pavlovmedia.net";
+        option domain-name-servers 66.253.214.16, 50.30.184.16;
+        default-lease-time 14400;
+        max-lease-time 28800;
+        min-lease-time 3600;
+	pool {
+#           failover peer "NATIONAL";
+            deny members of "ruckus";
+            deny members of "ubnt";
+            deny dynamic bootp clients;
+            range 10.144.152.3 10.144.153.254;
+        }
+    }
+
+#dhcpd-snmp=gakeucf-cust2,10.144.154.3-10.144.155.254
+    subnet 10.144.154.0 netmask 255.255.254.0 {
+        option routers 10.144.154.1;
+        option subnet-mask 255.255.254.0;
+        option broadcast-address 10.144.155.255;
+        option domain-name "client.pavlovmedia.net";
+        option domain-name-servers 66.253.214.16, 50.30.184.16;
+        default-lease-time 14400;
+        max-lease-time 28800;
+        min-lease-time 3600;
+	pool {
+#           failover peer "NATIONAL";
+            deny members of "ruckus";
+            deny members of "ubnt";
+            deny dynamic bootp clients;
+            range 10.144.154.3 10.144.155.254;
+        }
+    }
+    subnet 10.144.112.0 netmask 255.255.255.0 {
+        }
+    
+    subnet 10.144.113.0 netmask 255.255.255.0 {
+    }
+    
+#dhcpd-snmp=gakeucf-ruckus,10.144.114.50-10.144.114.239
+        subnet 10.144.114.0 netmask 255.255.255.0 {
+            option routers 10.144.114.1;
+            option subnet-mask 255.255.255.0;
+            option broadcast-address 10.144.114.255;
+            pool {
+#               failover peer "NATIONAL";
+                allow members of "ruckus";
+                allow members of "ubnt";
+                deny dynamic bootp clients;
+                default-lease-time 86400;
+        	max-lease-time 259200;
+        	min-lease-time 14400;
+		range 10.144.114.50 10.144.114.239;
+            }
+        }
+}

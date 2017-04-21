@@ -1,0 +1,45 @@
+# ilcu309heal DHCPD Config File.
+# Generated 2012-08-14-13:35 with gendhcpd.pl by 309 Healey.
+
+shared-network ilcu309heal {
+    authoritative;
+
+#  include "/etc/dhcp3/folder.dhcpd/events.dhcpd";
+
+# WANIP for ilcu309heal not configured
+
+#dhcpd-snmp=ilcu309heal-cust0,173.230.21.197-173.230.21.254
+    subnet 173.230.21.192 netmask 255.255.255.192 {
+        option routers 173.230.21.193;
+        option subnet-mask 255.255.255.192;
+        option broadcast-address 173.230.21.255;
+        option domain-name "client.pavlovmedia.net";
+        option domain-name-servers 66.253.214.16, 50.30.184.16;
+        default-lease-time 14400;
+        max-lease-time 28800;
+	min-lease-time 3600;
+        pool {
+#           failover peer "NATIONAL";
+            deny members of "ruckus";
+            deny members of "ubnt";
+            deny dynamic bootp clients;
+            range 173.230.21.197 173.230.21.254;
+        }
+    }
+
+#dhcpd-snmp=ilcu309heal-ruckus,10.159.125.100-10.159.125.239
+        subnet 10.159.125.0 netmask 255.255.255.0 {
+            option routers 10.159.125.1;
+            option subnet-mask 255.255.255.0;
+            option broadcast-address 10.159.125.255;
+            pool {
+#               failover peer "NATIONAL";
+                allow members of "ruckus";
+                allow members of "ubnt";
+                deny dynamic bootp clients;
+                #default-lease-time dTruk;
+                #max-lease-time mdTruk;
+                range 10.159.125.100 10.159.125.239;
+            }
+        }
+}

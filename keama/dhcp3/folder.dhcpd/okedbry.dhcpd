@@ -1,0 +1,51 @@
+# okedbry DHCPD Config File.
+# Generated 2012-03-29-21:01 with gendhcpd.pl by Bryant Place.
+
+shared-network okedbry {
+    authoritative;
+
+#  include "/etc/dhcp3/folder.dhcpd/events.dhcpd";
+
+# WANIP for okedbry not configured
+
+#dhcpd-snmp=okedbry-cust0,66.253.236.21-66.253.237.254
+    subnet 66.253.236.0 netmask 255.255.254.0 {
+        option routers 66.253.236.1;
+        option subnet-mask 255.255.254.0;
+        option broadcast-address 66.253.237.255;
+        option domain-name "client.pavlovmedia.net";
+        option domain-name-servers 66.253.214.16, 50.30.184.16;
+        default-lease-time 14400;
+        max-lease-time 28800;
+	min-lease-time 3600;
+        pool {
+#           failover peer "NATIONAL";
+            deny members of "ruckus";
+            deny members of "ubnt";
+            deny dynamic bootp clients;
+            range 66.253.236.21 66.253.237.254;
+        }
+    }
+
+    subnet 10.145.60.0 netmask 255.255.255.0 {
+        }
+    
+    subnet 10.145.61.0 netmask 255.255.255.0 {
+    }
+    
+#dhcpd-snmp=okedbry-ruckus,10.145.62.100-10.145.62.239
+        subnet 10.145.62.0 netmask 255.255.255.0 {
+            option routers 10.145.62.1;
+            option subnet-mask 255.255.255.0;
+            option broadcast-address 10.145.62.255;
+            pool {
+#               failover peer "NATIONAL";
+                allow members of "ruckus";
+                allow members of "ubnt";
+                deny dynamic bootp clients;
+                #default-lease-time dTruk;
+                #max-lease-time mdTruk;
+                range 10.145.62.100 10.145.62.239;
+            }
+        }
+}

@@ -1,0 +1,107 @@
+# aztures DHCPD Config File.
+# Generated 2014-08-25-23:20 with gendhcpd.pl by Reserve at Star Pass.
+
+shared-network aztures {
+    authoritative;
+
+# WANIP for aztures not configured
+
+#dhcpd-snmp=aztures-cust0,68.180.16.21-68.180.19.254
+    subnet 68.180.16.0 netmask 255.255.252.0 {
+        option routers 68.180.16.1;
+        option subnet-mask 255.255.252.0;
+        option broadcast-address 68.180.19.255;
+        option domain-name "client.pavlovmedia.net";
+        option domain-name-servers 66.253.214.16, 50.30.184.16;
+        default-lease-time 14400;
+        max-lease-time 28800;
+        min-lease-time 3600;
+	pool {
+#           failover peer "NATIONAL";
+            deny members of "ruckus";
+            deny members of "ubnt";
+            deny dynamic bootp clients;
+            range 68.180.16.21 68.180.19.254;
+        }
+    }
+
+#dhcpd-snmp=aztures-cust1,173.230.53.3-173.230.53.254
+    subnet 173.230.53.0 netmask 255.255.255.0 {
+        option routers 173.230.53.1;
+        option subnet-mask 255.255.255.0;
+        option broadcast-address 173.230.53.255;
+        option domain-name "client.pavlovmedia.net";
+        option domain-name-servers 66.253.214.16, 50.30.184.16;
+        default-lease-time 14400;
+        max-lease-time 28800;
+        min-lease-time 3600;
+	pool {
+#           failover peer "NATIONAL";
+            deny members of "ruckus";
+            deny members of "ubnt";
+            deny dynamic bootp clients;
+            range 173.230.53.3 173.230.53.254;
+        }
+    }
+
+#dhcpd-snmp=aztures-cust2,173.230.113.3-173.230.113.254
+    subnet 173.230.113.0 netmask 255.255.255.0 {
+        option routers 173.230.113.1;
+        option subnet-mask 255.255.255.0;
+        option broadcast-address 173.230.113.255;
+        option domain-name "client.pavlovmedia.net";
+        option domain-name-servers 66.253.214.16, 50.30.184.16;
+        default-lease-time 14400;
+        max-lease-time 28800;
+        min-lease-time 3600;
+	pool {
+#           failover peer "NATIONAL";
+            deny members of "ruckus";
+            deny members of "ubnt";
+            deny dynamic bootp clients;
+            range 173.230.113.3 173.230.113.254;
+        }
+    }
+
+#dhcpd-snmp=aztures-cust3,10.180.126.3-10.180.127.254
+    subnet 10.180.126.0 netmask 255.255.254.0 {
+        option routers 10.180.126.1;
+        option subnet-mask 255.255.254.0;
+        option broadcast-address 10.180.127.255;
+        option domain-name "client.pavlovmedia.net";
+        option domain-name-servers 66.253.214.16, 50.30.184.16;
+        default-lease-time 14400;
+        max-lease-time 28800;
+        min-lease-time 3600;
+	pool {
+#           failover peer "NATIONAL";
+            deny members of "ruckus";
+            deny members of "ubnt";
+            deny dynamic bootp clients;
+            range 10.180.126.3 10.180.127.254;
+        }
+    }
+
+    subnet 10.152.28.0 netmask 255.255.255.0 {
+        }
+    
+    subnet 10.152.29.0 netmask 255.255.255.0 {
+    }
+    
+#dhcpd-snmp=aztures-ruckus,10.152.30.100-10.152.30.239
+        subnet 10.152.30.0 netmask 255.255.255.0 {
+            option routers 10.152.30.1;
+            option subnet-mask 255.255.255.0;
+            option broadcast-address 10.152.30.255;
+            pool {
+#               failover peer "NATIONAL";
+                allow members of "ruckus";
+                allow members of "ubnt";
+                deny dynamic bootp clients;
+                default-lease-time 86400;
+        	max-lease-time 259200;
+        	min-lease-time 14400;
+		range 10.152.30.100 10.152.30.239;
+            }
+        }
+}

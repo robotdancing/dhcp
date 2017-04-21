@@ -1,0 +1,32 @@
+# ilcudow-free DHCPD Config File.
+# Generated 2013-07-12-12:14 with gendhcpd.pl by DowntownWireless-Free.
+
+shared-network ilcudow-free {
+    authoritative;
+
+#  include "/etc/dhcp3/folder.dhcpd/events.dhcpd";
+
+# WANIP for ilcudow-free not configured
+
+#dhcpd-snmp=ilcudow-free-cust0,68.180.82.21-68.180.82.254
+    subnet 68.180.82.0 netmask 255.255.255.0 {
+        option routers 68.180.82.1;
+        option subnet-mask 255.255.255.0;
+        option broadcast-address 68.180.82.255;
+        option domain-name "client.pavlovmedia.net";
+        option domain-name-servers 66.253.214.16, 50.30.184.16;
+        default-lease-time 3600;
+        max-lease-time 3600;
+        min-lease-time 1200;
+	pool {
+            failover peer "NATIONAL";
+            deny members of "ruckus";
+            deny members of "ubnt";
+            deny dynamic bootp clients;
+            range 68.180.82.21 68.180.82.254;
+        }
+    }
+
+# Tunnel for ilcudow-free not configured
+
+}

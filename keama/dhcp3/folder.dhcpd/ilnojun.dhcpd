@@ -1,0 +1,51 @@
+# ilnojun DHCPD Config File.
+# Generated 2012-02-22-10:41 with gendhcpd.pl by The Edge.
+
+shared-network ilnojun {
+    authoritative;
+
+#  include "/etc/dhcp3/folder.dhcpd/events.dhcpd";
+
+# WANIP for ilnojun not configured
+
+#dhcpd-snmp=ilnojun-cust0,216.171.40.21-216.171.43.254
+    subnet 216.171.40.0 netmask 255.255.252.0 {
+        option routers 216.171.40.1;
+        option subnet-mask 255.255.252.0;
+        option broadcast-address 216.171.43.255;
+        option domain-name "client.pavlovmedia.net";
+        option domain-name-servers 66.253.214.16, 50.30.184.16;
+        default-lease-time 14400;
+        max-lease-time 28800;
+	min-lease-time 3600;
+        pool {
+#           failover peer "NATIONAL";
+            deny members of "ruckus";
+            deny members of "ubnt";
+            deny dynamic bootp clients;
+            range 216.171.40.21 216.171.43.254;
+        }
+    }
+
+    subnet 10.151.92.0 netmask 255.255.255.0 {
+        }
+    
+    subnet 10.151.93.0 netmask 255.255.255.0 {
+    }
+    
+#dhcpd-snmp=ilnojun-ruckus,10.151.94.100-10.151.94.239
+        subnet 10.151.94.0 netmask 255.255.255.0 {
+            option routers 10.151.94.1;
+            option subnet-mask 255.255.255.0;
+            option broadcast-address 10.151.94.255;
+            pool {
+#               failover peer "NATIONAL";
+                allow members of "ruckus";
+                allow members of "ubnt";
+                deny dynamic bootp clients;
+                #default-lease-time dTruk;
+                #max-lease-time mdTruk;
+                range 10.151.94.100 10.151.94.239;
+            }
+        }
+}

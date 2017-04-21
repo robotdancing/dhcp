@@ -1,0 +1,50 @@
+# nysycob DHCPD Config File.
+# Generated 2012-08-02-09:55 with gendhcpd.pl by Copper Beech.
+
+shared-network nysycob {
+    authoritative;
+
+# WANIP for nysycob not configured
+
+#dhcpd-snmp=nysycob-cust0,50.30.136.21-50.30.137.254
+    subnet 50.30.136.0 netmask 255.255.254.0 {
+        option routers 50.30.136.1;
+        option subnet-mask 255.255.254.0;
+        option broadcast-address 50.30.137.255;
+        option domain-name "client.pavlovmedia.net";
+        option domain-name-servers 66.253.214.16, 50.30.184.16;
+        default-lease-time 14400;
+        max-lease-time 28800;
+	min-lease-time 3600;
+        pool {
+#           failover peer "NATIONAL";
+            deny members of "ruckus";
+            deny members of "ubnt";
+            deny dynamic bootp clients;
+            range 50.30.136.181 50.30.137.254;
+        }
+#  include "/etc/dhcp3/dhcp_hosts/nysycob.hosts";
+    }
+
+    subnet 10.145.156.0 netmask 255.255.255.0 {
+        }
+    
+    subnet 10.145.157.0 netmask 255.255.255.0 {
+    }
+    
+#dhcpd-snmp=nysycob-ruckus,10.145.158.100-10.145.158.239
+        subnet 10.145.158.0 netmask 255.255.255.0 {
+            option routers 10.145.158.1;
+            option subnet-mask 255.255.255.0;
+            option broadcast-address 10.145.158.255;
+            pool {
+#               failover peer "NATIONAL";
+                allow members of "ruckus";
+                allow members of "ubnt";
+                deny dynamic bootp clients;
+                #default-lease-time dTruk;
+                #max-lease-time mdTruk;
+                range 10.145.158.100 10.145.158.239;
+            }
+        }
+}

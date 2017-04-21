@@ -1,0 +1,44 @@
+# ilcu701wel DHCPD Config File.
+# Generated 2010-11-11-14:34 with gendhcpd.pl by AUTObpeterson.
+
+shared-network ilcu701wel {
+    authoritative;
+
+#  include "/etc/dhcp3/folder.dhcpd/events.dhcpd";
+
+    subnet 96.63.204.78 netmask 255.255.255.255 {
+    }
+
+#dhcpd-snmp=ilcu701wel-cust0,173.230.9.37-173.230.9.62
+    subnet 173.230.9.32 netmask 255.255.255.224 {
+        option routers 173.230.9.33;
+        option subnet-mask 255.255.255.224;
+        option broadcast-address 173.230.9.63;
+        option domain-name "client.pavlovmedia.net";
+        option domain-name-servers 66.253.214.16, 50.30.184.16;
+#        default-lease-time dTlease0;
+#        max-lease-time mdTlease0;
+        pool {
+#           failover peer "NATIONAL";
+            deny members of "ruckus";
+            deny dynamic bootp clients;
+            range 173.230.9.37 173.230.9.62;
+        }
+    }
+
+#dhcpd-snmp=ilcu701wel-ruckus,10.159.205.100-10.159.205.239
+    subnet 10.159.205.0 netmask 255.255.255.0 {
+        option routers 10.159.205.1;
+        option subnet-mask 255.255.255.0;
+        option broadcast-address 10.159.205.255;
+        pool {
+#           failover peer "NATIONAL";
+            allow members of "ruckus";
+            deny dynamic bootp clients;
+#            default-lease-time dTruk;
+#            max-lease-time mdTruk;
+            range 10.159.205.100 10.159.205.239;
+        }
+#  include "/etc/dhcp3/bootp/ilcu701wel.bootp";
+    }
+}

@@ -1,0 +1,139 @@
+# aztevds DHCPD Config File.
+# Generated 2012-06-21-13:51 with gendhcpd.pl by Vista del Sol.
+
+shared-network aztevds {
+    authoritative;
+
+#  include "/etc/dhcp3/folder.dhcpd/events.dhcpd";
+
+# WANIP for aztevds not configured
+
+#dhcpd-snmp=aztevds-cust0,66.253.167.21-66.253.167.254
+    subnet 66.253.167.0 netmask 255.255.255.0 {
+        option routers 66.253.167.1;
+        option subnet-mask 255.255.255.0;
+        option broadcast-address 66.253.167.255;
+        option domain-name "client.pavlovmedia.net";
+        option domain-name-servers 66.253.214.16, 50.30.184.16;
+        default-lease-time 14400;
+        max-lease-time 28800;
+	min-lease-time 3600;
+        pool {
+#           failover peer "NATIONAL";
+            deny members of "ruckus";
+            deny members of "ubnt";
+            deny dynamic bootp clients;
+            range 66.253.167.21 66.253.167.254;
+        }
+    }
+
+#dhcpd-snmp=aztevds-cust1,68.180.44.3-68.180.45.254
+    subnet 68.180.44.0 netmask 255.255.254.0 {
+        option routers 68.180.44.1;
+        option subnet-mask 255.255.254.0;
+        option broadcast-address 68.180.45.255;
+        option domain-name "client.pavlovmedia.net";
+        option domain-name-servers 66.253.214.16, 50.30.184.16;
+        default-lease-time 14400;
+        max-lease-time 28800;
+	min-lease-time 3600;
+        pool {
+#           failover peer "NATIONAL";
+            deny members of "ruckus";
+            deny members of "ubnt";
+            deny dynamic bootp clients;
+            range 68.180.44.3 68.180.45.254;
+        }
+    }
+
+#dhcpd-snmp=aztevds-cust2,68.180.46.3-68.180.47.254
+    subnet 68.180.46.0 netmask 255.255.254.0 {
+        option routers 68.180.46.1;
+        option subnet-mask 255.255.254.0;
+        option broadcast-address 68.180.47.255;
+        option domain-name "client.pavlovmedia.net";
+        option domain-name-servers 66.253.214.16, 50.30.184.16;
+        default-lease-time 14400;
+        max-lease-time 28800;
+	min-lease-time 3600;
+        pool {
+#           failover peer "NATIONAL";
+            deny members of "ruckus";
+            deny members of "ubnt";
+            deny dynamic bootp clients;
+            range 68.180.46.3 68.180.47.254;
+        }
+    }
+
+#dhcpd-snmp=aztevds-cust3,68.180.52.3-68.180.53.254
+    subnet 68.180.52.0 netmask 255.255.254.0 {
+        option routers 68.180.52.1;
+        option subnet-mask 255.255.254.0;
+        option broadcast-address 68.180.53.255;
+        option domain-name "client.pavlovmedia.net";
+        option domain-name-servers 66.253.214.16, 50.30.184.16;
+        default-lease-time 14400;
+        max-lease-time 28800;
+	min-lease-time 3600;
+        pool {
+#           failover peer "NATIONAL";
+            deny members of "ruckus";
+            deny members of "ubnt";
+            deny dynamic bootp clients;
+            range 68.180.52.3 68.180.53.254;
+        }
+    }
+
+#dhcpd-snmp=aztevds-cust4,68.180.54.3-68.180.55.254
+    subnet 68.180.54.0 netmask 255.255.254.0 {
+        option routers 68.180.54.1;
+        option subnet-mask 255.255.254.0;
+        option broadcast-address 68.180.55.255;
+        option domain-name "client.pavlovmedia.net";
+        option domain-name-servers 66.253.214.16, 50.30.184.16;
+        default-lease-time 14400;
+        max-lease-time 28800;
+	min-lease-time 3600;
+        pool {
+#           failover peer "NATIONAL";
+            deny members of "ruckus";
+            deny members of "ubnt";
+            deny dynamic bootp clients;
+            range 68.180.54.3 68.180.55.254;
+        }
+    }
+
+    subnet 10.153.16.0 netmask 255.255.255.0 {
+        }
+    
+#dhcpd-snmp=aztevds-ruckus,10.153.17.20-10.153.17.254
+        subnet 10.153.17.0 netmask 255.255.255.0 {
+            option routers 10.153.17.1;
+            option subnet-mask 255.255.255.0;
+            option broadcast-address 10.153.17.255;
+            pool {
+#               failover peer "NATIONAL";
+                allow members of "ruckus";
+                allow members of "ubnt";
+                deny dynamic bootp clients;
+                #default-lease-time dTruk;
+                #max-lease-time mdTruk;
+                range 10.153.17.20 10.153.17.254;
+            }
+        }
+#dhcpd-snmp=aztevds-ruckus2,10.153.18.20-10.153.18.254
+        subnet 10.153.18.0 netmask 255.255.255.0 {
+            option routers 10.153.18.1;
+            option subnet-mask 255.255.255.0;
+            option broadcast-address 10.153.18.255;
+            pool {
+#               failover peer "NATIONAL";
+                allow members of "ruckus";
+                allow members of "ubnt";
+                deny dynamic bootp clients;
+                #default-lease-time dTruk;
+                #max-lease-time mdTruk;
+                range 10.153.18.20 10.153.18.254;
+            }
+        }
+}

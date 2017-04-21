@@ -1,0 +1,70 @@
+# mnro318 DHCPD Config File.
+# Generated 2012-02-16-13:23 with gendhcpd.pl by 318 Commons.
+
+shared-network mnro318 {
+    authoritative;
+
+#  include "/etc/dhcp3/folder.dhcpd/events.dhcpd";
+
+# WANIP for mnro318 not configured
+
+#dhcpd-snmp=mnro318-cust0,66.253.238.21-66.253.239.254
+    subnet 66.253.238.0 netmask 255.255.254.0 {
+        option routers 66.253.238.1;
+        option subnet-mask 255.255.254.0;
+        option broadcast-address 66.253.239.255;
+        option domain-name "client.pavlovmedia.net";
+        option domain-name-servers 66.253.214.16, 50.30.184.16;
+        default-lease-time 14400;
+        max-lease-time 28800;
+	min-lease-time 3600;
+        pool {
+            failover peer "NATIONAL";
+            deny members of "Trapeze";
+            deny members of "Trapeze2";
+            deny dynamic bootp clients;
+            range 66.253.238.21 66.253.239.254;
+        }
+    }
+
+##dhcpd-snmp=mnro318-cust1,66.253.149.3-66.253.149.254
+#    subnet 66.253.149.0 netmask 255.255.255.0 {
+#        option routers 66.253.149.1;
+#        option subnet-mask 255.255.255.0;
+#        option broadcast-address 66.253.149.255;
+#        option domain-name "client.pavlovmedia.net";
+#        option domain-name-servers 66.253.214.16, 50.30.184.16;
+#        default-lease-time 14400;
+#        max-lease-time 28800;
+	min-lease-time 3600;
+#        pool {
+#            failover peer "NATIONAL";
+#            deny members of "Trapeze";
+#            deny dynamic bootp clients;
+#            range 66.253.149.3 66.253.149.254;
+#        }
+#    }
+#
+#    subnet 10.147.0.0 netmask 255.255.255.0 {
+#        }
+#    
+#    subnet 10.147.1.0 netmask 255.255.255.0 {
+#    }
+    
+#dhcpd-snmp=mnro318-Trapeze,10.147.2.100-10.147.2.239
+        subnet 10.147.2.0 netmask 255.255.255.0 {
+            option routers 10.147.2.1;
+            option subnet-mask 255.255.255.0;
+            option broadcast-address 10.147.2.255;
+            pool {
+                failover peer "NATIONAL";
+                allow members of "Trapeze";
+                allow members of "Trapeze2";
+                deny dynamic bootp clients;
+                #default-lease-time dTruk;
+                #max-lease-time mdTruk;
+                range 10.147.2.100 10.147.2.239;
+            }
+#  include "/etc/dhcp3/bootp/mnro318.bootp";
+        }
+}

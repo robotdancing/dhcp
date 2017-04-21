@@ -1,0 +1,57 @@
+# ncch901 DHCPD Config File.
+# Generated 2012-02-16-09:17 with gendhcpd.pl by 901 Place.
+
+shared-network ncch901 {
+    authoritative;
+
+#  include "/etc/dhcp3/folder.dhcpd/events.dhcpd";
+
+# WANIP for ncch901 not configured
+
+#dhcpd-snmp=ncch901-cust0,50.30.248.21-50.30.249.254
+    subnet 50.30.248.0 netmask 255.255.254.0 {
+        option routers 50.30.248.1;
+        option subnet-mask 255.255.254.0;
+        option broadcast-address 50.30.249.255;
+        option domain-name "client.pavlovmedia.net";
+        option domain-name-servers 66.253.214.16, 50.30.184.16;
+        default-lease-time 14400;
+        max-lease-time 28800;
+	min-lease-time 3600;
+        pool {
+            failover peer "NATIONAL";
+            deny members of "ruckus";
+            deny members of "ubnt";
+            deny dynamic bootp clients;
+            range 50.30.248.21 50.30.249.254;
+        }
+       #Office Router
+       host 50-30-248-8 {
+        hardware ethernet 1c:aa:07:ed:98:9d;
+        fixed-address 50.30.248.8;
+      }
+    }
+
+    subnet 10.144.64.0 netmask 255.255.255.0 {
+        }
+    
+    subnet 10.144.65.0 netmask 255.255.255.0 {
+    }
+    
+#dhcpd-snmp=ncch901-ruckus,10.144.66.100-10.144.66.239
+        subnet 10.144.66.0 netmask 255.255.255.0 {
+            option routers 10.144.66.1;
+            option subnet-mask 255.255.255.0;
+            option broadcast-address 10.144.66.255;
+            pool {
+                failover peer "NATIONAL";
+                allow members of "ruckus";
+                allow members of "ubnt";
+                deny dynamic bootp clients;
+                #default-lease-time dTruk;
+                #max-lease-time mdTruk;
+                range 10.144.66.100 10.144.66.239;
+            }
+#  include "/etc/dhcp3/bootp/ncch901.bootp";
+        }
+}

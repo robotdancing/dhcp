@@ -1,0 +1,52 @@
+# DHCPD garwwct Config File 10/14/2010 
+shared-network garwwct {
+    authoritative;
+
+
+    ## Cable Modem Subnet - 
+    subnet 10.149.183.0 netmask 255.255.255.0 {
+        ### General Options
+        option subnet-mask 255.255.255.0;
+        option broadcast-address 10.149.183.255;
+        option domain-name "pavlovmedia.net";
+        server-identifier 68.234.128.73;
+        next-server 68.234.128.73;
+        option routers 10.149.183.1;
+        option time-servers 10.149.183.1;
+        option log-servers 10.149.183.1;
+        option time-offset -18000;
+    
+        pool {
+            allow members of "cm-unregistered";
+
+            filename "P2_TOS_DOC11.bin";
+            
+            default-lease-time 86400;
+            max-lease-time 86400;
+            range 10.149.183.21 10.149.183.250;
+        }
+    }
+
+include "dhcp3/cmts/host_includes/garwwct.hosts";
+
+#  OUTLIERS
+
+    subnet 68.234.131.128 netmask 255.255.255.128 {
+        option routers 68.234.131.129;
+        option subnet-mask 255.255.255.128;
+        option broadcast-address 68.234.131.255;
+        option domain-name "client.pavlovmedia.net";
+        option netbios-name-servers 66.253.230.210;
+	option domain-name-servers 66.253.214.16, 50.30.184.16;
+#        default-lease-time dTlease0;
+#        max-lease-time mdTlease0;
+        pool {
+            deny members of "ruckus";
+            deny members of "cm-unregistered";
+            deny members of "3010s";
+            default-lease-time 86400;
+            max-lease-time 86400;
+            range 68.234.131.138 68.234.131.250;
+        }
+    }
+}

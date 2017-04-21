@@ -1,0 +1,76 @@
+# wachgro DHCPD Config File.
+# Generated 2012-03-06-17:42 with gendhcpd.pl by Grove Cheney.
+
+shared-network wachgro {
+    authoritative;
+
+#  include "/etc/dhcp3/folder.dhcpd/events.dhcpd";
+
+# WANIP for wachgro not configured
+
+#dhcpd-snmp=wachgro-cust0,50.30.158.21-50.30.159.254
+    subnet 50.30.158.0 netmask 255.255.254.0 {
+        option routers 50.30.158.1;
+        option subnet-mask 255.255.254.0;
+        option broadcast-address 50.30.159.255;
+        option domain-name "client.pavlovmedia.net";
+        option domain-name-servers 66.253.214.16, 50.30.184.16;
+        default-lease-time 14400;
+        max-lease-time 28800;
+	min-lease-time 3600;
+        pool {
+#           failover peer "NATIONAL";
+            deny members of "ruckus";
+            deny members of "ubnt";
+            deny dynamic bootp clients;
+            range 50.30.158.21 50.30.159.254;
+        }
+
+	#Slingbox
+		host 50-30-158-10{
+			hardware ethernet 00:13:B6:08:DF:1C;
+			fixed-address 50.30.158.10;
+		}
+    }
+
+#dhcpd-snmp=wachgro-cust1,50.30.185.3-50.30.185.254
+    subnet 50.30.185.0 netmask 255.255.255.0 {
+        option routers 50.30.185.1;
+        option subnet-mask 255.255.255.0;
+        option broadcast-address 50.30.185.255;
+        option domain-name "client.pavlovmedia.net";
+        option domain-name-servers 66.253.214.16, 50.30.184.16;
+        default-lease-time 14400;
+        max-lease-time 28800;
+	min-lease-time 3600;
+        pool {
+#           failover peer "NATIONAL";
+            deny members of "ruckus";
+            deny members of "ubnt";
+            deny dynamic bootp clients;
+            range 50.30.185.3 50.30.185.254;
+        }
+    }
+
+    subnet 10.250.32.0 netmask 255.255.255.0 {
+        }
+    
+    subnet 10.250.33.0 netmask 255.255.255.0 {
+    }
+    
+#dhcpd-snmp=wachgro-ruckus,10.250.34.100-10.250.34.239
+        subnet 10.250.34.0 netmask 255.255.255.0 {
+            option routers 10.250.34.1;
+            option subnet-mask 255.255.255.0;
+            option broadcast-address 10.250.34.255;
+            pool {
+#               failover peer "NATIONAL";
+                allow members of "ruckus";
+                allow members of "ubnt";
+                deny dynamic bootp clients;
+                #default-lease-time dTruk;
+                #max-lease-time mdTruk;
+                range 10.250.34.100 10.250.34.239;
+            }
+        }
+}

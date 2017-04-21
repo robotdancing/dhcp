@@ -1,0 +1,46 @@
+# ilcu307white DHCPD Config File.
+# Generated 2013-04-24-18:19 with gendhcpd.pl by 307 White.
+
+shared-network ilcu307white {
+    authoritative;
+
+#  include "/etc/dhcp3/folder.dhcpd/events.dhcpd";
+
+# WANIP for ilcu307white not configured
+
+#dhcpd-snmp=ilcu307white-cust0,173.230.21.133-173.230.21.158
+    subnet 173.230.21.128 netmask 255.255.255.224 {
+        option routers 173.230.21.129;
+        option subnet-mask 255.255.255.224;
+        option broadcast-address 173.230.21.159;
+        option domain-name "client.pavlovmedia.net";
+        option domain-name-servers 66.253.214.16, 50.30.184.16;
+        default-lease-time 14400;
+        max-lease-time 28800;
+        min-lease-time 3600;
+	pool {
+            failover peer "NATIONAL";
+            deny members of "ruckus";
+            deny members of "ubnt";
+            deny dynamic bootp clients;
+            range 173.230.21.133 173.230.21.158;
+        }
+    }
+
+#dhcpd-snmp=ilcu307white-ruckus,10.159.127.100-10.159.127.239
+        subnet 10.159.127.0 netmask 255.255.255.0 {
+            option routers 10.159.127.1;
+            option subnet-mask 255.255.255.0;
+            option broadcast-address 10.159.127.255;
+            pool {
+                failover peer "NATIONAL";
+                allow members of "ruckus";
+                allow members of "ubnt";
+                deny dynamic bootp clients;
+                default-lease-time 86400;
+        	max-lease-time 259200;
+        	min-lease-time 14400;
+		range 10.159.127.100 10.159.127.239;
+            }
+        }
+}

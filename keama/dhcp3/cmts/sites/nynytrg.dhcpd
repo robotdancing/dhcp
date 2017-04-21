@@ -1,0 +1,59 @@
+# DHCPD nynytrg Regent Config File 10/14/2010 
+shared-network nynytrg {
+    authoritative;
+
+
+    ## Cable Modem Subnet - 
+    subnet 10.146.12.0 netmask 255.255.255.0 {
+        ### General Options
+        option subnet-mask 255.255.255.0;
+        option broadcast-address 10.146.12.255;
+        option domain-name "pavlovmedia.net";
+        server-identifier 68.234.128.73;
+        next-server 68.234.128.73;
+        option routers 10.146.12.1;
+        option time-servers 10.146.12.1;
+        option log-servers 10.146.12.1;
+        option time-offset -18000;
+    
+        pool {
+            allow members of "cm-unregistered";
+
+	    #  ARRIS CMTS  Mikrotik  hotspot
+            #filename "P2_TOS_DOC11.bin";
+            #filename "PV_15md-3mu_cpe3_DOC11.bin";
+            filename "standard.cm";
+            
+            #default-lease-time 86400;
+            #max-lease-time 86400;
+            default-lease-time 1200;
+            max-lease-time 1200;
+            range 10.146.12.21 10.146.12.250;
+        }
+    }
+
+# Mikrotik NOT BOSI  so no hosts file
+# include "dhcp3/cmts/host_includes/nynytrg.hosts";
+
+#  OUTLIERS
+
+    subnet 173.230.70.0 netmask 255.255.255.128 {
+        option routers 173.230.70.1;
+        option subnet-mask 255.255.255.128;
+        option broadcast-address 173.230.70.127;
+        option domain-name "client.pavlovmedia.net";
+        option domain-name-servers 66.253.214.16, 50.30.184.16;
+#        default-lease-time dTlease0;
+#        max-lease-time mdTlease0;
+        pool {
+            deny members of "ruckus";
+            deny members of "cm-unregistered";
+            deny members of "3010s";
+            #default-lease-time 86400;
+            #max-lease-time 86400;
+            default-lease-time 1200;
+            max-lease-time 1200;
+            range 173.230.70.15 173.230.70.126;
+        }
+    }
+}

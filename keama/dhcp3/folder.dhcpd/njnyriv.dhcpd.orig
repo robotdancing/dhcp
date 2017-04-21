@@ -1,0 +1,59 @@
+# njnyriv DHCPD Config File.
+# Generated 2012-12-17-14:34 with gendhcpd.pl by Grandview 2.
+
+shared-network njnyriv {
+    authoritative;
+
+#  include "/etc/dhcp3/folder.dhcpd/events.dhcpd";
+
+# WANIP for njnyriv not configured
+
+#dhcpd-snmp=njnyriv-cust0,76.10.30.21-76.10.31.254
+    subnet 76.10.30.0 netmask 255.255.254.0 {
+        option routers 76.10.30.1;
+        option subnet-mask 255.255.254.0;
+        option broadcast-address 76.10.31.255;
+        option domain-name "client.pavlovmedia.net";
+        option domain-name-servers 66.253.214.16, 50.30.184.16;
+        default-lease-time 14400;
+        max-lease-time 28800;
+        min-lease-time 3600;
+	pool {
+            failover peer "NATIONAL";
+            deny members of "ruckus";
+            deny members of "ubnt";
+            deny dynamic bootp clients;
+            range 76.10.30.21 76.10.31.254;
+        }
+	
+	#slingbox
+		host 76-10-31-217{
+			hardware ethernet 00:13:b6:31:fd:81;
+			fixed-address 76.10.31.217;
+		}
+
+    }
+
+    subnet 10.146.28.0 netmask 255.255.255.0 {
+        }
+    
+    subnet 10.146.29.0 netmask 255.255.255.0 {
+    }
+    
+#dhcpd-snmp=njnyriv-ruckus,10.146.30.100-10.146.30.239
+        subnet 10.146.30.0 netmask 255.255.255.0 {
+            option routers 10.146.30.1;
+            option subnet-mask 255.255.255.0;
+            option broadcast-address 10.146.30.255;
+            pool {
+                failover peer "NATIONAL";
+                allow members of "ruckus";
+                allow members of "ubnt";
+                deny dynamic bootp clients;
+                default-lease-time 86400;
+        	max-lease-time 259200;
+        	min-lease-time 14400;
+		range 10.146.30.100 10.146.30.239;
+            }
+        }
+}

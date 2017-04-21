@@ -1,0 +1,50 @@
+# DHCPD alphgrp Config File 07/11/2012 
+shared-network alphgrp {
+    authoritative;
+
+
+    ## Cable Modem Subnet - 
+    subnet 10.160.44.0 netmask 255.255.252.0 {
+        ### General Options
+        option subnet-mask 255.255.252.0;
+        option broadcast-address 10.160.47.255;
+        option domain-name "pavlovmedia.net";
+        server-identifier 68.234.128.73;
+        next-server 68.234.128.73;
+        option routers 10.160.44.1;
+        option time-servers 10.160.44.1;
+        option log-servers 10.160.44.1;
+        option time-offset -18000;
+    
+        pool {
+            allow members of "cm-unregistered";
+
+            filename "Casa-Vlan2.bin";
+            
+            default-lease-time 86400;
+            max-lease-time 86400;
+            range 10.160.44.21 10.160.47.250;
+        }
+    }
+
+#include "dhcp3/cmts/host_includes/alphgrp.hosts";
+
+    subnet 66.253.224.0 netmask 255.255.252.0 {
+        option routers 66.253.224.1;
+        option subnet-mask 255.255.252.0;
+        option broadcast-address 66.253.227.255;
+        option domain-name "client.pavlovmedia.net";
+        option netbios-name-servers 66.253.230.210;
+	option domain-name-servers 66.253.214.16, 50.30.184.16;
+#        default-lease-time dTlease0;
+#        max-lease-time mdTlease0;
+        pool {
+            deny members of "ruckus";
+            deny members of "cm-unregistered";
+            deny members of "3010s";
+            default-lease-time 86400;
+            max-lease-time 86400;
+            range 66.253.224.20 66.253.227.250;
+        }
+    }
+}

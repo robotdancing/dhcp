@@ -1267,6 +1267,7 @@ print_data_expression(struct element *expr, isc_boolean_t *lose)
 		struct element *arg;
 		struct element *relay;
 		struct element *option;
+		
 
 		appendString(result, "v6relay(");
 		arg = mapGet(expr, "v6relay");
@@ -1581,7 +1582,7 @@ reduce_data_expression(struct element *expr, isc_boolean_t *literalp)
 			return NULL;
 		}
 		result = makeString(-1,
-			    "concat(substring(pkt4.htype,-1,all),pk4.mac)");
+			    "concat(substring(pkt4.htype,-1,all),pkt4.mac)");
 		return createString(result);
 	}
 
@@ -2208,12 +2209,15 @@ reduce_data_expression(struct element *expr, isc_boolean_t *literalp)
 		if ((relay == NULL) || (relay->type != ELEMENT_INTEGER))
 			return NULL;
 		r = intValue(relay);
-		if ((r < 0) || (r > 32)) {
+		if (r < 0) {
 			debug("v6relay called with illegal relay (%lld)",
 			      (long long)r);
+			return NULL;
 		}
 		/* unfortunately Kea nested level is incompatible */
-		if (r != 0)
+		/* ISC DHCP 0 means at client, ISC DHCP > max (32)
+		 * means closest to server. Cf #5249 */
+		if ((r != 0) && (r <= 32))
 			return NULL;
 		arg = mapGet(arg, "relay-option");
 		if ((arg == NULL) || (arg->type != ELEMENT_MAP)) {
@@ -2236,8 +2240,9 @@ reduce_data_expression(struct element *expr, isc_boolean_t *literalp)
 		    (strcmp(option->space->name, "dhcp6") != 0))
 			return NULL;
 		snprintf(result, sizeof(result),
-			 "option[%u].hex", option->code);
-		/* could be "relay6[%u].option[%u].hes", r, code */
+			 "%soption[%u].hex",
+			 r > 32 ? "relay6[0]." : "",
+			 option->code);
 		return createString(makeString(-1, result));
 	}
 

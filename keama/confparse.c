@@ -41,6 +41,8 @@ isc_boolean_t use_hw_address = ISC_FALSE;
 /* To map reservations to declared subnets */
 struct subnet {
 	struct element *subnet;
+	struct string *addr;
+	struct string *mask;
 	TAILQ_ENTRY(subnet) next;
 };
 TAILQ_HEAD(subnets, subnet) known_subnets;
@@ -50,6 +52,7 @@ static void add_match_class(struct parse *, struct element *,
 			    struct element *);
 static void new_network_interface(struct parse *, struct element *);
 static struct string *addrmask(const struct string *, const struct string *);
+static struct element *find_match(struct parse *, struct element *);
 static int get_prefix_length(const char *, const char *);
 
 /* Add head config file comments to the DHCP server map */
@@ -59,8 +62,7 @@ conf_file_parse(struct parse *cfile)
 {
 	struct element *top;
 	struct element *dhcp;
-	struct element *orphans;
-	struct comment *comment;
+	struct element *hosts;
 	size_t issues;
 
 	TAILQ_INIT(&known_subnets);
@@ -87,22 +89,49 @@ conf_file_parse(struct parse *cfile)
 		parse_error(cfile,
 			    "missing top level authoritative statement");
 
-	orphans = mapGet(cfile->stack[1], "reservations");
-	if (orphans != NULL) {
-		comment = createComment("/// Orphan reservations");
-		TAILQ_INSERT_TAIL(&orphans->comments, comment);
-		comment = createComment("/// Kea reservations are per subnet");
-		TAILQ_INSERT_TAIL(&orphans->comments, comment);
-		comment = createComment("/// Reference Kea #5246");
-		TAILQ_INSERT_TAIL(&orphans->comments, comment);
-		orphans->skip = ISC_TRUE;
-		issues++;
+	hosts = mapGet(cfile->stack[1], "reservations");
+	if (hosts != NULL) {
+		struct element *orphans;
+		struct element *host;
+		struct element *where;
+		struct element *dest;
+
+		mapRemove(cfile->stack[1], "reservations");
+		orphans = createList();
+		while (listSize(hosts) > 0) {
+			host = listGet(hosts, 0);
+			listRemove(hosts, 0);
+			where = find_match(cfile, host);
+			if (where == cfile->stack[1])
+				dest = orphans;
+			else
+				dest = mapGet(where, "reservations");
+			if (dest == NULL) {
+				dest = createList();
+				mapSet(where, dest, "reservations");
+			}
+			listPush(dest, host);
+		}
+		if (listSize(orphans) > 0) {
+			struct comment *comment;
+
+			comment = createComment("/// Orphan reservations");
+			TAILQ_INSERT_TAIL(&orphans->comments, comment);
+			comment = createComment("/// Kea reservations are "
+						"per subnet");
+			TAILQ_INSERT_TAIL(&orphans->comments, comment);
+			comment = createComment("/// Reference Kea #5246");
+			TAILQ_INSERT_TAIL(&orphans->comments, comment);
+			orphans->skip = ISC_TRUE;
+			issues++;
+			mapSet(cfile->stack[1], orphans, "reservations");
+		}
 	}
 
 	return issues;
 }
 
-size_t
+void
 read_conf_file(struct parse *parent, const char *filename, int group_type)
 {
 	int file;
@@ -124,13 +153,22 @@ read_conf_file(struct parse *parent, const char *filename, int group_type)
 	memcpy(cfile->stack, parent->stack, amount);
 	cfile->stack_size = parent->stack_size;
 	cfile->stack_top = parent->stack_top;
-	cnt = cfile->issue_counter = parent->issue_counter;
+	cfile->issue_counter = parent->issue_counter;
 
 	cnt = conf_file_subparse(cfile, group_type);
+
+	amount = cfile->stack_size * sizeof(struct element *);
+	if (cfile->stack_size > parent->stack_size) {
+		parent->stack =
+			(struct element **)realloc(parent->stack, amount);
+		if (parent->stack == NULL)
+			parse_error(cfile, "can't resize element stack");
+	}
+	memcpy(parent->stack, cfile->stack, amount);
+	parent->stack_size = cfile->stack_size;
+	parent->stack_top = cfile->stack_top;
 	parent->issue_counter = cfile->issue_counter;
 	end_parse(cfile);
-
-	return parent->issue_counter - cnt;
 }
 
 /* conf-file :== parameters declarations END_OF_FILE
@@ -482,9 +520,10 @@ parse_statement(struct parse *cfile, int type, int declaration)
 		/* "server-identifier" is a special hack, equivalent to
 		   "option dhcp-server-identifier". */
 	case SERVER_IDENTIFIER:
-		option = option_lookup_code("dhcp4",
+		option = option_lookup_code("dhcp",
 					    DHO_DHCP_SERVER_IDENTIFIER);
 		assert(option);
+		skip_token(&val, NULL, cfile);
 		goto finish_option;
 
 	case OPTION:
@@ -753,6 +792,7 @@ parse_pool_statement(struct parse *cfile, int type)
 			skip_token(&val, NULL, cfile);
 			parse_address_range(cfile, type, cfile->stack_top);
 			break;
+
 		case ALLOW:
 			skip_token(&val, NULL, cfile);
 			get_permit(cfile, permit);
@@ -927,20 +967,9 @@ parse_host_declaration(struct parse *cfile)
 					    "only one host-identifier allowed "
 					    "per host");
 	      		skip_token(&val, NULL, cfile);
-			save_parse_state(cfile);
 			token = next_token(&val, NULL, cfile);
 			host_id = makeString(-1, val);
-			while (peek_raw_token(NULL, NULL, cfile) != SEMI) {
-				next_raw_token(&val, NULL, cfile);
-				appendString(host_id, val);
-			}
-			restore_parse_state(cfile);
-			expr = createString(host_id);
-			expr->skip = ISC_TRUE;
-			cfile->issue_counter++;
-			mapSet(host, expr, "host-identifier");
-
-			token = next_token(&val, NULL, cfile);
+			appendString(host_id, " ");
 			if (token == V6RELOPT) {
 				token = next_token(&val, NULL, cfile); 
 
@@ -948,6 +977,8 @@ parse_host_declaration(struct parse *cfile)
 					parse_error(cfile,
 						    "host-identifier v6relopt "
 						    "must have a number");
+				appendString(host_id, val);
+				appendString(host_id, " ");
 				relays = atoi(val);
 				if (relays < 0)
 					parse_error(cfile,
@@ -962,7 +993,11 @@ parse_host_declaration(struct parse *cfile)
 			if (!known)
 				parse_error(cfile, "unknown option %s.%s",
 					    option->space->old, option->old);
-			/* check for circuit-id and client-id */
+			appendString(host_id, option->space->name);
+			appendString(host_id, ".");
+			appendString(host_id, option->name);
+			appendString(host_id, " ");
+
 			expr = createMap();
 			if (!parse_option_data(expr, cfile, option))
 				parse_error(cfile, "can't parse option data");
@@ -975,6 +1010,13 @@ parse_host_declaration(struct parse *cfile)
 			if (data->type != ELEMENT_STRING)
 				parse_error(cfile, "option data must be a "
 					    "string or binary option");
+			
+			concatString(host_id, stringValue(data));
+			expr = createString(host_id);
+			expr->skip = ISC_TRUE;
+			cfile->issue_counter++;
+			mapSet(host, expr, "host-identifier");
+
 			mapSet(host, data, "flex-id");
 			/* Kea todo: push the flex-id glue */
 			continue;
@@ -987,26 +1029,9 @@ parse_host_declaration(struct parse *cfile)
 	if (!deleted) {
 		struct element *where;
 		struct element *hosts = NULL;
-		size_t parent;
-		size_t i;
-		int kind = 0;
 
-		for (i = cfile->stack_top; i > 0; --i) {
-			kind = cfile->stack[i]->kind;
-			if ((kind == GROUP_DECL) || (kind == ROOT_GROUP)) {
-				parent = i;
-				break;
-			}
-		}
-		if (kind == 0)
-			parse_error(cfile, "can't find a place to put "
-				    "host %s declaration", name->content);
-		where = cfile->stack[parent];
-		if ((kind == ROOT_GROUP) && !TAILQ_EMPTY(&known_subnets))
-			where = TAILQ_LAST(&known_subnets, subnets)->subnet;
-
-		if (hosts == NULL)
-			hosts = mapGet(where, "reservations");
+		where = find_match(cfile, host);
+		hosts = mapGet(where, "reservations");
 		if (hosts == NULL) {
 			hosts = createList();
 			mapSet(where, hosts, "reservations");
@@ -1437,7 +1462,10 @@ parse_shared_net_declaration(struct parse *cfile)
 	if (listSize(subnets) == 0)
 		parse_error(cfile, "empty shared-network decl");
 	if (listSize(subnets) > 1) {
+		share->skip = ISC_TRUE;
 		cfile->issue_counter++;
+		mapSet(cfile->stack[cfile->stack_top],
+		       share, "shared-network");
 		return;
 	}
 
@@ -1522,7 +1550,6 @@ parse_subnet_declaration(struct parse *cfile)
 	struct element *subnet;
 	struct subnet *chain;
 	struct element *subnets;
-	struct element *hosts;
 	struct string *address;
 	struct string *netmask;
 	struct string *prefix;
@@ -1569,6 +1596,9 @@ parse_subnet_declaration(struct parse *cfile)
 	address = parse_numeric_aggregate(cfile, addr, &len, DOT, 10, 8);
 	if (address == NULL)
 		parse_error(cfile, "can't decode network number");
+	if (address->length != 4)
+		parse_error(cfile, "bad IPv4 address length");
+	chain->addr = address;
 
 	token = next_token(&val, NULL, cfile);
 	if (token != NETMASK)
@@ -1578,19 +1608,15 @@ parse_subnet_declaration(struct parse *cfile)
 	netmask = parse_numeric_aggregate(cfile, addr, &len, DOT, 10, 8);
 	if (netmask == NULL)
 		parse_error(cfile, "can't decode network mask");
+	if (netmask->length != address->length)
+		parse_error(cfile, "bad IPv4 mask length");
+	chain->mask = netmask;
 
 	prefix = addrmask(address, netmask);
 	if (prefix == NULL)
 		parse_error(cfile, "can't get a prefix from %s mask %s",
 			    address->content, netmask->content);
 	mapSet(subnet, createString(prefix), "subnet");
-
-	/* Get orphan reservations */
-	hosts = mapGet(cfile->stack[1], "reservations");
-	if (hosts != NULL) {
-		mapRemove(cfile->stack[1], "reservations");
-		mapSet(subnet, hosts, "reservations");
-	}
 
 	common_subnet_parsing(cfile, subnets, subnet);
 }
@@ -1599,19 +1625,21 @@ parse_subnet_declaration(struct parse *cfile)
 	net / bits RBRACE parameters declarations LBRACE */
 
 void
-parse_subnet6_declaration(struct parse *cfile) {
+parse_subnet6_declaration(struct parse *cfile)
+{
 	enum dhcp_token token;
 	const char *val;
 	struct element *subnet;
 	struct subnet *chain;
 	struct element *subnets;
-	struct element *hosts;
 	struct string *address;
 	struct string *prefix;
+	struct string *netmask;
 	size_t parent;
         size_t i;
         int kind = 0;
 	char paddr[80];
+	char *p;
 
         if (local_family != AF_INET6)
                 parse_error(cfile, "subnet6 statement is only supported "
@@ -1653,6 +1681,10 @@ parse_subnet6_declaration(struct parse *cfile) {
 	address = parse_ip6_addr(cfile);
 	if (address == NULL)
 		parse_error(cfile, "can't decode network number");
+	if (address->length != 16)
+		parse_error(cfile, "bad IPv6 address length");
+	chain->addr = address;
+
 	memset(paddr, 0, sizeof(paddr));
 	if (!inet_ntop(AF_INET6, address->content, paddr, sizeof(paddr)))
 		parse_error(cfile, "can't print network number");
@@ -1668,14 +1700,15 @@ parse_subnet6_declaration(struct parse *cfile) {
 		parse_error(cfile, "Expecting a number.");
 	appendString(prefix, val);
 
-	mapSet(subnet, createString(prefix), "subnet");
+	netmask = makeString(16, "0123456789abcdef");
+	memset(netmask->content, 0, 16);
+	p = netmask->content;
+	for (i = atoi(val); i >= 8; i -= 8)
+		*p++ = 0xff;
+	*p = 0xff << (8 - i);
+	chain->mask = netmask;
 
-	/* Get orphan reservations */
-	hosts = mapGet(cfile->stack[1], "reservations");
-	if (hosts != NULL) {
-		mapRemove(cfile->stack[1], "reservations");
-		mapSet(subnet, hosts, "reservations");
-	}
+	mapSet(subnet, createString(prefix), "subnet");
 
 	common_subnet_parsing(cfile, subnets, subnet);
 }
@@ -1835,11 +1868,14 @@ parse_address_range(struct parse *cfile, int type, size_t where)
 
 	if (type != POOL_DECL) {
 		struct element *group;
-		struct element *permit;
 		struct element *pools;
+#ifdef want_bootp
+		struct element *permit;
+#endif
 
 		group = cfile->stack[where];
 		pool = createMap();
+#ifdef want_bootp
 		permit = createList();
 		permit->skip = ISC_TRUE;
 
@@ -1858,6 +1894,7 @@ parse_address_range(struct parse *cfile, int type, size_t where)
 			listPush(permit, createString(dyn_bootp));
 			mapSet(pool, permit, "deny");
 		}
+#endif
 
 		pools = mapGet(group, "pools");
 		if (pools == NULL) {
@@ -2526,6 +2563,49 @@ addrmask(const struct string *address, const struct string *netmask)
 	if (cc < 0 || cc >= 40)
 		return NULL;
 	return makeString(-1, buf);
+}
+
+static struct element *
+find_match(struct parse *cfile, struct element *host)
+{
+	struct element *address;
+	struct subnet *subnet;
+	char addr[16];
+	size_t i, len;
+
+	if (local_family == AF_INET) {
+		address = mapGet(host, "ip-address");
+		if (address == NULL)
+			return TAILQ_LAST(&known_subnets, subnets)->subnet;
+		len = 4;
+	} else {
+		address = mapGet(host, "ip-addresses");
+		if (address == NULL)
+			return TAILQ_LAST(&known_subnets, subnets)->subnet;
+		address = listGet(address, 0);
+		if (address == NULL)
+			return TAILQ_LAST(&known_subnets, subnets)->subnet;
+		len = 16;
+	}
+
+	if (inet_pton(local_family, stringValue(address)->content, addr) != 1)
+		parse_error(cfile, "bad address %s",
+			    stringValue(address)->content);
+	TAILQ_FOREACH(subnet, &known_subnets) {
+		isc_boolean_t matching = ISC_TRUE;
+
+		if (subnet->mask->length != len)
+			continue;
+		for (i = 0; i < len; i++)
+			if ((addr[i] & subnet->mask->content[i]) !=
+					subnet->addr->content[i]) {
+				matching = ISC_FALSE;
+				break;
+			}
+		if (matching)
+			return subnet->subnet;
+	}
+	return cfile->stack[1];
 }
 
 static int

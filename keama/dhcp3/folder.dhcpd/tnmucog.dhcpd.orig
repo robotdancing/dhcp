@@ -1,0 +1,85 @@
+# tnmucog DHCPD Config File.
+# Generated 2012-10-11-14:45 with gendhcpd.pl by College Grove.
+
+shared-network tnmucog {
+    authoritative;
+
+# WANIP for tnmucog not configured
+
+#dhcpd-snmp=tnmucog-cust0,216.171.60.21-216.171.63.254
+    subnet 216.171.60.0 netmask 255.255.252.0 {
+        option routers 216.171.60.1;
+        option subnet-mask 255.255.252.0;
+        option broadcast-address 216.171.63.255;
+        option domain-name "client.pavlovmedia.net";
+        option domain-name-servers 66.253.214.16, 50.30.184.16;
+        #default-lease-time dTlease0;
+        #max-lease-time mdTlease0;
+        pool {
+            failover peer "NATIONAL";
+            deny members of "ruckus";
+            deny members of "ubnt";
+            deny dynamic bootp clients;
+            range 216.171.60.21 216.171.63.254;
+        }
+    }
+
+#dhcpd-snmp=tnmucog-cust1,68.234.181.3-68.234.181.254
+    subnet 68.234.181.0 netmask 255.255.255.0 {
+        option routers 68.234.181.1;
+        option subnet-mask 255.255.255.0;
+        option broadcast-address 68.234.181.255;
+        option domain-name "client.pavlovmedia.net";
+        option domain-name-servers 66.253.214.16, 50.30.184.16;
+        #default-lease-time dTlease0;
+        #max-lease-time mdTlease0;
+        pool {
+            failover peer "NATIONAL";
+            deny members of "ruckus";
+            deny members of "ubnt";
+            deny dynamic bootp clients;
+            range 68.234.181.3 68.234.181.254;
+        }
+    }
+
+#dhcpd-snmp=tnmucog-cust2,76.10.28.3-76.10.28.254
+    subnet 76.10.28.0 netmask 255.255.255.0 {
+        option routers 76.10.28.1;
+        option subnet-mask 255.255.255.0;
+        option broadcast-address 76.10.28.255;
+        option domain-name "client.pavlovmedia.net";
+        option domain-name-servers 66.253.214.16, 50.30.184.16;
+        #default-lease-time dTlease0;
+        #max-lease-time mdTlease0;
+        pool {
+            failover peer "NATIONAL";
+            deny members of "ruckus";
+            deny members of "ubnt";
+            deny dynamic bootp clients;
+            range 76.10.28.3 76.10.28.254;
+        }
+    }
+
+    subnet 10.149.76.0 netmask 255.255.255.0 {
+        }
+    
+    subnet 10.149.77.0 netmask 255.255.255.0 {
+    }
+    
+#dhcpd-snmp=tnmucog-ruckus,10.149.78.100-10.149.78.239
+        subnet 10.149.78.0 netmask 255.255.255.0 {
+            option routers 10.149.78.1;
+            option subnet-mask 255.255.255.0;
+            option ubnt.unifi-address 66.253.230.15;
+            option broadcast-address 10.149.78.255;
+            pool {
+                failover peer "NATIONAL";
+                allow members of "ruckus";
+                allow members of "ubnt";
+                deny dynamic bootp clients;
+                #default-lease-time dTruk;
+                #max-lease-time mdTruk;
+                range 10.149.78.50 10.149.78.250;
+            }
+        }
+}

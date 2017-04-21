@@ -1,0 +1,88 @@
+# scspcsv DHCPD Config File.
+# Generated 2012-04-09-11:48 with gendhcpd.pl by Campus Suites on Valley Falls Road.
+
+shared-network scspcsv {
+    authoritative;
+
+#  include "/etc/dhcp3/folder.dhcpd/events.dhcpd";
+
+# WANIP for scspcsv not configured
+
+#dhcpd-snmp=scspcsv-cust0,68.180.30.21-68.180.31.254
+    subnet 68.180.30.0 netmask 255.255.254.0 {
+        option routers 68.180.30.1;
+        option subnet-mask 255.255.254.0;
+        option broadcast-address 68.180.31.255;
+        option domain-name "client.pavlovmedia.net";
+        option domain-name-servers 66.253.214.16, 50.30.184.16;
+        default-lease-time 14400;
+        max-lease-time 28800;
+	min-lease-time 3600;
+        pool {
+            failover peer "NATIONAL";
+            deny members of "ruckus";
+            deny members of "ubnt";
+            deny dynamic bootp clients;
+            range 68.180.30.21 68.180.31.254;
+        }
+	# Slingbox
+	  host 68-180-30-10 {
+	  hardware ethernet 00:13:b6:04:b4:b7;
+            fixed-address 68.180.30.10;
+        }
+	# TeleGuide
+        host 68-180-30-12 {
+            hardware ethernet 00:01:e1:08:cb:0b;
+            fixed-address 68.180.30.12;
+        }
+	# Teleguide2
+        host 68-180-30-13 {
+            hardware ethernet 00:01:e1:08:cb:3f;
+            fixed-address 68.180.30.13;        }
+    }
+#dhcpd-snmp=scspcsv-cust1,68.180.58.3-68.180.59.254
+    subnet 68.180.58.0 netmask 255.255.254.0 {
+        option routers 68.180.58.1;
+        option subnet-mask 255.255.254.0;
+        option broadcast-address 68.180.59.255;
+        option domain-name "client.pavlovmedia.net";
+        option domain-name-servers 66.253.214.16, 50.30.184.16;
+        default-lease-time 14400;
+        max-lease-time 28800;
+        min-lease-time 3600;
+        pool {
+            failover peer "NATIONAL";
+            deny members of "ruckus";
+            deny members of "ubnt";
+            deny dynamic bootp clients;
+            range 68.180.58.3 68.180.59.254;
+        }
+    }
+
+
+    subnet 10.149.92.0 netmask 255.255.255.0 {
+        }
+    
+    subnet 10.149.93.0 netmask 255.255.255.0 {
+    }
+    
+#dhcpd-snmp=scspcsv-ruckus,10.149.94.100-10.149.94.239
+        subnet 10.149.94.0 netmask 255.255.255.0 {
+            option routers 10.149.94.1;
+            option subnet-mask 255.255.255.0;
+            option broadcast-address 10.149.94.255;
+            pool {
+                failover peer "NATIONAL";
+                allow members of "ruckus";
+                allow members of "ubnt";
+                deny dynamic bootp clients;
+                #default-lease-time dTruk;
+                #max-lease-time mdTruk;
+                range 10.149.94.100 10.149.94.239;
+            }
+	# IRKontroller
+        host 10-149-94-3 {
+            hardware ethernet 00:20:4a:c9:1c:f4;
+            fixed-address 10.149.94.3;        }
+        }
+}
