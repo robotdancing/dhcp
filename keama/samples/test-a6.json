@@ -1,0 +1,158 @@
+{
+  "Dhcp6": {
+    "option-def": [
+      #
+      # Define the DHCPv6 option space.
+      #
+      # Option numbers are assigned by IANA:
+      # http://www.iana.org/assignments/dhcpv6-parameters
+      #
+      {
+        "space": "dhcp6",
+        "name": "time-servers",
+        "code": 1040,
+        "array": true,
+        "type": "ipv6-address"
+      },
+      {
+        "space": "dhcp6",
+        "name": "time-offset",
+        "code": 1041,
+        "type": "int32"
+      },
+      #
+      # Define the DOCSIS option space.
+      # TODO: DOCSIS oro definition
+      #
+      {
+        "space": "vendor-44910",
+        "name": "tftp-servers",
+        "code": 32,
+        "array": true,
+        "type": "ipv6-address"
+      },
+      {
+        "space": "vendor-44910",
+        "name": "cablelabs-configuration-file",
+        "code": 33,
+        "type": "string"
+      },
+      {
+        "space": "vendor-44910",
+        "name": "cablelabs-syslog-servers",
+        "code": 34,
+        "array": true,
+        "type": "ipv6-address"
+      },
+      {
+        "space": "vendor-44910",
+        "name": "device-id",
+        "code": 36,
+        "type": "string"
+      }
+    ],
+    "option-data": [
+      # 
+      # Declare some options.
+      #
+      {
+        "space": "dhcp6",
+        "name": "time-servers",
+        "code": 1040,
+        "data": "3ffe:bbbb:aaaa:aaaa::1, 3ffe:bbbb:aaaa:aaaa::2"
+      },
+      {
+        "space": "vendor-44910",
+        "name": "vendor-opts",
+        "code": 17,
+        "data": "44910"
+      },
+      {
+        "space": "vendor-44910",
+        "name": "tftp-servers",
+        "code": 32,
+        "data": "3ffe:cccc:aaaa:aaaa::1, 3ffe:cccc:aaaa:aaaa::2"
+      }
+    ],
+//  /// Unsupported ddns-update-style interim
+//  "ddns-update-style": "interim",
+    "dhcp-ddns": {
+      "enable-updates": true,
+      "qualifying-suffix": "foo.com"
+    },
+    "host-reservation-identifiers": [
+      "flex-id"
+    ],
+    "subnet6": [
+      #host cablemodem-2 {
+      #	host-identifier option docsis.device-id 00:06:5B:50:99:F6;
+      #	option dhcp6.time-servers 3ffe:dddd:aaaa:aaaa::1, 
+      #				   3ffe:dddd:aaaa:aaaa::2;
+      #	option docsis.tftp-servers 3ffe:dddd:aaaa:aaaa::1,
+      #				   3ffe:dddd:aaaa:aaaa::2;
+      #	option dhcp6.time-offset -14400;	# -4 hours
+      #	option docsis.cablelabs-configuration-file "bootfile.cfg";
+      #	option docsis.cablelabs-syslog-servers 3ffe:aaaa:aaaa:aaaa::1,
+      #					       3ffe:aaaa:aaaa:aaaa::2;
+      #}
+      # XXX: for testing
+      {
+        "subnet": "3ffe:aaaa:aaaa:aaaa::/64",
+        "reservations": [
+          #
+          # Per-host settings.
+          #
+          {
+            "hostname": "cablemodem-1",
+//          "host-identifier": "option dhcp6.clientid 000100010c00a14100065b5099f6",
+            "flex-id": "000100010c00a14100065b5099f6",
+            "ip-addresses": [
+              "3ffe:aaaa:aaaa:aaaa::ffff"
+            ],
+//          /// Only global qualifying-suffix is supported
+//          "qualifying-suffix": "bar.com",
+            "option-data": [
+              {
+                "space": "dhcp6",
+                "name": "time-servers",
+                "code": 1040,
+                "data": "3ffe:aaaa:aaaa:aaaa::1, 3ffe:aaaa:aaaa:aaaa::2"
+              },
+              {
+                "space": "vendor-44910",
+                "name": "vendor-opts",
+                "code": 17,
+                "data": "44910"
+              },
+              {
+                "space": "vendor-44910",
+                "name": "tftp-servers",
+                "code": 32,
+                "data": "3ffe:aaaa:aaaa:aaaa::1, 3ffe:aaaa:aaaa:aaaa::2"
+              },
+              {
+                "space": "dhcp6",
+                "name": "time-offset",
+                "code": 1041,
+                "data": "-14400"
+              },
+              # -4 hours
+              {
+                "space": "vendor-44910",
+                "name": "cablelabs-configuration-file",
+                "code": 33,
+                "data": "bootfile.cfg"
+              },
+              {
+                "space": "vendor-44910",
+                "name": "cablelabs-syslog-servers",
+                "code": 34,
+                "data": "3ffe:aaaa:aaaa:aaaa::1, 3ffe:aaaa:aaaa:aaaa::2"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

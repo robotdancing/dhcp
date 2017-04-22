@@ -1,4 +1,4 @@
-# minimal config
+# DHCPv4 minimal config
 
 # authoritative is mandatory
 authoritative;

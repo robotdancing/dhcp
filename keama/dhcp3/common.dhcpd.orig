@@ -37,7 +37,7 @@ omapi-port 7911;
 
 key omapi_key {
 algorithm HMAC-MD5;
-secret "d5oSRwTWSdlITJOjMHrfDjUSDxykr/2k3NTMSh4IsRaqhQliPXOGXsbbZEJKCpkwZvjqE6bbYyQ7z+1+0+xQ9A==";
+secret "InHgN5hAa9m7eCkkPCrVBsLpmKhfWZ3L9+X8pLkg/uM=";
 };
 
 omapi-key omapi_key;

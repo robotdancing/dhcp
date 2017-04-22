@@ -60,7 +60,7 @@ fi
 
 out=/tmp/$base.out$$
 expected=""
-if [ $errcase ]; then
+if [ $errcase -ne 0 ]; then
 	expected=$base.msg
 else
 	expected=$base.out
@@ -68,18 +68,18 @@ fi
 
 if [ $errcase -ne 0 ]; then
 	if [ $dual -eq 1 ]; then
-		../keama -4 -i $full 2> $out > /dev/null
+		../keama -4 -i $full >& $out
 		if [ $? -ne 255 ]; then
 			echo "$full -4 doesn't fail as expected" >&2
 			exit 1
 		fi
-		../keama -6 -i $full 2> $out > /dev/null
+		../keama -6 -i $full >& $out
 		if [ $? -ne 255 ]; then
 			echo "$full -6 doesn't fail as expected" >&2
 			exit 1
 		fi
 	else
-		../keama $options -i $full 2> $out > /dev/null
+		../keama $options -i $full >& $out
 		if [ $? -ne 255 ]; then
 			echo "$full doesn't fail as expected" >&2
 			exit 1
@@ -93,7 +93,16 @@ else
 	fi
 fi
 
-if `cmp -s $out $expected`; then
-	echo "$full not expected output" >&2
-	exit 1
+if [ $errcase -ne 0 ]; then
+	cat $out | head -1 | diff --brief - $expected
+	if [ $? -ne 0 ]; then
+		echo "$full doesn't provide expected output" >&2
+		exit 1
+	fi
+else
+	diff --brief $out $expected
+	if [ $? -ne 0 ]; then
+		echo "$full doesn't provide expected output" >&2
+		exit 1
+	fi
 fi

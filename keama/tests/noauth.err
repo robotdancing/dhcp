@@ -1,7 +1,7 @@
-# DHCPv6 minimal config
+# no(t) authoritative config
 
 # authoritative is mandatory
-authoritative;
+#authoritative;
 
 # empty configs are not accepted by Kea
 default-lease-time 1800;
