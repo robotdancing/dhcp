@@ -36,6 +36,10 @@ keama - Kea Migration Assistant
 |
 .B -6]
 [
+.B -r
+.I {perform|fatal|pass}
+]
+[
 .B -i
 .I input-file
 ]
@@ -57,6 +61,10 @@ option.
 -6
 The input configuration is for DHCPv6.  Incompatible with the \fB-4\fR
 option.
+.TP
+-r
+Specify what to do with hostnames: resolve them into their first address,
+raise a fatal error or pass them silently.
 .TP
 -i input-file
 Specify the ISC DHCP configuration file to read. When it is not

@@ -244,6 +244,12 @@ parse_ip_addr_or_hostname(struct parse *cfile, isc_boolean_t check_multi)
 		if (name == NULL)
 			return NULL;
 
+		if (resolve == fatal)
+			parse_error(cfile, "expected IPv4 address. got "
+				    "hostname %s", name->content);
+		else if (resolve == pass)
+			return name;
+
 		/* from do_host_lookup */
 		h = gethostbyname(name->content);
 		if ((h == NULL) || (h->h_addr_list[0] == NULL))
@@ -1268,6 +1274,7 @@ parse_vendor_code_definition(struct parse *cfile, struct option *option)
 	struct string *space;
 	struct space *universe;
 	struct string *name;
+	unsigned code;
 	struct element *vendor;
 
 	space = makeString(-1, "vendor-");
@@ -1296,11 +1303,16 @@ parse_vendor_code_definition(struct parse *cfile, struct option *option)
 	universe->name = space->content;
 	/* Create the vendor option */
 	vendor = createMap();
-	if (local_family == AF_INET)
+	if (local_family == AF_INET) {
 		name = makeString(-1, "vivso-suboptions");
-	else
+		code = DHO_VIVSO_SUBOPTIONS;
+	} else {
 		name = makeString(-1, "vendor-opts");
+		code = D6O_VENDOR_OPTS;
+	}
+	mapSet(vendor, createString(makeString(-1, universe->name)), "space");
 	mapSet(vendor, createString(name), "name");
+	mapSet(vendor, createInt(code), "code");
 	mapSet(vendor, createString(id), "data");
 	universe->vendor = vendor;
 	parse_semi(cfile);
@@ -1401,7 +1413,7 @@ parse_cshl(struct parse *cfile)
 /* Same but without colons in output */
 
 struct string *
-parse_hexa(struct parse *cfile, struct string *saved)
+parse_hexa(struct parse *cfile)
 {
 	uint8_t ibuf;
 	char tbuf[4];
@@ -1415,8 +1427,6 @@ parse_hexa(struct parse *cfile, struct string *saved)
 		token = next_token(&val, NULL, cfile);
 		if (token != NUMBER && token != NUMBER_OR_NAME)
 			parse_error(cfile, "expecting hexadecimal number.");
-		if (saved != NULL)
-			appendString(saved, val);
 		convert_num(cfile, &ibuf, val, 16, 8);
 		snprintf(tbuf, sizeof(tbuf), "%02hhx", ibuf);
 		appendString(data, tbuf);
@@ -1424,8 +1434,6 @@ parse_hexa(struct parse *cfile, struct string *saved)
 		token = peek_token(&val, NULL, cfile);
 		if (token != COLON)
 			break;
-		if (saved != NULL)
-			appendString(saved, val);
 		skip_token(&val, NULL, cfile);
 	}
 
@@ -3151,7 +3159,7 @@ parse_non_binary(struct element *expr,
 		/* Return a const-data to make a difference with
 		   a string literal. */
 		data = makeString(-1, "0x");
-		concatString(data, parse_hexa(cfile, NULL));
+		concatString(data, parse_hexa(cfile));
 		mapSet(expr, createString(data), "const-data");
 		break;
 
@@ -3804,20 +3812,44 @@ parse_option_data(struct element *expr,
 	struct comment *comment;
 	isc_boolean_t canon_bool = ISC_FALSE;
 	isc_boolean_t has_ignore = ISC_FALSE;
+	isc_boolean_t has_ambiguous_binary = ISC_FALSE;
+	isc_boolean_t modified = ISC_FALSE;
+	isc_boolean_t consumed;
 
 	data = makeString(0, NULL);
+
+	/* Save the initial content */
 	saved = makeString(0, NULL);
+	save_parse_state(cfile);
+	for (;;) {
+		token = peek_token(&val, NULL, cfile);
+		if ((token == SEMI) || (token == END_OF_FILE))
+			break;
+		skip_token(&val, &len, cfile);
+		item = makeString(len, val);
+		if (token == STRING) {
+			appendString(saved, "\"");
+			concatString(saved, item);
+			appendString(saved, "\"");
+		} else
+			concatString(saved, item);
+		if (token == COMMA)
+			appendString(saved, " ");
+	}
+	restore_parse_state(cfile);
+
 	format = makeString(0, NULL);
 	appendString(format, option->format);
 	/* To be sure we should never go outside it... */
 	appendString(format, "Ba");
-	fmt =  format->content;
+	fmt = format->content;
 
 	/* Handle ISC DHCP binary data */
 	if ((*fmt == 'E') || (*fmt == 'X')) {
 		token = peek_token(&val, NULL, cfile);
 		if (token == NUMBER_OR_NAME || token == NUMBER) {
-			data = parse_hexa(cfile, saved);
+			data = parse_hexa(cfile);
+			modified = ISC_TRUE;
 			mapSet(expr, createBool(ISC_FALSE), "csv-format");
 		} else if (token == STRING) {
 			skip_token(&val, &len, cfile);
@@ -3825,8 +3857,7 @@ parse_option_data(struct element *expr,
 		} else
 			parse_error(cfile, "expecting string "
 				    "or hexadecimal data.");
-		mapSet(expr, createString(data), "data");
-		return ISC_TRUE;
+		goto done;
 	}
 
 	/* Just collect data expecting ISC DHCP and Kea are compatible */
@@ -3835,7 +3866,8 @@ parse_option_data(struct element *expr,
 			fmt = format->content;
 		if ((*fmt == 'a') && (fmt != format->content))
 			fmt -= 1;
-		token = peek_token(&val, NULL, cfile);
+		consumed = ISC_FALSE;
+		token = peek_token(&val, &len, cfile);
 		if (token == END_OF_FILE)
 			parse_error(cfile, "unexpected end of file");
 		if (token == SEMI)
@@ -3843,60 +3875,74 @@ parse_option_data(struct element *expr,
 		if (token == COMMA) {
 			skip_token(&val, NULL, cfile);
 			appendString(data, ", ");
-			appendString(saved, ",");
 			fmt++;
 			continue;
 		}
-		skip_token(&val, &len, cfile);
-			
-		item = makeString(len, val);
+
+		/* Addresses */
+		if (*fmt == 'I') {
+			item = parse_ip_addr_or_hostname(cfile, ISC_FALSE);
+			modified = ISC_TRUE;
+			consumed = ISC_TRUE;
+		} else if (*fmt == '6') {
+			item = parse_ip6_addr_txt(cfile);
+			modified = ISC_TRUE;
+			consumed = ISC_TRUE;
+		} else
 		/* Translate booleans */
 		if ((*fmt == 'f') && is_identifier(token)) {
 			if ((len == 3) && (memcmp(val, "off", 3) == 0)) {
 				val = "false";
 				len = 5;
 				canon_bool = ISC_TRUE;
+				modified = ISC_TRUE;
 			} else if (token == ON) {
 				val = "true";
 				len = 4;
 				canon_bool = ISC_TRUE;
+				modified = ISC_TRUE;
 			} else if (token == IGNORE)
 				has_ignore = ISC_TRUE;
-		}
+			item = makeString(len, val);
+		} else
 		/* Handle terminating binary */
 		if ((*fmt == 'X') &&
-		    (token == NUMBER_OR_NAME || token == NUMBER))
-			item = parse_hexa(cfile, saved);
+		    (token == NUMBER_OR_NAME || token == NUMBER)) {
+			has_ambiguous_binary = ISC_TRUE;
+			item = parse_hexa(cfile);
+			consumed = ISC_TRUE;
+		}  else
 		/* STRING can return embedded unexpected characters */
-		else if (token == STRING) {
-			concatString(saved, item);
+		if (token == STRING)
 			item = escape_option_string(len, val);
-		} else {
-			concatString(saved, item);
+		else
 			item = makeString(len, val);
-		}
 		concatString(data, item);
+		if (!consumed)
+			skip_token(&val, NULL, cfile);
 		fmt++;
 	}
 				
-	if (canon_bool) {
-		comment = createComment("/// canonized booleans to "
-					" lowercase true or false");
-		TAILQ_INSERT_TAIL(&expr->comments, comment);
-	}
-	if (has_ignore) {
-		comment = createComment("/// 'ignore' pseudo-boolean is used");
-		TAILQ_INSERT_TAIL(&expr->comments, comment);
-		expr->skip = ISC_TRUE;
-		cfile->issue_counter++;
-	}
-
-	if (canon_bool || has_ignore) {
+done:
+	if (modified && !eqString(saved, data)) {
 		elem = createString(saved);
 		elem->skip = ISC_TRUE;
 		mapSet(expr, elem, "original-data");
 	}
-	mapSet(expr, createString(data), "data");
+
+	elem = createString(data);
+	if (canon_bool) {
+		comment = createComment("/// canonized booleans to "
+					" lowercase true or false");
+		TAILQ_INSERT_TAIL(&elem->comments, comment);
+	}
+	if (has_ignore) {
+		comment = createComment("/// 'ignore' pseudo-boolean is used");
+		TAILQ_INSERT_TAIL(&elem->comments, comment);
+		expr->skip = ISC_TRUE;
+		cfile->issue_counter++;
+	}
+	mapSet(expr, elem, "data");
 
         return ISC_TRUE;
 }
@@ -4017,54 +4063,8 @@ parse_option_statement(struct element *result,
 		opt_data_list = createList();
 		mapSet(cfile->stack[where], opt_data_list, "option-data");
 	}
-	if (!opt_data->skip && (option->space->vendor != NULL)) {
-		size_t i;
-		isc_boolean_t already = ISC_FALSE;
-		struct string *vo_name;
-		struct string *vo_data;
-		struct element *opt;
-
-		vo_name = stringValue(mapGet(option->space->vendor, "name"));
-		vo_data = stringValue(mapGet(option->space->vendor, "data"));
-		for (i = 0; i < listSize(opt_data_list); i++) {
-			struct element *name;
-			struct element *data;
-
-			opt = listGet(opt_data_list, 0);
-			if (opt == NULL)
-				parse_error(cfile, "null option-data at %u",
-					    (unsigned) i);
-			name = mapGet(opt, "name");
-			if (name == NULL)
-				continue;
-			if (name->type != ELEMENT_STRING)
-				parse_error(cfile, "bad name in option-data "
-					    "at %u: unexpected type %s",
-					    (unsigned) i,
-					    type2name(name->type));
-			if (!eqString(stringValue(name), vo_name))
-				continue;
-			data = mapGet(opt, "data");
-			/* Can be expression too */
-			if (data == NULL)
-				continue;
-			if (data->type != ELEMENT_STRING)
-				parse_error(cfile, "bad data in option-data "
-					    "at %u: unexpected type %s",
-					    (unsigned) i,
-					    type2name(data->type));
-			if (eqString(stringValue(data), vo_data)) {
-				already = ISC_TRUE;
-				break;
-			}
-		}
-		if (!already) {
-			opt = createMap();
-			mapSet(opt, createString(vo_name), "name");
-			mapSet(opt, createString(vo_data), "data");
-			listPush(opt_data_list, opt);
-		}
-	}
+	if (!opt_data->skip && (option->space->vendor != NULL))
+		add_option_data(option->space->vendor, opt_data_list);
 	listPush(opt_data_list, opt_data);
 
 	return ISC_TRUE;

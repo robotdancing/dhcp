@@ -572,6 +572,31 @@ option_lookup_name(const char *space, const char *name)
 }
 
 struct option *
+kea_lookup_name(const char *space, const char *name)
+{
+	struct space *universe;
+	struct option *option;
+
+	TAILQ_FOREACH(universe, &spaces) {
+		if (universe->status == kea_unknown)
+			continue;
+		if (strcmp(name, universe->name) == 0)
+			break;
+	}
+	if (universe == NULL)
+		return NULL;
+	TAILQ_FOREACH(option, &options) {
+		if (option->status == kea_unknown)
+			continue;
+		if (universe != option->space)
+			continue;
+		if (strcmp(name, option->name) == 0)
+			return option;
+	}
+	return NULL;
+}
+
+struct option *
 option_lookup_code(const char *space, unsigned code)
 {
 	struct space *universe;
@@ -603,6 +628,68 @@ push_option(struct option *option)
 	option->old = option->name;
 	option->status = dynamic;
 	TAILQ_INSERT_TAIL(&options, option);
+}
+
+void
+add_option_data(struct element *src, struct element *dst)
+{
+	struct string *sspace;
+	struct element *scode;
+	struct element *name;
+	struct option *option;
+	size_t i;
+
+	sspace = stringValue(mapGet(src, "space"));
+	scode = mapGet(src, "code");
+	name = mapGet(src, "name");
+	assert((scode != NULL) || (name != NULL));
+
+	/* We'll use the code so fill it even it should always be available */
+	if (scode == NULL) {
+		option = kea_lookup_name(sspace->content,
+					 stringValue(name)->content);
+		assert(option != NULL);
+		scode = createInt(option->code);
+		mapSet(src, scode, "code");
+	}
+	assert(intValue(scode) != 0);
+
+	for (i = 0; i < listSize(dst); i++) {
+		struct element *od;
+		struct element *space;
+		struct element *code;
+
+		od = listGet(dst, i);
+		space = mapGet(od, "space");
+		if (!eqString(sspace, stringValue(space)))
+			continue;
+		code = mapGet(od, "code");
+		if (code == NULL) {
+			name = mapGet(od, "name");
+			assert(name != NULL);
+			option = kea_lookup_name(sspace->content,
+						 stringValue(name)->content);
+			assert(option != NULL);
+			code = createInt(option->code);
+			mapSet(od, code, "code");
+		}
+		/* check if the option is already present */
+		if (intValue(scode) == intValue(code))
+				return;
+	}
+	listPush(dst, copy(src));
+}
+
+void
+merge_option_data(struct element *src, struct element *dst)
+{
+	struct element *od;
+	size_t i;
+
+	for (i = 0; i < listSize(src); i++) {
+		od = listGet(src, i);
+		add_option_data(od, dst);
+	}
 }
 
 struct comments *

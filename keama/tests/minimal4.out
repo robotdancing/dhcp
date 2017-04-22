@@ -1,0 +1,5 @@
+{
+  "Dhcp4": {
+    "valid-lifetime": 1800
+  }
+}

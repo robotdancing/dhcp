@@ -32,7 +32,8 @@
 
 #include "keama.h"
 
-#define KEAMA_USAGE "Usage: keama [-4|-6] [-i input-file] [-o output-file]"
+#define KEAMA_USAGE	"Usage: keama [-4|-6] [-r {perform|fatal|pass}\\n" \
+			" [-i input-file] [-o output-file]\n"
 
 static void
 usage(const char *sfmt, const char *sarg) {
@@ -40,7 +41,7 @@ usage(const char *sfmt, const char *sarg) {
 		fprintf(stderr, sfmt, sarg);
 		fprintf(stderr, "\n");
 	}
-	fprintf(stderr, "%s\n", KEAMA_USAGE);
+	fputs(KEAMA_USAGE, stderr);
 	exit(1);
 }
 
@@ -52,6 +53,7 @@ FILE *output = NULL;
 isc_boolean_t json = ISC_FALSE;
 
 static const char use_noarg[] = "No argument for command: %s";
+static const char bad_resolve[] = "Bad -r argument: %s";
 
 int 
 main(int argc, char **argv) {
@@ -70,7 +72,18 @@ main(int argc, char **argv) {
 			local_family = AF_INET6;
 		else if (strcmp(argv[i], "-T") == 0)
 			json = ISC_TRUE;
-		else if (strcmp(argv[i], "-i") == 0) {
+		else if (strcmp(argv[i], "-r") == 0) {
+			if (++i == argc)
+				usage(use_noarg, argv[i -  1]);
+			if (strcmp(argv[i], "perform") == 0)
+				resolve = perform;
+			else if (strcmp(argv[i], "fatal") == 0)
+				resolve = fatal;
+			else if (strcmp(argv[i], "pass") == 0)
+				resolve = pass;
+			else
+				usage(bad_resolve, argv[i]);
+		} else if (strcmp(argv[i], "-i") == 0) {
 			if (++i == argc)
 				usage(use_noarg, argv[i -  1]);
 			input_file = argv[i];
@@ -83,7 +96,7 @@ main(int argc, char **argv) {
 	}
 
 	if (!json && (local_family == 0))
-		usage("address family must be set using ", "-4 or -6");
+		usage("address family must be set using %s", "-4 or -6");
 
 	if (input_file == NULL) {
 		input_file = "--stdin--";
@@ -194,5 +207,5 @@ parse_error(struct parse *cfile, const char *fmt, ...)
 	fprintf(stderr, "%s\n%s\n", mbuf, cfile->token_line);
 	if (cfile->lexchar < 81)
 		fprintf(stderr, "%s^\n", lexbuf);
-	exit(1);
+	exit(-1);
 }

@@ -45,11 +45,14 @@ struct subnet {
 	struct string *mask;
 	TAILQ_ENTRY(subnet) next;
 };
+
 TAILQ_HEAD(subnets, subnet) known_subnets;
 
 static void add_host_reservation_identifiers(struct parse *, const char *);
 static void add_match_class(struct parse *, struct element *,
 			    struct element *);
+static void option_data_derive(struct parse *, struct handle *,
+			       struct handle *, isc_boolean_t);
 static void new_network_interface(struct parse *, struct element *);
 static struct string *addrmask(const struct string *, const struct string *);
 static struct element *find_match(struct parse *, struct element *);
@@ -830,6 +833,23 @@ parse_pool_statement(struct parse *cfile, int type)
 		}
 	} while (!done);
 
+	if (local_family == AF_INET) {
+		struct element *opt_list;
+
+		opt_list = mapGet(pool, "option-data");
+		if (opt_list != NULL) {
+			struct comment *comment;
+
+			comment = createComment("/// Kea doesn't support "
+						"option-data in DHCPv4 pools");
+			TAILQ_INSERT_TAIL(&opt_list->comments, comment);
+			if (!opt_list->skip) {
+				opt_list->skip = ISC_TRUE;
+				cfile->issue_counter++;
+			}
+		}
+	}
+
 	cfile->stack_top--;
 }
 
@@ -1409,7 +1429,6 @@ parse_shared_net_declaration(struct parse *cfile)
 	int declaration = 0;
 
 	share = createMap();
-	share->skip = ISC_TRUE;
 	share->kind = SHARED_NET_DECL;
 	TAILQ_CONCAT(&share->comments, &cfile->comments);
 
@@ -1467,10 +1486,20 @@ parse_shared_net_declaration(struct parse *cfile)
 	if (listSize(subnets) == 0)
 		parse_error(cfile, "empty shared-network decl");
 	if (listSize(subnets) > 1) {
+		struct element *shares;
+
 		share->skip = ISC_TRUE;
 		cfile->issue_counter++;
-		mapSet(cfile->stack[cfile->stack_top],
-		       share, "shared-network");
+		shares = mapGet(cfile->stack[cfile->stack_top],
+				"shared-networks");
+		if (shares == NULL) {
+			shares = createList();
+			shares->skip = ISC_TRUE;
+			shares->kind = SHARED_NET_DECL;
+			mapSet(cfile->stack[cfile->stack_top],
+			       shares, "shared-networks");
+		}
+		listPush(shares, share);
 		return;
 	}
 
@@ -1794,31 +1823,36 @@ void
 dissolve_group(struct parse *cfile, struct element *group)
 {
 	struct handle *handle;
+	struct handle *nh;
 	struct element *parent;
 	struct element *item;
-	/*struct element *decl;*/
 	struct element *param;
 	struct handle *hosts = NULL;
 	struct handle *shares = NULL;
 	struct handle *subnets = NULL;
 	struct handle *classes = NULL;
-	struct handle *pools = NULL;
 	struct handle *pdpools = NULL;
-	struct handle *downs = NULL;
+	struct handle *pools = NULL;
+	struct handles downs;
 	struct comment *comment;
 	const char *key;
 	const char *name = NULL;
 	unsigned order = 0;
 	isc_boolean_t marked = ISC_FALSE;
 
-	/* check that group is on its parent */
+	TAILQ_INIT(&downs);
 
+	/* check that group is in its parent */
 	parent = cfile->stack[cfile->stack_top];
+	if (parent->kind == PARAMETER)
+		parse_error(cfile, "unexpected kind for group parent %d",
+			    parent->kind);
 	item = mapGet(parent, "group");
 	if (item == NULL)
 		parse_error(cfile, "no group in parent");
 	if (item != group)
 		parse_error(cfile, "got a different group from parent");
+	mapRemove(parent, "group");
 
 	/* classify content */
 	while (mapSize(group) > 0) {
@@ -1846,19 +1880,26 @@ dissolve_group(struct parse *cfile, struct element *group)
 				parse_error(cfile, "got reservations twice "
 					    "at %u and %u",
 					    hosts->order, order);
+			if ((parent->kind == HOST_DECL) ||
+			    (parent->kind == CLASS_DECL))
+				parse_error(cfile, "host declarations not "
+					    "allowed here.");
 			hosts = handle;
 			handle = NULL;
 			break;
 
 		case SHARED_NET_DECL:
-			if (strcmp(handle->key, "shared-network") != 0)
-				parse_error(cfile, "expected shared-network "
+			if (strcmp(handle->key, "shared-networks") != 0)
+				parse_error(cfile, "expected shared-networks "
 					    "got %s at %u",
 					    handle->key, order);
-			if (shares == NULL)
-				shares = handle;
-			else
-				TAILQ_INSERT_TAIL(&shares->values, handle);
+			if ((parent->kind == SHARED_NET_DECL) ||
+			    (parent->kind == HOST_DECL) ||
+			    (parent->kind == SUBNET_DECL) ||
+			    (parent->kind == CLASS_DECL))
+				parse_error(cfile, "shared-network parameters "
+					    "not allowed here.");
+			shares = handle;
 			handle = NULL;
 			break;
 
@@ -1870,6 +1911,11 @@ dissolve_group(struct parse *cfile, struct element *group)
 			if (subnets != NULL)
 				parse_error(cfile, "got %s twice at %u and %u",
 					    key, subnets->order, order);
+			if ((parent->kind == HOST_DECL) ||
+			    (parent->kind == SUBNET_DECL) ||
+			    (parent->kind == CLASS_DECL))
+				parse_error(cfile, "subnet declarations not "
+					    "allowed here.");
 			subnets = handle;
 			handle = NULL;
 			break;
@@ -1879,6 +1925,9 @@ dissolve_group(struct parse *cfile, struct element *group)
 				parse_error(cfile, "expected client-classes "
 					    "got %s at %u",
 					    handle->key, order);
+			if (parent->kind == CLASS_DECL)
+				parse_error(cfile, "class declarations not "
+					    "allowed here.");
 			if (classes == NULL)
 				classes = handle;
 			else
@@ -1887,20 +1936,29 @@ dissolve_group(struct parse *cfile, struct element *group)
                         break;
 
 		case POOL_DECL:
-			if (strcmp(handle->key, "pools") == 0) {
-				if (pools != NULL)
-					parse_error(cfile, "got pools twice "
-						    "at %u and %u",
-						    pools->order, order);
-				pools = handle;
-			} else if (strcmp(handle->key, "pd-pools") == 0) {
+			if (strcmp(handle->key, "pd-pools") == 0) {
                                 if (pdpools != NULL)
                                         parse_error(cfile, "got pd-pools "
 						    "twice at %u and %u",
                                                     pdpools->order, order);
                                 pdpools = handle;
+			} else if (strcmp(handle->key, "pools") == 0) {
+				if (pools != NULL)
+					parse_error(cfile, "got pools twice "
+						    "at %u and %u",
+						    pools->order, order);
+				pools = handle;
 			} else
-				
+				parse_error(cfile, "expecyed [pd-]pools got "
+					    "%s at %u",
+					    handle->key, order);
+			if (parent->kind == POOL_DECL)
+				parse_error(cfile, "pool declared within "
+					    "pool.");
+			if ((parent->kind == HOST_DECL) ||
+			    (parent->kind == CLASS_DECL))
+				parse_error(cfile, "pool declared outside "
+					    "of network");
 			handle = NULL;
 			break;
 		default:
@@ -1920,7 +1978,7 @@ dissolve_group(struct parse *cfile, struct element *group)
 		/* unexpected values */
 		if ((strcmp(handle->key, "reservations") == 0) ||
 		    (strcmp(handle->key, "group") == 0) ||
-		    (strcmp(handle->key, "shared-network") == 0) ||
+		    (strcmp(handle->key, "shared-networks") == 0) ||
 		    (strcmp(handle->key, "subnets") == 0) ||
 		    (strcmp(handle->key, "subnet4") == 0) ||
 		    (strcmp(handle->key, "subnet6") == 0) ||
@@ -1966,8 +2024,8 @@ dissolve_group(struct parse *cfile, struct element *group)
 				comment = createComment(msg->content);
 				TAILQ_INSERT_TAIL(&param->comments, comment);
 			}
-			TAILQ_INSERT_AFTER(&parent->value.map_value,
-					   group, param);
+			mapSet(parent, param, handle->key);
+			free(handle);
 			continue;
 		}
 		/* To reconsider: qualifying-suffix, enable-updates */
@@ -1976,15 +2034,14 @@ dissolve_group(struct parse *cfile, struct element *group)
 		    (strcmp(handle->key, "deny") == 0) ||
 		    (strcmp(handle->key, "interface") == 0) ||
 		    (strcmp(handle->key, "valid-lifetime") == 0) ||
+		    (strcmp(handle->key, "preferred-lifetime") == 0) ||
+		    (strcmp(handle->key, "renew-timer") == 0) ||
+		    (strcmp(handle->key, "rebind-timer") == 0) ||
 		    (strcmp(handle->key, "boot-file-name") == 0) ||
 		    (strcmp(handle->key, "server-hostname") == 0) ||
 		    (strcmp(handle->key, "next-server") == 0) ||
-		    (strcmp(handle->key, "preferred-lifetime") == 0) ||
 		    (strcmp(handle->key, "match-client-id") == 0)) {
-			if (downs == NULL)
-				downs = handle;
-			else
-				TAILQ_INSERT_TAIL(&downs->values, handle);
+			TAILQ_INSERT_TAIL(&downs, handle);
 			continue;
 		}
 		/* unknown */
@@ -2003,10 +2060,136 @@ dissolve_group(struct parse *cfile, struct element *group)
 		TAILQ_INSERT_TAIL(&param->comments, comment);
 		param->skip = ISC_TRUE;
 		cfile->issue_counter++;
-		TAILQ_INSERT_AFTER(&parent->value.map_value, group, param);
+		mapSet(parent, param, handle->key);
+		free(handle);
 	}
-	/* to finish */
-	TAILQ_REMOVE(&parent->value.map_value, group);
+	TAILQ_FOREACH_SAFE(handle, &downs, nh) {
+		if (strcmp(handle->key, "option-data") == 0) {
+			option_data_derive(cfile, handle, hosts, ISC_FALSE);
+			option_data_derive(cfile, handle, shares, ISC_FALSE);
+			option_data_derive(cfile, handle, subnets, ISC_FALSE);
+			option_data_derive(cfile, handle, classes, ISC_FALSE);
+			option_data_derive(cfile, handle, pdpools, ISC_FALSE);
+			option_data_derive(cfile, handle, pools, ISC_TRUE);
+		} else if ((strcmp(handle->key, "allow") == 0) ||
+			   (strcmp(handle->key, "deny") == 0)) {
+			derive(handle, pdpools);
+			derive(handle, pools);
+		} else if ((strcmp(handle->key, "interface") == 0) ||
+			   (strcmp(handle->key, "valid-lifetime") == 0) ||
+			   (strcmp(handle->key, "preferred-lifetime") == 0) ||
+			   (strcmp(handle->key, "renew-timer") == 0) ||
+			   (strcmp(handle->key, "rebind-timer") == 0) ||
+			   (strcmp(handle->key, "match-client-id") == 0)) {
+			derive(handle, shares);
+			derive(handle, subnets);
+		} else if ((strcmp(handle->key, "boot-file-name") == 0) ||
+			   (strcmp(handle->key, "server-hostname") == 0)) {
+			derive(handle, hosts);
+			derive(handle, classes);
+		} else if (strcmp(handle->key, "next-server") == 0) {
+			derive(handle, hosts);
+			derive(handle, subnets);
+			derive(handle, classes);
+		} else
+			parse_error(cfile, "unexpected parameter %s to derive",
+				    handle->key);
+	}
+	if (hosts != NULL) {
+		struct element *root;
+
+		root = mapGet(cfile->stack[1], "reservations");
+		if (root == NULL)
+			mapSet(cfile->stack[1], hosts->value, "reservations");
+		else
+			concat(root, hosts->value);
+	}
+	if (shares != NULL) {
+		struct element *upper;
+
+		upper = mapGet(parent, "shared-networks");
+		if (upper == NULL)
+			mapSet(parent, shares->value, "shared-networks");
+		else
+			concat(upper, shares->value);
+	}
+	key = local_family == AF_INET ? "subnet4" : "subnet6";
+	if (subnets != NULL) {
+		struct element *upper;
+
+		upper = mapGet(parent, key);
+		if (upper == NULL)
+			mapSet(parent, subnets->value, key);
+		else
+			concat(upper, subnets->value);
+	}
+	if (classes != NULL) {
+                struct element *root;
+
+		root = mapGet(cfile->stack[1], "client-classes");
+		if (root == NULL)
+			mapSet(cfile->stack[1], classes->value,
+			       "client-classes");
+		else
+			concat(root, classes->value);
+	}
+	if (pdpools != NULL) {
+		struct element *upper;
+
+		upper = mapGet(parent, "pd-pools");
+		if (upper == NULL)
+                        mapSet(parent, pdpools->value, "pools");
+                else
+                        concat(upper, pdpools->value);
+	}
+	if (pools != NULL) {
+		struct element *upper;
+
+		upper = mapGet(parent, "pools");
+		if (upper == NULL)
+                        mapSet(parent, pools->value, "pools");
+                else
+                        concat(upper, pools->value);
+	}
+}
+
+static void
+option_data_derive(struct parse *cfile, struct handle *src,
+		   struct handle *dst, isc_boolean_t is_pools)
+{
+	struct element *list;
+	struct element *item;
+	struct element *opt_list;
+	size_t i;
+
+	if (dst == NULL)
+		return;
+	list = dst->value;
+	assert(list != NULL);
+	assert(list->type == ELEMENT_LIST);
+	for (i = 0; i < listSize(list); i++) {
+		item = listGet(list, i);
+		assert(item != NULL);
+		assert(item->type == ELEMENT_MAP);
+		opt_list = mapGet(item, src->key);
+		if (opt_list != NULL) {
+			merge_option_data(src->value, opt_list);
+			continue;
+		}
+		opt_list = copy(src->value);
+		if (is_pools && (local_family == AF_INET)) {
+			struct comment *comment;
+
+			comment = createComment("/// Kea doesn't support "
+						"option-data in DHCPv4 pools");
+			TAILQ_INSERT_TAIL(&opt_list->comments, comment);
+			if (!opt_list->skip) {
+				opt_list->skip = ISC_TRUE;
+				cfile->issue_counter++;
+			}
+			mapSet(item, opt_list, src->key);
+		}
+	}
 }
 
 /* fixed-addr-parameter :== ip-addrs-or-hostnames SEMI
