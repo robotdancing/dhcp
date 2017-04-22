@@ -569,11 +569,6 @@ parse_statement(struct parse *cfile, int type, isc_boolean_t declaration)
 		break;
 
 	case FAILOVER:
-		if (type != ROOT_GROUP && type != SHARED_NET_DECL)
-			parse_error(cfile, "failover peers may only be %s",
-				    "defined in shared-network\n"
-				    "declarations and the outer scope.");
-		token = next_token(&val, NULL, cfile);
 		parse_error(cfile, "No failover support.");
 		break;
 			
@@ -588,8 +583,10 @@ parse_statement(struct parse *cfile, int type, isc_boolean_t declaration)
 		/* ignore: ISC DHCP specific */
 		break;
 
-	default:
 	unknown:
+		skip_token(&val, NULL, cfile);
+
+	default:
 		et = createMap();
 		TAILQ_CONCAT(&et->comments, &cfile->comments);
 		lose = ISC_FALSE;
@@ -2991,13 +2988,19 @@ find_match(struct parse *cfile, struct element *host)
 
 	if (local_family == AF_INET) {
 		address = mapGet(host, "ip-address");
-		if (address == NULL)
+		if (address == NULL) {
+			if (TAILQ_EMPTY(&known_subnets))
+				return cfile->stack[1];
 			return TAILQ_LAST(&known_subnets, subnets)->subnet;
+		}
 		len = 4;
 	} else {
 		address = mapGet(host, "ip-addresses");
-		if (address == NULL)
+		if (address == NULL) {
+			if (TAILQ_EMPTY(&known_subnets))
+				return cfile->stack[1];
 			return TAILQ_LAST(&known_subnets, subnets)->subnet;
+		}
 		address = listGet(address, 0);
 		if (address == NULL)
 			return TAILQ_LAST(&known_subnets, subnets)->subnet;

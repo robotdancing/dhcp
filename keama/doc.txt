@@ -287,6 +287,9 @@ expr: expression to reduce
 literalp: literal flag for quoting
 return: NULL or the reduced expression as a Kea eval string
 
+reducing works for a limited (but interesting) set of expressions which
+can be converted to kea evaluatebool and for literals.
+
 Part 5: Specific issues
 =======================
 
@@ -312,7 +315,7 @@ TODO finish this
 
 Groups:
 -------
-TODO: spread parameters to child declarations.
+TODO: search missing parameters from the Kea syntax.
 
 Shared-Networks:
 ----------------
@@ -349,7 +352,6 @@ Subclasses:
 Hardware Addresses:
 -------------------
  Kea supports only Ethernet.
-TODO: create a ticket
 
 Pools:
 ------
@@ -364,7 +366,6 @@ TODO implement and check move
  and IMHO more powerful model.
  Pool6 permissions are not supported.
  option-data is not allowed in DHCPv4 pools
-TODO create a ticket about this silly constraint
 
 Authoritative declaration:
 --------------------------

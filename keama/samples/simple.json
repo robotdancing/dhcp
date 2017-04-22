@@ -1,0 +1,57 @@
+{
+  "Dhcp4": {
+    "option-data": [
+      # -------------------------
+      # dhcpd.conf
+      #
+      # Sample configuration file for ISC dhcpd
+      #
+      # option definitions common to all supported networks...
+      {
+        "space": "dhcp4",
+        "name": "domain-name",
+        "code": 15,
+        "data": "example.org"
+      }
+    ],
+    "valid-lifetime": 1800,
+//  "config": [
+//    /// max-lease-time is not supported
+//    /// use default-lease-time instead
+//    /// Reference Kea #5219
+//    {
+//      "name": "max-lease-time",
+//      "code": 2,
+//      "value": 7200
+//    }
+//  ],
+    "subnet4": [
+      # We're going to be authoritative for the network we've
+      # just created.
+      # No service will be given on this subnet, but we're telling
+      # the DHCP server about it so it understands it's there and
+      # not to hand out leases for it.
+      {
+        "subnet": "10.14.8.195/24"
+      },
+      # But we do want to hand out leases for the 192.168.1.0/24
+      # network for purposes of this test..
+      {
+        "subnet": "192.168.1.0/24",
+        "pools": [
+          {
+            "pool": "192.168.1.100 - 192.168.1.150"
+          }
+        ],
+        "option-data": [
+          {
+            "space": "dhcp4",
+            "name": "routers",
+            "code": 3,
+            "data": "192.168.1.1"
+          }
+        ]
+      }
+    ]
+  }
+}

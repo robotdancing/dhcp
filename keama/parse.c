@@ -3933,11 +3933,20 @@ done:
 	elem = createString(data);
 	if (canon_bool) {
 		comment = createComment("/// canonized booleans to "
-					" lowercase true or false");
+					"lowercase true or false");
 		TAILQ_INSERT_TAIL(&elem->comments, comment);
 	}
 	if (has_ignore) {
 		comment = createComment("/// 'ignore' pseudo-boolean is used");
+		TAILQ_INSERT_TAIL(&elem->comments, comment);
+		expr->skip = ISC_TRUE;
+		cfile->issue_counter++;
+	}
+	if (has_ambiguous_binary) {
+		comment = createComment("/// Please consider to change "
+					"last type in the record to binary");
+		TAILQ_INSERT_TAIL(&elem->comments, comment);
+		comment = createComment("/// Reference Kea #5257");
 		TAILQ_INSERT_TAIL(&elem->comments, comment);
 		expr->skip = ISC_TRUE;
 		cfile->issue_counter++;
