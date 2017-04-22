@@ -940,3 +940,25 @@ mapPop(struct element *m)
 
 	return h;
 }
+
+void
+derive(struct handle *src, struct handle *dst)
+{
+	struct element *list;
+	struct element *item;
+	size_t i;
+
+	if (dst == NULL)
+		return;
+	list = dst->value;
+	assert(list != NULL);
+	assert(list->type == ELEMENT_LIST);
+	for (i = 0; i < listSize(list); i++) {
+		item = listGet(list, i);
+		assert(item != NULL);
+		assert(item->type == ELEMENT_MAP);
+		if (mapContains(item, src->key))
+			continue;
+		mapSet(item, copy(src->value), src->key);
+	}
+}

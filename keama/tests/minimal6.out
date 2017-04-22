@@ -1,0 +1,5 @@
+{
+  "Dhcp6": {
+    "valid-lifetime": 1800
+  }
+}

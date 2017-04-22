@@ -1,0 +1,99 @@
+#!/bin/sh
+
+#set -x
+
+if [ $# -ne 1 ]; then
+	echo "usage: $0 test-name" >&2
+	exit 1
+fi
+
+file=$1
+
+cd "$(dirname "$0")"
+
+isin=$(expr $file : ".*\.in*")
+iserr=$(expr $file : ".*\.err*")
+if [ \( $isin -eq 0 \) -a \( $iserr -eq 0 \) ]; then
+	full=$file.in*
+	if [ ! -f $full ]; then
+		full=$file.err*
+	fi
+else
+	full=$file
+fi
+
+if [ ! -f $full ]; then
+	echo "can't find $file" >&2
+	exit 1
+fi
+
+errcase=$(expr $full : ".*\.err*")
+
+trail=
+if [ $errcase -eq 0 ]; then
+	trail=$(expr $full : ".*\.in\(.\)")
+else
+	trail=$(expr $full : ".*\.err\(.\)")
+fi
+
+options=""
+dual=0
+
+case $trail in
+	'') dual=1;;
+	4) options="-4";;
+	6) options="-6";;
+	F) options="-4 -r fatal";;
+	P) options="-4 -r pass";;
+	*) echo "unrecognized trail '$trail' in '$full'" >&2; exit 1;;
+esac
+
+if [ $errcase -ne 0 ]; then
+	base=$(basename $full .err$trail)
+else
+	if [ $dual -ne 0 ]; then
+		echo "required trail ([45FP]) in '$full'" >&2
+		exit 1
+	fi
+	base=$(basename $full .in$trail)
+fi
+
+out=/tmp/$base.out$$
+expected=""
+if [ $errcase ]; then
+	expected=$base.msg
+else
+	expected=$base.out
+fi
+
+if [ $errcase -ne 0 ]; then
+	if [ $dual -eq 1 ]; then
+		../keama -4 -i $full 2> $out > /dev/null
+		if [ $? -ne 255 ]; then
+			echo "$full -4 doesn't fail as expected" >&2
+			exit 1
+		fi
+		../keama -6 -i $full 2> $out > /dev/null
+		if [ $? -ne 255 ]; then
+			echo "$full -6 doesn't fail as expected" >&2
+			exit 1
+		fi
+	else
+		../keama $options -i $full 2> $out > /dev/null
+		if [ $? -ne 255 ]; then
+			echo "$full doesn't fail as expected" >&2
+			exit 1
+		fi
+	fi
+else
+	../keama $options -i  $full -o $out >&2
+	if [ $? -eq 255 ]; then
+		echo "$full raised an error" >&2
+		exit 1
+	fi
+fi
+
+if `cmp -s $out $expected`; then
+	echo "$full not expected output" >&2
+	exit 1
+fi

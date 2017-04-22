@@ -363,6 +363,8 @@ TODO implement and check move
  ISC DHCP supports interval ranges for prefix6. Kea has a different
  and IMHO more powerful model.
  Pool6 permissions are not supported.
+ option-data is not allowed in DHCPv4 pools
+TODO create a ticket about this silly constraint
 
 Authoritative declaration:
 --------------------------
@@ -389,7 +391,9 @@ Hostnames:
  ISC DHCP does dynamic resolution in parse_ip_addr_or_hostname.
  Static (at conversion time) resolution to one address is done by
  the MA for fixed-address. Resolution is considered as painful
- in option values, i.e. there are better (and safer) ways to do this.
+ there are better (and safer) ways to do this. The -r (resolve)
+ command line parameter controls the at-conversion-time resolution.
+ Note only the first address is returned.
 TODO: check the multiple address comment is correctly taken
 
 Server DUID:
@@ -442,5 +446,3 @@ Dynamic DNS:
 ------------
  Details are very different so the MA maps only basic parameters
  at the global scope.
-
-

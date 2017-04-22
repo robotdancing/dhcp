@@ -30,11 +30,22 @@
 
 #include <time.h>
 
+/* Resolution of FQDNs into IPv4 addresses */
+enum resolve { 
+	perform = 0,	/* resolve */
+	fatal,		/* raise a fatal error */
+	pass		/* pass the string wth a warning */
+} resolve;
+
 /* From includes/dhcp.h */
 
 #define DHO_DHCP_SERVER_IDENTIFIER		54
 #define DHO_VENDOR_CLASS_IDENTIFIER		60
 #define DHO_USER_CLASS				77
+#define DHO_VIVSO_SUBOPTIONS			125
+
+/* From includes/dhcp6.h */
+#define D6O_VENDOR_OPTS				17
 
 /* From includes/dhcpd.h */
 
@@ -345,7 +356,7 @@ void parse_option_code_definition(struct parse *, struct option *);
 void parse_vendor_code_definition(struct parse *, struct option *);
 struct string *parse_base64(struct parse *);
 struct string *parse_cshl(struct parse *);
-struct string *parse_hexa(struct parse *, struct string *);
+struct string *parse_hexa(struct parse *);
 isc_boolean_t parse_executable_statements(struct element *,
 					  struct parse *, isc_boolean_t *,
 					  enum expression_context);
@@ -394,9 +405,12 @@ void spaces_init(void);
 void options_init(void);
 struct space *space_lookup(const char *);
 struct option *option_lookup_name(const char *, const char *);
+struct option *kea_lookup_name(const char *, const char *);
 struct option *option_lookup_code(const char *, unsigned);
 void push_space(struct space *);
 void push_option(struct option *);
+void add_option_data(struct element *, struct element *);
+void merge_option_data(struct element *, struct element *);
 struct comments *get_config_comments(unsigned);
 
 /* json.c */

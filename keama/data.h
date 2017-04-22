@@ -287,5 +287,6 @@ struct handle {
 };
 
 struct handle* mapPop(struct element *);
+void derive(struct handle *, struct handle *);
 
 #endif /* DATA_H */
