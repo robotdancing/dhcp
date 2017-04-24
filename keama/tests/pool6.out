@@ -1,0 +1,28 @@
+{
+  "Dhcp6": {
+    "subnet6": [
+      # DHCPv6 pool config
+      # authoritative is mandatory
+      # subnet declaration
+      {
+        "subnet": "2001::/64",
+        "pools": [
+          # pool declaration
+          {
+            "option-data": [
+              {
+                "space": "dhcp6",
+                "name": "domain-search",
+                "code": 24,
+                "data": "example.com, example.org"
+              }
+            ],
+            "pool": "2001::100 - 2001::200"
+          }
+        ],
+        /// valid-lifetime moved from an internal pool scope
+        "valid-lifetime": 1800
+      }
+    ]
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "Dhcp6": {
+    "valid-lifetime": 1800,
+    "subnet6": [
+      # subnet declaration
+      {
+        "subnet": "2001::/64",
+        "pools": [
+          # pool declaration
+          {
+            "option-data": [
+              # for a silly reason option-data is not allowed in DHCPv4 pools
+              # but allowed in DHCPv6 pools
+              {
+                "space": "dhcp6",
+                "name": "domain-search",
+                "code": 24,
+                "data": "example.com, example.org"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

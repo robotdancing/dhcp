@@ -1,0 +1,17 @@
+# option-data in DHCPv6 pool config
+
+# authoritative is mandatory
+authoritative;
+
+# empty configs are not accepted by Kea
+default-lease-time 1800;
+
+# subnet declaration
+subnet6 2001::/64 {
+    # pool declaration
+    pool6 {
+        # for a silly reason option-data is not allowed in DHCPv4 pools
+	# but allowed in DHCPv6 pools
+	option dhcp6.domain-search example.com, example.org;
+    }
+}

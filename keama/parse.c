@@ -4062,8 +4062,16 @@ parse_option_statement(struct element *result,
 		if (cfile->stack[where]->kind == PARAMETER)
 			continue;
 		if ((local_family == AF_INET) &&
-		    (cfile->stack[where]->kind == POOL_DECL))
+		    (cfile->stack[where]->kind == POOL_DECL)) {
+			struct element *pool;
+			struct comment *comment;
+
+			pool = cfile->stack[where];
+			comment = createComment("/// option-data was moved "
+						"from this DHCPv4 pool");
+			TAILQ_INSERT_TAIL(&pool->comments, comment);
 			continue;
+		}
 		break;
 	}
 

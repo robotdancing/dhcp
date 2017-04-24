@@ -38,6 +38,8 @@ isc_boolean_t use_client_id = ISC_FALSE;
 isc_boolean_t use_flex_id = ISC_FALSE;
 isc_boolean_t use_hw_address = ISC_FALSE;
 
+unsigned subclass_counter = 0;
+
 /* To map reservations to declared subnets */
 struct subnet {
 	struct element *subnet;
@@ -49,6 +51,8 @@ struct subnet {
 TAILQ_HEAD(subnets, subnet) known_subnets;
 
 static void add_host_reservation_identifiers(struct parse *, const char *);
+static void subclass_inherit(struct parse *, struct element *,
+			     struct element *);
 static void add_match_class(struct parse *, struct element *,
 			    struct element *);
 static void option_data_derive(struct parse *, struct handle *,
@@ -301,35 +305,22 @@ parse_statement(struct parse *cfile, int type, isc_boolean_t declaration)
 		return 1;
 
 	case VENDOR_CLASS:
-		skip_token(&val, NULL, cfile);
-		if (type == CLASS_DECL)
-			parse_error(cfile,
-				    "class declarations not allowed here.");
-		parse_class_declaration(cfile, CLASS_TYPE_VENDOR);
-		return 1;
-
 	case USER_CLASS:
-		skip_token(&val, NULL, cfile);
-		if (type == CLASS_DECL)
-			parse_error(cfile,
-				    "class declarations not allowed here.");
-		parse_class_declaration(cfile, CLASS_TYPE_USER);
-		return 1;
-
 	case CLASS:
-		skip_token(&val, NULL, cfile);
-		if (type == CLASS_DECL)
-			parse_error(cfile,
-				    "class declarations not allowed here.");
-		parse_class_declaration(cfile, CLASS_TYPE_CLASS);
-		return 1;
-
 	case SUBCLASS:
 		skip_token(&val, NULL, cfile);
+		if (token == VENDOR_CLASS)
+			parse_error(cfile, "obsolete 'vendor-class' "
+				    "declaration");
+		if (token == USER_CLASS)
+			parse_error(cfile, "obsolete 'user-class' "
+				    "declaration");
 		if (type == CLASS_DECL)
 			parse_error(cfile,
 				    "class declarations not allowed here.");
-		parse_class_declaration(cfile, CLASS_TYPE_SUBCLASS);
+		parse_class_declaration(cfile, token == CLASS
+					       ? CLASS_TYPE_CLASS
+					       : CLASS_TYPE_SUBCLASS);
 		return 1;
 
 	case HARDWARE:
@@ -569,8 +560,8 @@ parse_statement(struct parse *cfile, int type, isc_boolean_t declaration)
 		break;
 
 	case FAILOVER:
+		skip_token(&val, NULL, cfile);
 		parse_error(cfile, "No failover support.");
-		break;
 			
 	case SERVER_DUID:
 		if (local_family != AF_INET6)
@@ -783,14 +774,10 @@ parse_pool_statement(struct parse *cfile, int type)
 		token = peek_token(&val, NULL, cfile);
 		switch (token) {
 		case TOKEN_NO:
+		case FAILOVER:
 			skip_token(&val, NULL, cfile);
-			token = next_token(&val, NULL, cfile);
-			if (token != FAILOVER ||
-			    (token = next_token(&val, NULL, cfile)) != PEER)
-				parse_error(cfile,
-					   "expecting \"failover peer\".");
-			break;
-				
+			parse_error(cfile, "No failover support.");
+
 		case RANGE:
 			skip_token(&val, NULL, cfile);
 			parse_address_range(cfile, type, cfile->stack_top);
@@ -872,9 +859,9 @@ parse_host_declaration(struct parse *cfile)
 	enum dhcp_token token;
 	struct element *host;
 	struct string *name;
+	struct element *where;
+	struct element *hosts = NULL;
 	int declaration = 0;
-	isc_boolean_t dynamicp = ISC_FALSE;
-	isc_boolean_t deleted = ISC_FALSE;
 
 	host = createMap();
 	host->kind = HOST_DECL;
@@ -901,18 +888,16 @@ parse_host_declaration(struct parse *cfile)
 		/* If the host declaration was created by the server,
 		   remember to save it. */
 		if (token == DYNAMIC) {
-			dynamicp = ISC_TRUE;
 			skip_token(&val, NULL, cfile);
-			parse_semi(cfile);
-			continue;
+			parse_error(cfile, "dynamic hosts don't exist "
+				    "in the config file");
 		}
 		/* If the host declaration was created by the server,
 		   remember to save it. */
 		if (token == TOKEN_DELETED) {
-			deleted = ISC_TRUE;
 			skip_token(&val, NULL, cfile);
-			parse_semi(cfile);
-			continue;
+			parse_error(cfile, "deleted hosts don't exist "
+				    "in the config file");
 		}
 
 		if (token == GROUP) {
@@ -953,13 +938,24 @@ parse_host_declaration(struct parse *cfile)
 				skip_token(&val, NULL, cfile);
 				client_id = makeString(-1, val);
 			} else {
+				struct string *bin;
 				unsigned len = 0;
+				unsigned i;
+				char buf[4];
 
-				client_id = parse_numeric_aggregate
+				bin = parse_numeric_aggregate
 					(cfile, NULL, &len, ':', 16, 8);
-				if (!client_id)
+				if (!bin)
 					parse_error(cfile,
 						    "expecting hex list.");
+				client_id = makeString(0, NULL);
+				for (i = 0; i < bin->length; i++) {
+					if (i != 0)
+						appendString(client_id, ":");
+					snprintf(buf, sizeof(buf),
+						 "%02hhx", bin->content[i]);
+					appendString(client_id, buf);
+				}
 			}
 			/* Kea todo: get text */
 			mapSet(host, createString(client_id), "client-id");
@@ -1046,19 +1042,15 @@ parse_host_declaration(struct parse *cfile)
 	}
 
 	cfile->stack_top--;
-	if (!deleted) {
-		struct element *where;
-		struct element *hosts = NULL;
 
-		where = find_match(cfile, host);
-		hosts = mapGet(where, "reservations");
-		if (hosts == NULL) {
-			hosts = createList();
-			hosts->kind = HOST_DECL;
-			mapSet(where, hosts, "reservations");
-		}
-		listPush(hosts, host);
+	where = find_match(cfile, host);
+	hosts = mapGet(where, "reservations");
+	if (hosts == NULL) {
+		hosts = createList();
+		hosts->kind = HOST_DECL;
+		mapSet(where, hosts, "reservations");
 	}
+	listPush(hosts, host);
 }
 
 static void
@@ -1075,55 +1067,80 @@ add_host_reservation_identifiers(struct parse *cfile, const char *id)
 }
 
 /* class-declaration :== STRING LBRACE parameters declarations RBRACE
-*/
+ *
+ * in fact:
+ * (CLASS) NAME(STRING) LBRACE ... RBRACE
+ * (SUBCLASS) SUPER(STRING) DATA/HASH(STRING | <hexa>) [BRACE ... RBRACE]
+ * 
+ * class "name" { MATCH IF <boolean-expr> }: direct: belong when true
+ * class "name" { MATCH <data-expr> }: indirect: use subclasses
+ * class "name" { MATCH <data-expr> SPAWN WITH <data-expr> }: indirect:
+ *  create dynamically a subclass
+ * subclass "super" <data-expr = string or binary aka hash>: belongs when
+ *  super <data-expr> == <hash>
+ */
 
 void
 parse_class_declaration(struct parse *cfile, int type)
 {
 	const char *val;
 	enum dhcp_token token;
+	size_t group;
+	size_t i;
+	struct element *group_classes = NULL;
 	struct element *classes;
-	struct element *class = NULL, *pc = NULL;
-	struct element *children;
-	struct element *lease_limit;
+	struct element *class = NULL;
+	struct element *pc = NULL; /* p(arent)c(lass) */
+	struct element *tmp;
 	struct element *expr;
 	int declaration = 0;
 	struct string *data;
-	char *name;
-	const char *tname;
-	isc_boolean_t new = ISC_TRUE;
+	isc_boolean_t binary = ISC_FALSE;
+	struct string *name;
 	isc_boolean_t lose = ISC_FALSE;
-	isc_boolean_t matchedonce = ISC_FALSE;
-	isc_boolean_t submatchedonce = ISC_FALSE;
-	int i;
-	isc_boolean_t has_superclass = ISC_FALSE;
-	int flags = 0;
 	
 	token = next_token(&val, NULL, cfile);
 	if (token != STRING)
 		parse_error(cfile, "Expecting class name");
 
-	/* See if there's already a class with the specified name. */
+	/* Find group and root classes */
 	classes = mapGet(cfile->stack[1], "client-classes");
 	if (classes == NULL) {
 		classes = createList();
 		classes->kind = CLASS_DECL;
 		mapSet(cfile->stack[1], classes, "client-classes");
-	} else {
-		int i;
+	}
+	for (group = cfile->stack_top; group > 0; --group) {
+		int kind;
 
-		for (i = 0; i < listSize(classes); ++i) {
-			struct element *item;
-			struct element *name;
+		kind = cfile->stack[group]->kind;
+		if (kind == CLASS_DECL)
+			parse_error(cfile, "class in class");
+		if ((kind == GROUP_DECL) || (kind == ROOT_GROUP))
+			break;
+	}
+	if (cfile->stack[group]->kind == GROUP_DECL) {
+		group_classes = mapGet(cfile->stack[group], "client-classes");
+		if (group_classes == NULL) {
+			group_classes = createList();
+			group_classes->kind = CLASS_DECL;
+			mapSet(cfile->stack[group], group_classes,
+			       "client-classes");
+		}
+	} else
+		group_classes = classes;
 
-			item = listGet(classes, i);
-			name = mapGet(item, "name");
-			if ((name != NULL) &&
-			    (name->type == ELEMENT_STRING) &&
-			    (strcmp(stringValue(name)->content, val) == 0)) {
-				pc = item;
-				break;
-			}
+	/* See if there's already a class with the specified name. */
+	for (i = 0; i < listSize(classes); ++i) {
+		struct element *name;
+
+		tmp = listGet(classes, i);
+		name = mapGet(tmp, "name");
+		if (name == NULL)
+			continue;
+		if (strcmp(stringValue(name)->content, val) == 0) {
+			pc = tmp;
+			break;
 		}
 	}
 
@@ -1131,40 +1148,19 @@ parse_class_declaration(struct parse *cfile, int type)
 	 * types (subclass, vendor or user class), the named class is a
 	 * reference to the parent class so its mandatory.
 	 */
-	if (pc && (type == CLASS_TYPE_CLASS)) {
-		new = ISC_FALSE;
+	if ((pc != NULL) && (type == CLASS_TYPE_CLASS)) {
 		class = pc;
 		pc = NULL;
-	} else if (!pc && (type != CLASS_TYPE_CLASS))
-		parse_error(cfile, "no class named %s", val);
-
-	/* The old vendor-class and user-class declarations had an implicit
-	   match.   We don't do the implicit match anymore.   Instead, for
-	   backward compatibility, we have an implicit-vendor-class and an
-	   implicit-user-class.   vendor-class and user-class declarations
-	   are turned into subclasses of the implicit classes, and the
-	   submatch expression of the implicit classes extracts the contents of
-	   the vendor class or user class. */
-	if ((type == CLASS_TYPE_VENDOR) || (type == CLASS_TYPE_USER)) {
-		data = makeString(-1, val);
-
-		tname = (type == CLASS_TYPE_VENDOR) ?
-		  "implicit-vendor-class" : "implicit-user-class";
-
-	} else if (type == CLASS_TYPE_CLASS) {
-		tname = val;
-	} else {
-		tname = NULL;
+	} else if (type != CLASS_TYPE_CLASS) {
+		if (pc == NULL)
+			parse_error(cfile, "no class named %s", val);
+		if (!mapContains(pc, "spawining") ||
+		    !mapContains(pc, "submatch"))
+			parse_error(cfile, "found class name %s but it is "
+				    "not a suitable superclass", val);
 	}
 
-	if (tname) {
-		name = strdup(tname);
-		if (!name)
-			parse_error(cfile, "No memory for class name %s.",
-				    tname);
-	} else
-		name = NULL;
-
+	name = makeString(-1, val);
 	/* If this is a straight subclass, parse the hash string. */
 	if (type == CLASS_TYPE_SUBCLASS) {
 		token = peek_token(&val, NULL, cfile);
@@ -1173,44 +1169,59 @@ parse_class_declaration(struct parse *cfile, int type)
 
 			skip_token(&val, &data_len, cfile);
 			data = makeString(data_len, val);
-		} else if (token == NUMBER_OR_NAME || token == NUMBER)
-			data = parse_cshl(cfile);
-		else
+		} else if (token == NUMBER_OR_NAME || token == NUMBER) {
+			data = parse_hexa(cfile);
+			binary = ISC_TRUE;
+		} else
 			parse_error(cfile, "Expecting string or hex list.");
 	}
 
 	/* See if there's already a class in the hash table matching the
 	   hash data. */
 	if (type != CLASS_TYPE_CLASS) {
-		children = mapGet(pc, "children");
-		if (children == NULL) {
-			children = createList();
-			children->skip = ISC_TRUE;
-			mapSet(pc, children, "children");
-			lease_limit = mapGet(pc, "lease-limit");
-			if (lease_limit != NULL) {
-				struct element *copy;
+		for (i = 0; i < listSize(classes); i++) {
+			struct element *super;
+			struct element *selector;
 
-				copy = createInt(intValue(lease_limit));
-				copy->skip = lease_limit->skip;
-				mapSet(class, copy, "lease-limit");
-			}
-		} else {
-			for (i = 0; i < listSize(children); ++i) {
-				struct element *child;
-				struct element *hash;
-
-				child = listGet(children, i);
-				hash = mapGet(child, "hash");
-				if ((hash != NULL) &&
-				    (hash->type == ELEMENT_STRING) &&
-				    eqString(stringValue(hash), data)) {
-					class = child;
-					has_superclass = ISC_TRUE;
-					break;
-				}
+			tmp = listGet(classes, i);
+			super = mapGet(tmp, "super");
+			if (super == NULL)
+				continue;
+			if (!eqString(stringValue(super), name))
+				continue;
+			if (binary)
+				selector = mapGet(tmp, "binary");
+			else
+				selector = mapGet(tmp, "string");
+			if (selector == NULL)
+				continue;
+			if (eqString(stringValue(selector), data)) {
+				class = tmp;
+				break;
 			}
 		}
+	}
+			
+	/* Note the class declaration in the enclosing group */
+	if (group_classes != classes) {
+		struct element *gc;
+
+		gc = createMap();
+		gc->kind = CLASS_DECL;
+		tmp = createString(name);
+		if (type == CLASS_TYPE_CLASS)
+			mapSet(gc, tmp, "name");
+		else {
+			tmp->skip = ISC_TRUE;
+			mapSet(gc, tmp, "super");
+			tmp = createString(data);
+			tmp->skip = ISC_TRUE;
+			if (binary)
+				mapSet(gc, tmp, "binary");
+			else
+				mapSet(gc, tmp, "string");
+		}
+		listPush(group_classes, gc);
 	}
 
 	/* If we didn't find an existing class, allocate a new one. */
@@ -1218,57 +1229,35 @@ parse_class_declaration(struct parse *cfile, int type)
 		/* Allocate the class structure... */
 		class = createMap();
 		class->kind = CLASS_DECL;
-		if (type != CLASS_TYPE_CLASS) {
-			class->skip = ISC_TRUE;
+		TAILQ_CONCAT(&class->comments, &cfile->comments);
+		if (type == CLASS_TYPE_SUBCLASS) {
+			char buf[40];
+
+			tmp = createString(name);
+			tmp->skip = ISC_TRUE;
+			mapSet(class, tmp, "super");
+			tmp = createString(data);
+			tmp->skip = ISC_TRUE;
+			if (binary)
+				mapSet(class, tmp, "binary");
+			else
+				mapSet(class, tmp, "string");
+			snprintf(buf, sizeof(buf),
+				 "#sub%u", subclass_counter++);
+			appendString(name, buf);
 			cfile->issue_counter++;
 		}
-		TAILQ_CONCAT(&class->comments, &cfile->comments);
-
-		if (type == CLASS_TYPE_SUBCLASS) {
-			struct element *sub;
-
-			sub = createBool(ISC_TRUE);
-			mapSet(class, sub, "subclass");
-		}
-		if (pc) {
-			listPush(children, class);
-			mapSet(class, createString(data), "hash");
-			has_superclass = ISC_TRUE;
-		}
-
-		/* If this is an implicit vendor or user class, add a
-		   statement that causes the vendor or user class ID to
-		   be sent back in the reply. */
-		if (type == CLASS_TYPE_VENDOR || type == CLASS_TYPE_USER) {
-			struct element *opt_data;
-			struct element *opt_data_list;
-			int code;
-
-			opt_data = createMap();
-			code = (type == CLASS_TYPE_VENDOR)
-				? DHO_VENDOR_CLASS_IDENTIFIER
-				: DHO_USER_CLASS;
-			mapSet(opt_data, createInt(code), "code");
-			mapSet(opt_data, createString(data), "data");
-			opt_data_list = mapGet(class, "option-data");
-			if (opt_data_list == NULL) {
-				opt_data_list = createList();
-				mapSet(class, opt_data_list, "option-data");
-			}
-			listPush(opt_data_list, opt_data);
-		}
 		/* Save the name, if there is one. */
-		if (mapContains(class, "name"))
-			mapRemove(class, "name");
-		mapSet(class, createString(makeString(-1, name)), "name");
+		mapSet(class, createString(name), "name");
+		listPush(classes, class);
 	}
 
 	/* Spawned classes don't have to have their own settings. */
-	if (has_superclass) {
+	if (type == CLASS_TYPE_SUBCLASS) {
 		token = peek_token(&val, NULL, cfile);
 		if (token == SEMI) {
 			skip_token(&val, NULL, cfile);
-
+			subclass_inherit(cfile, class, copy(pc));
 			return;
 		}
 	}
@@ -1285,30 +1274,34 @@ parse_class_declaration(struct parse *cfile, int type)
 		} else if (token == END_OF_FILE) {
 			skip_token(&val, NULL, cfile);
 			parse_error(cfile, "unexpected end of file");
-			break;
 		} else if (token == DYNAMIC) {
-			flags |= CLASS_DECL_DYNAMIC;
 			skip_token(&val, NULL, cfile);
-			parse_semi(cfile);
-			continue;
+			parse_error(cfile, "dynamic classes don't exist "
+				    "in the config file");
 		} else if (token == TOKEN_DELETED) {
-			flags |= CLASS_DECL_DELETED;
 			skip_token(&val, NULL, cfile);
-			parse_semi(cfile);
-			continue;
+			parse_error(cfile, "deleted hosts don't exist "
+				    "in the config file");
 		} else if (token == MATCH) {
+			skip_token(&val, NULL, cfile);
 			if (pc)
 				parse_error(cfile,
 					    "invalid match in subclass.");
-			skip_token(&val, NULL, cfile);
+			if (mapContains(class, "spawning") ||
+			    mapContains(class, "match-if") ||
+			    mapContains(class, "submatch") ||
+			    mapContains(class, "test"))
+				parse_error(cfile,
+					    "A class may only have "
+					    "one 'match' or 'spawn' clause.");
 			token = peek_token(&val, NULL, cfile);
-			if (token != IF)
+			if (token != IF) {
+				mapSet(class,
+				       createBool(ISC_FALSE),
+				       "spawning");
 				goto submatch;
+			}
 			skip_token(&val, NULL, cfile);
-			if (matchedonce)
-				parse_error(cfile, "A class may only have "
-					    "one 'match if' clause.");
-			matchedonce = ISC_TRUE;
 			expr = createMap();
 			if (!parse_boolean_expression(expr, cfile, &lose)) {
 				if (!lose)
@@ -1323,16 +1316,21 @@ parse_class_declaration(struct parse *cfile, int type)
 			if (pc)
 				parse_error(cfile,
 					    "invalid spawn in subclass.");
+			if (mapContains(class, "spawning") ||
+			    mapContains(class, "match-if") ||
+			    mapContains(class, "submatch") ||
+			    mapContains(class, "test"))
+				parse_error(cfile,
+					    "A class may only have "
+					    "one 'match' or 'spawn' clause.");
+			class->skip = ISC_TRUE;
+			cfile->issue_counter++;
+			mapSet(class, createBool(ISC_TRUE), "spawning");
 			token = next_token(&val, NULL, cfile);
 			if (token != WITH)
 				parse_error(cfile,
 					    "expecting with after spawn");
 		submatch:
-			if (submatchedonce)
-				parse_error(cfile,
-					    "can't override existing %s.",
-					    "submatch/spawn");
-			submatchedonce = ISC_TRUE;
 			expr = createMap();
 			if (!parse_data_expression(expr, cfile, &lose)) {
 				if (!lose)
@@ -1341,7 +1339,7 @@ parse_class_declaration(struct parse *cfile, int type)
 			} else {
 				expr->skip = ISC_TRUE;
 				cfile->issue_counter++;
-				mapSet(class, expr, "spawn");
+				mapSet(class, expr, "submatch");
 				parse_semi(cfile);
 			}
 		} else if (token == LEASE) {
@@ -1352,35 +1350,134 @@ parse_class_declaration(struct parse *cfile, int type)
 			token = next_token(&val, NULL, cfile);
 			if (token != NUMBER)
 				parse_error(cfile, "expecting a number");
-			lease_limit = createInt(atoll(val));
-			lease_limit->skip = ISC_TRUE;
+			tmp = createInt(atoll(val));
+			tmp->skip = ISC_TRUE;
 			cfile->issue_counter++;
-			mapSet(class, lease_limit, "lease-limit");
+			mapSet(class, tmp, "lease-limit");
 			parse_semi(cfile);
-		} else {
+		} else
 			declaration = parse_statement(cfile, CLASS_DECL,
 						      declaration);
-		}
 	}
 
-	if (flags & CLASS_DECL_DELETED) {
-		if (type != CLASS_TYPE_CLASS) {
-			for (i = 0; i < listSize(children); ++i) {
-				struct element *child;
-				struct element *hash;
-
-				child = listGet(children, i);
-				hash = mapGet(child, "hash");
-				if ((hash != NULL) &&
-				    (hash->type == ELEMENT_STRING) &&
-				    eqString(stringValue(hash), data))
-					listRemove(children, i);
-			}
-		}
-	} else if (type == CLASS_TYPE_CLASS && new)
-		listPush(classes, class);
-
 	cfile->stack_top--;
+
+	if (type == CLASS_TYPE_SUBCLASS)
+		subclass_inherit(cfile, class, copy(pc));
+}
+
+static void
+subclass_inherit(struct parse *cfile,
+		 struct element *class,
+		 struct element *superclass)
+{
+	struct string *name;
+	struct element *submatch;
+	struct handle *handle;
+	struct string *mmsg;
+	struct string *dmsg;
+	struct element *expr;
+	struct element *data;
+	struct element *match;
+	struct element *reduced;
+	unsigned order = 0;
+	struct comment *comment;
+	isc_boolean_t marked = ISC_FALSE;
+	isc_boolean_t lose = ISC_FALSE;
+
+	expr = mapGet(superclass, "name");
+	if (expr == NULL)
+		parse_error(cfile, "can't get superclass name");
+	name = stringValue(expr);
+	submatch = mapGet(superclass, "submatch");
+	if (submatch == NULL)
+		parse_error(cfile, "can't get superclass submatch");
+
+	/* Iterates on (copy of) superclass entrie */
+	while (mapSize(superclass) > 0) {
+		handle = mapPop(superclass);
+		if ((handle == NULL) || (handle->key == NULL) ||
+		    (handle->value == NULL))
+			parse_error(cfile, "can't get superclass %s item at "
+				    "%u", name->content, order);
+		handle->order = order++;
+		/* Superclass specific entries */
+		if ((strcmp(handle->key, "name") == 0) ||
+		    (strcmp(handle->key, "spawning") == 0) ||
+		    (strcmp(handle->key, "submatch") == 0))
+			continue;
+		/* Subclass specific so impossible entries */
+		if ((strcmp(handle->key, "super") == 0) ||
+		    (strcmp(handle->key, "binary") == 0) ||
+		    (strcmp(handle->key, "string") == 0))
+			parse_error(cfile, "superclass %s has unexpected %s "
+				    "at %u",
+				    name->content, handle->key, order);
+		/* Special entries */
+		if (strcmp(handle->key, "option-data") == 0) {
+			struct element *opt_list;
+
+			opt_list = mapGet(class, handle->key);
+			if (opt_list != NULL)
+				merge_option_data(handle->value, opt_list);
+			else
+				mapSet(class, opt_list, handle->key);
+			continue;
+		}
+		/* Just copy */
+		if ((strcmp(handle->key, "lease-limit") == 0) ||
+		    (strcmp(handle->key, "boot-file-name") == 0) ||
+		    (strcmp(handle->key, "serverhostname") == 0) ||
+		    (strcmp(handle->key, "next-server") == 0)) {
+			mapSet(class, handle->value, handle->key);
+			continue;
+		}
+		/* Unknown */
+		if (!marked) {
+			marked = ISC_TRUE;
+			comment = createComment("/// copied from superclass");
+			TAILQ_INSERT_TAIL(&handle->value->comments, comment);
+		}
+		comment = createComment("/// unhandled entry");
+		TAILQ_INSERT_TAIL(&handle->value->comments, comment);
+		if (!handle->value->skip) {
+			handle->value->skip = ISC_TRUE;
+			cfile->issue_counter++;
+		}
+		mapSet(class, handle->value, handle->key);
+	}
+
+	/* build submatch = data */
+	expr = mapGet(class, "binary");
+	if (expr != NULL) {
+		data = createMap();
+		mapSet(expr, data, "const-data");
+	} else
+		data = mapGet(class, "string");
+	if (data == NULL)
+		parse_error(cfile, "can't get subclass %s data",
+			    name->content);
+	match = createMap();
+	mapSet(match, submatch, "left");
+	mapSet(match, data, "right");
+	expr = createMap();
+	mapSet(expr, match, "equal");
+	
+	mmsg = makeString(-1, "/// from: match ");
+	appendString(mmsg, print_data_expression(submatch, &lose));
+	dmsg = makeString(-1, "/// data: ");
+	appendString(dmsg, print_data_expression(data, &lose));
+
+	reduced = reduce_boolean_expression(expr);
+	if ((reduced = NULL) || (reduced->type != ELEMENT_STRING))
+		return;
+	if (!lose) {
+		comment = createComment(mmsg->content);
+		TAILQ_INSERT_TAIL(&reduced->comments, comment);
+		comment = createComment(dmsg->content);
+		TAILQ_INSERT_TAIL(&reduced->comments, comment);
+	}
+	mapSet(class, reduced, "test");
 }
 
 static void
@@ -1388,25 +1485,25 @@ add_match_class(struct parse *cfile,
 		struct element *class,
 		struct element *expr)
 {
-	struct element *rmatch;
+	struct element *reduced;
 	struct comment *comment;
 	struct string *msg;
 	isc_boolean_t lose = ISC_FALSE;
 
-	msg = makeString(-1, "/// from: match ");
+	msg = makeString(-1, "/// from: match if ");
 	appendString(msg, print_boolean_expression(expr, &lose));
 	if (!lose)
 		comment = createComment(msg->content);
 
-	rmatch = reduce_boolean_expression(expr);
-	if ((rmatch == NULL) || (rmatch->type != ELEMENT_STRING)) {
+	reduced = reduce_boolean_expression(expr);
+	if ((reduced == NULL) || (reduced->type != ELEMENT_STRING)) {
 		expr->skip = ISC_TRUE;
 		cfile->issue_counter++;
 		TAILQ_INSERT_TAIL(&expr->comments, comment);
-		mapSet(class, expr, "match");
+		mapSet(class, expr, "match-if");
 	} else {
-		TAILQ_INSERT_TAIL(&rmatch->comments, comment);
-		mapSet(class, rmatch, "test");
+		TAILQ_INSERT_TAIL(&reduced->comments, comment);
+		mapSet(class, reduced, "test");
 	}
 }
 
@@ -1758,9 +1855,6 @@ parse_group_declaration(struct parse *cfile)
 	struct element *group;
 	int declaration = 0;
 	struct string *name = NULL;
-	isc_boolean_t deletedp = ISC_FALSE;
-	isc_boolean_t dynamicp = ISC_FALSE;
-	isc_boolean_t staticp = ISC_FALSE;
 
 	if (mapContains(cfile->stack[cfile->stack_top], "group"))
 		parse_error(cfile, "another group is already open");
@@ -1795,23 +1889,23 @@ parse_group_declaration(struct parse *cfile)
 			break;
 		} else if (token == TOKEN_DELETED) {
 			skip_token(&val, NULL, cfile);
-			parse_semi(cfile);
-			deletedp = ISC_TRUE;
+			parse_error(cfile, "deleted groups don't exist "
+				    "in the config file");
 		} else if (token == DYNAMIC) {
 			skip_token(&val, NULL, cfile);
-			parse_semi(cfile);
-			dynamicp = ISC_TRUE;
+			parse_error(cfile, "dynamic groups don't exist "
+				    "in the config file");
 		} else if (token == STATIC) {
 			skip_token(&val, NULL, cfile);
-			parse_semi(cfile);
-			staticp = ISC_TRUE;
+			parse_error(cfile, "static groups don't exist "
+				    "in the config file");
 		}
 		declaration = parse_statement(cfile, GROUP_DECL, declaration);
 	}
 
 	cfile->stack_top--;
 
-	if (name && !deletedp)
+	if (name != NULL)
 		mapSet(group, createString(name), "name");
 	dissolve_group(cfile, group);
 }
@@ -2249,8 +2343,7 @@ parse_address_range(struct parse *cfile, int type, size_t where)
 	char taddr[40];
 	struct element *r;
 
-	if ((token = peek_token(&val,
-				 NULL, cfile)) == DYNAMIC_BOOTP) {
+	if ((token = peek_token(&val, NULL, cfile)) == DYNAMIC_BOOTP) {
 		skip_token(&val, NULL, cfile);
 		dynamic = ISC_TRUE;
 	}
