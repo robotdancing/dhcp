@@ -1,0 +1,29 @@
+{
+  "Dhcp4": {
+    "subnet4": [
+      # DHCPv4 pool config
+      # authoritative is mandatory
+      # subnet declaration
+      {
+        "subnet": "10.5.5.0/27",
+        "pools": [
+          # pool declaration
+          /// option-data was moved from this DHCPv4 pool
+          {
+            "pool": "10.5.5.5 - 10.5.5.10"
+          }
+        ],
+        "option-data": [
+          {
+            "space": "dhcp4",
+            "name": "domain-search",
+            "code": 119,
+            "data": "example.com, example.org"
+          }
+        ],
+        /// valid-lifetime moved from an internal pool scope
+        "valid-lifetime": 1800
+      }
+    ]
+  }
+}

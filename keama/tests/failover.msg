@@ -1,1 +1,1 @@
-failover.err line 0: No failover support.
+failover.err line 4: No failover support.

@@ -4,7 +4,7 @@
 class "foobar" {
      # can't put a host declaration here
      host illegal {
-          hardware ethernet 00:07:0E:36:48:19;;
+          hardware ethernet 00:07:0E:36:48:19;
      }
 }
 

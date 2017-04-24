@@ -836,6 +836,7 @@
           # to /etc between these two systems without modifications.
           #
           # Removed already defined PXE
+          # match if substring (option vendor-class-identifier, 0, 9) = "PXEClient";
           # Some PXE clients are said to require that the vci be sent.
           # But it seems clear that if we send these PXE and vendor-class
           # options, it also expects "extended DHCP" via port 4011.  For
@@ -950,8 +951,6 @@
 //          ]
 //        }
 //      },
-        /// from: match (substring(option dhcp.vendor-class-identifier, 0, 9)) = ('PXEClient')
-        "test": "substring(option[60].hex,0,9) == 'PXEClient'",
 //      /// Only global enable-updates is supported
 //      "enable-updates": false,
         "boot-file-name": "pxelinux.0",

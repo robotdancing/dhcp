@@ -327,13 +327,12 @@ TODO: check what ISC DHCP does
   - if there are more than one subnet the shared-network is commented
 TODO: put the reference when the ticket will be created.
 
-Vendor-Classes:
----------------
-TODO: specific code
-
-User-Classes:
--------------
-TODO: specific code
+Vendor-Classes and User-Classes:
+--------------------------------
+ ISC DHCP code is inconsistent: in particular before setting the
+ super-class "tname" to "implicit-vendor-class" / "implicit-user-class"
+ it allocates a buffer for data but does not copy the lexical value
+ "val" into it... So I removed support.
 
 Classes:
 --------
@@ -347,7 +346,16 @@ TODO: simplify the hardware address matching
 
 Subclasses:
 -----------
- No equivalent in Kea so waiting for an interesting and convertible use case.
+ Understood how it works:
+  - (super) class defined with a MATCH <data-expression> (vs.
+   MATCH IF <boolean-expression>)
+  - subclasses defined by <superclass-name> <data-literal> which
+   are equivalent to
+   MATCH IF <superclass-data-expression> EQUAL <data-literal>
+ So subclasses are convertible when the data expression can be reduced.
+ Cf https://kb.isc.org/article/AA-01092/202/OMAPI-support-for-classes-and-subclasses.html
+  which BTW suggests the management API could manage classes...
+TODO: implement subclass conversion
 
 Hardware Addresses:
 -------------------

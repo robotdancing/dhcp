@@ -1,0 +1,27 @@
+{
+  "Dhcp6": {
+    "subnet6": [
+      # DHCPv6 range config
+      # authoritative is mandatory
+      # subnet declaration
+      {
+        "subnet": "2001::/64",
+        "option-data": [
+          # range declaration
+          {
+            "space": "dhcp6",
+            "name": "domain-search",
+            "code": 24,
+            "data": "example.com, example.org"
+          }
+        ],
+        "valid-lifetime": 1800,
+        "pools": [
+          {
+            "pool": "2001::100 - 2001::200"
+          }
+        ]
+      }
+    ]
+  }
+}

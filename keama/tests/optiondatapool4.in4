@@ -1,0 +1,15 @@
+# option-data in DHCPv4 pool config
+
+# authoritative is mandatory
+authoritative;
+
+# subnet declaration
+subnet 10.5.5.0 netmask 255.255.255.224 {
+    # pool declaration
+    pool {
+        # avoid empty pool
+        range 10.5.5.5 10.5.5.10;
+        # for a silly reason option-data is not allowed in DHCPv4 pools
+	option domain-search example.com, example.org;
+    }
+}
