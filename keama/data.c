@@ -584,13 +584,14 @@ void
 merge(struct element *m, struct element *o)
 {
 	struct element *elem;
+	struct element *ne;
 
 	assert(m != NULL);
 	assert(m->type == ELEMENT_MAP);
 	assert(o != NULL);
 	assert(o->type == ELEMENT_MAP);
 
-	TAILQ_FOREACH(elem, &o->value.map_value) {
+	TAILQ_FOREACH_SAFE(elem, &o->value.map_value, ne) {
 		assert(elem->key != NULL);
 		TAILQ_REMOVE(&o->value.map_value, elem);
 		if (!mapContains(m, elem->key)) {

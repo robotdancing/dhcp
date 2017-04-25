@@ -6,7 +6,7 @@ authoritative;
 # subnet declaration
 subnet6 2001::/64 {
     # range declaration
-    option dhcp6.domain-search example.com, example.org;
+    option dhcp6.domain-search "example.com", "example.org";
     default-lease-time 1800;
     range6 2001::100 2001::200;
 }

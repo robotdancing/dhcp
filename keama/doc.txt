@@ -455,3 +455,29 @@ Dynamic DNS:
 ------------
  Details are very different so the MA maps only basic parameters
  at the global scope.
+
+Expressions:
+------------
+TODO check if data really includes numeric
+ ISC DHCP expressions are typed: boolean, numeric, and data which includes
+ strings and numeric. The default for a literal is to be a string so
+ literal numbers are interpreted in hexadecimal (for a strange consequence
+ https://kb.isc.org/article/AA-00334/56/Do-the-list-of-parameters-in-the-dhcp-parameter-request-list-need-to-be-in-hex.html ).
+ String literals are converted to string elements, hexadecimal literals
+ are converted to const-data maps.
+TODO reduce more hexa aka const-data
+ As booleans are not data there is no way to fix this:
+  /tmp/bool line 9: Expecting a data expression.
+  option ip-forwarding = foo = foo;
+                                ^
+ The tautology 'foo = foo' is not a data expression so is rejected by
+ both the MA and dhcpd (BTW the role of the MA is not to fix ISC DHCP
+ shortcomings so it does what it is expected to do here).
+ Note this does not work too:
+  option ip-forwarding = true;
+ because "true" is not a keyword and it is converted into a variable
+ reference... And I expect ISC DHCP makes this true a false at runtime
+ because the variable "true" is not defined by default.
+ Reduced expressions are pretty printed to allow an extra check.
+TODO use precedence to minimize parentheses
+

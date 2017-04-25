@@ -1,0 +1,12 @@
+# bad (tautology) class declaration config
+
+# authoritative is mandatory
+authoritative;
+
+# superclass declaration
+class "constant" {
+    match "foo";
+}
+
+# subclass declaration
+subclass "constant" "bar";
