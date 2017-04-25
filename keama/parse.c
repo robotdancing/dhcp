@@ -4010,6 +4010,9 @@ parse_option_statement(struct element *result,
 		 */
 		skip_token(&val, NULL, cfile);
 	} else if (token == EQUAL) {
+		struct element *data;
+		const char *fmt;
+
 		/* Eat the equals sign. */
 		skip_token(&val, NULL, cfile);
 
@@ -4024,25 +4027,67 @@ parse_option_statement(struct element *result,
 					    "expecting a data expression.");
 			return ISC_FALSE;
 		}
-		mapSet(opt_data, createBool(ISC_FALSE), "csv-format");
-		/* Stringify scalar expressions */
-		if (expr->type == ELEMENT_BOOLEAN) {
+		fmt = option->format;
+		/* protect againt empty format */
+		if (fmt == NULL)
+			fmt = "z";
+
+		/* boolean */
+		if (strcmp(fmt, "f") == 0) {
+			if (expr->type != ELEMENT_BOOLEAN)
+				goto giveup;
+			/* Stringify booleans */
 			if (boolValue(expr))
 				resetString(expr, makeString(-1, "true"));
 			else
 				resetString(expr, makeString(-1, "false"));
-		} else if (expr->type == ELEMENT_INTEGER) {
-			char buf[80];
-
-			snprintf(buf, sizeof(buf), "%lld",
-				 (long long)intValue(expr));
-			resetString(expr, makeString(-1, buf));
-		}
-		if (expr->type == ELEMENT_STRING)
 			mapSet(opt_data, expr, "data");
-		else {
+		}
+		/* integers */
+		else if ((strcmp(fmt, "l") == 0) ||
+		    (strcmp(fmt, "L") == 0) ||
+		    (strcmp(fmt, "s") == 0) ||
+		    (strcmp(fmt, "S") == 0) ||
+		    (strcmp(fmt, "b") == 0) ||
+		    (strcmp(fmt, "B") == 0)) {
+			if (expr->type == ELEMENT_INTEGER) {
+				char buf[80];
+
+				/* Stringify integers */
+				snprintf(buf, sizeof(buf), "%lld",
+					 (long long)intValue(expr));
+				resetString(expr, makeString(-1, buf));
+				mapSet(opt_data, expr, "data");
+			} else if (expr->type == ELEMENT_MAP) {
+				data = mapGet(expr, "const-data");
+				if (data == NULL)
+					goto giveup;
+				/* hexadecimal literal */
+				mapSet(opt_data, data, "data");
+			}
+		}
+		/* binary */
+		else if ((*fmt == 'E') || (*fmt == 'X')) {
+			struct string *hexa;
+
+			if (expr->type != ELEMENT_MAP)
+				goto giveup;
+			data = mapGet(expr, "const-data");
+			if (data == NULL)
+				goto giveup;
+			/* remove leading 0x */
+			hexa = stringValue(data);
+			data = createString(makeString(hexa->length - 2,
+						       hexa->content + 2));
+			mapSet(opt_data, data, "data");
+			mapSet(opt_data, createBool(ISC_FALSE), "csv-format");
+		}
+			
+		if (!mapContains(opt_data, "data")) {
+		giveup:
 			opt_data->skip = ISC_TRUE;
 			cfile->issue_counter++;
+			mapSet(opt_data, createBool(ISC_FALSE), "csv-format");
 			mapSet(opt_data, expr, "expression");
 		}
 	} else {

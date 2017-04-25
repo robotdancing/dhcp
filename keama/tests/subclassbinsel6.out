@@ -1,0 +1,96 @@
+{
+  "Dhcp6": {
+    "option-def": [
+      # subclass declaration config
+      # authoritative is mandatory
+      # options
+      {
+        "space": "dhcp6",
+        "name": "hardware",
+        "code": 1250,
+        "type": "string"
+      },
+      {
+        "space": "dhcp6",
+        "name": "myversion",
+        "code": 1251,
+        "type": "uint16"
+      }
+    ],
+    "client-classes": [
+      # superclass declaration
+      {
+        "name": "foobar",
+//      "spawning": false,
+//      "submatch": {
+//        "option": {
+//          "universe": "dhcp6",
+//          "name": "hardware"
+//        }
+//      },
+        "option-data": [
+          # no harware in DHCPv6
+          {
+            "space": "dhcp6",
+            "name": "myversion",
+            "code": 1251,
+            "data": "1"
+          }
+        ]
+      },
+      # simple subclass declaration
+      {
+//      "super": "foobar",
+//      "binary": "0x0100070e364819",
+        "name": "sub#foobar#0",
+        "option-data": [
+          # no harware in DHCPv6
+          {
+            "space": "dhcp6",
+            "name": "myversion",
+            "code": 1251,
+            "data": "1"
+          }
+        ],
+        /// from: match option dhcp6.hardware
+        /// data: 0x0100070e364819
+        "test": "option[1250].hex == 0x0100070e364819"
+      },
+      # option setting subclass declaration
+      {
+//      "super": "foobar",
+//      "binary": "0x01000bfd32e6fa",
+        "name": "sub#foobar#1",
+        "option-data": [
+          {
+            "space": "dhcp6",
+            "name": "myversion",
+            "code": 1251,
+            "data": "2"
+          }
+        ],
+        /// from: match option dhcp6.hardware
+        /// data: 0x01000bfd32e6fa
+        "test": "option[1250].hex == 0x01000bfd32e6fa"
+      },
+      # complex subclass declaration
+      {
+//      "super": "foobar",
+//      "binary": "0x010002b388c527",
+        "name": "sub#foobar#2",
+        "option-data": [
+          {
+            "space": "dhcp6",
+            "name": "myversion",
+            "code": 1251,
+            "data": "3"
+          }
+        ],
+//      "lease-limit": 20,
+        /// from: match option dhcp6.hardware
+        /// data: 0x010002b388c527
+        "test": "option[1250].hex == 0x010002b388c527"
+      }
+    ]
+  }
+}

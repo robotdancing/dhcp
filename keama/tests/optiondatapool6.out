@@ -1,13 +1,16 @@
 {
   "Dhcp6": {
-    "valid-lifetime": 1800,
     "subnet6": [
+      # option-data in DHCPv6 pool config
+      # authoritative is mandatory
       # subnet declaration
       {
         "subnet": "2001::/64",
         "pools": [
           # pool declaration
           {
+            # avoid empty pool
+            "pool": "2001::100 - 2001::200",
             "option-data": [
               # for a silly reason option-data is not allowed in DHCPv4 pools
               # but allowed in DHCPv6 pools
