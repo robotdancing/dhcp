@@ -170,7 +170,7 @@
       # other clients get addresses on the 10.0.29/24 subnet.
       {
         "name": "foo",
-        /// from: match (substring(option dhcp.vendor-class-identifier, 0, 4)) = ('SUNW')
+        /// from: match if (substring(option dhcp.vendor-class-identifier, 0, 4)) = ('SUNW')
         "test": "substring(option[60].hex,0,4) == 'SUNW'"
       }
     ]

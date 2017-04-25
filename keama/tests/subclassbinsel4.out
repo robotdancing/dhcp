@@ -1,0 +1,67 @@
+{
+  "Dhcp4": {
+    "option-def": [
+      # subclass declaration config
+      # authoritative is mandatory
+      # options
+      {
+        "space": "dhcp4",
+        "name": "myversion",
+        "code": 251,
+        "type": "uint16"
+      }
+    ],
+    "client-classes": [
+      # superclass declaration
+      {
+        "name": "foobar",
+//      "spawning": false,
+//      "submatch": {
+//        "hardware": null
+//      },
+        "option-data": [
+          {
+            "space": "dhcp4",
+            "name": "myversion",
+            "code": 251,
+            "data": "1"
+          }
+        ]
+      },
+      # simple subclass declaration
+      {
+//      "super": "foobar",
+//      "binary": "0x0100070e364819",
+        "name": "sub#foobar#0",
+        "option-data": [
+          {
+            "space": "dhcp4",
+            "name": "myversion",
+            "code": 251,
+            "data": "1"
+          }
+        ],
+        /// from: match hardware
+        /// data: 0x0100070e364819
+        "test": "concat(substring(pkt4.htype,-1,all),pkt4.mac) == 0x0100070e364819"
+      },
+      # option setting subclass declaration
+      {
+//      "super": "foobar",
+//      "binary": "0x01000bfd32e6fa",
+        "name": "sub#foobar#1",
+        "option-data": [
+          {
+            "space": "dhcp4",
+            "name": "myversion",
+            "code": 251,
+            "data": "2"
+          }
+        ],
+        /// from: match hardware
+        /// data: 0x01000bfd32e6fa
+        "test": "concat(substring(pkt4.htype,-1,all),pkt4.mac) == 0x01000bfd32e6fa"
+      }
+    ]
+  }
+}

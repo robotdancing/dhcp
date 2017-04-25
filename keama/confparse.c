@@ -137,6 +137,8 @@ conf_file_parse(struct parse *cfile)
 		}
 	}
 
+	/* Kea todo: cleanup classes */
+
 	return issues;
 }
 
@@ -1154,7 +1156,7 @@ parse_class_declaration(struct parse *cfile, int type)
 	} else if (type != CLASS_TYPE_CLASS) {
 		if (pc == NULL)
 			parse_error(cfile, "no class named %s", val);
-		if (!mapContains(pc, "spawining") ||
+		if (!mapContains(pc, "spawning") ||
 		    !mapContains(pc, "submatch"))
 			parse_error(cfile, "found class name %s but it is "
 				    "not a suitable superclass", val);
@@ -1170,10 +1172,13 @@ parse_class_declaration(struct parse *cfile, int type)
 			skip_token(&val, &data_len, cfile);
 			data = makeString(data_len, val);
 		} else if (token == NUMBER_OR_NAME || token == NUMBER) {
-			data = parse_hexa(cfile);
+			data = makeString(-1, "0x");
+			concatString(data, parse_hexa(cfile));
 			binary = ISC_TRUE;
-		} else
+		} else {
+			skip_token(&val, NULL, cfile);
 			parse_error(cfile, "Expecting string or hex list.");
+		}
 	}
 
 	/* See if there's already a class in the hash table matching the
@@ -1231,8 +1236,10 @@ parse_class_declaration(struct parse *cfile, int type)
 		class->kind = CLASS_DECL;
 		TAILQ_CONCAT(&class->comments, &cfile->comments);
 		if (type == CLASS_TYPE_SUBCLASS) {
+			struct string *subname;
 			char buf[40];
 
+			cfile->issue_counter++;
 			tmp = createString(name);
 			tmp->skip = ISC_TRUE;
 			mapSet(class, tmp, "super");
@@ -1242,13 +1249,15 @@ parse_class_declaration(struct parse *cfile, int type)
 				mapSet(class, tmp, "binary");
 			else
 				mapSet(class, tmp, "string");
+			subname = makeString(-1, "sub#");
+			concatString(subname, name);
 			snprintf(buf, sizeof(buf),
-				 "#sub%u", subclass_counter++);
-			appendString(name, buf);
-			cfile->issue_counter++;
-		}
-		/* Save the name, if there is one. */
-		mapSet(class, createString(name), "name");
+				 "#%u", subclass_counter++);
+			appendString(subname, buf);
+			mapSet(class, createString(subname), "name");
+		} else
+			/* Save the name, if there is one. */
+			mapSet(class, createString(name), "name");
 		listPush(classes, class);
 	}
 
@@ -1296,9 +1305,9 @@ parse_class_declaration(struct parse *cfile, int type)
 					    "one 'match' or 'spawn' clause.");
 			token = peek_token(&val, NULL, cfile);
 			if (token != IF) {
-				mapSet(class,
-				       createBool(ISC_FALSE),
-				       "spawning");
+				expr = createBool(ISC_FALSE);
+				expr->skip = 1;
+				mapSet(class, expr, "spawning");
 				goto submatch;
 			}
 			skip_token(&val, NULL, cfile);
@@ -1325,7 +1334,9 @@ parse_class_declaration(struct parse *cfile, int type)
 					    "one 'match' or 'spawn' clause.");
 			class->skip = ISC_TRUE;
 			cfile->issue_counter++;
-			mapSet(class, createBool(ISC_TRUE), "spawning");
+			expr = createBool(ISC_TRUE);
+			expr->skip = ISC_TRUE;
+			mapSet(class, expr, "spawning");
 			token = next_token(&val, NULL, cfile);
 			if (token != WITH)
 				parse_error(cfile,
@@ -1421,7 +1432,7 @@ subclass_inherit(struct parse *cfile,
 			if (opt_list != NULL)
 				merge_option_data(handle->value, opt_list);
 			else
-				mapSet(class, opt_list, handle->key);
+				mapSet(class, handle->value, handle->key);
 			continue;
 		}
 		/* Just copy */
@@ -1451,7 +1462,7 @@ subclass_inherit(struct parse *cfile,
 	expr = mapGet(class, "binary");
 	if (expr != NULL) {
 		data = createMap();
-		mapSet(expr, data, "const-data");
+		mapSet(data, copy(expr), "const-data");
 	} else
 		data = mapGet(class, "string");
 	if (data == NULL)
@@ -1459,7 +1470,7 @@ subclass_inherit(struct parse *cfile,
 			    name->content);
 	match = createMap();
 	mapSet(match, submatch, "left");
-	mapSet(match, data, "right");
+	mapSet(match, copy(data), "right");
 	expr = createMap();
 	mapSet(expr, match, "equal");
 	
@@ -1469,7 +1480,7 @@ subclass_inherit(struct parse *cfile,
 	appendString(dmsg, print_data_expression(data, &lose));
 
 	reduced = reduce_boolean_expression(expr);
-	if ((reduced = NULL) || (reduced->type != ELEMENT_STRING))
+	if ((reduced == NULL) || (reduced->type != ELEMENT_STRING))
 		return;
 	if (!lose) {
 		comment = createComment(mmsg->content);
@@ -2016,13 +2027,14 @@ dissolve_group(struct parse *cfile, struct element *group)
 				parse_error(cfile, "expected client-classes "
 					    "got %s at %u",
 					    handle->key, order);
+			if (classes != NULL)
+				parse_error(cfile, "got %s twice at %u and %u",
+					    key, classes->order, order);
 			if (parent->kind == CLASS_DECL)
 				parse_error(cfile, "class declarations not "
 					    "allowed here.");
-			if (classes == NULL)
-				classes = handle;
-			else
-				TAILQ_INSERT_TAIL(&classes->values, handle);
+			classes = handle;
+			/* Kea todo: resolve names or super/select */
 			handle = NULL;
                         break;
 
@@ -2215,7 +2227,10 @@ dissolve_group(struct parse *cfile, struct element *group)
 			concat(upper, subnets->value);
 	}
 	if (classes != NULL) {
+		/*
+		 * Kea todo: move class refs to upper group
                 struct element *root;
+
 
 		root = mapGet(cfile->stack[1], "client-classes");
 		if (root == NULL)
@@ -2223,6 +2238,7 @@ dissolve_group(struct parse *cfile, struct element *group)
 			       "client-classes");
 		else
 			concat(root, classes->value);
+		*/
 	}
 	if (pdpools != NULL) {
 		struct element *upper;

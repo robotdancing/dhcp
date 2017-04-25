@@ -874,12 +874,12 @@
       # Define device classes
       {
         "name": "cm-unregistered",
-        /// from: match (substring(option dhcp.vendor-class-identifier, 0, 6)) = ('docsis')
+        /// from: match if (substring(option dhcp.vendor-class-identifier, 0, 6)) = ('docsis')
         "test": "substring(option[60].hex,0,6) == 'docsis'"
       },
       {
         "name": "ruckus",
-        /// from: match ((option dhcp.vendor-class-identifier) = ('Ruckus CPE')) or ((option dhcp.vendor-class-identifier) = ('Ruckus'))
+        /// from: match if ((option dhcp.vendor-class-identifier) = ('Ruckus CPE')) or ((option dhcp.vendor-class-identifier) = ('Ruckus'))
         "test": "(option[60].hex == 'Ruckus CPE') or (option[60].hex == 'Ruckus')",
 //      "config": [
 //        /// vendor-option-space is not (yet?) supported
@@ -901,17 +901,17 @@
       },
       {
         "name": "Trapeze",
-        /// from: match (option dhcp.vendor-class-identifier) = ('WIRELESS-AP:MP_522')
+        /// from: match if (option dhcp.vendor-class-identifier) = ('WIRELESS-AP:MP_522')
         "test": "option[60].hex == 'WIRELESS-AP:MP_522'"
       },
       {
         "name": "Trapeze2",
-        /// from: match (option dhcp.vendor-class-identifier) = ('WIRELESS-AP:WLA522-US')
+        /// from: match if (option dhcp.vendor-class-identifier) = ('WIRELESS-AP:WLA522-US')
         "test": "option[60].hex == 'WIRELESS-AP:WLA522-US'"
       },
       {
         "name": "ubnt",
-        /// from: match ((option dhcp.vendor-class-identifier) = ('ubnt')) or ((option dhcp.vendor-class-identifier) = ('udhcp 1.11.2'))
+        /// from: match if ((option dhcp.vendor-class-identifier) = ('ubnt')) or ((option dhcp.vendor-class-identifier) = ('udhcp 1.11.2'))
         "test": "(option[60].hex == 'ubnt') or (option[60].hex == 'udhcp 1.11.2')",
         "option-data": [
           {
@@ -939,7 +939,7 @@
       },
       {
         "name": "unifi",
-        /// from: match (option dhcp.vendor-class-identifier) = ('udhcp 1.11.2')
+        /// from: match if (option dhcp.vendor-class-identifier) = ('udhcp 1.11.2')
         "test": "option[60].hex == 'udhcp 1.11.2'",
         "option-data": [
           {
@@ -952,17 +952,17 @@
       },
       {
         "name": "3010s",
-        /// from: match (substring(option dhcp.host-name, 0, 10)) = ('DES-3010PA')
+        /// from: match if (substring(option dhcp.host-name, 0, 10)) = ('DES-3010PA')
         "test": "substring(option[12].hex,0,10) == 'DES-3010PA'"
       },
       {
         "name": "HP",
-        /// from: match (option dhcp.vendor-class-identifier) = ('Colubris-AP')
+        /// from: match if (option dhcp.vendor-class-identifier) = ('Colubris-AP')
         "test": "option[60].hex == 'Colubris-AP'"
       },
       {
         "name": "BEC",
-        /// from: match (substring(hardware, 1, 3)) = (0x0004ed)
+        /// from: match if (substring(hardware, 1, 3)) = (0x0004ed)
         "test": "substring(concat(substring(pkt4.htype,-1,all),pkt4.mac),1,3) == 0x0004ed"
       }
     ],
