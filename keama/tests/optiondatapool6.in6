@@ -11,6 +11,6 @@ subnet6 2001::/64 {
 	range6 2001::100 2001::200;
         # for a silly reason option-data is not allowed in DHCPv4 pools
 	# but allowed in DHCPv6 pools
-	option dhcp6.domain-search example.com, example.org;
+	option dhcp6.domain-search "example.com", "example.org";
     }
 }

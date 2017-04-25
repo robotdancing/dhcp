@@ -1,0 +1,39 @@
+{
+  "Dhcp4": {
+    "interfaces-config": {
+      "interfaces": [
+        "foo"
+      ]
+    },
+    "subnet4": [
+      # subnet declaration
+      {
+        "subnet": "10.5.5.0/27",
+        "valid-lifetime": 3600,
+        "option-data": [
+          # another option
+          {
+            "space": "dhcp4",
+            "name": "ip-forwarding",
+            "code": 19,
+            "data": "true"
+          },
+          # interface
+          {
+            "space": "dhcp4",
+            "name": "domain-search",
+            "code": 119,
+            "data": "example.com, example.org"
+          }
+        ],
+        "interface": "foo",
+        "pools": [
+          # pool (must be after the subnet)
+          {
+            "pool": "10.5.5.5 - 10.5.5.10"
+          }
+        ]
+      }
+    ]
+  }
+}

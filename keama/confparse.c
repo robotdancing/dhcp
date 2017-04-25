@@ -1480,6 +1480,11 @@ subclass_inherit(struct parse *cfile,
 	appendString(dmsg, print_data_expression(data, &lose));
 
 	reduced = reduce_boolean_expression(expr);
+	if ((reduced != NULL) && (reduced->type == ELEMENT_BOOLEAN))
+		parse_error(cfile, "class matching rule reduced to a "
+			    "constant boolean expression: %s = %s",
+			    print_data_expression(submatch, &lose),
+			    print_data_expression(data, &lose));
 	if ((reduced == NULL) || (reduced->type != ELEMENT_STRING))
 		return;
 	if (!lose) {
@@ -1507,6 +1512,10 @@ add_match_class(struct parse *cfile,
 		comment = createComment(msg->content);
 
 	reduced = reduce_boolean_expression(expr);
+	if ((reduced != NULL) && (reduced->type == ELEMENT_BOOLEAN))
+		parse_error(cfile, "'match if' with a constant boolean "
+			    "expression %s",
+			    print_boolean_expression(expr, &lose));
 	if ((reduced == NULL) || (reduced->type != ELEMENT_STRING)) {
 		expr->skip = ISC_TRUE;
 		cfile->issue_counter++;
@@ -1613,6 +1622,37 @@ parse_shared_net_declaration(struct parse *cfile)
 	listRemove(subnets, 0);
 	mapRemove(share, "name");
 	mapRemove(share, "subnets");
+	/* specific case before calling generic merge */
+	if (mapContains(share, "pools") &&
+	    mapContains(subnet, "pools")) {
+		struct element *pools;
+		struct element *sub;
+
+		pools = mapGet(share, "pools");
+		mapRemove(share, "pools");
+		sub = mapGet(subnet, "pools");
+		concat(sub, pools);
+	}
+	if (mapContains(share, "pd-pools") &&
+	    mapContains(subnet, "pd-pools")) {
+		struct element *pools;
+		struct element *sub;
+
+		pools = mapGet(share, "pd-pools");
+		mapRemove(share, "pd-pools");
+		sub = mapGet(subnet, "pd-pools");
+		concat(sub, pools);
+	}
+	if (mapContains(share, "option-data") &&
+	    mapContains(subnet, "option-data")) {
+		struct element *opt_list;
+		struct element *sub;
+
+		opt_list = mapGet(share, "option-data");
+		mapRemove(share, "option-data");
+		sub = mapGet(subnet, "option-data");
+		merge_option_data(opt_list, sub);
+	}
 	merge(subnet, share);
 
 	if (local_family == AF_INET) {

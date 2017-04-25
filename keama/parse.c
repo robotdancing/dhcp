@@ -4884,8 +4884,11 @@ putUChar(unsigned char *obuf, uint32_t val)
 isc_boolean_t
 is_boolean_expression(struct element *expr)
 {
-	return ((expr->type == ELEMENT_BOOLEAN) ||
-		mapContains(expr, "check") ||
+	if (expr->type == ELEMENT_BOOLEAN)
+		return ISC_TRUE;
+	if (expr->type != ELEMENT_MAP)
+		return ISC_FALSE;
+	return (mapContains(expr, "check") ||
 		mapContains(expr, "exists") ||
 		mapContains(expr, "variable-exists") ||
 		mapContains(expr, "equal") ||
@@ -4902,9 +4905,12 @@ is_boolean_expression(struct element *expr)
 isc_boolean_t
 is_data_expression(struct element *expr)
 {
-	return ((expr->type == ELEMENT_INTEGER) ||
-		(expr->type == ELEMENT_STRING) ||
-		mapContains(expr, "substring") ||
+	if ((expr->type == ELEMENT_INTEGER) ||
+	    (expr->type == ELEMENT_STRING))
+		return ISC_TRUE;
+	if (expr->type != ELEMENT_MAP)
+		return ISC_FALSE;
+	return (mapContains(expr, "substring") ||
 		mapContains(expr, "suffix") ||
 		mapContains(expr, "lowercase") ||
 		mapContains(expr, "uppercase") ||
@@ -4934,8 +4940,11 @@ is_data_expression(struct element *expr)
 isc_boolean_t
 is_numeric_expression(struct element *expr)
 {
-	return ((expr->type == ELEMENT_INTEGER) ||
-		mapContains(expr, "extract-int8") ||
+	if (expr->type == ELEMENT_INTEGER)
+		return ISC_TRUE;
+	if (expr->type != ELEMENT_MAP)
+		return ISC_FALSE;
+	return (mapContains(expr, "extract-int8") ||
 		mapContains(expr, "extract-int16") ||
 		mapContains(expr, "extract-int32") ||
 		mapContains(expr, "const-int") ||

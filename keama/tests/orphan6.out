@@ -15,8 +15,8 @@
 //      "option-data": [
 //        {
 //          "space": "dhcp6",
-//          "name": "domain-search",
-//          "code": 24,
+//          "name": "dns-servers",
+//          "code": 23,
 //          "data": "2a01:e00::2, 2a01:e00::1"
 //        }
 //      ]

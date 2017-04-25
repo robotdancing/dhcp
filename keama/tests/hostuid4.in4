@@ -14,7 +14,7 @@ ignore-client-uids false;
 # host declarations
 host test1 {
     uid 01:02:03:04:05:0a:0b:0c:0d:0e:0f;
-    option domain-search example.com, example.org;
+    option domain-search "example.com", "example.org";
     default-lease-time 1800;
     fixed-address 10.5.5.1, 10.10.10.10;
 }

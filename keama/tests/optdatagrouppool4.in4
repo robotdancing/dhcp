@@ -15,7 +15,7 @@ subnet 10.5.5.0 netmask 255.255.255.224 {
         # for a silly reason option-data is not allowed in DHCPv4 pools
 	# try to fool this rule using a group
 	group fool {
-            option domain-search example.com, example.org;
+            option domain-search "example.com", "example.org";
         }
     }
 }
