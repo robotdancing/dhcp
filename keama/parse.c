@@ -60,8 +60,10 @@ static void putUChar(unsigned char *obuf, uint32_t val);
 static isc_boolean_t is_compound_expression(struct element *);
 */
 static enum expression_context op_context(enum expr_op);
+static int op_val(enum expr_op);
 static int op_precedence(enum expr_op, enum expr_op);
 static enum expression_context expression_context(struct element *);
+static enum expr_op expression(struct element *);
 
 /* Skip to the semicolon ending the current statement.   If we encounter
    braces, the matching closing brace terminates the statement.
@@ -1668,9 +1670,11 @@ parse_executable_statement(struct element *result,
 		token = next_token(&val, NULL, cfile);
 
 		if (token == LPAREN) {
-			struct string *value;
+			struct element *func;
+			struct string *args;
 
-			value = makeString(0, NULL);
+			func = createMap();
+			args = makeString(0, NULL);
 			do {
 				token = next_token(&val, NULL, cfile);
 				if (token == RPAREN)
@@ -1678,9 +1682,9 @@ parse_executable_statement(struct element *result,
 				if (token != NAME && token != NUMBER_OR_NAME)
 					parse_error(cfile,
 						    "expecting argument name");
-				if (value->length > 0)
-					appendString(value, ", ");
-				appendString(value, val);
+				if (args->length > 0)
+					appendString(args, ", ");
+				appendString(args, val);
 				token = next_token(&val, NULL, cfile);
 			} while (token == COMMA);
 
@@ -1691,7 +1695,7 @@ parse_executable_statement(struct element *result,
 				*lose = ISC_TRUE;
 				return ISC_FALSE;
 			}
-			mapSet(st, createString(value), "arguments");
+			mapSet(func, createString(args), "arguments");
 
 			token = next_token(&val, NULL, cfile);
 			if (token != LBRACE)
@@ -1703,7 +1707,8 @@ parse_executable_statement(struct element *result,
 				if (*lose)
 					goto badx;
 			}
-			mapSet(st, expr, "function-body");
+			mapSet(func, expr, "body");
+			mapSet(st, func, "function");
 
 			token = next_token(&val, NULL, cfile);
 			if (token != RBRACE)
@@ -5160,4 +5165,152 @@ expression_context(struct element *expr)
 	if (is_boolean_expression(expr))
 		return context_boolean;
 	return context_any;
+}
+
+static enum expr_op
+expression(struct element *expr)
+{
+	if (expr->type != ELEMENT_MAP)
+		return expr_none;
+	if (mapContains(expr, "match"))
+		return expr_match;
+	if (mapContains(expr, "check"))
+		return expr_check;
+	if (mapContains(expr, "equal"))
+		return expr_equal;
+	if (mapContains(expr, "substring"))
+		return expr_substring;
+	if (mapContains(expr, "suffix"))
+		return expr_suffix;
+	if (mapContains(expr, "concat"))
+		return expr_concat;
+	if (mapContains(expr, "and"))
+		return expr_and;
+	if (mapContains(expr, "or"))
+		return expr_or;
+	if (mapContains(expr, "not"))
+		return expr_not;
+	if (mapContains(expr, "option"))
+		return expr_option;
+	if (mapContains(expr, "hardware"))
+		return expr_hardware;
+	if (mapContains(expr, "packet"))
+		return expr_packet;
+	if (mapContains(expr, "const-data"))
+		return expr_const_data;
+	if (mapContains(expr, "extract-int8"))
+		return expr_extract_int8;
+	if (mapContains(expr, "extract-int16"))
+		return expr_extract_int16;
+	if (mapContains(expr, "extract-int32"))
+		return expr_extract_int32;
+	if (mapContains(expr, "encode-int8"))
+		return expr_encode_int8;
+	if (mapContains(expr, "encode-int16"))
+		return expr_encode_int16;
+	if (mapContains(expr, "encode-int32"))
+		return expr_encode_int32;
+	if (mapContains(expr, "const-int"))
+		return expr_const_int;
+	if (mapContains(expr, "exists"))
+		return expr_exists;
+	if (mapContains(expr, "encapsulate"))
+		return expr_encapsulate;
+	if (mapContains(expr, "known"))
+		return expr_known;
+	if (mapContains(expr, "reverse"))
+		return expr_reverse;
+	if (mapContains(expr, "leased-address"))
+		return expr_leased_address;
+	if (mapContains(expr, "binary-to-ascii"))
+		return expr_binary_to_ascii;
+	if (mapContains(expr, "config-option"))
+		return expr_config_option;
+	if (mapContains(expr, "host-decl-name"))
+		return expr_host_decl_name;
+	if (mapContains(expr, "pick-first-value"))
+		return expr_pick_first_value;
+	if (mapContains(expr, "lease-time"))
+		return expr_lease_time;
+	if (mapContains(expr, "static"))
+		return expr_static;
+	if (mapContains(expr, "not-equal"))
+		return expr_not_equal;
+	if (mapContains(expr, "null"))
+		return expr_null;
+	if (mapContains(expr, "variable-exists"))
+		return expr_variable_exists;
+	if (mapContains(expr, "variable-reference"))
+		return expr_variable_reference;
+	if (mapContains(expr, "filename"))
+		return expr_filename;
+	if (mapContains(expr, "server-name"))
+		return expr_sname;
+	if (mapContains(expr, "arguments"))
+		return expr_arg;
+	if (mapContains(expr, "funcall"))
+		return expr_funcall;
+	if (mapContains(expr, "function"))
+		return expr_function;
+	if (mapContains(expr, "add"))
+		return expr_add;
+	if (mapContains(expr, "subtract"))
+		return expr_subtract;
+	if (mapContains(expr, "multiply"))
+		return expr_multiply;
+	if (mapContains(expr, "divide"))
+		return expr_divide;
+	if (mapContains(expr, "remainder"))
+		return expr_remainder;
+	if (mapContains(expr, "binary-and"))
+		return expr_binary_and;
+	if (mapContains(expr, "binary-or"))
+		return expr_binary_or;
+	if (mapContains(expr, "binary-xor"))
+		return expr_binary_xor;
+	if (mapContains(expr, "client-state"))
+		return expr_client_state;
+	if (mapContains(expr, "uppercase"))
+		return expr_ucase;
+	if (mapContains(expr, "lowercase"))
+		return expr_lcase;
+	if (mapContains(expr, "regex-match"))
+		return expr_regex_match;
+	if (mapContains(expr, "iregex-match"))
+		return expr_iregex_match;
+	if (mapContains(expr, "gethostname"))
+		return expr_gethostname;
+	if (mapContains(expr, "v6relay"))
+		return expr_v6relay;
+	if (TAILQ_EMPTY(&expr->value.map_value)) {
+		fprintf(stderr, "empty expression");
+		if (expr->key != NULL)
+			fprintf(stderr, " for %s", expr->key);
+	} else {
+		struct element *item;
+		isc_boolean_t first = ISC_TRUE;
+
+		TAILQ_FOREACH(item, &expr->value.map_value) {
+			const char *key;
+
+			key = item->key;
+			if (key == NULL)
+				continue;
+			if (first)
+				fprintf(stderr, ": %s", key);
+			else
+				fprintf(stderr, ", %s", key);
+			first = ISC_FALSE;
+		}
+	}
+	fputs("\n", stderr);
+	return expr_none;
+}
+
+int
+expr_precedence(enum expr_op op, struct element *expr)
+{
+	if (expr->type != ELEMENT_MAP)
+		return op_val(op);
+	return op_val(op) - op_val(expression(expr));
 }

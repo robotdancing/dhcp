@@ -130,6 +130,7 @@ print_boolean_expression(struct element *expr, isc_boolean_t *lose)
 		struct element *arg;
 		struct element *left;
 		struct element *right;
+		isc_boolean_t add_parenthesis;
 
 		appendString(result, "equal ");
 		arg = mapGet(expr, "equal");
@@ -144,17 +145,28 @@ print_boolean_expression(struct element *expr, isc_boolean_t *lose)
 			appendString(result, "???");
 			return result->content;
 		}
-		result = makeString(-1, "(");
+		result = makeString(0, NULL);
+		add_parenthesis = ISC_TF(expr_precedence(expr_equal,
+							 left) < 0);
+		if (add_parenthesis)
+			appendString(result, "(");
 		appendString(result, print_expression(left, lose));
-		appendString(result, ") = (");
+		if (add_parenthesis)
+			appendString(result, ")");
+		appendString(result, " = ");
 		right = mapGet(arg, "right");
 		if (right == NULL) {
 			*lose = ISC_TRUE;
 			appendString(result, "???");
 			return result->content;
 		}
+		add_parenthesis = ISC_TF(expr_precedence(expr_equal,
+							 right) < 0);
+		if (add_parenthesis)
+			appendString(result, "(");
 		appendString(result, print_expression(right, lose));
-		appendString(result, ")");
+		if (add_parenthesis)
+			appendString(result, ")");
 		return result->content;
 	}
 
@@ -163,6 +175,7 @@ print_boolean_expression(struct element *expr, isc_boolean_t *lose)
 		struct element *arg;
 		struct element *left;
 		struct element *right;
+		isc_boolean_t add_parenthesis;
 
 		appendString(result, "not-equal ");
 		arg = mapGet(expr, "not-equal");
@@ -177,17 +190,28 @@ print_boolean_expression(struct element *expr, isc_boolean_t *lose)
 			appendString(result, "???");
 			return result->content;
 		}
-		result = makeString(-1,"(");
+		result = makeString(0, NULL);
+		add_parenthesis = ISC_TF(expr_precedence(expr_not_equal,
+							 left) < 0);
+		if (add_parenthesis)
+			appendString(result, "(");
 		appendString(result, print_expression(left, lose));
-		appendString(result, ") != (");
+		if (add_parenthesis)
+			appendString(result, ")");
+		appendString(result, " != ");
 		right = mapGet(arg, "right");
 		if (right == NULL) {
 			*lose = ISC_TRUE;
 			appendString(result, "???");
 			return result->content;
 		}
+		add_parenthesis = ISC_TF(expr_precedence(expr_not_equal,
+							 right) < 0);
+		if (add_parenthesis)
+			appendString(result, "(");
 		appendString(result, print_expression(right, lose));
-		appendString(result, ")");
+		if (add_parenthesis)
+			appendString(result, ")");
 		return result->content;
 	}
 
@@ -196,6 +220,7 @@ print_boolean_expression(struct element *expr, isc_boolean_t *lose)
 		struct element *arg;
 		struct element *left;
 		struct element *right;
+		isc_boolean_t add_parenthesis;
 
 		appendString(result, "regex-match ");
 		arg = mapGet(expr, "regex-match");
@@ -210,9 +235,15 @@ print_boolean_expression(struct element *expr, isc_boolean_t *lose)
 			appendString(result, "???");
 			return result->content;
 		}
-		result = makeString(-1,"(");
+		result = makeString(0, NULL);
+		add_parenthesis = ISC_TF(expr_precedence(expr_regex_match,
+							 left) < 0);
+		if (add_parenthesis)
+			appendString(result, "(");
 		appendString(result, print_expression(left, lose));
-		appendString(result, ") ~= ");
+		if (add_parenthesis)
+			appendString(result, ")");
+		appendString(result, " ~= ");
 		right = mapGet(arg, "right");
 		if (right == NULL) {
 			*lose = ISC_TRUE;
@@ -228,6 +259,7 @@ print_boolean_expression(struct element *expr, isc_boolean_t *lose)
 		struct element *arg;
 		struct element *left;
 		struct element *right;
+		isc_boolean_t add_parenthesis;
 
 		appendString(result, "iregex-match ");
 		arg = mapGet(expr, "iregex-match");
@@ -242,9 +274,15 @@ print_boolean_expression(struct element *expr, isc_boolean_t *lose)
 			appendString(result, "???");
 			return result->content;
 		}
-		result = makeString(-1,"(");
+		result = makeString(0, NULL);
+		add_parenthesis = ISC_TF(expr_precedence(expr_iregex_match,
+							 left) < 0);
+		if (add_parenthesis)
+			appendString(result, "(");
 		appendString(result, print_expression(left, lose));
-		appendString(result, ") ~~ ");
+		if (add_parenthesis)
+			appendString(result, ")");
+		appendString(result, " ~~ ");
 		right = mapGet(arg, "right");
 		if (right == NULL) {
 			*lose = ISC_TRUE;
@@ -260,6 +298,7 @@ print_boolean_expression(struct element *expr, isc_boolean_t *lose)
 		struct element *arg;
 		struct element *left;
 		struct element *right;
+		isc_boolean_t add_parenthesis;
 
 		appendString(result, "and ");
 		arg = mapGet(expr, "and");
@@ -274,17 +313,28 @@ print_boolean_expression(struct element *expr, isc_boolean_t *lose)
 			appendString(result, "???");
 			return result->content;
 		}
-		result = makeString(-1, "(");
-		appendString(result, print_boolean_expression(left, lose));
-		appendString(result, ") and (");
+		result = makeString(0, NULL);
+		add_parenthesis = ISC_TF(expr_precedence(expr_and,
+							 left) < 0);
+		if (add_parenthesis)
+			appendString(result, "(");
+		appendString(result, print_expression(left, lose));
+		if (add_parenthesis)
+			appendString(result, ")");
+		appendString(result, " and ");
 		right = mapGet(arg, "right");
 		if (right == NULL) {
 			*lose = ISC_TRUE;
 			appendString(result, "???");
 			return result->content;
 		}
-		appendString(result, print_boolean_expression(right, lose));
-		appendString(result, ")");
+		add_parenthesis = ISC_TF(expr_precedence(expr_and,
+							 right) < 0);
+		if (add_parenthesis)
+			appendString(result, "(");
+		appendString(result, print_expression(right, lose));
+		if (add_parenthesis)
+			appendString(result, ")");
 		return result->content;
 	}
 
@@ -293,6 +343,7 @@ print_boolean_expression(struct element *expr, isc_boolean_t *lose)
 		struct element *arg;
 		struct element *left;
 		struct element *right;
+		isc_boolean_t add_parenthesis;
 
 		appendString(result, "or ");
 		arg = mapGet(expr, "or");
@@ -307,23 +358,35 @@ print_boolean_expression(struct element *expr, isc_boolean_t *lose)
 			appendString(result, "???");
 			return result->content;
 		}
-		result = makeString(-1, "(");
-		appendString(result, print_boolean_expression(left, lose));
-		appendString(result, ") or (");
+		result = makeString(0, NULL);
+		add_parenthesis = ISC_TF(expr_precedence(expr_or,
+							 left) < 0);
+		if (add_parenthesis)
+			appendString(result, "(");
+		appendString(result, print_expression(left, lose));
+		if (add_parenthesis)
+			appendString(result, ")");
+		appendString(result, " or ");
 		right = mapGet(arg, "right");
 		if (right == NULL) {
 			*lose = ISC_TRUE;
 			appendString(result, "???");
 			return result->content;
 		}
-		appendString(result, print_boolean_expression(right, lose));
-		appendString(result, ")");
+		add_parenthesis = ISC_TF(expr_precedence(expr_or,
+							 right) < 0);
+		if (add_parenthesis)
+			appendString(result, "(");
+		appendString(result, print_expression(right, lose));
+		if (add_parenthesis)
+			appendString(result, ")");
 		return result->content;
 	}
 
 	/* not */
 	if (mapContains(expr, "not")) {
 		struct element *arg;
+		isc_boolean_t add_parenthesis;
 
 		appendString(result, "not ");
 		arg = mapGet(expr, "not");
@@ -332,9 +395,13 @@ print_boolean_expression(struct element *expr, isc_boolean_t *lose)
 			appendString(result, "???");
 			return result->content;
 		}
-		appendString(result, "(");
-		appendString(result, print_boolean_expression(arg, lose));
-		appendString(result, ")");
+		add_parenthesis = ISC_TF(expr_precedence(expr_not,
+							 arg) < 0);
+		if (add_parenthesis)
+			appendString(result, "(");
+		appendString(result, print_expression(arg, lose));
+		if (add_parenthesis)
+			appendString(result, ")");
 		return result->content;
 	}
 
@@ -1098,7 +1165,7 @@ print_data_expression(struct element *expr, isc_boolean_t *lose)
 	if (mapContains(expr, "gethostbyname")) {
 		struct element *arg;
 
-		appendString(result, "gethostbyname ");
+		appendString(result, "gethostbyname(");
 		arg = mapGet(expr, "gethostbyname");
 		if (arg == NULL) {
 			*lose = ISC_TRUE;
@@ -1106,6 +1173,7 @@ print_data_expression(struct element *expr, isc_boolean_t *lose)
 			return result->content;
 		}
 		appendString(result, print_data_expression(arg, lose));
+		appendString(result, ")");
 		return result->content;
 	}
 
@@ -2376,6 +2444,7 @@ print_numeric_expression(struct element *expr, isc_boolean_t *lose)
 		struct element *arg;
 		struct element *left;
 		struct element *right;
+		isc_boolean_t add_parenthesis;
 
 		appendString(result, "add ");
 		arg = mapGet(expr, "add");
@@ -2390,17 +2459,28 @@ print_numeric_expression(struct element *expr, isc_boolean_t *lose)
 			appendString(result, "???");
 			return result->content;
 		}
-		result = makeString(-1, "(");
-		appendString(result, print_numeric_expression(left, lose));
-		appendString(result, ") + (");
+		result = makeString(0, NULL);
+		add_parenthesis = ISC_TF(expr_precedence(expr_add,
+							 left) < 0);
+		if (add_parenthesis)
+			appendString(result, "(");
+		appendString(result, print_expression(left, lose));
+		if (add_parenthesis)
+			appendString(result, ")");
+		appendString(result, " + ");
 		right = mapGet(arg, "right");
 		if (right == NULL) {
 			*lose = ISC_TRUE;
 			appendString(result, "???");
 			return result->content;
 		}
-		appendString(result, print_numeric_expression(right, lose));
-		appendString(result, ")");
+		add_parenthesis = ISC_TF(expr_precedence(expr_add,
+							 right) < 0);
+		if (add_parenthesis)
+			appendString(result, "(");
+		appendString(result, print_expression(right, lose));
+		if (add_parenthesis)
+			appendString(result, ")");
 		return result->content;
 	}
 
@@ -2409,6 +2489,7 @@ print_numeric_expression(struct element *expr, isc_boolean_t *lose)
 		struct element *arg;
 		struct element *left;
 		struct element *right;
+		isc_boolean_t add_parenthesis;
 
 		appendString(result, "subtract ");
 		arg = mapGet(expr, "subtract");
@@ -2423,17 +2504,28 @@ print_numeric_expression(struct element *expr, isc_boolean_t *lose)
 			appendString(result, "???");
 			return result->content;
 		}
-		result = makeString(-1, "(");
-		appendString(result, print_numeric_expression(left, lose));
-		appendString(result, ") - (");
+		result = makeString(0, NULL);
+		add_parenthesis = ISC_TF(expr_precedence(expr_subtract,
+							 left) < 0);
+		if (add_parenthesis)
+			appendString(result, "(");
+		appendString(result, print_expression(left, lose));
+		if (add_parenthesis)
+			appendString(result, ")");
+		appendString(result, " - ");
 		right = mapGet(arg, "right");
 		if (right == NULL) {
 			*lose = ISC_TRUE;
 			appendString(result, "???");
 			return result->content;
 		}
-		appendString(result, print_numeric_expression(right, lose));
-		appendString(result, ")");
+		add_parenthesis = ISC_TF(expr_precedence(expr_subtract,
+							 right) < 0);
+		if (add_parenthesis)
+			appendString(result, "(");
+		appendString(result, print_expression(right, lose));
+		if (add_parenthesis)
+			appendString(result, ")");
 		return result->content;
 	}
 
@@ -2442,6 +2534,7 @@ print_numeric_expression(struct element *expr, isc_boolean_t *lose)
 		struct element *arg;
 		struct element *left;
 		struct element *right;
+		isc_boolean_t add_parenthesis;
 
 		appendString(result, "multiply ");
 		arg = mapGet(expr, "multiply");
@@ -2456,17 +2549,28 @@ print_numeric_expression(struct element *expr, isc_boolean_t *lose)
 			appendString(result, "???");
 			return result->content;
 		}
-		result = makeString(-1, "(");
-		appendString(result, print_numeric_expression(left, lose));
-		appendString(result, ") * (");
+		result = makeString(0, NULL);
+		add_parenthesis = ISC_TF(expr_precedence(expr_multiply,
+							 left) < 0);
+		if (add_parenthesis)
+			appendString(result, "(");
+		appendString(result, print_expression(left, lose));
+		if (add_parenthesis)
+			appendString(result, ")");
+		appendString(result, " * ");
 		right = mapGet(arg, "right");
 		if (right == NULL) {
 			*lose = ISC_TRUE;
 			appendString(result, "???");
 			return result->content;
 		}
-		appendString(result, print_numeric_expression(right, lose));
-		appendString(result, ")");
+		add_parenthesis = ISC_TF(expr_precedence(expr_multiply,
+							 right) < 0);
+		if (add_parenthesis)
+			appendString(result, "(");
+		appendString(result, print_expression(right, lose));
+		if (add_parenthesis)
+			appendString(result, ")");
 		return result->content;
 	}
 
@@ -2475,6 +2579,7 @@ print_numeric_expression(struct element *expr, isc_boolean_t *lose)
 		struct element *arg;
 		struct element *left;
 		struct element *right;
+		isc_boolean_t add_parenthesis;
 
 		appendString(result, "divide ");
 		arg = mapGet(expr, "divide");
@@ -2489,17 +2594,28 @@ print_numeric_expression(struct element *expr, isc_boolean_t *lose)
 			appendString(result, "???");
 			return result->content;
 		}
-		result = makeString(-1, "(");
-		appendString(result, print_numeric_expression(left, lose));
-		appendString(result, ") / (");
+		result = makeString(0, NULL);
+		add_parenthesis = ISC_TF(expr_precedence(expr_divide,
+							 left) < 0);
+		if (add_parenthesis)
+			appendString(result, "(");
+		appendString(result, print_expression(left, lose));
+		if (add_parenthesis)
+			appendString(result, ")");
+		appendString(result, " / ");
 		right = mapGet(arg, "right");
 		if (right == NULL) {
 			*lose = ISC_TRUE;
 			appendString(result, "???");
 			return result->content;
 		}
-		appendString(result, print_numeric_expression(right, lose));
-		appendString(result, ")");
+		add_parenthesis = ISC_TF(expr_precedence(expr_divide,
+							 right) < 0);
+		if (add_parenthesis)
+			appendString(result, "(");
+		appendString(result, print_expression(right, lose));
+		if (add_parenthesis)
+			appendString(result, ")");
 		return result->content;
 	}
 
@@ -2508,6 +2624,7 @@ print_numeric_expression(struct element *expr, isc_boolean_t *lose)
 		struct element *arg;
 		struct element *left;
 		struct element *right;
+		isc_boolean_t add_parenthesis;
 
 		appendString(result, "remainder ");
 		arg = mapGet(expr, "remainder");
@@ -2522,17 +2639,28 @@ print_numeric_expression(struct element *expr, isc_boolean_t *lose)
 			appendString(result, "???");
 			return result->content;
 		}
-		result = makeString(-1, "(");
-		appendString(result, print_numeric_expression(left, lose));
-		appendString(result, ") % (");
+		result = makeString(0, NULL);
+		add_parenthesis = ISC_TF(expr_precedence(expr_remainder,
+							 left) < 0);
+		if (add_parenthesis)
+			appendString(result, "(");
+		appendString(result, print_expression(left, lose));
+		if (add_parenthesis)
+			appendString(result, ")");
+		appendString(result, " % ");
 		right = mapGet(arg, "right");
 		if (right == NULL) {
 			*lose = ISC_TRUE;
 			appendString(result, "???");
 			return result->content;
 		}
-		appendString(result, print_numeric_expression(right, lose));
-		appendString(result, ")");
+		add_parenthesis = ISC_TF(expr_precedence(expr_remainder,
+							 right) < 0);
+		if (add_parenthesis)
+			appendString(result, "(");
+		appendString(result, print_expression(right, lose));
+		if (add_parenthesis)
+			appendString(result, ")");
 		return result->content;
 	}
 
@@ -2541,6 +2669,7 @@ print_numeric_expression(struct element *expr, isc_boolean_t *lose)
 		struct element *arg;
 		struct element *left;
 		struct element *right;
+		isc_boolean_t add_parenthesis;
 
 		appendString(result, "binary-and ");
 		arg = mapGet(expr, "binary-and");
@@ -2555,17 +2684,28 @@ print_numeric_expression(struct element *expr, isc_boolean_t *lose)
 			appendString(result, "???");
 			return result->content;
 		}
-		result = makeString(-1, "(");
-		appendString(result, print_numeric_expression(left, lose));
-		appendString(result, ") & (");
+		result = makeString(0, NULL);
+		add_parenthesis = ISC_TF(expr_precedence(expr_binary_and,
+							 left) < 0);
+		if (add_parenthesis)
+			appendString(result, "(");
+		appendString(result, print_expression(left, lose));
+		if (add_parenthesis)
+			appendString(result, ")");
+		appendString(result, " & ");
 		right = mapGet(arg, "right");
 		if (right == NULL) {
 			*lose = ISC_TRUE;
 			appendString(result, "???");
 			return result->content;
 		}
-		appendString(result, print_numeric_expression(right, lose));
-		appendString(result, ")");
+		add_parenthesis = ISC_TF(expr_precedence(expr_binary_and,
+							 right) < 0);
+		if (add_parenthesis)
+			appendString(result, "(");
+		appendString(result, print_expression(right, lose));
+		if (add_parenthesis)
+			appendString(result, ")");
 		return result->content;
 	}
 
@@ -2574,6 +2714,7 @@ print_numeric_expression(struct element *expr, isc_boolean_t *lose)
 		struct element *arg;
 		struct element *left;
 		struct element *right;
+		isc_boolean_t add_parenthesis;
 
 		appendString(result, "binary-or ");
 		arg = mapGet(expr, "binary-or");
@@ -2588,17 +2729,28 @@ print_numeric_expression(struct element *expr, isc_boolean_t *lose)
 			appendString(result, "???");
 			return result->content;
 		}
-		result = makeString(-1, "(");
-		appendString(result, print_numeric_expression(left, lose));
-		appendString(result, ") | (");
+		result = makeString(0, NULL);
+		add_parenthesis = ISC_TF(expr_precedence(expr_binary_or,
+							 left) < 0);
+		if (add_parenthesis)
+			appendString(result, "(");
+		appendString(result, print_expression(left, lose));
+		if (add_parenthesis)
+			appendString(result, ")");
+		appendString(result, " | ");
 		right = mapGet(arg, "right");
 		if (right == NULL) {
 			*lose = ISC_TRUE;
 			appendString(result, "???");
 			return result->content;
 		}
-		appendString(result, print_numeric_expression(right, lose));
-		appendString(result, ")");
+		add_parenthesis = ISC_TF(expr_precedence(expr_binary_or,
+							 right) < 0);
+		if (add_parenthesis)
+			appendString(result, "(");
+		appendString(result, print_expression(right, lose));
+		if (add_parenthesis)
+			appendString(result, ")");
 		return result->content;
 	}
 
@@ -2607,6 +2759,7 @@ print_numeric_expression(struct element *expr, isc_boolean_t *lose)
 		struct element *arg;
 		struct element *left;
 		struct element *right;
+		isc_boolean_t add_parenthesis;
 
 		appendString(result, "binary-xor ");
 		arg = mapGet(expr, "binary-xor");
@@ -2621,17 +2774,28 @@ print_numeric_expression(struct element *expr, isc_boolean_t *lose)
 			appendString(result, "???");
 			return result->content;
 		}
-		result = makeString(-1, "(");
-		appendString(result, print_numeric_expression(left, lose));
-		appendString(result, ") ^ (");
+		result = makeString(0, NULL);
+		add_parenthesis = ISC_TF(expr_precedence(expr_binary_xor,
+							 left) < 0);
+		if (add_parenthesis)
+			appendString(result, "(");
+		appendString(result, print_expression(left, lose));
+		if (add_parenthesis)
+			appendString(result, ")");
+		appendString(result, " ^ ");
 		right = mapGet(arg, "right");
 		if (right == NULL) {
 			*lose = ISC_TRUE;
 			appendString(result, "???");
 			return result->content;
 		}
-		appendString(result, print_numeric_expression(right, lose));
-		appendString(result, ")");
+		add_parenthesis = ISC_TF(expr_precedence(expr_binary_xor,
+							 right) < 0);
+		if (add_parenthesis)
+			appendString(result, "(");
+		appendString(result, print_expression(right, lose));
+		if (add_parenthesis)
+			appendString(result, ")");
 		return result->content;
 	}
 
