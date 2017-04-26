@@ -403,6 +403,7 @@ isc_boolean_t parse_config_statement(struct element *, struct parse *,
 isc_boolean_t is_boolean_expression(struct element *);
 isc_boolean_t is_data_expression(struct element *);
 isc_boolean_t is_numeric_expression(struct element *);
+int expr_precedence(enum expr_op, struct element *);
 
 /* options.c */
 void spaces_init(void);
