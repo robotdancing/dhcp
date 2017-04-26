@@ -1,0 +1,8 @@
+# LLT server duid config
+
+# authoritative is mandatory
+authoritative;
+
+# LLT server duid declaration
+server-duid llt;
+

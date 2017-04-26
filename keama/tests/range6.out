@@ -1,8 +1,8 @@
 {
+  # DHCPv6 range config
+  # authoritative is mandatory
   "Dhcp6": {
     "subnet6": [
-      # DHCPv6 range config
-      # authoritative is mandatory
       # subnet declaration
       {
         "subnet": "2001::/64",
@@ -19,6 +19,9 @@
         "pools": [
           {
             "pool": "2001::100 - 2001::200"
+          },
+          {
+            "pool": "2001::1000/116"
           }
         ]
       }

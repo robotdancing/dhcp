@@ -1,0 +1,37 @@
+{
+  # DHCPv6 subnet declaration config
+  # authoritative is mandatory
+  "Dhcp6": {
+    "valid-lifetime": 1800,
+    "subnet6": [
+      # DHCPv4 subnet declaration
+      {
+        "subnet": "2001::/64",
+        "pools": [
+          # at least one pool is required
+          {
+            "pool": "2001::100 - 2001::200"
+          },
+          # in future it will be possible to use the same pool6
+          { }
+        ],
+        "option-data": [
+          {
+            "space": "dhcp6",
+            "name": "domain-search",
+            "code": 24,
+            "data": "example.com, example.org"
+          }
+        ],
+        "valid-lifetime": 3600,
+        "pd-pools": [
+          {
+            "prefix": "2001:0:0:10::",
+            "delegated-len": 64,
+            "prefix-len": 60
+          }
+        ]
+      }
+    ]
+  }
+}

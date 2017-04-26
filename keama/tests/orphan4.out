@@ -1,4 +1,6 @@
 {
+  # DHCPv4 orphan reservation config
+  # authoritative is mandatory
   "Dhcp4": {
     "valid-lifetime": 1800,
     "host-reservation-identifiers": [

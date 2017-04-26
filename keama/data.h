@@ -275,7 +275,7 @@ struct element *copy(struct element *e);
 struct element *copyList(struct element *l);
 struct element *copyMap(struct element *m);
 
-/* Handle */
+/* Handles */
 TAILQ_HEAD(handles, handle);
 
 struct handle {
@@ -288,5 +288,9 @@ struct handle {
 
 struct handle* mapPop(struct element *);
 void derive(struct handle *, struct handle *);
+
+/* Hexadecimal literals */
+struct string *hexaValue(struct element *);
+struct element *createHexa(struct string *);
 
 #endif /* DATA_H */

@@ -1,8 +1,8 @@
 {
+  # option-data in DHCPv4 pool config
+  # authoritative is mandatory
   "Dhcp4": {
     "subnet4": [
-      # option-data in DHCPv4 pool config
-      # authoritative is mandatory
       # subnet declaration
       {
         "subnet": "10.5.5.0/27",

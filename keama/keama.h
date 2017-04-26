@@ -39,6 +39,10 @@ enum resolve {
 
 /* From includes/dhcp.h */
 
+#define HTYPE_ETHER	1
+#define HTYPE_IEEE802	6
+#define HTYPE_FDDI	8
+
 #define DHO_DHCP_SERVER_IDENTIFIER		54
 #define DHO_VENDOR_CLASS_IDENTIFIER		60
 #define DHO_USER_CLASS				77

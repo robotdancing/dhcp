@@ -1,4 +1,6 @@
 {
+  # DHCPv4 minimal config
+  # authoritative is mandatory
   "Dhcp4": {
     "valid-lifetime": 1800
   }

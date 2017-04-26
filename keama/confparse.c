@@ -78,6 +78,7 @@ conf_file_parse(struct parse *cfile)
 	top->kind = TOPLEVEL;
 	dhcp = createMap();
 	dhcp->kind = ROOT_GROUP;
+	(void) peek_token(NULL, NULL, cfile);
 	TAILQ_CONCAT(&dhcp->comments, &cfile->comments);
 	stackPush(cfile, dhcp);
 	assert(cfile->stack_top == 1);
@@ -1055,6 +1056,7 @@ parse_host_declaration(struct parse *cfile)
 	listPush(hosts, host);
 }
 
+/* Simple tool to declare used (and only used) reservation identifiers */
 static void
 add_host_reservation_identifiers(struct parse *cfile, const char *id)
 {
@@ -1095,9 +1097,9 @@ parse_class_declaration(struct parse *cfile, int type)
 	struct element *pc = NULL; /* p(arent)c(lass) */
 	struct element *tmp;
 	struct element *expr;
-	int declaration = 0;
-	struct string *data;
+	struct element *data;
 	isc_boolean_t binary = ISC_FALSE;
+	int declaration = 0;
 	struct string *name;
 	isc_boolean_t lose = ISC_FALSE;
 	
@@ -1167,13 +1169,12 @@ parse_class_declaration(struct parse *cfile, int type)
 	if (type == CLASS_TYPE_SUBCLASS) {
 		token = peek_token(&val, NULL, cfile);
 		if (token == STRING) {
-			unsigned data_len;
+			unsigned len;
 
-			skip_token(&val, &data_len, cfile);
-			data = makeString(data_len, val);
+			skip_token(&val, &len, cfile);
+			data = createString(makeString(len, val));
 		} else if (token == NUMBER_OR_NAME || token == NUMBER) {
-			data = makeString(-1, "0x");
-			concatString(data, parse_hexa(cfile));
+			data = createHexa(parse_hexa(cfile));
 			binary = ISC_TRUE;
 		} else {
 			skip_token(&val, NULL, cfile);
@@ -1200,7 +1201,8 @@ parse_class_declaration(struct parse *cfile, int type)
 				selector = mapGet(tmp, "string");
 			if (selector == NULL)
 				continue;
-			if (eqString(stringValue(selector), data)) {
+			if (eqString(stringValue(selector),
+				     stringValue(data))) {
 				class = tmp;
 				break;
 			}
@@ -1219,12 +1221,11 @@ parse_class_declaration(struct parse *cfile, int type)
 		else {
 			tmp->skip = ISC_TRUE;
 			mapSet(gc, tmp, "super");
-			tmp = createString(data);
-			tmp->skip = ISC_TRUE;
+			data->skip = ISC_TRUE;
 			if (binary)
-				mapSet(gc, tmp, "binary");
+				mapSet(gc, data, "binary");
 			else
-				mapSet(gc, tmp, "string");
+				mapSet(gc, data, "string");
 		}
 		listPush(group_classes, gc);
 	}
@@ -1243,12 +1244,11 @@ parse_class_declaration(struct parse *cfile, int type)
 			tmp = createString(name);
 			tmp->skip = ISC_TRUE;
 			mapSet(class, tmp, "super");
-			tmp = createString(data);
-			tmp->skip = ISC_TRUE;
+			data->skip = ISC_TRUE;
 			if (binary)
-				mapSet(class, tmp, "binary");
+				mapSet(class, data, "binary");
 			else
-				mapSet(class, tmp, "string");
+				mapSet(class, data, "string");
 			subname = makeString(-1, "sub#");
 			concatString(subname, name);
 			snprintf(buf, sizeof(buf),
@@ -1377,6 +1377,12 @@ parse_class_declaration(struct parse *cfile, int type)
 		subclass_inherit(cfile, class, copy(pc));
 }
 
+/*
+ * Inherit entries:
+ *  - first copy entries from the current superclass to the subclass
+ *  - second try to reduce the subclass matching condition
+ */
+
 static void
 subclass_inherit(struct parse *cfile,
 		 struct element *class,
@@ -1495,6 +1501,10 @@ subclass_inherit(struct parse *cfile,
 	}
 	mapSet(class, reduced, "test");
 }
+
+/*
+ * Try to reduce a match-if condition into a Kea evaluate bool "test"
+ */
 
 static void
 add_match_class(struct parse *cfile,
@@ -1795,9 +1805,15 @@ parse_subnet_declaration(struct parse *cfile)
 	chain->mask = netmask;
 
 	prefix = addrmask(address, netmask);
-	if (prefix == NULL)
+	if (prefix == NULL) {
+		char bufa[INET_ADDRSTRLEN];
+		char bufm[INET_ADDRSTRLEN];
+
+		inet_ntop(AF_INET, address->content, bufa, INET_ADDRSTRLEN);
+		inet_ntop(AF_INET, netmask->content, bufm, INET_ADDRSTRLEN);
 		parse_error(cfile, "can't get a prefix from %s mask %s",
-			    address->content, netmask->content);
+			    bufa, bufm);
+	}
 	mapSet(subnet, createString(prefix), "subnet");
 
 	common_subnet_parsing(cfile, subnets, subnet);
@@ -1960,6 +1976,12 @@ parse_group_declaration(struct parse *cfile)
 		mapSet(group, createString(name), "name");
 	dissolve_group(cfile, group);
 }
+
+/*
+ * Dissolve a group. Called when a group is closed.
+ *  - spread parameters to children
+ *  - attach declarations at an upper level
+ */
 
 void
 dissolve_group(struct parse *cfile, struct element *group)
@@ -2300,6 +2322,11 @@ dissolve_group(struct parse *cfile, struct element *group)
 	}
 }
 
+/*
+ * Specialized derivation routine for option-data
+ * (options are identified by space + name and/or code
+ */
+
 static void
 option_data_derive(struct parse *cfile, struct handle *src,
 		   struct handle *dst, isc_boolean_t is_pools)
@@ -2539,6 +2566,7 @@ parse_address_range6(struct parse *cfile, int type, size_t where)
 			is_temporary = ISC_TRUE;
 			appendString(lo, " ");
 			appendString(lo, val);
+			skip_token(NULL, NULL, cfile);
 		}			
 	} else if (token == TEMPORARY) {
 		/*
@@ -2696,7 +2724,7 @@ parse_fixed_prefix6(struct parse *cfile, size_t host_decl)
 	ia = parse_ip6_addr_txt(cfile);
 	if (ia == NULL)
 		parse_error(cfile, "can't parse fixed-prefix6 address");
-	token = next_token(NULL, NULL, cfile);
+	token = next_token(&val, NULL, cfile);
 	if (token != SLASH)
 		parse_error(cfile, "expecting '/'");
 	appendString(ia, val);
@@ -2921,41 +2949,45 @@ parse_server_duid_conf(struct parse *cfile) {
 	const char *val;
 	unsigned int len;
 	struct string *ll_addr;
-	struct string *duid;
-	struct element *sv_duid;
+	struct element *duid;
+	struct element *item;
+	int ll_type;
+
+	duid = createMap();
+	TAILQ_CONCAT(&duid->comments, &cfile->comments);
 
 	/*
 	 * Consume the SERVER_DUID token.
 	 */
 	next_token(&val, NULL, cfile);
-	duid = makeString(-1, val);
 
 	/*
 	 * Obtain the DUID type.
 	 */
 	token = next_token(&val, NULL, cfile);
-	appendString(duid, " ");
-	appendString(duid, val);
 
 	/* 
 	 * Enterprise is the easiest - enterprise number and raw data
 	 * are required.
 	 */
 	if (token == EN) {
+		item = createString(makeString(-1, "EN"));
+		mapSet(duid, item, "type");
+
 		/*
 		 * Get enterprise number and identifier.
 		 */
 		token = next_token(&val, NULL, cfile);
 		if (token != NUMBER)
 			parse_error(cfile, "enterprise number expected");
-		appendString(duid, " ");
-		appendString(duid, val);
+		item = createInt(atoi(val));
+		mapSet(duid, item, "enterprise-id");
 
 		token = next_token(&val, &len, cfile);
 		if (token != STRING)
 			parse_error(cfile, "identifier expected");
-		appendString(duid, " ");
-		appendString(duid, val);
+		item = createString(makeString(len, val));
+		mapSet(duid, item, "identifier");
 	}
 
 	/* 
@@ -2966,20 +2998,36 @@ parse_server_duid_conf(struct parse *cfile) {
 	 * value, then we set the actual DUID.
 	 */
 	else if (token == LL) {
+		item = createString(makeString(-1, "LL"));
+		mapSet(duid, item, "type");
+
 		if (peek_token(NULL, NULL, cfile) != SEMI) {
 			/*
 			 * Get our hardware type and address.
 			 */
 			token = next_token(NULL, NULL, cfile);
-			appendString(duid, " ");
-			appendString(duid, val);
+			switch (token) {
+			case ETHERNET:
+				ll_type = HTYPE_ETHER;
+				break;
+			case TOKEN_RING:
+				ll_type = HTYPE_IEEE802;
+				break;
+			case TOKEN_FDDI:
+				ll_type = HTYPE_FDDI;
+				break;
+			default:
+				parse_error(cfile, "hardware type expected");
+			}
+			item = createInt(ll_type);
+			mapSet(duid, item, "htype");
 
-			ll_addr = parse_cshl(cfile);
+			ll_addr = parse_hexa(cfile);
 			if (ll_addr == NULL)
 				parse_error(cfile,
 					    "can't get hardware address");
-			appendString(duid, " ");
-			appendString(duid, ll_addr->content);
+			item = createString(ll_addr);
+			mapSet(duid, item, "identifier");
 		}
 	}
 
@@ -2991,27 +3039,42 @@ parse_server_duid_conf(struct parse *cfile) {
 	 * value, then we set the actual DUID.
 	 */
 	else if (token == LLT) {
+		item = createString(makeString(-1, "LLT"));
+		mapSet(duid, item, "type");
+
 		if (peek_token(NULL, NULL, cfile) != SEMI) {
 			/*
 			 * Get our hardware type, timestamp, and address.
 			 */
 			token = next_token(NULL, NULL, cfile);
-			appendString(duid, " ");
-			appendString(duid, val);
+			switch (token) {
+			case ETHERNET:
+				ll_type = HTYPE_ETHER;
+				break;
+			case TOKEN_RING:
+				ll_type = HTYPE_IEEE802;
+				break;
+			case TOKEN_FDDI:
+				ll_type = HTYPE_FDDI;
+				break;
+			default:
+				parse_error(cfile, "hardware type expected");
+			}
+			item = createInt(ll_type);
+			mapSet(duid, item, "htype");
 
 			token = next_token(&val, NULL, cfile);
 			if (token != NUMBER)
 				parse_error(cfile, "timestamp expected");
-			appendString(duid, " ");
-			appendString(duid, val);
+			item = createInt(atoi(val));
+			mapSet(duid, item, "time");
 
-			ll_addr = parse_cshl(cfile);
+			ll_addr = parse_hexa(cfile);
 			if (ll_addr == NULL)
 				parse_error(cfile,
 					    "can't get hardware address");
-			appendString(duid, " ");
-			appendString(duid, ll_addr->content);
-			memset(&ll_addr, 0, sizeof(ll_addr));
+			item = createString(ll_addr);
+			mapSet(duid, item, "identifier");
 		}
 	}
 
@@ -3025,11 +3088,18 @@ parse_server_duid_conf(struct parse *cfile) {
 	 * This also works for existing DUID types of course. 
 	 */
 	else if (token == NUMBER) {
+		item = createString(makeString(-1, val));
+		item->skip = ISC_TRUE;
+		/* Kea wants EN, LL or LLT so skip the whole thing */
+		duid->skip = ISC_TRUE;
+		cfile->issue_counter++;
+		mapSet(duid, item, "type");
+
 		token = next_token(&val, &len, cfile);
 		if (token != STRING)
 			parse_error(cfile, "identifier expected");
-		appendString(duid, " ");
-		appendString(duid, val);
+		item = createString(makeString(len, val));
+		mapSet(duid, item, "identifier");
 	}
 
 	/*
@@ -3045,16 +3115,21 @@ parse_server_duid_conf(struct parse *cfile) {
 	if (token != SEMI)
 		parse_error(cfile, "semicolon expected");
 
-	sv_duid = createString(duid);
-	sv_duid->skip = ISC_TRUE;
-	TAILQ_CONCAT(&sv_duid->comments, &cfile->comments);
-	cfile->issue_counter++;
-	mapSet(cfile->stack[cfile->stack_top], sv_duid, "server-duid");
+	/* server-id is a global parameter */
+	if (mapContains(cfile->stack[1], "server-id"))
+		parse_error(cfile, "there is already a server-id");
+	/* DHCPv6 only but not fatal */
+	if ((local_family != AF_INET6) && !duid->skip) {
+		duid->skip = ISC_TRUE;
+		cfile->issue_counter++;
+	}
+	mapSet(cfile->stack[1], duid, "server-id");
 }
 
 /*
  * Push new interface on the interface list when it is not already.
  */
+
 static void
 new_network_interface(struct parse *cfile, struct element *iface)
 {
@@ -3127,6 +3202,13 @@ addrmask(const struct string *address, const struct string *netmask)
 	return makeString(-1, buf);
 }
 
+/*
+ * find a place where to put a reservation
+ * (reservations aka hosts must be in a subnet in Kea)
+ * (defaulting to the last defined subnet (e.g. for reservations
+ *  without any address).
+ */
+
 static struct element *
 find_match(struct parse *cfile, struct element *host)
 {
@@ -3176,19 +3258,41 @@ find_match(struct parse *cfile, struct element *host)
 	return cfile->stack[1];
 }
 
+/*
+ * Compute a prefix length from lower - higher IPv6 addresses.
+ */
+
+static const uint8_t bytemasks[8] = {
+	0x80, 0xc0, 0xe0, 0xf0, 0xf8, 0xfc, 0xfe, 0xff
+};
+
 static int
 get_prefix_length(const char *low, const char *high)
 {
-	uint32_t low_int;
-	uint32_t high_int;
-	uint32_t xor_int;
-	int plen;
+	uint8_t lo[16];
+	uint8_t hi[16];
+	uint8_t xor[16];
+	int i, plen;
 
-	memcpy(&low_int, low, 4);
-	memcpy(&high_int, high, 4);
-	xor_int = low_int ^ high_int;
-	for (plen = 0; plen <= 32; ++plen)
-		if (xor_int == bitmasks[plen])
-			return plen;
+	if ((inet_pton(AF_INET6, low, lo) != 1) ||
+	    (inet_pton(AF_INET6, high, hi) != 1))
+		return -100;
+
+	for (i = 0; i < 16; i++)
+		xor[i] = lo[i] ^ hi[i];
+	for (plen = 0; plen < 128; plen += 8)
+		if (xor[plen / 8] != 0)
+			break;
+	if (plen == 128)
+		return plen;
+	for (i = (plen / 8) + 1; i < 16; ++i)
+		if (xor[i] != 0)
+			return -2;
+	for (i = 0; i < 8; i++) {
+		uint8_t msk =  ~xor[plen / 8];
+
+		if (msk == bytemasks[i])
+			return plen + i + 1;
+	}
 	return -1;
 }

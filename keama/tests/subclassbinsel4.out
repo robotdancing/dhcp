@@ -1,8 +1,8 @@
 {
+  # subclass declaration config
+  # authoritative is mandatory
   "Dhcp4": {
     "option-def": [
-      # subclass declaration config
-      # authoritative is mandatory
       # options
       {
         "space": "dhcp4",

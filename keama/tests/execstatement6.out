@@ -1,4 +1,6 @@
 {
+  # DHCPv6 executable statement config
+  # authoritative is mandatory
   "Dhcp6": {
     "valid-lifetime": 1800
 //  # impossible to convert statement statement

@@ -1,4 +1,6 @@
 {
+  # DHCPv6 one-subnet shared-network declaration config
+  # authoritative is mandatory
   "Dhcp6": {
     "interfaces-config": {
       "interfaces": [

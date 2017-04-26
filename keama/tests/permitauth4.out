@@ -1,4 +1,6 @@
 {
+  # DHCPv4 permit authenticated client config
+  # authoritative is mandatory
   "Dhcp4": {
     "valid-lifetime": 1800,
     "subnet4": [

@@ -1,0 +1,29 @@
+{
+  # DHCPv6 prefix config
+  # authoritative is mandatory
+  "Dhcp6": {
+    "subnet6": [
+      # subnet declaration
+      {
+        "subnet": "2001::/64",
+        "option-data": [
+          # range declaration
+          {
+            "space": "dhcp6",
+            "name": "domain-search",
+            "code": 24,
+            "data": "example.com, example.org"
+          }
+        ],
+        "valid-lifetime": 1800,
+        "pd-pools": [
+//        {
+//          "prefix": "2001:0:0:1::",
+//          "delegated-len": 64,
+//          "prefix-highest": "2001:0:0:3::"
+//        }
+        ]
+      }
+    ]
+  }
+}
