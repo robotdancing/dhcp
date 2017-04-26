@@ -1,0 +1,7 @@
+# bad (no hardware address) LL server duid config
+
+# authoritative is mandatory
+authoritative;
+
+# LL server duid declaration
+server-duid ll fddi;

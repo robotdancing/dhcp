@@ -1,11 +1,11 @@
 {
+  # dhcpd.conf
+  #
+  # Sample configuration file for ISC dhcpd
+  #
+  # Required
   "Dhcp4": {
     "option-data": [
-      # dhcpd.conf
-      #
-      # Sample configuration file for ISC dhcpd
-      #
-      # Required
       # option definitions common to all supported networks...
       {
         "space": "dhcp4",

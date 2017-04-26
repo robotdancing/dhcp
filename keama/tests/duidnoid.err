@@ -1,0 +1,7 @@
+# bad (no identifier) numeric server duid config
+
+# authoritative is mandatory
+authoritative;
+
+# server duid declaration
+server-duid 9;

@@ -963,3 +963,30 @@ derive(struct handle *src, struct handle *dst)
 		mapSet(item, copy(src->value), src->key);
 	}
 }
+
+struct string *
+hexaValue(struct element *s)
+{
+	struct string *h;
+
+	assert(s != NULL);
+	assert(s->type == ELEMENT_STRING);
+
+	h = stringValue(s);
+	assert(h->length >= 2);
+
+	/* string leading 0x */
+	return makeString(h->length - 2, h->content + 2);
+}
+
+struct element *
+createHexa(struct string *h)
+{
+	struct string *s;
+
+	assert(h != NULL);
+
+	s = makeString(-1, "0x");
+	concatString(s, h);
+	return createString(s);
+}

@@ -1,8 +1,8 @@
 {
+  # option-data in DHCPv6 pool config
+  # authoritative is mandatory
   "Dhcp6": {
     "subnet6": [
-      # option-data in DHCPv6 pool config
-      # authoritative is mandatory
       # subnet declaration
       {
         "subnet": "2001::/64",

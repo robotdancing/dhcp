@@ -1,8 +1,8 @@
 {
+  # host declaration with client-identfiers config
+  # authoritative is mandatory
   "Dhcp4": {
     "subnet4": [
-      # host declaration with client-identfiers config
-      # authoritative is mandatory
       # subnet4 declaration
       {
         "subnet": "10.5.5.0/27",
@@ -49,7 +49,7 @@
         ]
       }
     ],
-    "match-client-id": false,
+    "match-client-id": true,
     "host-reservation-identifiers": [
       "client-id",
       "hw-address"

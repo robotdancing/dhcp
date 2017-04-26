@@ -3157,10 +3157,8 @@ parse_non_binary(struct element *expr,
 
 	case NUMBER_OR_NAME:
 		/* Return a const-data to make a difference with
-		   a string literal. */
-		data = makeString(-1, "0x");
-		concatString(data, parse_hexa(cfile));
-		mapSet(expr, createString(data), "const-data");
+		   a string literal. createHexa() adds 0x */
+		mapSet(expr, createHexa(parse_hexa(cfile)), "const-data");
 		break;
 
 	case NS_FORMERR:
@@ -4066,24 +4064,26 @@ parse_option_statement(struct element *result,
 				mapSet(opt_data, data, "data");
 			}
 		}
+		/* string */
+		else if (((*fmt == 't') || (*fmt == 'X')) &&
+			 (expr->type == ELEMENT_STRING))
+			mapSet(opt_data, expr, "data");
 		/* binary */
 		else if ((*fmt == 'E') || (*fmt == 'X')) {
-			struct string *hexa;
-
 			if (expr->type != ELEMENT_MAP)
 				goto giveup;
 			data = mapGet(expr, "const-data");
 			if (data == NULL)
 				goto giveup;
 			/* remove leading 0x */
-			hexa = stringValue(data);
-			data = createString(makeString(hexa->length - 2,
-						       hexa->content + 2));
+			data = createString(hexaValue(data));
 			mapSet(opt_data, data, "data");
 			mapSet(opt_data, createBool(ISC_FALSE), "csv-format");
 		}
 			
-		if (!mapContains(opt_data, "data")) {
+		if (mapContains(opt_data, "data")) {
+			/* insert warning comment */
+		} else {
 		giveup:
 			opt_data->skip = ISC_TRUE;
 			cfile->issue_counter++;
@@ -4741,6 +4741,8 @@ config_match_client_id(struct element *config, struct parse *cfile)
 		parse_error(cfile, "ignore-client-uids is DHCPv4 only");
 
 	value = mapGet(config, "value");
+	/* match-client-id is !ignore-client-uids */
+	value = createBool(!boolValue(value));
 
 	for (scope = cfile->stack_top; scope > 0; --scope) {
 		int kind = cfile->stack[scope]->kind;

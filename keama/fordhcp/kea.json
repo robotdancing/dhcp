@@ -1,4 +1,13 @@
 {
+  # dhcpd.conf file for jaguar in 950 charter failover pair jaguar and
+  # gozer.
+  #
+  # NOTE: DHCP Service for the 950 Wireless Network is now being
+  # handled by sauber.isc.org.
+  #
+  #######################################################################
+  # Global Configuration
+  #
   "Dhcp4": {
 //  "config": [
 //    /// lease-file-name is an internal ISC DHCP feature

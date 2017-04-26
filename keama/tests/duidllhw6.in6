@@ -1,0 +1,9 @@
+# LL server duid config
+
+# authoritative is mandatory
+authoritative;
+
+# LL server duid declaration
+server-duid ll ethernet 00:16:6F:49:7D:9B;
+
+

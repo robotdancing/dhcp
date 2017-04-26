@@ -1,4 +1,6 @@
 {
+  # DHCPv6 orphan reservation config
+  # authoritative is mandatory
   "Dhcp6": {
     "valid-lifetime": 1800,
     "host-reservation-identifiers": [

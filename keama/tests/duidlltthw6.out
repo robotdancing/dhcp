@@ -1,0 +1,13 @@
+{
+  # LLT server duid config
+  # authoritative is mandatory
+  "Dhcp6": {
+    # LLT server duid declaration
+    "server-id": {
+      "type": "LLT",
+      "htype": 6,
+      "time": 213982198,
+      "identifier": "00166f497d9b"
+    }
+  }
+}

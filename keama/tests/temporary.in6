@@ -1,0 +1,13 @@
+# DHCPv6 temporary (aka IA_TA) range config
+
+# authoritative is mandatory
+authoritative;
+
+# subnet declaration
+subnet6 2001::/64 {
+    # range declaration
+    option dhcp6.domain-search "example.com", "example.org";
+    default-lease-time 1800;
+    range6 2001::100 temporary;
+    range6 2001::1000/116 temporary;
+}
