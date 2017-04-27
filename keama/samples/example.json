@@ -4,6 +4,8 @@
   # Sample configuration file for ISC dhcpd
   #
   # Required
+  /// This configuration declares some subnets but has no interfaces-config
+  /// Reference Kea #5256
   "Dhcp4": {
     "option-data": [
       # option definitions common to all supported networks...
@@ -170,7 +172,7 @@
       # other clients get addresses on the 10.0.29/24 subnet.
       {
         "name": "foo",
-        /// from: match if (substring(option dhcp.vendor-class-identifier, 0, 4)) = ('SUNW')
+        /// from: match if (substring(option dhcp.vendor-class-identifier, 0, 4)) = 'SUNW'
         "test": "substring(option[60].hex,0,4) == 'SUNW'"
       }
     ]
@@ -205,16 +207,16 @@
 //      ],
 //      "pools": [
 //        {
+//          "pool": "10.17.224.10 - 10.17.224.250",
 //          "allow": [
 //            "member of foo"
-//          ],
-//          "pool": "10.17.224.10 - 10.17.224.250"
+//          ]
 //        },
 //        {
+//          "pool": "10.0.29.10 - 10.0.29.230",
 //          "deny": [
 //            "member of foo"
-//          ],
-//          "pool": "10.0.29.10 - 10.0.29.230"
+//          ]
 //        }
 //      ]
 //    }

@@ -284,7 +284,7 @@ struct element *
 reduce_numeric_expression(struct element *expr);
 
 expr: expression to reduce
-literalp: literal flag for quoting
+literalp: string literal flag for quoting
 return: NULL or the reduced expression as a Kea eval string
 
 reducing works for a limited (but interesting) set of expressions which
@@ -322,7 +322,6 @@ Shared-Networks:
  Waiting for the feature to be supported by Kea.
  Currently at the end of a shared network declaration:
   - if there is no subnets it is a fatal error
-TODO: check what ISC DHCP does
   - if there is one subnet the shared-network is squeezed
   - if there are more than one subnet the shared-network is commented
 TODO: put the reference when the ticket will be created.
@@ -355,7 +354,6 @@ Subclasses:
  So subclasses are convertible when the data expression can be reduced.
  Cf https://kb.isc.org/article/AA-01092/202/OMAPI-support-for-classes-and-subclasses.html
   which BTW suggests the management API could manage classes...
-TODO: implement subclass conversion
 
 Hardware Addresses:
 -------------------
@@ -367,7 +365,6 @@ Pools:
  but in a very different way so not convertible.
  Mixed DHCPv6 address and prefix pools are not supported, perhaps in this
  case the pool should be duplicated into pool and pd-pool instances?
-TODO implement and check move
  The bootp stuff was ifdef's as bootp is obsolete.
  Temporary (aka IA_TA) is commented ny the MA.
  ISC DHCP supports interval ranges for prefix6. Kea has a different
@@ -393,7 +390,6 @@ Interfaces:
 -----------
  Referenced interface names are pushed to an interfaces-config but it is
  very (too!) easy to finish with a Kea config without any interface.
-TODO: add a comment in this case
 
 Hostnames:
 ----------
@@ -404,10 +400,7 @@ Hostnames:
  command line parameter controls the at-conversion-time resolution.
  Note only the first address is returned.
 TODO: check the multiple address comment is correctly taken
-
-Server DUID:
-------------
- Kea does a similar thing in an incompatible way.
+ (need a known host resolving in a stable set of addresses)
 
 Options:
 --------
@@ -458,10 +451,9 @@ Dynamic DNS:
 
 Expressions:
 ------------
-TODO check if data really includes numeric
- ISC DHCP expressions are typed: boolean, numeric, and data which includes
- strings and numeric. The default for a literal is to be a string so
- literal numbers are interpreted in hexadecimal (for a strange consequence
+ ISC DHCP expressions are typed: boolean, numeric, and data aka string.
+ The default for a literal is to be a string so literal numbers are
+ interpreted in hexadecimal (for a strange consequence look at
  https://kb.isc.org/article/AA-00334/56/Do-the-list-of-parameters-in-the-dhcp-parameter-request-list-need-to-be-in-hex.html ).
  String literals are converted to string elements, hexadecimal literals
  are converted to const-data maps.
@@ -470,6 +462,7 @@ TODO reduce more hexa aka const-data
   /tmp/bool line 9: Expecting a data expression.
   option ip-forwarding = foo = foo;
                                 ^
+ Cf Kea #5265
  The tautology 'foo = foo' is not a data expression so is rejected by
  both the MA and dhcpd (BTW the role of the MA is not to fix ISC DHCP
  shortcomings so it does what it is expected to do here).
@@ -479,5 +472,4 @@ TODO reduce more hexa aka const-data
  reference... And I expect ISC DHCP makes this true a false at runtime
  because the variable "true" is not defined by default.
  Reduced expressions are pretty printed to allow an extra check.
-TODO use precedence to minimize parentheses
 

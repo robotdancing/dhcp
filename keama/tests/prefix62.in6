@@ -9,4 +9,5 @@ subnet6 2001::/64 {
     option dhcp6.domain-search "example.com", "example.org";
     default-lease-time 1800;
     prefix6 2001:0:0:1:: 2001:0:0:3:: / 64;
+    interface "foo";
 }

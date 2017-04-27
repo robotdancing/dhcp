@@ -1,17 +1,24 @@
 {
   # DHCPv6 subnet declaration config
   # authoritative is mandatory
-  /// This configuration declares some subnets but has no interfaces-config
-  /// Reference Kea #5256
   "Dhcp6": {
     "valid-lifetime": 1800,
     "subnet6": [
       # DHCPv4 subnet declaration
       {
         "subnet": "2001::/64",
+        "pd-pools": [
+          # at least one pool is required
+          {
+            "prefix": "2001:0:0:10::",
+            "delegated-len": 64,
+            "prefix-len": 60
+          }
+        ],
         "pools": [
           # at least one pool is required
           {
+            # the pool is shared between addresses and prefixes
             "pool": "2001::100 - 2001::200"
           }
         ],
@@ -24,14 +31,13 @@
           }
         ],
         "valid-lifetime": 3600,
-        "pd-pools": [
-          {
-            "prefix": "2001:0:0:10::",
-            "delegated-len": 64,
-            "prefix-len": 60
-          }
-        ]
+        "interface": "foo"
       }
-    ]
+    ],
+    "interfaces-config": {
+      "interfaces": [
+        "foo"
+      ]
+    }
   }
 }

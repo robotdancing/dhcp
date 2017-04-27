@@ -9,10 +9,27 @@
       # DHCPv4 subnet declaration
       {
         "subnet": "2001::/64",
-        "pools": [
+        "pd-pools": [
+          {
+            "prefix": "2001:0:0:10::",
+            "delegated-len": 64,
+            "prefix-len": 60
+          },
           # at least one pool is required
           {
+            "prefix": "2001:0:0:80::",
+            "delegated-len": 64,
+            "prefix-len": 57
+          }
+        ],
+        "pools": [
+          {
+            # the pool is shared between addresses and prefixes
             "pool": "2001::100 - 2001::200"
+          },
+          # at least one pool is required
+          {
+            "pool": "2001::1000 - 2001::2000"
           }
         ],
         "option-data": [
@@ -23,14 +40,7 @@
             "data": "example.com, example.org"
           }
         ],
-        "valid-lifetime": 3600,
-        "pd-pools": [
-          {
-            "prefix": "2001:0:0:10::",
-            "delegated-len": 64,
-            "prefix-len": 60
-          }
-        ]
+        "valid-lifetime": 3600
       }
     ]
   }

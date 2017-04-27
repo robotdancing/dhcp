@@ -865,13 +865,6 @@ print_data_expression(struct element *expr, isc_boolean_t *lose)
 {
 	struct string *result;
 
-	if (expr->type == ELEMENT_INTEGER) {
-		char buf[20];
-
-		snprintf(buf, sizeof(buf), "%lld", (long long)intValue(expr));
-		result = makeString(-1, buf);
-		return result->content;
-	}
 	if (expr->type == ELEMENT_STRING)
 		return quote(stringValue(expr))->content;
 
@@ -1386,8 +1379,6 @@ struct element *
 reduce_data_expression(struct element *expr, isc_boolean_t *literalp)
 {
 	/* trivial case: already done */
-	if (expr->type == ELEMENT_INTEGER)
-		return expr;
 	if (expr->type == ELEMENT_STRING) {
 		if (literalp)
 			*literalp = ISC_TRUE;
@@ -3253,19 +3244,7 @@ reduce_equal_expression(struct element *left, struct element *right)
 	isc_boolean_t lliteral = ISC_FALSE;
 	isc_boolean_t rliteral = ISC_FALSE;
 
-	if (is_boolean_expression(left)) {
-		if (!is_boolean_expression(right)) {
-			debug("equal left is a boolean expression, "
-			      "right is not");
-			return createBool(ISC_FALSE);
-		}
-		rleft = reduce_boolean_expression(left);
-		if (rleft == NULL)
-			return NULL;
-		rright = reduce_boolean_expression(right);
-		if (rright == NULL)
-			return NULL;
-	} else if (is_numeric_expression(left)) {
+	if (is_numeric_expression(left)) {
 		if (!is_numeric_expression(left)) {
 			debug("equal left is a numeric expression, "
 			      "right is not");
@@ -3291,12 +3270,6 @@ reduce_equal_expression(struct element *left, struct element *right)
 	} else {
 		debug("equal: can't type left expression");
 		return NULL;
-	}
-	if (rleft->type == ELEMENT_BOOLEAN) {
-		if (rright->type != ELEMENT_BOOLEAN)
-			return NULL;
-		return createBool(ISC_TF(boolValue(rleft) ==
-					 boolValue(rright)));
 	}
 	if (rleft->type == ELEMENT_INTEGER) {
 		if (rright->type != ELEMENT_INTEGER)

@@ -1,11 +1,15 @@
 {
   # DHCPv6 pool config
   # authoritative is mandatory
+  /// This configuration declares some subnets but has no interfaces-config
+  /// Reference Kea #5256
   "Dhcp6": {
     "subnet6": [
       # subnet declaration
       {
         "subnet": "2001::/64",
+        /// valid-lifetime moved from an internal pool scope
+        "valid-lifetime": 1800,
         "pools": [
           # pool declaration
           {
@@ -19,9 +23,7 @@
             ],
             "pool": "2001::100 - 2001::200"
           }
-        ],
-        /// valid-lifetime moved from an internal pool scope
-        "valid-lifetime": 1800
+        ]
       }
     ]
   }

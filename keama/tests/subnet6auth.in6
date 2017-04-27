@@ -1,7 +1,7 @@
 # DHCPv6 subnet declaration config
 
 # authoritative is mandatory
-authoritative;
+not authoritative;
 
 # parameter which will be changed in subnet
 default-lease-time 1800;
@@ -12,8 +12,11 @@ subnet6 2001::/64 {
     pool6 {
         range6 2001::100 2001::200;
     }
+    # authorize here
+    authoritative;
     option dhcp6.domain-search "example.com", "example.org";
     default-lease-time 3600;
+    interface "foo";
     pool6 {
         prefix6 2001:0:0:10:: 2001:0:0:1f:: /64;
     }

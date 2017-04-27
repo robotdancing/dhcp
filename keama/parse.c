@@ -4912,8 +4912,7 @@ is_boolean_expression(struct element *expr)
 isc_boolean_t
 is_data_expression(struct element *expr)
 {
-	if ((expr->type == ELEMENT_INTEGER) ||
-	    (expr->type == ELEMENT_STRING))
+	if (expr->type == ELEMENT_STRING)
 		return ISC_TRUE;
 	if (expr->type != ELEMENT_MAP)
 		return ISC_FALSE;
@@ -5087,7 +5086,9 @@ op_val(enum expr_op op)
 	case expr_option:
 	case expr_hardware:
 	case expr_packet:
+#ifdef keep_expr_const_data_precedence
 	case expr_const_data:
+#endif
 	case expr_extract_int8:
 	case expr_extract_int16:
 	case expr_extract_int32:
@@ -5145,6 +5146,10 @@ op_val(enum expr_op op)
 	case expr_divide:
 	case expr_remainder:
 		return 1;
+#ifndef keep_expr_const_data_precedence
+	case expr_const_data:
+		return 0;
+#endif
 	}
 	return 100;
 }

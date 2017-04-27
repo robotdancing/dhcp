@@ -1,6 +1,8 @@
 {
   # DHCPv4 permit authenticated client config
   # authoritative is mandatory
+  /// This configuration declares some subnets but has no interfaces-config
+  /// Reference Kea #5256
   "Dhcp6": {
     "valid-lifetime": 1800,
     "subnet6": [

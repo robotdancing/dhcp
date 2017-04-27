@@ -10,12 +10,12 @@ default-lease-time 1800;
 subnet6 2001::/64 {
     # at least one pool is required
     pool6 {
+        # the pool is shared between addresses and prefixes
         range6 2001::100 2001::200;
+        prefix6 2001:0:0:10:: 2001:0:0:1f:: /64;
     }
     option dhcp6.domain-search "example.com", "example.org";
     default-lease-time 3600;
-    pool6 {
-        prefix6 2001:0:0:10:: 2001:0:0:1f:: /64;
-    }
+    interface "foo";
 }
 

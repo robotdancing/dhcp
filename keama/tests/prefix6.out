@@ -1,6 +1,8 @@
 {
   # DHCPv6 prefix config
   # authoritative is mandatory
+  /// This configuration declares some subnets but has no interfaces-config
+  /// Reference Kea #5256
   "Dhcp6": {
     "subnet6": [
       # subnet declaration
@@ -17,11 +19,11 @@
         ],
         "valid-lifetime": 1800,
         "pd-pools": [
-//        {
-//          "prefix": "2001:0:0:1::",
-//          "delegated-len": 64,
-//          "prefix-highest": "2001:0:0:3::"
-//        }
+          {
+            "prefix": "2001:0:0:10::",
+            "delegated-len": 64,
+            "prefix-len": 60
+          }
         ]
       }
     ]

@@ -17,13 +17,19 @@
         ],
         "valid-lifetime": 1800,
         "pd-pools": [
-          {
-            "prefix": "2001:0:0:10::",
-            "delegated-len": 64,
-            "prefix-len": 60
-          }
-        ]
+//        {
+//          "prefix": "2001:0:0:1::",
+//          "delegated-len": 64,
+//          "prefix-highest": "2001:0:0:3::"
+//        }
+        ],
+        "interface": "foo"
       }
-    ]
+    ],
+    "interfaces-config": {
+      "interfaces": [
+        "foo"
+      ]
+    }
   }
 }

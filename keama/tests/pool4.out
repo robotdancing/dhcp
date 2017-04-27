@@ -1,18 +1,13 @@
 {
   # DHCPv4 pool config
   # authoritative is mandatory
+  /// This configuration declares some subnets but has no interfaces-config
+  /// Reference Kea #5256
   "Dhcp4": {
     "subnet4": [
       # subnet declaration
       {
         "subnet": "10.5.5.0/27",
-        "pools": [
-          # pool declaration
-          /// option-data was moved from this DHCPv4 pool
-          {
-            "pool": "10.5.5.5 - 10.5.5.10"
-          }
-        ],
         "option-data": [
           {
             "space": "dhcp4",
@@ -22,7 +17,14 @@
           }
         ],
         /// valid-lifetime moved from an internal pool scope
-        "valid-lifetime": 1800
+        "valid-lifetime": 1800,
+        "pools": [
+          # pool declaration
+          /// option-data was moved from this DHCPv4 pool
+          {
+            "pool": "10.5.5.5 - 10.5.5.10"
+          }
+        ]
       }
     ]
   }

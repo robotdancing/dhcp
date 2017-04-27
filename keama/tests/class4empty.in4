@@ -1,0 +1,8 @@
+# void class declaration config
+
+# authoritative is mandatory
+authoritative;
+
+# class declaration
+class "foobar" {
+}
