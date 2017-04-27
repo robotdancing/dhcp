@@ -326,7 +326,7 @@ void parse_shared_net_declaration(struct parse *);
 void parse_subnet_declaration(struct parse *);
 void parse_subnet6_declaration(struct parse *);
 void parse_group_declaration(struct parse *);
-void dissolve_group(struct parse *, struct element *);
+void close_group(struct parse *, struct element *);
 struct element *parse_fixed_addr_param(struct parse *, enum dhcp_token);
 void parse_address_range(struct parse *, int, size_t);
 void parse_address_range6(struct parse *, int, size_t);

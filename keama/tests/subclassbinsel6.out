@@ -39,9 +39,8 @@
         ]
       },
       # simple subclass declaration
+      /// subclass selector 0x0x0100070e364819
       {
-//      "super": "foobar",
-//      "binary": "0x0100070e364819",
         "name": "sub#foobar#0",
         "option-data": [
           # no harware in DHCPv6
@@ -57,9 +56,8 @@
         "test": "option[1250].hex == 0x0100070e364819"
       },
       # option setting subclass declaration
+      /// subclass selector 0x0x01000bfd32e6fa
       {
-//      "super": "foobar",
-//      "binary": "0x01000bfd32e6fa",
         "name": "sub#foobar#1",
         "option-data": [
           {
@@ -74,9 +72,8 @@
         "test": "option[1250].hex == 0x01000bfd32e6fa"
       },
       # complex subclass declaration
+      /// subclass selector 0x0x010002b388c527
       {
-//      "super": "foobar",
-//      "binary": "0x010002b388c527",
         "name": "sub#foobar#2",
         "option-data": [
           {

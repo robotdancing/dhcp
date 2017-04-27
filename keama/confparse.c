@@ -151,7 +151,7 @@ conf_file_parse(struct parse *cfile)
 	}
 
 	/* Cleanup classes */
-	classes = mapGet(cfile->stack[1], "clint-classes");
+	classes = mapGet(cfile->stack[1], "client-classes");
 	if ((classes != NULL) && (listSize(classes) > 0))
 		for (i = 0; i < listSize(classes); i++) {
 			struct element *class;
@@ -1261,6 +1261,8 @@ parse_class_declaration(struct parse *cfile, int type)
 		if ((kind == GROUP_DECL) || (kind == ROOT_GROUP))
 			break;
 	}
+	if (!group)
+		parse_error(cfile, "can't find root group");
 	if (cfile->stack[group]->kind == GROUP_DECL) {
 		group_classes = mapGet(cfile->stack[group], "client-classes");
 		if (group_classes == NULL) {
@@ -1946,7 +1948,9 @@ parse_subnet_declaration(struct parse *cfile)
 	/* Find parent */
 	for (i = cfile->stack_top; i > 0; --i) {
 		kind = cfile->stack[i]->kind;
-		if ((kind == SHARED_NET_DECL) || (kind == ROOT_GROUP)) {
+		if ((kind == SHARED_NET_DECL) ||
+		    (kind == GROUP_DECL) ||
+		    (kind == ROOT_GROUP)) {
 			parent = i;
 			break;
 		}
@@ -1958,11 +1962,11 @@ parse_subnet_declaration(struct parse *cfile)
 		if (subnets == NULL)
 			parse_error(cfile, "shared network without subnets");
 	} else {
-		subnets = mapGet(cfile->stack[1], "subnet4");
+		subnets = mapGet(cfile->stack[parent], "subnet4");
 		if (subnets == NULL) {
 			subnets = createList();
 			subnets->kind = SUBNET_DECL;
-			mapSet(cfile->stack[1], subnets, "subnet4");
+			mapSet(cfile->stack[parent], subnets, "subnet4");
 		}
 	}
 
@@ -2039,7 +2043,9 @@ parse_subnet6_declaration(struct parse *cfile)
 	/* Find parent */
 	for (i = cfile->stack_top; i > 0; --i) {
 		kind = cfile->stack[i]->kind;
-		if ((kind == SHARED_NET_DECL) || (kind == ROOT_GROUP)) {
+		if ((kind == SHARED_NET_DECL) ||
+		    (kind == GROUP_DECL) ||
+		    (kind == ROOT_GROUP)) {
 			parent = i;
 			break;
 		}
@@ -2051,11 +2057,11 @@ parse_subnet6_declaration(struct parse *cfile)
 		if (subnets == NULL)
 			parse_error(cfile, "shared network without subnets");
 	} else {
-		subnets = mapGet(cfile->stack[1], "subnet6");
+		subnets = mapGet(cfile->stack[parent], "subnet6");
 		if (subnets == NULL) {
 			subnets = createList();
 			subnets->kind = SUBNET_DECL;
-			mapSet(cfile->stack[1], subnets, "subnet6");
+			mapSet(cfile->stack[parent], subnets, "subnet6");
 		}
 	}
 
@@ -2156,17 +2162,17 @@ parse_group_declaration(struct parse *cfile)
 
 	if (name != NULL)
 		mapSet(group, createString(name), "name");
-	dissolve_group(cfile, group);
+	close_group(cfile, group);
 }
 
 /*
- * Dissolve a group. Called when a group is closed.
+ * Close a group. Called when a group is closed.
  *  - spread parameters to children
  *  - attach declarations at an upper level
  */
 
 void
-dissolve_group(struct parse *cfile, struct element *group)
+close_group(struct parse *cfile, struct element *group)
 {
 	struct handle *handle;
 	struct handle *nh;
@@ -2552,8 +2558,8 @@ option_data_derive(struct parse *cfile, struct handle *src,
 				opt_list->skip = ISC_TRUE;
 				cfile->issue_counter++;
 			}
-			mapSet(item, opt_list, src->key);
 		}
+		mapSet(item, opt_list, src->key);
 	}
 }
 
@@ -3585,6 +3591,7 @@ addrmask(const struct string *address, const struct string *netmask)
  * (reservations aka hosts must be in a subnet in Kea)
  * (defaulting to the last defined subnet (e.g. for reservations
  *  without any address).
+ * (first step is to find an enclosing group).
  */
 
 static struct element *
@@ -3593,7 +3600,19 @@ find_match(struct parse *cfile, struct element *host)
 	struct element *address;
 	struct subnet *subnet;
 	char addr[16];
+	size_t group;
 	size_t i, len;
+	int kind;
+
+	for (group = cfile->stack_top; group > 0; --group) {
+		kind = cfile->stack[group]->kind;
+		if ((kind == GROUP_DECL) || (kind == ROOT_GROUP))
+			break;
+	}
+	if (!group)
+		parse_error(cfile, "can't find root group");
+	if (kind == GROUP_DECL)
+		return cfile->stack[group];
 
 	if (local_family == AF_INET) {
 		address = mapGet(host, "ip-address");
@@ -3690,7 +3709,7 @@ get_class(struct parse *cfile, struct element *ref)
 	struct element *param;
 	size_t i;
 
-	classes = mapGet(cfile->stack[1], "clint-classes");
+	classes = mapGet(cfile->stack[1], "client-classes");
 	if ((classes == NULL) || (listSize(classes) == 0))
 		return NULL;
 
@@ -3723,7 +3742,7 @@ get_class(struct parse *cfile, struct element *ref)
 				continue;
 			if (!eqString(stringValue(name), stringValue(param)))
 				continue;
-			param = mapGet(class, "string");
+			param = mapGet(class, "binary");
 			if (param == NULL)
 				continue;
 			if (eqString(stringValue(selector),
@@ -3732,9 +3751,6 @@ get_class(struct parse *cfile, struct element *ref)
 		}
 		return NULL;
 	}
-	selector = mapGet(ref, "binary");
-	if (selector == NULL)
-		return NULL;
 	for (i = 0; i <listSize(classes); i++) {
 		class = listGet(classes, i);
 		param = mapGet(class, "super");
@@ -3742,7 +3758,7 @@ get_class(struct parse *cfile, struct element *ref)
 			continue;
 		if (!eqString(stringValue(name), stringValue(param)))
 			continue;
-		param = mapGet(class, "binary");
+		param = mapGet(class, "string");
 		if (param == NULL)
 			continue;
 		if (eqString(stringValue(selector), stringValue(param)))

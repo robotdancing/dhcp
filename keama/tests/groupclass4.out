@@ -1,19 +1,19 @@
 {
-  # subclass declaration config
+  # group and class declaration config
   # authoritative is mandatory
-  "Dhcp6": {
+  "Dhcp4": {
     "option-def": [
       # options
       {
-        "space": "dhcp6",
+        "space": "dhcp4",
         "name": "mysystem",
-        "code": 1250,
+        "code": 250,
         "type": "string"
       },
       {
-        "space": "dhcp6",
+        "space": "dhcp4",
         "name": "myversion",
-        "code": 1251,
+        "code": 251,
         "type": "uint16"
       }
     ],
@@ -24,15 +24,15 @@
 //      "spawning": false,
 //      "submatch": {
 //        "option": {
-//          "universe": "dhcp6",
+//          "universe": "dhcp",
 //          "name": "mysystem"
 //        }
 //      },
         "option-data": [
           {
-            "space": "dhcp6",
+            "space": "dhcp4",
             "name": "myversion",
-            "code": 1251,
+            "code": 251,
             "data": "1"
           }
         ]
@@ -43,15 +43,15 @@
         "name": "sub#foobar#0",
         "option-data": [
           {
-            "space": "dhcp6",
+            "space": "dhcp4",
             "name": "myversion",
-            "code": 1251,
+            "code": 251,
             "data": "1"
           }
         ],
-        /// from: match option dhcp6.mysystem
+        /// from: match option dhcp.mysystem
         /// data: 'version1'
-        "test": "option[1250].hex == 'version1'"
+        "test": "option[250].hex == 'version1'"
       },
       # option setting subclass declaration
       /// subclass selector 'version2'
@@ -59,15 +59,16 @@
         "name": "sub#foobar#1",
         "option-data": [
           {
-            "space": "dhcp6",
+            "space": "dhcp4",
             "name": "myversion",
-            "code": 1251,
+            "code": 251,
             "data": "2"
           }
         ],
-        /// from: match option dhcp6.mysystem
+        /// from: match option dhcp.mysystem
         /// data: 'version2'
-        "test": "option[1250].hex == 'version2'"
+        "test": "option[250].hex == 'version2'",
+        "next-server": "10.10.10.1"
       },
       # complex subclass declaration
       /// subclass selector 'version3'
@@ -75,21 +76,33 @@
         "name": "sub#foobar#2",
         "option-data": [
           {
-            "space": "dhcp6",
+            "space": "dhcp4",
             "name": "myversion",
-            "code": 1251,
+            "code": 251,
             "data": "3"
-          },
-          {
-            "space": "dhcp6",
-            "name": "rapid-commit",
-            "code": 14,
-            "data": ""
           }
         ],
-        /// from: match option dhcp6.mysystem
+        "next-server": "192.168.0.1",
+        /// from: match option dhcp.mysystem
         /// data: 'version3'
-        "test": "option[1250].hex == 'version3'"
+        "test": "option[250].hex == 'version3'"
+      },
+      # another simple subclass declaration
+      /// subclass selector 'version10'
+      {
+        "name": "sub#foobar#3",
+        "option-data": [
+          {
+            "space": "dhcp4",
+            "name": "myversion",
+            "code": 251,
+            "data": "1"
+          }
+        ],
+        /// from: match option dhcp.mysystem
+        /// data: 'version10'
+        "test": "option[250].hex == 'version10'",
+        "next-server": "10.10.10.1"
       }
     ]
   }

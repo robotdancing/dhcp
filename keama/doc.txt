@@ -142,6 +142,14 @@ Typically declarations use { } and are associated with a group
 (changed to a type) in ROOT_GROUP (global), HOST_DECL, SHARED_NET_DECL,
 SUBNET_DECL, CLASS_DECL, GROUP_DECL and POOL_DECL.
 
+ROOT: parent = TOPLEVEL, children = everythig but not POOL
+HOST: parent = ROOT, GROUP, warn on SHARED or SUBNET, children = none
+SHARED_NET: parent = ROOT, GROUP, children = HOST (warn), SUBNET, POOL4
+SUBNET: parent = ROOT, GROUP, SHARED, children = HOST (warn), POOL
+CLASS: parent = ROOT, GROUP, children = none
+GROUP: parent = ROOT, SHARED, children = anything but not POOL
+POOL: parent = SHARED4, SUBNET, warn on others, children = none
+
 isc_boolean_t
 parse_statement(struct parse *cfile, int type, isc_boolean_t declaration);
 
