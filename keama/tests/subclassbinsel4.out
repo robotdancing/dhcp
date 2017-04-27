@@ -29,9 +29,8 @@
         ]
       },
       # simple subclass declaration
+      /// subclass selector 0x0x0100070e364819
       {
-//      "super": "foobar",
-//      "binary": "0x0100070e364819",
         "name": "sub#foobar#0",
         "option-data": [
           {
@@ -46,9 +45,8 @@
         "test": "concat(substring(pkt4.htype,-1,all),pkt4.mac) == 0x0100070e364819"
       },
       # option setting subclass declaration
+      /// subclass selector 0x0x01000bfd32e6fa
       {
-//      "super": "foobar",
-//      "binary": "0x01000bfd32e6fa",
         "name": "sub#foobar#1",
         "option-data": [
           {

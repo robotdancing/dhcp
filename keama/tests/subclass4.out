@@ -38,9 +38,8 @@
         ]
       },
       # simple subclass declaration
+      /// subclass selector 'version1'
       {
-//      "super": "foobar",
-//      "string": "version1",
         "name": "sub#foobar#0",
         "option-data": [
           {
@@ -55,9 +54,8 @@
         "test": "option[250].hex == 'version1'"
       },
       # option setting subclass declaration
+      /// subclass selector 'version2'
       {
-//      "super": "foobar",
-//      "string": "version2",
         "name": "sub#foobar#1",
         "option-data": [
           {
@@ -72,9 +70,8 @@
         "test": "option[250].hex == 'version2'"
       },
       # complex subclass declaration
+      /// subclass selector 'version3'
       {
-//      "super": "foobar",
-//      "string": "version3",
         "name": "sub#foobar#2",
         "option-data": [
           {
