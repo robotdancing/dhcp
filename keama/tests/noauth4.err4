@@ -3,5 +3,5 @@
 # authoritative is mandatory
 #authoritative;
 
-# empty configs are not accepted by Kea
-default-lease-time 1800;
+subnet 10.5.5.0 netmask 255.255.255.224 { }
+

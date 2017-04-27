@@ -33,11 +33,15 @@
 #include <stdlib.h>
 #include <string.h>
 
-isc_boolean_t got_authoritative = ISC_FALSE;
+/* To manage host-reservation-identifiers */
 isc_boolean_t use_client_id = ISC_FALSE;
 isc_boolean_t use_flex_id = ISC_FALSE;
 isc_boolean_t use_hw_address = ISC_FALSE;
 
+/* To avoid late authoritative declaration */
+unsigned subnet_counter = 0;
+
+/* For subclass name generation */
 unsigned subclass_counter = 0;
 
 /* To map reservations to declared subnets */
@@ -57,10 +61,13 @@ static void add_match_class(struct parse *, struct element *,
 			    struct element *);
 static void option_data_derive(struct parse *, struct handle *,
 			       struct handle *, isc_boolean_t);
+static void derive_classes(struct parse *, struct handle *, struct handle *);
 static void new_network_interface(struct parse *, struct element *);
 static struct string *addrmask(const struct string *, const struct string *);
 static struct element *find_match(struct parse *, struct element *);
 static int get_prefix_length(const char *, const char *);
+static struct element *get_class(struct parse *, struct element *);
+static void concat_classes(struct parse *, struct element *, struct element *);
 
 /* Add head config file comments to the DHCP server map */
 
@@ -70,7 +77,9 @@ conf_file_parse(struct parse *cfile)
 	struct element *top;
 	struct element *dhcp;
 	struct element *hosts;
+	struct element *classes;
 	size_t issues;
+	size_t i;
 
 	TAILQ_INIT(&known_subnets);
 
@@ -93,10 +102,13 @@ conf_file_parse(struct parse *cfile)
 
 	issues = conf_file_subparse(cfile, ROOT_GROUP);
 
-	if (!got_authoritative)
-		parse_error(cfile,
-			    "missing top level authoritative statement");
+	/* Cleanup authoritative */ 
+	if (mapContains(cfile->stack[1], "authoritative"))
+		mapRemove(cfile->stack[1], "authoritative");
 
+	/*
+	 * Reservation post-processing
+	 */
 	hosts = mapGet(cfile->stack[1], "reservations");
 	if (hosts != NULL) {
 		struct element *orphans;
@@ -138,7 +150,71 @@ conf_file_parse(struct parse *cfile)
 		}
 	}
 
-	/* Kea todo: cleanup classes */
+	/* Cleanup classes */
+	classes = mapGet(cfile->stack[1], "clint-classes");
+	if ((classes != NULL) && (listSize(classes) > 0))
+		for (i = 0; i < listSize(classes); i++) {
+			struct element *class;
+			struct element *name;
+			struct element *entry;
+			struct string *msg;
+			struct comment *comment;
+
+			class = listGet(classes, i);
+			if ((class == NULL) || (class->type != ELEMENT_MAP))
+				parse_error(cfile, "null global class at %i",
+					    (unsigned)i);
+			name = mapGet(class, "name");
+			if ((name == NULL) || (name->type != ELEMENT_STRING))
+				parse_error(cfile, "global class at %u "
+					    "without a name", (unsigned)i);
+			if (!mapContains(class, "super"))
+				continue;
+			mapRemove(class,"super");
+			entry = mapGet(class, "string");
+			if (entry != NULL) {
+				if (entry->type != ELEMENT_STRING)
+					parse_error(cfile, "subclass %s has "
+						    "a bad string selector",
+						    stringValue(name)->
+						    content);
+				msg = makeString(-1, "/// subclass selector ");
+				appendString(msg, "'");
+				concatString(msg, stringValue(entry));
+				appendString(msg, "'");
+				comment = createComment(msg->content);
+				TAILQ_INSERT_TAIL(&class->comments, comment);
+				mapRemove(class, "string");
+				continue;
+			}
+			entry = mapGet(class, "binary");
+			if (entry == NULL)
+				parse_error(cfile, "subclass %s has no "
+					    "selector",
+					    stringValue(name)->content);
+			msg = makeString(-1, "/// subclass selector 0x");
+			concatString(msg, stringValue(entry));
+			comment = createComment(msg->content);
+			TAILQ_INSERT_TAIL(&class->comments, comment);
+			mapRemove(class, "binary");
+		}
+
+	/* Add a warning when interfaces-config is not present */
+	if (subnet_counter > 0) {
+		struct element *ifconf;
+
+		ifconf = mapGet(cfile->stack[1], "interfaces-config");
+		if (ifconf == NULL) {
+			struct comment *comment;
+
+			comment = createComment("/// This configuration "
+						"declares some subnets but "
+						"has no interfaces-config");
+			TAILQ_INSERT_TAIL(&cfile->stack[1]->comments, comment);
+			comment = createComment("/// Reference Kea #5256");
+			TAILQ_INSERT_TAIL(&cfile->stack[1]->comments, comment);
+		}
+	}
 
 	return issues;
 }
@@ -501,18 +577,34 @@ parse_statement(struct parse *cfile, int type, isc_boolean_t declaration)
 		skip_token(&val, NULL, cfile);
 		authoritative = ISC_TRUE;
 	authoritative:
-		if (type == HOST_DECL)
-			parse_error(cfile, "authority makes no sense here.");
 		if (type == ROOT_GROUP) {
-			got_authoritative = authoritative;
-			parse_semi(cfile);
-			break;
-		}
+			if (subnet_counter > 0)
+				goto late_authoritative;
+		} else if (type == SHARED_NET_DECL) {
+			struct element *subnets;
+
+			subnets = mapGet(cfile->stack[cfile->stack_top],
+					 "subnets");
+			if ((subnets == NULL) ||
+			    (subnets->type != ELEMENT_LIST))
+				parse_error(cfile, "can't get subnets from "
+					    "shared-network");
+			if (listSize(subnets) > 0)
+		late_authoritative:
+				parse_error(cfile, "too late authoritative "
+					    "declaration");
+		} else if (type != SUBNET_DECL)
+			parse_error(cfile, "authority makes no sense here.");
+		if (mapContains(cfile->stack[cfile->stack_top],
+				"authoritative"))
+			parse_error(cfile, "authoritative was already "
+				    "declared in this scope");
 		cache = createBool(authoritative);
 		cache->skip = ISC_TRUE;
 		TAILQ_CONCAT(&cache->comments, &cfile->comments);
 		mapSet(cfile->stack[cfile->stack_top], cache, "authoritative");
-		cfile->issue_counter++;
+		if (!authoritative || (type != ROOT_GROUP))
+			cfile->issue_counter++;
 		parse_semi(cfile);
 		break;
 
@@ -745,6 +837,7 @@ parse_pool_statement(struct parse *cfile, int type)
 	struct element *permit;
 	struct element *prohibit;
 	int declaration = 0;
+	unsigned range_counter = 0;
 
 	pool = createMap();
 	pool->kind = POOL_DECL;
@@ -755,16 +848,6 @@ parse_pool_statement(struct parse *cfile, int type)
 			    "subnet or shared-network statements.");
 	parse_lbrace(cfile);
 
-	pools = mapGet(cfile->stack[cfile->stack_top], "pools");
-	if (pools == NULL) {
-		pools = createList();
-		pools->kind = POOL_DECL;
-		mapSet(cfile->stack[cfile->stack_top], pools, "pools");
-	} else if ((type == SHARED_NET_DECL) && (listSize(pools) > 0)) {
-		cfile->stack[cfile->stack_top]->skip = ISC_TRUE;
-		cfile->issue_counter++;
-	}
-	listPush(pools, pool);
 	stackPush(cfile, pool);
 	type = POOL_DECL;
 
@@ -784,20 +867,17 @@ parse_pool_statement(struct parse *cfile, int type)
 		case RANGE:
 			skip_token(&val, NULL, cfile);
 			parse_address_range(cfile, type, cfile->stack_top);
+			range_counter++;
 			break;
 
 		case ALLOW:
 			skip_token(&val, NULL, cfile);
 			get_permit(cfile, permit);
-			mapSet(pool, permit, "allow");
-			cfile->issue_counter++;
 			break;
 
 		case DENY:
 			skip_token(&val, NULL, cfile);
 			get_permit(cfile, prohibit);
-			mapSet(pool, prohibit, "deny");
-			cfile->issue_counter++;
 			break;
 			
 		case RBRACE:
@@ -820,6 +900,17 @@ parse_pool_statement(struct parse *cfile, int type)
 		}
 	} while (!done);
 
+	cfile->stack_top--;
+
+	if (listSize(permit) > 0) {
+		mapSet(pool, permit, "allow");
+		cfile->issue_counter++;
+	}
+	if (listSize(prohibit) > 0) {
+		mapSet(pool, prohibit, "deny");
+		cfile->issue_counter++;
+	}
+
 	if (local_family == AF_INET) {
 		struct element *opt_list;
 
@@ -837,7 +928,54 @@ parse_pool_statement(struct parse *cfile, int type)
 		}
 	}
 
-	cfile->stack_top--;
+	pools = mapGet(cfile->stack[cfile->stack_top], "pools");
+	if (pools == NULL) {
+		pools = createList();
+		pools->kind = POOL_DECL;
+		mapSet(cfile->stack[cfile->stack_top], pools, "pools");
+	}
+	if (range_counter == 0) {
+		struct comment *comment;
+
+		/* no range */
+		comment = createComment("empty pool");
+		TAILQ_INSERT_TAIL(&pool->comments, comment);
+		pool->skip = ISC_TRUE;
+		cfile->issue_counter++;
+		listPush(pools, pool);
+		return;
+	}
+	/* spread extra ranges into pool copies */
+	while (--range_counter != 0) {
+		struct handle *handle;
+		struct element *first;
+		struct element *saved;
+		isc_boolean_t seen = ISC_FALSE;
+
+		first = createMap();
+		saved = copy(pool);
+		while (mapSize(pool) > 0) {
+			handle = mapPop(pool);
+			if ((handle == NULL) || (handle->key == NULL) ||
+			    (handle->value == NULL))
+				parse_error(cfile, "bad pool entry");
+			if (strcmp(handle->key, "pool") != 0)
+				mapSet(first, handle->value, handle->key);
+			else if (!seen) {
+				mapSet(first, handle->value, handle->key);
+				mapRemove(saved, "pool");
+				seen = ISC_TRUE;
+			}
+		}
+		listPush(pools, first);
+		pool = saved;
+	}
+	listPush(pools, pool);
+
+	if ((type == SHARED_NET_DECL) && (listSize(pools) > 1)) {
+		cfile->stack[cfile->stack_top]->skip = ISC_TRUE;
+		cfile->issue_counter++;
+	}
 }
 
 /* Expect a left brace */
@@ -1607,6 +1745,10 @@ parse_shared_net_declaration(struct parse *cfile)
 
 	cfile->stack_top--;
 
+	/* The declaration is closed so authoritative entry now useless */ 
+	if (mapContains(share, "authoritative"))
+		mapRemove(share, "authoritative");
+
 	if (listSize(subnets) == 0)
 		parse_error(cfile, "empty shared-network decl");
 	if (listSize(subnets) > 1) {
@@ -1689,8 +1831,9 @@ common_subnet_parsing(struct parse *cfile,
 		      struct element *subnet)
 {
 	enum dhcp_token token;
-	struct element *interface;
 	const char *val;
+	struct element *interface;
+	struct element *authoritative;
 	int declaration = 0;
 
 	parse_lbrace(cfile);
@@ -1724,8 +1867,47 @@ common_subnet_parsing(struct parse *cfile,
 
 	cfile->stack_top--;
 
+	/* Check authority */
+	authoritative = mapGet(subnet, "authoritative");
+	if (authoritative == NULL) {
+		struct element *scope;
+		size_t i;
+
+		for (i = cfile->stack_top; i > 0; --i) {
+			scope = cfile->stack[i];
+
+			if ((scope->kind == ROOT_GROUP) ||
+			    (scope->kind == SHARED_NET_DECL) ||
+			    (scope->kind == GROUP_DECL))
+				authoritative = mapGet(scope, "authoritative");
+			if (authoritative != NULL)
+				break;
+		}
+	}
+	if (authoritative == NULL)
+		parse_error(cfile,
+			    "missing top level authoritative statement");
+	if (!boolValue(authoritative)) {
+		struct comment *comment;
+
+		comment = createComment("/// Not authorized subnet");
+		TAILQ_INSERT_TAIL(&subnet->comments, comment);
+		comment = createComment("/// This feature is not supported by "
+					"Kea");
+		TAILQ_INSERT_TAIL(&subnet->comments, comment);
+		comment = createComment("/// Skipping the subnet only "
+					"partially simulates it");
+		TAILQ_INSERT_TAIL(&subnet->comments, comment);
+		subnet->skip = ISC_TRUE;
+		cfile->issue_counter++;
+	}
+	/* authoritative entry is now useless */
+	if (mapContains(subnet, "authoritative"))
+		mapRemove(subnet, "authoritative");
+
 	/* Add the subnet to the list of subnets in this shared net. */
 	listPush(subnets, subnet);
+	subnet_counter++;
 
 	return;
 }
@@ -2096,7 +2278,6 @@ dissolve_group(struct parse *cfile, struct element *group)
 				parse_error(cfile, "class declarations not "
 					    "allowed here.");
 			classes = handle;
-			/* Kea todo: resolve names or super/select */
 			handle = NULL;
                         break;
 
@@ -2170,9 +2351,13 @@ dissolve_group(struct parse *cfile, struct element *group)
 			parse_error(cfile, "unexpected parameter %s "
 				    "in group at %u",
 				    handle->key, order);
+		/* to drop */
+		if (strcmp(handle->key, "authoritative") == 0) {
+			free(handle);
+			continue;
+		}
 		/* to parent at group position */
-		if ((strcmp(handle->key, "authoritative") == 0) ||
-		    (strcmp(handle->key, "option-space") == 0) ||
+		if ((strcmp(handle->key, "option-space") == 0) ||
 		    (strcmp(handle->key, "server-duid") == 0) ||
 		    (strcmp(handle->key, "statement") == 0) ||
 		    (strcmp(handle->key, "config") == 0) ||
@@ -2233,7 +2418,7 @@ dissolve_group(struct parse *cfile, struct element *group)
 			option_data_derive(cfile, handle, hosts, ISC_FALSE);
 			option_data_derive(cfile, handle, shares, ISC_FALSE);
 			option_data_derive(cfile, handle, subnets, ISC_FALSE);
-			option_data_derive(cfile, handle, classes, ISC_FALSE);
+			derive_classes(cfile, handle, classes);
 			option_data_derive(cfile, handle, pdpools, ISC_FALSE);
 			option_data_derive(cfile, handle, pools, ISC_TRUE);
 		} else if ((strcmp(handle->key, "allow") == 0) ||
@@ -2251,11 +2436,11 @@ dissolve_group(struct parse *cfile, struct element *group)
 		} else if ((strcmp(handle->key, "boot-file-name") == 0) ||
 			   (strcmp(handle->key, "server-hostname") == 0)) {
 			derive(handle, hosts);
-			derive(handle, classes);
+			derive_classes(cfile, handle, classes);
 		} else if (strcmp(handle->key, "next-server") == 0) {
 			derive(handle, hosts);
 			derive(handle, subnets);
-			derive(handle, classes);
+			derive_classes(cfile, handle, classes);
 		} else
 			parse_error(cfile, "unexpected parameter %s to derive",
 				    handle->key);
@@ -2289,18 +2474,24 @@ dissolve_group(struct parse *cfile, struct element *group)
 			concat(upper, subnets->value);
 	}
 	if (classes != NULL) {
-		/*
-		 * Kea todo: move class refs to upper group
-                struct element *root;
+		struct element *upper;
+		size_t where;
+		int kind = 0;
 
-
-		root = mapGet(cfile->stack[1], "client-classes");
-		if (root == NULL)
-			mapSet(cfile->stack[1], classes->value,
-			       "client-classes");
-		else
-			concat(root, classes->value);
-		*/
+		for (where = cfile->stack_top; where > 0; --where) {
+			kind = cfile->stack[where]->kind;
+			if ((kind == GROUP_DECL) || (kind == ROOT_GROUP))
+				break;
+		}
+		if (kind == GROUP_DECL) {
+			upper = mapGet(cfile->stack[where], "client-classes");
+			if (upper == NULL)
+				mapSet(cfile->stack[where],
+				       classes->value,
+				       "client-classes");
+			else
+				concat_classes(cfile, upper, classes->value);
+		}
 	}
 	if (pdpools != NULL) {
 		struct element *upper;
@@ -2363,6 +2554,45 @@ option_data_derive(struct parse *cfile, struct handle *src,
 			}
 			mapSet(item, opt_list, src->key);
 		}
+	}
+}
+
+/*
+ * Specialized derivation routine for classes
+ * (which are by reference so a resolution step is needed)
+ */
+static void
+derive_classes(struct parse *cfile, struct handle *src, struct handle *dst)
+{
+	struct element *list;
+	struct element *item;
+	size_t i;
+
+	if (dst == NULL)
+		return;
+	list = dst->value;
+	assert(list != NULL);
+	assert(list->type == ELEMENT_LIST);
+	for (i = 0; i < listSize(list); i++) {
+		item = listGet(list, i);
+		assert(item != NULL);
+		assert(item->type == ELEMENT_MAP);
+		item = get_class(cfile, item);
+		if (item == NULL)
+			parse_error(cfile, "dangling class reference");
+		if (strcmp(src->key, "option-data") == 0) {
+			struct element *opt_list;
+
+			opt_list = mapGet(item, "option-data");
+			if (opt_list != NULL)
+				merge_option_data(src->value, opt_list);
+			else
+				mapSet(item, copy(src->value), "option-data");
+			continue;
+		}
+		if (mapContains(item, src->key))
+			continue;
+		mapSet(item, copy(src->value), src->key);
 	}
 }
 
@@ -2760,10 +2990,6 @@ parse_fixed_prefix6(struct parse *cfile, size_t host_decl)
  *        it encounters a problem.
  */
 
-/*
- * Should reorganize the code to create both pool and pd-pool -- KEA TODO
- */
-
 void
 parse_pool6_statement(struct parse *cfile, int type)
 {
@@ -2772,9 +2998,13 @@ parse_pool6_statement(struct parse *cfile, int type)
 	isc_boolean_t done = ISC_FALSE;
 	struct element *pool;
 	struct element *pools;
+	struct element *pdpool;
+	struct element *pdpools;
 	struct element *permit;
 	struct element *prohibit;
 	int declaration = 0;
+	unsigned range_counter = 0;
+	unsigned prefix_counter = 0;
 
 	if (local_family != AF_INET6)
 		parse_error(cfile, "pool6 statement is only supported "
@@ -2789,13 +3019,6 @@ parse_pool6_statement(struct parse *cfile, int type)
 			    "subnet statements.");
 	parse_lbrace(cfile);
 
-	pools = mapGet(cfile->stack[cfile->stack_top], "pools");
-	if (pools == NULL) {
-		pools = createList();
-		pools->kind = POOL_DECL;
-		mapSet(cfile->stack[cfile->stack_top], pools, "pools");
-	}
-	listPush(pools, pool);
 	stackPush(cfile, pool);
 	type = POOL_DECL;
 
@@ -2810,26 +3033,24 @@ parse_pool6_statement(struct parse *cfile, int type)
 		case RANGE6:
 			skip_token(NULL, NULL, cfile);
 			parse_address_range6(cfile, type, cfile->stack_top);
+			range_counter++;
 			break;
 
 		case PREFIX6:
 			skip_token(NULL, NULL, cfile);
-			parse_prefix6(cfile, SUBNET_DECL,
-				      cfile->stack_top - 1);
+			parse_prefix6(cfile, type, cfile->stack_top);
+			mapSet(pool, createNull(), "***mark***");
+			prefix_counter++;
 			break;
 
 		case ALLOW:
 			skip_token(NULL, NULL, cfile);
 			get_permit(cfile, permit);
-			mapSet(pool, permit, "allow");
-			cfile->issue_counter++;
 			break;
 
 		case DENY:
 			skip_token(NULL, NULL, cfile);
 			get_permit(cfile, prohibit);
-			mapSet(pool, prohibit, "deny");
-			cfile->issue_counter++;
 			break;
 			
 		case RBRACE:
@@ -2853,6 +3074,163 @@ parse_pool6_statement(struct parse *cfile, int type)
 	} while (!done);
 
 	cfile->stack_top--;
+
+	if (listSize(permit) > 0) {
+		mapSet(pool, permit, "allow");
+		cfile->issue_counter++;
+	}
+	if (listSize(prohibit) > 0) {
+		mapSet(pool, prohibit, "deny");
+		cfile->issue_counter++;
+	}
+
+	/*
+	 * Spread and eventually split between pools and pd-pools
+	 */
+	if (prefix_counter == 0) {
+		/* we need pools list */
+		pools = mapGet(cfile->stack[cfile->stack_top], "pools");
+		if (pools == NULL) {
+			pools = createList();
+			pools->kind = POOL_DECL;
+			mapSet(cfile->stack[cfile->stack_top], pools, "pools");
+		}
+
+		/* no address or prefix range */
+		if (range_counter == 0) {
+			struct comment *comment;
+
+			comment = createComment("empty pool6");
+			TAILQ_INSERT_TAIL(&pool->comments, comment);
+			pool->skip = ISC_TRUE;
+			cfile->issue_counter++;
+			listPush(pools, pool);
+			return;
+		}
+	} else {
+		/* we need pd-pools list */
+		pdpools = mapGet(cfile->stack[cfile->stack_top], "pd-pools");
+		if (pdpools == NULL) {
+			pdpools = createList();
+			pdpools->kind = POOL_DECL;
+			mapSet(cfile->stack[cfile->stack_top],
+			       pdpools, "pd-pools");
+		}
+
+		/* split and purge copies */
+		pdpool = copy(pool);
+		while (mapContains(pdpool, "pool"))
+			mapRemove(pdpool, "pool");
+		while (mapContains(pool, "prefix"))
+			mapRemove(pool, "prefix");
+		while (mapContains(pool, "prefix-len"))
+			mapRemove(pool, "prefix-len");
+		while (mapContains(pool, "delegated-len"))
+			mapRemove(pool, "delegated-len");
+		while (mapContains(pool, "excluded-prefix"))
+			mapRemove(pool, "excluded-prefix");
+		while (mapContains(pool, "excluded-prefix-len"))
+			mapRemove(pool, "excluded-prefix-len");
+		while (mapContains(pool, "***mark***"))
+			mapRemove(pool, "***mark***");
+
+		/* spread extra prefixes into pdpool copies */
+		while (--prefix_counter != 0) {
+			struct handle *handle;
+			struct element *first;
+			struct element *saved;
+			isc_boolean_t seen = ISC_FALSE;
+
+			first = createMap();
+			saved = copy(pdpool);
+			while (mapSize(pdpool) > 0) {
+				handle = mapPop(pdpool);
+				if ((handle == NULL) ||
+				    (handle->key == NULL) ||
+				    (handle->value == NULL))
+					parse_error(cfile, "bad pdpool entry");
+				if (strcmp(handle->key, "***mark***") == 0) {
+					if (!seen) {
+						mapRemove(saved, handle->key);
+						seen = ISC_TRUE;
+					}
+					continue;
+				}
+				if ((strcmp(handle->key, "prefix") != 0) &&
+				    (strcmp(handle->key, "prefix-len") != 0) &&
+				    (strcmp(handle->key,
+					    "delegated-len") != 0) &&
+				    (strcmp(handle->key,
+					    "excluded-prefix") != 0) &&
+				    (strcmp(handle->key,
+					    "excluded-prefix-len") != 0))
+					mapSet(first, handle->value,
+					       handle->key);
+				else if (!seen) {
+					mapSet(first, handle->value,
+					       handle->key);
+					mapRemove(saved, handle->key);
+				}
+			}
+			listPush(pdpools, first);
+			pdpool = saved;
+		}
+		if (!mapContains(pdpool, "***mark***"))
+			parse_error(cfile, "can't find prefix marker");
+		mapRemove(pdpool, "***mark***");
+		if (mapContains(pdpool, "***mark***"))
+			parse_error(cfile, "unexpected prefix marker");
+		listPush(pdpools, pdpool);
+	}
+
+	/* Do pools now */
+	if (range_counter != 0) {
+		/* we need pools list */
+		pools = mapGet(cfile->stack[cfile->stack_top], "pools");
+		if (pools == NULL) {
+			pools = createList();
+			pools->kind = POOL_DECL;
+			mapSet(cfile->stack[cfile->stack_top], pools, "pools");
+		}
+
+		/* spread extra prefixes into pool copies */
+		while (--range_counter != 0) {
+			struct handle *handle;
+			struct element *first;
+			struct element *saved;
+			isc_boolean_t seen = ISC_FALSE;
+
+			first = createMap();
+			saved = copy(pool);
+			while (mapSize(pool) > 0) {
+				handle = mapPop(pool);
+				if ((handle == NULL) ||
+				    (handle->key == NULL) ||
+				    (handle->value == NULL))
+					parse_error(cfile, "bad pool entry");
+				if (strcmp(handle->key, "pool") != 0)
+					mapSet(first, handle->value,
+					       handle->key);
+				else if (!seen) {
+					mapSet(first, handle->value,
+					       handle->key);
+					mapRemove(saved, "pool");
+					seen = ISC_TRUE;
+				}
+			}
+			listPush(pools, first);
+			pool = saved;
+		}
+		listPush(pools, pool);
+	}
+
+	if (type != SHARED_NET_DECL)
+		return;
+	if (((pools != NULL) && (listSize(pool) > 1)) ||
+	    ((pdpools != NULL) && (listSize(pdpool) > 1))) {
+		cfile->stack[cfile->stack_top]->skip = ISC_TRUE;
+		cfile->issue_counter++;
+	}
 }
 
 /* allow-deny-keyword :== BOOTP
@@ -3295,4 +3673,115 @@ get_prefix_length(const char *low, const char *high)
 			return plen + i + 1;
 	}
 	return -1;
+}
+
+/*
+ * Get a (global) class from its reference, i.e.:
+ * - name for a (super)class
+ * - super, and binary or string for a subclass
+ */
+static struct element *
+get_class(struct parse *cfile, struct element *ref)
+{
+	struct element *classes;
+	struct element *class;
+	struct element *name;
+	struct element *selector;
+	struct element *param;
+	size_t i;
+
+	classes = mapGet(cfile->stack[1], "clint-classes");
+	if ((classes == NULL) || (listSize(classes) == 0))
+		return NULL;
+
+	name = mapGet(ref, "super");
+	if (name == NULL) {
+		name = mapGet(ref, "name");
+		if (name == NULL)
+			return NULL;
+		for (i = 0; i < listSize(classes); i++) {
+			class = listGet(classes, i);
+			if (mapContains(ref, "super"))
+				continue;
+			param = mapGet(class, "name");
+			if (param == NULL)
+				continue;
+			if (eqString(stringValue(name), stringValue(param)))
+				return class;
+		}
+		return NULL;
+	}
+	selector = mapGet(ref, "string");
+	if (selector == NULL) {
+		selector = mapGet(ref, "binary");
+		if (selector == NULL)
+			return NULL;
+		for (i = 0; i <listSize(classes); i++) {
+			class = listGet(classes, i);
+			param = mapGet(class, "super");
+			if (param == NULL)
+				continue;
+			if (!eqString(stringValue(name), stringValue(param)))
+				continue;
+			param = mapGet(class, "string");
+			if (param == NULL)
+				continue;
+			if (eqString(stringValue(selector),
+				     stringValue(param)))
+				return class;
+		}
+		return NULL;
+	}
+	selector = mapGet(ref, "binary");
+	if (selector == NULL)
+		return NULL;
+	for (i = 0; i <listSize(classes); i++) {
+		class = listGet(classes, i);
+		param = mapGet(class, "super");
+		if (param == NULL)
+			continue;
+		if (!eqString(stringValue(name), stringValue(param)))
+			continue;
+		param = mapGet(class, "binary");
+		if (param == NULL)
+			continue;
+		if (eqString(stringValue(selector), stringValue(param)))
+			return class;
+	}
+	return NULL;
+}
+
+/*
+ * Concatenate two class reference lists eliminating duplicates
+ * (complexity is bad: if this becomes a performance pig, use a hash table)
+ */
+
+static void
+concat_classes(struct parse *cfile, struct element *dst, struct element *src)
+{
+	struct element *class;
+	struct element *sitem;
+	struct element *ditem;
+	size_t i;
+	isc_boolean_t dup;
+
+	while (listSize(src) > 0) {
+		sitem = listGet(src, 0);
+		listRemove(src, 0);
+		class = get_class(cfile, sitem);
+		if (class == NULL)
+			/* just ignore */
+			continue;
+		dup = ISC_FALSE;
+		for (i = 0; i < listSize(dst); i++) {
+			ditem = listGet(dst, i);
+			if (class == get_class(cfile, ditem)) {
+				dup = ISC_TRUE;
+				break;
+			}
+		}
+		if (dup)
+			continue;
+		listPush(dst, sitem);
+	}
 }

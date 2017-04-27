@@ -1,0 +1,12 @@
+{
+  # void class declaration config
+  # authoritative is mandatory
+  "Dhcp6": {
+    "client-classes": [
+      # class declaration
+      {
+        "name": "foobar"
+      }
+    ]
+  }
+}

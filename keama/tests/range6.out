@@ -23,8 +23,14 @@
           {
             "pool": "2001::1000/116"
           }
-        ]
+        ],
+        "interface": "foo"
       }
-    ]
+    ],
+    "interfaces-config": {
+      "interfaces": [
+        "foo"
+      ]
+    }
   }
 }

@@ -1,19 +1,13 @@
 {
   # option-data in DHCPv4 pool config
   # authoritative is mandatory
+  /// This configuration declares some subnets but has no interfaces-config
+  /// Reference Kea #5256
   "Dhcp4": {
     "subnet4": [
       # subnet declaration
       {
         "subnet": "10.5.5.0/27",
-        "pools": [
-          # pool declaration
-          /// option-data was moved from this DHCPv4 pool
-          {
-            # avoid empty pool
-            "pool": "10.5.5.5 - 10.5.5.10"
-          }
-        ],
         "option-data": [
           # for a silly reason option-data is not allowed in DHCPv4 pools
           {
@@ -21,6 +15,14 @@
             "name": "domain-search",
             "code": 119,
             "data": "example.com, example.org"
+          }
+        ],
+        "pools": [
+          # pool declaration
+          /// option-data was moved from this DHCPv4 pool
+          {
+            # avoid empty pool
+            "pool": "10.5.5.5 - 10.5.5.10"
           }
         ]
       }

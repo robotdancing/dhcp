@@ -1,0 +1,10 @@
+# bad (match with a boolean expression) class declaration config
+
+# authoritative is mandatory
+authoritative;
+
+# class declaration
+class "foobar" {
+    match option server.duplicates = 0;
+    default-lease-time 1800;
+}

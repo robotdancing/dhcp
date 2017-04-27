@@ -8,6 +8,8 @@
   #######################################################################
   # Global Configuration
   #
+  /// This configuration declares some subnets but has no interfaces-config
+  /// Reference Kea #5256
   "Dhcp4": {
 //  "config": [
 //    /// lease-file-name is an internal ISC DHCP feature
@@ -146,27 +148,35 @@
 //    ]
 //  },
     "subnet4": [
-      # These are stub subnets to inform the DHCP server that they exist.
-      # sql1-blue, the "outside" network
-      {
-        "subnet": "149.20.48.0/25"
-//      "authoritative": false
-      },
-      # 187-net is all but dead
-      {
-        "subnet": "204.152.187.0/24"
-//      "authoritative": false
-      },
-      # QuickBooks/GreatPlains VLAN
-      {
-        "subnet": "149.20.48.128/28"
-//      "authoritative": false
-      },
-      # Device management VLAN
-      {
-        "subnet": "149.20.60.0/24"
-//      "authoritative": false
-      },
+//    # These are stub subnets to inform the DHCP server that they exist.
+//    # sql1-blue, the "outside" network
+//    /// Not authorized subnet
+//    /// This feature is not supported by Kea
+//    /// Skipping the subnet only partially simulates it
+//    {
+//      "subnet": "149.20.48.0/25"
+//    },
+//    # 187-net is all but dead
+//    /// Not authorized subnet
+//    /// This feature is not supported by Kea
+//    /// Skipping the subnet only partially simulates it
+//    {
+//      "subnet": "204.152.187.0/24"
+//    },
+//    # QuickBooks/GreatPlains VLAN
+//    /// Not authorized subnet
+//    /// This feature is not supported by Kea
+//    /// Skipping the subnet only partially simulates it
+//    {
+//      "subnet": "149.20.48.128/28"
+//    },
+//    # Device management VLAN
+//    /// Not authorized subnet
+//    /// This feature is not supported by Kea
+//    /// Skipping the subnet only partially simulates it
+//    {
+//      "subnet": "149.20.60.0/24"
+//    },
       # dhcpd.voip.conf file for Voice over IP phone network served by the 950
       # charter #failover peerset.  This file may be copied to /etc between these
       # two systems without modifications.
@@ -201,11 +211,11 @@
         ],
         "pools": [
           {
-//          "deny": [
-//            "dynamic bootp clients"
-//          ],
             #failover peer "isc";
             "pool": "204.152.185.135 - 204.152.185.185"
+//          "deny": [
+//            "dynamic bootp clients"
+//          ]
           }
         ]
       },
@@ -256,11 +266,11 @@
         "pools": [
           # 51 minutes
           {
-//          "deny": [
-//            "dynamic bootp clients"
-//          ],
             #failover peer "isc";
             "pool": "204.152.189.15 - 204.152.189.50"
+//          "deny": [
+//            "dynamic bootp clients"
+//          ]
           }
         ],
         "reservations": [
@@ -325,11 +335,11 @@
         "pools": [
           # 20 minutes
           {
-//          "deny": [
-//            "dynamic bootp clients"
-//          ],
             #failover peer "isc";
             "pool": "149.20.50.196 - 149.20.50.254"
+//          "deny": [
+//            "dynamic bootp clients"
+//          ]
           }
         ]
       },
@@ -359,11 +369,11 @@
 //      "enable-updates": false,
         "pools": [
           {
-//          "deny": [
-//            "dynamic bootp clients"
-//          ],
             #failover peer "isc";
             "pool": "149.20.50.33 - 149.20.50.120"
+//          "deny": [
+//            "dynamic bootp clients"
+//          ]
           }
         ],
         "reservations": [
@@ -504,11 +514,11 @@
         ],
         "pools": [
           {
-//          "deny": [
-//            "dynamic bootp clients"
-//          ],
             #		#failover peer "isc";
             "pool": "149.20.50.140 - 149.20.50.190"
+//          "deny": [
+//            "dynamic bootp clients"
+//          ]
           }
         ],
         "reservations": [
@@ -667,11 +677,11 @@
           #	default-lease-time 1200;	# 20 minutes
           #	max-lease-time 1200;		# 20 minutes
           {
-//          "deny": [
-//            "dynamic bootp clients"
-//          ],
             #failover peer "isc";
             "pool": "149.20.49.240 - 149.20.49.252"
+//          "deny": [
+//            "dynamic bootp clients"
+//          ]
           }
         ]
       }
@@ -772,7 +782,7 @@
     "client-classes": [
       {
         "name": "APC",
-        /// from: match if (substring(option dhcp.vendor-class-identifier, 0, 3)) = ('APC')
+        /// from: match if (substring(option dhcp.vendor-class-identifier, 0, 3)) = 'APC'
         "test": "substring(option[60].hex,0,3) == 'APC'"
 //      "config": [
 //        /// vendor-option-space is not (yet?) supported
@@ -786,7 +796,7 @@
       },
       {
         "name": "MSFT",
-        /// from: match if (substring(option dhcp.vendor-class-identifier, 0, 4)) = ('MSFT')
+        /// from: match if (substring(option dhcp.vendor-class-identifier, 0, 4)) = 'MSFT'
         "test": "substring(option[60].hex,0,4) == 'MSFT'",
         "option-data": [
 //        # Windows doesn't put WPAD on its PRL, but does consume it.
@@ -813,7 +823,7 @@
       },
       {
         "name": "pxeclients",
-        /// from: match if (substring(option dhcp.vendor-class-identifier, 0, 9)) = ('PXEClient')
+        /// from: match if (substring(option dhcp.vendor-class-identifier, 0, 9)) = 'PXEClient'
         "test": "substring(option[60].hex,0,9) == 'PXEClient'",
         "option-data": [
           # Some PXE clients are said to require that the vci be sent.
