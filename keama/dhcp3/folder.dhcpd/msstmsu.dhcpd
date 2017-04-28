@@ -16,7 +16,7 @@ shared-network msstmsu {
         default-lease-time 7200;
         max-lease-time 14400;
         pool {
-#           failover peer "NATIONAL";
+            failover peer "NATIONAL";
             deny members of "ruckus";
             deny dynamic bootp clients;
             range 68.180.48.21 68.180.51.223;
@@ -44,7 +44,7 @@ shared-network msstmsu {
         default-lease-time 7200;
         max-lease-time 14400;
         pool {
-#           failover peer "NATIONAL";
+            failover peer "NATIONAL";
             deny members of "ruckus";
             deny dynamic bootp clients;
             range 68.180.63.3 68.180.63.254;
@@ -61,7 +61,7 @@ shared-network msstmsu {
         default-lease-time 7200;
         max-lease-time 14400;
         pool {
-#           failover peer "NATIONAL";
+            failover peer "NATIONAL";
             deny members of "ruckus";
             deny dynamic bootp clients;
             range 50.30.247.3 50.30.247.254;
@@ -78,7 +78,7 @@ shared-network msstmsu {
         default-lease-time 7200;
         max-lease-time 14400; 
         pool {
-#           failover peer "NATIONAL";
+            failover peer "NATIONAL";
             deny members of "ruckus";
             deny dynamic bootp clients;
             range 216.171.51.3 216.171.51.254;
@@ -96,7 +96,7 @@ shared-network msstmsu {
         max-lease-time 28800;
 	min-lease-time 3600;
         pool {
-#           failover peer "NATIONAL";
+            failover peer "NATIONAL";
             deny members of "ruckus";
             deny dynamic bootp clients;
             range 68.180.80.3 68.180.81.254;
@@ -115,7 +115,7 @@ shared-network msstmsu {
             option subnet-mask 255.255.255.0;
             option broadcast-address 10.145.154.255;
             pool {
-#               failover peer "NATIONAL";
+                failover peer "NATIONAL";
                 allow members of "ruckus";
                 deny dynamic bootp clients;
                 #default-lease-time dTruk;

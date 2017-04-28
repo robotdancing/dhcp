@@ -19,7 +19,7 @@ shared-network ilcunocubr {
         option time-offset -18000;
     
         pool {
-#	    failover peer "NATIONAL";
+	    failover peer "NATIONAL";
             allow members of "cm-unregistered";
 #            deny known clients;
 #            deny members of "ruckus";
@@ -49,7 +49,7 @@ include "dhcp3/cmts/host_includes/ilcunocubr.hosts";
 #        default-lease-time dTlease0;
 #        max-lease-time mdTlease0;
         pool {
-#	    failover peer "NATIONAL";
+	    failover peer "NATIONAL";
             deny members of "ruckus";
             deny members of "cm-unregistered";
             deny members of "3010s";

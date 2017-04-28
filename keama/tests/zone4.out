@@ -1,0 +1,47 @@
+{
+  # zone executable statement construct
+  # authoritative is mandatory
+  "Dhcp4": {
+    "valid-lifetime": 1800
+//  # a zone
+//  "statement": {
+//    "zone": {
+//      "name": "example.com.",
+//      "primary": [
+//        "10.5.5.1",
+//        "10.5.5.2"
+//      ],
+//      "secondary": [
+//        "10.10.10.1"
+//      ],
+//      "primary6": [
+//        "2001::1",
+//        "2001::2"
+//      ],
+//      "secondary6": [
+//        "2002::1"
+//      ],
+//      "key": "mykey"
+//    }
+//  }
+//  # a key;
+//  "statement": {
+//    "tsig-keys": [
+//      {
+//        "name": "mykey",
+//        "algorithm": "hmac-md5.SIG-ALG.REG.INT.",
+//        "secret": "InHgN5hAa9m7eCkkPCrVBsLpmKhfWZ3L9+X8pLkg/uM="
+//      }
+//    ]
+//  }
+//  # another key (with bind 8 semi-colon)
+//  "statement": {
+//    "tsig-keys": [
+//      {
+//        "name": "example.com",
+//        "algorithm": "aes-gmac.dreams."
+//      }
+//    ]
+//  }
+  }
+}

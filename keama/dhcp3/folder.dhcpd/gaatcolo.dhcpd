@@ -16,7 +16,7 @@ shared-network gaatcolo-servers {
 	min-lease-time 3600;
 	min-lease-time 14400;
         pool {
-#           failover peer "NATIONAL";
+            failover peer "NATIONAL";
             deny members of "ruckus";
             deny members of "ubnt";
             deny dynamic bootp clients;

@@ -1,0 +1,16 @@
+{
+  # option definition config
+  # authoritative is mandatory
+  "Dhcp4": {
+    "option-def": [
+      # options
+      {
+        "space": "foobar",
+        "name": "encap",
+        "code": 1,
+        "type": "empty",
+        "encapsulate": "xyz"
+      }
+    ]
+  }
+}

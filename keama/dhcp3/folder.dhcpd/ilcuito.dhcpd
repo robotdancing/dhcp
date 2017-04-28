@@ -18,7 +18,7 @@ shared-network ilcuito {
         #default-lease-time dTlease0;
         #max-lease-time mdTlease0;
         pool {
-#           failover peer "NATIONAL";
+            failover peer "NATIONAL";
             deny members of "ruckus";
             deny dynamic bootp clients;
             range 216.171.20.21 216.171.23.254;
@@ -40,7 +40,7 @@ shared-network ilcuito {
         #default-lease-time dTlease0;
         #max-lease-time mdTlease0;
         pool {
-#           failover peer "NATIONAL";
+            failover peer "NATIONAL";
             deny members of "ruckus";
             deny dynamic bootp clients;
             range 216.171.28.3 216.171.29.254;
@@ -59,7 +59,7 @@ shared-network ilcuito {
             option subnet-mask 255.255.255.0;
             option broadcast-address 10.151.34.255;
             pool {
-#               failover peer "NATIONAL";
+                failover peer "NATIONAL";
                 allow members of "ruckus";
                 deny dynamic bootp clients;
                 #default-lease-time dTruk;

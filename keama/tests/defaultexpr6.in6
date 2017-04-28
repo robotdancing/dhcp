@@ -1,0 +1,13 @@
+# default expressions
+
+# authoritative is mandatory
+authoritative;
+
+# empty configs are not accepted by Kea
+default-lease-time 1800;
+
+# default expression is a variable reference
+foo;
+
+# or a function call when there are parentheses
+bar ("abcd", "xyxt");

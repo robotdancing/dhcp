@@ -19,7 +19,7 @@ shared-network ilcudow-paid {
         max-lease-time 3600;
         min-lease-time 1200;
 	pool {
-#           failover peer "NATIONAL";
+            failover peer "NATIONAL";
             deny members of "ruckus";
             deny members of "ubnt";
             deny dynamic bootp clients;

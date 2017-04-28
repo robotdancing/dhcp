@@ -1,0 +1,10 @@
+{
+  # db-time-format config
+  # authoritative is mandatory
+  "Dhcp4": {
+    "valid-lifetime": 1800
+//  "statement": {
+//    "db-time-format": "default"
+//  }
+  }
+}

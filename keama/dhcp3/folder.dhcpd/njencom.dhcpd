@@ -16,7 +16,7 @@ shared-network njencom {
         #default-lease-time dTlease0;
         #max-lease-time mdTlease0;
         pool {
-#           failover peer "NATIONAL";
+            failover peer "NATIONAL";
             deny members of "ruckus";
             deny dynamic bootp clients;
             range 68.180.109.150 68.180.109.254;
@@ -50,7 +50,7 @@ shared-network njencom {
         #default-lease-time dTlease0;
         #max-lease-time mdTlease0;
         pool {
-#           failover peer "NATIONAL";
+            failover peer "NATIONAL";
             deny members of "ruckus";
             deny dynamic bootp clients;
             range 173.230.54.3 173.230.54.254;
@@ -69,7 +69,7 @@ shared-network njencom {
             option subnet-mask 255.255.255.0;
             option broadcast-address 10.146.154.255;
             pool {
-#               failover peer "NATIONAL";
+                failover peer "NATIONAL";
                 allow members of "ruckus";
                 deny dynamic bootp clients;
                 #default-lease-time dTruk;

@@ -1584,7 +1584,7 @@ parse_executable_statement(struct element *result,
 	pad:
 		skip_token(&val, NULL, cfile);
 		st = parse_allow_deny(cfile, flag);
-		mapSet(result, st, "server-control");
+		mapSet(result, st, "config");
 		break;
 
 	case DEFAULT:
@@ -1784,9 +1784,9 @@ parse_executable_statement(struct element *result,
 
 		st = createList();
 
-		while((token = next_token(&val, NULL, cfile)) == COMMA) {
+		while ((token = next_token(&val, NULL, cfile)) == COMMA) {
 			var = createMap();
-			if (parse_data_expression(var, cfile, lose)) {
+			if (!parse_data_expression(var, cfile, lose)) {
 				if (!*lose)
 					parse_error(cfile,
 						    "expecting expression.");
@@ -1864,6 +1864,7 @@ parse_executable_statement(struct element *result,
 			*lose = ISC_TRUE;
 			return ISC_FALSE;
 		}
+		mapSet(st, expr, "message");
 
 		token = next_token(&val, NULL, cfile);
 		if (token != RPAREN)
@@ -1932,7 +1933,8 @@ parse_executable_statement(struct element *result,
 				result->skip = ISC_TRUE;
 				cfile->issue_counter++;
 				return parse_config_statement
-					      (NULL, cfile, option,
+					      (direct ? NULL : result,
+					       cfile, option,
 					       supersede_option_statement);
 			}
 		}
@@ -2013,8 +2015,9 @@ parse_zone(struct element *zone, struct parse *cfile)
 			    value = parse_ip_addr_or_hostname(cfile,
 							      ISC_FALSE);
 			    if (value == NULL)
-				parse_error(cfile,
-					   "expecting IP addr or hostname.");
+				    parse_error(cfile,
+						"expecting IP addr or "
+						"hostname.");
 			    listPush(values, createString(value));
 			    token = next_token(&val, NULL, cfile);
 		    } while (token == COMMA);
@@ -2646,6 +2649,7 @@ parse_non_binary(struct element *expr,
 		mapSet(nexp,
 		       createString(makeString(-1, option->name)),
 		       "name");
+		mapSet(nexp, createInt(option->code), "code");
 		nexp->skip = ISC_TRUE;
 		cfile->issue_counter++;
 		mapSet(expr, nexp, "exists");
@@ -2955,10 +2959,19 @@ parse_non_binary(struct element *expr,
 		mapSet(nexp,
 		       createString(makeString(-1, option->name)),
 		       "name");
+		mapSet(nexp, createInt(option->code), "code");
 		nexp->skip = ISC_TRUE;
 		cfile->issue_counter++;
-		mapSet(expr, nexp,
-		       token == OPTION ? "option" : "config-option");
+		if (token == OPTION)
+			mapSet(expr, nexp, "option");
+		else {
+			struct comment *comment;
+
+			comment = createComment("/// config-option is "
+						"not supported by Kea");
+			TAILQ_CONCAT(&nexp->comments, &cfile->comments);
+			mapSet(expr, nexp, "config-option");
+		}
 		break;
 
 	case HARDWARE:
@@ -3994,10 +4007,33 @@ parse_option_statement(struct element *result,
 		cfile->issue_counter++;
 	}
 	if (op != supersede_option_statement) {
+		struct string *msg;
 		struct comment *comment;
 
-		comment = createComment("/// Kea does not support "
-					"option data set variants");
+		msg = makeString(-1, "/// Kea does not support option data ");
+		appendString(msg, "set variants (");
+		switch (op) {
+		case send_option_statement:
+			appendString(msg, "send");
+			break;
+		case supersede_option_statement:
+			appendString(msg, "supersede");
+			break;
+		case default_option_statement:
+			appendString(msg, "default");
+			break;
+		case prepend_option_statement:
+			appendString(msg, "prepend");
+			break;
+		case append_option_statement:
+			appendString(msg, "append");
+			break;
+		default:
+			appendString(msg, "???");
+			break;
+		}
+		appendString(msg, ")");
+		comment = createComment(msg->content);
 		TAILQ_INSERT_TAIL(&opt_data->comments, comment);
 	}
 
@@ -4305,10 +4341,33 @@ parse_config_statement(struct element *result,
 		cfile->issue_counter++;
 	}
 	if (op != supersede_option_statement) {
+		struct string *msg;
 		struct comment *comment;
 
-		comment = createComment("/// Kea does not support "
-					"option data set variants");
+		msg = makeString(-1, "/// Kea does not support option data ");
+		appendString(msg, "set variants (");
+		switch (op) {
+		case send_option_statement:
+			appendString(msg, "send");
+			break;
+		case supersede_option_statement:
+			appendString(msg, "supersede");
+			break;
+		case default_option_statement:
+			appendString(msg, "default");
+			break;
+		case prepend_option_statement:
+			appendString(msg, "prepend");
+			break;
+		case append_option_statement:
+			appendString(msg, "append");
+			break;
+		default:
+			appendString(msg, "???");
+			break;
+		}
+		appendString(msg, ")");
+		comment = createComment(msg->content);
 		TAILQ_INSERT_TAIL(&config->comments, comment);
 	}
 

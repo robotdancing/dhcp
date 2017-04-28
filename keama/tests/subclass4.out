@@ -19,15 +19,9 @@
     ],
     "client-classes": [
       # superclass declaration
+      /// match: option dhcp.mysystem
       {
         "name": "foobar",
-//      "spawning": false,
-//      "submatch": {
-//        "option": {
-//          "universe": "dhcp",
-//          "name": "mysystem"
-//        }
-//      },
         "option-data": [
           {
             "space": "dhcp4",

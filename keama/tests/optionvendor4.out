@@ -1,0 +1,29 @@
+{
+  # group and class declaration config
+  # authoritative is mandatory
+  "Dhcp4": {
+    "option-def": [
+      # vendor option space
+      {
+        "space": "vendor-12345",
+        "name": "test",
+        "code": 1,
+        "type": "string"
+      }
+    ],
+    "option-data": [
+      {
+        "space": "vendor-12345",
+        "name": "vivso-suboptions",
+        "code": 125,
+        "data": "12345"
+      },
+      {
+        "space": "vendor-12345",
+        "name": "test",
+        "code": 1,
+        "data": "a test"
+      }
+    ]
+  }
+}

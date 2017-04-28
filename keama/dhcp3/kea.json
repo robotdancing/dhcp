@@ -24,7 +24,9 @@
     ],
     "next-server": "50.30.208.80",
     "subnet4": [
-      # removed failover
+      # TODO: Maybe make the port/peer port different
+      # 300 was original
+      # 3600 is recommended
       #Current OpeNMS server
       {
         "subnet": "66.253.253.184/32",
@@ -92,7 +94,6 @@
 //      ],
         "pools": [
           {
-            #           failover peer "NATIONAL";
             "pool": "50.30.208.90 - 50.30.208.94"
 //          "deny": [
 //            "member of ruckus",
@@ -166,7 +167,6 @@
 //      ],
         "pools": [
           {
-            #           failover peer "NATIONAL";
             "pool": "68.234.128.100 - 68.234.128.126"
 //          "deny": [
 //            "member of ruckus",
@@ -234,7 +234,6 @@
 //      ],
         "pools": [
           {
-            #           failover peer "NATIONAL";
             "pool": "96.63.203.141 - 96.63.203.142"
 //          "deny": [
 //            "member of ruckus",
@@ -302,7 +301,6 @@
 //      ],
         "pools": [
           {
-            #           failover peer "NATIONAL";
             "pool": "66.253.181.205 - 66.253.181.206"
 //          "deny": [
 //            "member of ruckus",
@@ -353,7 +351,6 @@
           #default-lease-time dTlease0;
           #max-lease-time mdTlease0;
           {
-            #           failover peer "NATIONAL";
             "pool": "66.253.181.90 - 66.253.181.119"
 //          "deny": [
 //            "member of ruckus",
@@ -365,8 +362,7 @@
           # 
           {
             "hostname": "66-253-181-113",
-            #hardware ethernet 00:1e:67:a3:68:be;
-            "hw-address": "00:1e:67:a3:68:bb",
+            "hw-address": "00:1e:67:a3:68:be",
             "ip-address": "66.253.181.113"
           },
           #	Device 1
@@ -453,7 +449,6 @@
 //      ],
         "pools": [
           {
-            #           failover peer "NATIONAL";
             "pool": "68.180.82.21 - 68.180.82.254"
 //          "deny": [
 //            "member of ruckus",
@@ -521,7 +516,6 @@
 //      ],
         "pools": [
           {
-            #           failover peer "NATIONAL";
             "pool": "68.180.83.21 - 68.180.83.254"
 //          "deny": [
 //            "member of ruckus",
@@ -589,7 +583,6 @@
 //      ],
         "pools": [
           {
-            #           failover peer "NATIONAL";
             "pool": "173.230.8.157 - 173.230.8.158"
 //          "deny": [
 //            "member of ruckus",
@@ -657,7 +650,6 @@
 //      ],
         "pools": [
           {
-            #           failover peer "NATIONAL";
             "pool": "66.253.131.5 - 66.253.131.62"
 //          "deny": [
 //            "member of ruckus",
@@ -739,7 +731,6 @@
 //      ],
         "pools": [
           {
-            #           failover peer "NATIONAL";
             "pool": "68.253.247.21 - 68.253.247.126"
 //          "deny": [
 //            "member of ruckus",
@@ -803,7 +794,8 @@
 //      "value": {
 //        "option": {
 //          "universe": "dhcp",
-//          "name": "vendor-class-identifier"
+//          "name": "vendor-class-identifier",
+//          "code": 60
 //        }
 //      }
 //    }
@@ -812,10 +804,10 @@
       "enable-updates": false
     },
 //  "statement": {
-//    "server-control": {
-//      "data": "deny",
+//    "config": {
+//      "value": "deny",
 //      "name": "duplicates",
-//      "space": "_server_"
+//      "code": 28
 //    }
 //  },
 //  "statement": {
@@ -1019,7 +1011,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "66.253.160.21 - 66.253.163.254",
 //              "deny": [
 //                "member of ruckus",
@@ -1129,7 +1120,6 @@
 //          "valid-lifetime": 14400,
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "74.223.30.3 - 74.223.31.254",
 //              "deny": [
 //                "member of ruckus",
@@ -1170,7 +1160,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.146.114.100 - 10.146.114.239",
@@ -1248,7 +1237,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "68.180.118.21 - 68.180.119.254",
 //              "deny": [
 //                "member of ruckus",
@@ -1322,7 +1310,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "216.171.45.3 - 216.171.45.254",
 //              "deny": [
 //                "member of ruckus",
@@ -1363,7 +1350,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.149.10.100 - 10.149.10.239",
@@ -1442,7 +1428,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "76.10.34.21 - 76.10.35.254",
 //              "deny": [
 //                "member of ruckus",
@@ -1497,7 +1482,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.149.58.100 - 10.149.58.239",
@@ -1575,7 +1559,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "50.30.252.21 - 50.30.253.254",
 //              "deny": [
 //                "member of ruckus",
@@ -1636,7 +1619,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.144.90.100 - 10.144.90.239",
@@ -1735,7 +1717,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "76.10.32.21 - 76.10.33.254",
 //              "deny": [
 //                "member of ruckus",
@@ -1801,7 +1782,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "66.253.212.3 - 66.253.212.254",
 //              "deny": [
 //                "member of ruckus",
@@ -1842,7 +1822,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.149.62.100 - 10.149.62.239",
@@ -1923,7 +1902,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "68.180.64.21 - 68.180.67.254",
 //              "deny": [
 //                "member of ruckus",
@@ -1978,7 +1956,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.149.122.100 - 10.149.122.239",
@@ -2057,7 +2034,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "50.30.250.21 - 50.30.251.254",
 //              "deny": [
 //                "member of ruckus",
@@ -2118,7 +2094,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.144.86.100 - 10.144.86.239",
@@ -2187,7 +2162,6 @@
 //            #default-lease-time dTlease0;
 //            #max-lease-time mdTlease0;
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "76.10.14.0 - 76.10.15.254",
 //              "deny": [
 //                "member of ruckus",
@@ -6378,7 +6352,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.153.14.100 - 10.153.14.239",
@@ -6457,7 +6430,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "96.63.220.21 - 96.63.223.254",
 //              "deny": [
 //                "member of ruckus",
@@ -6498,7 +6470,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.152.38.100 - 10.152.38.239",
@@ -6577,7 +6548,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "50.30.210.21 - 50.30.211.254",
 //              "deny": [
 //                "member of ruckus",
@@ -6626,7 +6596,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.152.6.100 - 10.152.6.239",
@@ -6705,7 +6674,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "50.30.224.21 - 50.30.231.254",
 //              "deny": [
 //                "member of ruckus",
@@ -6754,7 +6722,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.152.42.100 - 10.152.42.239",
@@ -6832,7 +6799,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "76.10.8.21 - 76.10.11.254",
 //              "deny": [
 //                "member of ruckus",
@@ -6906,7 +6872,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "66.253.248.3 - 66.253.249.254",
 //              "deny": [
 //                "member of ruckus",
@@ -7043,7 +7008,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "50.30.216.21 - 50.30.219.254",
 //              "deny": [
 //                "member of ruckus",
@@ -7109,7 +7073,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "50.30.214.3 - 50.30.215.254",
 //              "deny": [
 //                "member of ruckus",
@@ -7183,7 +7146,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "50.30.244.3 - 50.30.244.254",
 //              "deny": [
 //                "member of ruckus",
@@ -7224,7 +7186,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.152.10.100 - 10.152.10.239",
@@ -7303,7 +7264,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "66.253.167.21 - 66.253.167.254",
 //              "deny": [
 //                "member of ruckus",
@@ -7369,7 +7329,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "68.180.44.3 - 68.180.45.254",
 //              "deny": [
 //                "member of ruckus",
@@ -7435,7 +7394,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "68.180.46.3 - 68.180.47.254",
 //              "deny": [
 //                "member of ruckus",
@@ -7501,7 +7459,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "68.180.52.3 - 68.180.53.254",
 //              "deny": [
 //                "member of ruckus",
@@ -7567,7 +7524,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "68.180.54.3 - 68.180.55.254",
 //              "deny": [
 //                "member of ruckus",
@@ -7605,7 +7561,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.153.17.20 - 10.153.17.254",
@@ -7644,7 +7599,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.153.18.20 - 10.153.18.254",
@@ -7722,7 +7676,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "50.30.160.21 - 50.30.161.223",
 //              "deny": [
 //                "member of ruckus",
@@ -7788,7 +7741,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "10.146.121.3 - 10.146.121.254",
 //              "deny": [
 //                "member of ruckus",
@@ -7860,7 +7812,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "10.146.123.3 - 10.146.123.254",
 //              "deny": [
 //                "member of ruckus",
@@ -7895,7 +7846,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.152.14.100 - 10.152.14.239",
@@ -7974,7 +7924,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "50.30.209.21 - 50.30.209.254",
 //              "deny": [
 //                "member of ruckus",
@@ -8015,7 +7964,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.152.18.100 - 10.152.18.239",
@@ -8094,7 +8042,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "50.30.212.21 - 50.30.213.254",
 //              "deny": [
 //                "member of ruckus",
@@ -8135,7 +8082,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.152.22.100 - 10.152.22.239",
@@ -8197,7 +8143,6 @@
 //            #default-lease-time dTlease0;
 //            #max-lease-time mdTlease0;
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "24.248.188.21 - 24.248.191.254",
 //              "deny": [
 //                "member of ruckus",
@@ -8269,7 +8214,6 @@
 //            #default-lease-time dTlease0;
 //            #max-lease-time mdTlease0;
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "50.30.153.3 - 50.30.153.254",
 //              "deny": [
 //                "member of ruckus",
@@ -8318,7 +8262,6 @@
 //            #default-lease-time dTlease0;
 //            #max-lease-time mdTlease0;
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "50.30.182.3 - 50.30.182.254",
 //              "deny": [
 //                "member of ruckus",
@@ -8367,7 +8310,6 @@
 //            #default-lease-time dTlease0;
 //            #max-lease-time mdTlease0;
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "96.63.213.3 - 96.63.213.254",
 //              "deny": [
 //                "member of ruckus",
@@ -8416,7 +8358,6 @@
 //            #default-lease-time dTlease0;
 //            #max-lease-time mdTlease0;
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "173.230.114.3 - 173.230.115.254",
 //              "deny": [
 //                "member of ruckus",
@@ -8457,7 +8398,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.152.26.100 - 10.152.26.239",
@@ -8535,7 +8475,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "68.180.16.21 - 68.180.19.254",
 //              "deny": [
 //                "member of ruckus",
@@ -8601,7 +8540,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "173.230.53.3 - 173.230.53.254",
 //              "deny": [
 //                "member of ruckus",
@@ -8667,7 +8605,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "173.230.113.3 - 173.230.113.254",
 //              "deny": [
 //                "member of ruckus",
@@ -8733,7 +8670,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "10.180.126.3 - 10.180.127.254",
 //              "deny": [
 //                "member of ruckus",
@@ -8870,7 +8806,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "68.180.92.21 - 68.180.93.254",
 //              "deny": [
 //                "member of ruckus",
@@ -8944,7 +8879,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "68.180.127.3 - 68.180.127.254",
 //              "deny": [
 //                "member of ruckus",
@@ -9010,7 +8944,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "173.230.122.3 - 173.230.122.254",
 //              "deny": [
 //                "member of ruckus",
@@ -9051,7 +8984,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.144.6.100 - 10.144.6.239",
@@ -9261,7 +9193,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "66.253.176.21 - 66.253.177.254",
 //              "deny": [
 //                "member of ruckus",
@@ -9327,7 +9258,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "66.253.205.3 - 66.253.205.254",
 //              "deny": [
 //                "member of ruckus",
@@ -9393,7 +9323,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "66.253.213.3 - 66.253.213.254",
 //              "deny": [
 //                "member of ruckus",
@@ -9530,7 +9459,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "50.30.134.21 - 50.30.135.254",
 //              "deny": [
 //                "member of ruckus",
@@ -9589,7 +9517,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.153.26.100 - 10.153.26.239",
@@ -9667,7 +9594,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "76.10.29.21 - 76.10.29.254",
 //              "deny": [
 //                "member of ruckus",
@@ -9733,7 +9659,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "173.230.127.3 - 173.230.127.254",
 //              "deny": [
 //                "member of ruckus",
@@ -9869,7 +9794,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "68.234.148.21 - 68.234.151.254",
 //              "deny": [
 //                "member of ruckus",
@@ -10004,7 +9928,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "66.253.132.21 - 66.253.135.254",
 //              "deny": [
 //                "member of ruckus",
@@ -10053,7 +9976,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.148.10.100 - 10.148.10.239",
@@ -10139,7 +10061,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "66.253.208.21 - 66.253.211.254",
 //              "deny": [
 //                "member of ruckus",
@@ -10188,7 +10109,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.148.22.100 - 10.148.22.239",
@@ -10267,7 +10187,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "66.253.244.21 - 66.253.245.254",
 //              "deny": [
 //                "member of ruckus",
@@ -10333,7 +10252,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "66.253.254.3 - 66.253.255.254",
 //              "deny": [
 //                "member of ruckus",
@@ -10399,7 +10317,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "66.253.156.3 - 66.253.156.254",
 //              "deny": [
 //                "member of ruckus",
@@ -10530,7 +10447,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "10.16.4.20 - 10.16.7.200",
 //              "deny": [
 //                "member of ruckus",
@@ -10635,7 +10551,6 @@
 //            #default-lease-time dTlease0;
 //            #max-lease-time mdTlease0;
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "68.234.136.21 - 68.234.139.254",
 //              "deny": [
 //                "member of ruckus",
@@ -10697,7 +10612,6 @@
 //            #default-lease-time dTlease0;
 //            #max-lease-time mdTlease0;
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "68.234.254.3 - 68.234.254.254",
 //              "deny": [
 //                "member of ruckus",
@@ -10737,7 +10651,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.144.82.6 - 10.144.82.6",
@@ -10750,7 +10663,6 @@
 //              ]
 //            },
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.144.82.18 - 10.144.82.18",
@@ -10763,7 +10675,6 @@
 //              ]
 //            },
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.144.82.96 - 10.144.82.96",
@@ -10776,7 +10687,6 @@
 //              ]
 //            },
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.144.82.165 - 10.144.82.165",
@@ -10789,7 +10699,6 @@
 //              ]
 //            },
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.144.82.176 - 10.144.82.184",
@@ -10802,7 +10711,6 @@
 //              ]
 //            },
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.144.82.193 - 10.144.82.193",
@@ -10815,7 +10723,6 @@
 //              ]
 //            },
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.144.82.206 - 10.144.82.206",
@@ -10828,7 +10735,6 @@
 //              ]
 //            },
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.144.82.213 - 10.144.82.219",
@@ -10841,7 +10747,6 @@
 //              ]
 //            },
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.144.82.223 - 10.144.82.223",
@@ -10854,7 +10759,6 @@
 //              ]
 //            },
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.144.82.227 - 10.144.82.227",
@@ -10867,7 +10771,6 @@
 //              ]
 //            },
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.144.82.234 - 10.144.82.234",
@@ -10880,7 +10783,6 @@
 //              ]
 //            },
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.144.82.237 - 10.144.82.239",
@@ -10893,7 +10795,6 @@
 //              ]
 //            },
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.144.82.241 - 10.144.82.248",
@@ -13755,7 +13656,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "173.230.118.21 - 173.230.119.254",
 //              "deny": [
 //                "member of ruckus",
@@ -13829,7 +13729,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "173.230.121.3 - 173.230.121.254",
 //              "deny": [
 //                "member of ruckus",
@@ -13895,7 +13794,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "50.30.139.3 - 50.30.139.254",
 //              "deny": [
 //                "member of ruckus",
@@ -13936,7 +13834,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.144.78.100 - 10.144.78.239",
@@ -14014,7 +13911,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "173.230.92.21 - 173.230.95.254",
 //              "deny": [
 //                "member of ruckus",
@@ -14136,7 +14032,6 @@
 //            #default-lease-time dTlease0;
 //            #max-lease-time mdTlease0;
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "68.234.200.21 - 68.234.207.254",
 //              "deny": [
 //                "member of ruckus",
@@ -14177,7 +14072,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.148.58.100 - 10.148.58.239",
@@ -14256,7 +14150,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "67.79.132.21 - 67.79.133.254",
 //              "deny": [
 //                "member of ruckus",
@@ -14297,7 +14190,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.149.106.100 - 10.149.106.239",
@@ -14375,7 +14267,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "66.253.220.21 - 66.253.223.254",
 //              "deny": [
 //                "member of ruckus",
@@ -14419,7 +14310,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.144.110.100 - 10.144.110.239",
@@ -14498,7 +14388,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "68.234.130.21 - 68.234.130.254",
 //              "deny": [
 //                "member of ruckus",
@@ -14539,7 +14428,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.147.18.100 - 10.147.18.239",
@@ -14618,7 +14506,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "96.63.214.21 - 96.63.215.254",
 //              "deny": [
 //                "member of ruckus",
@@ -14653,7 +14540,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.147.20.100 - 10.147.20.239",
@@ -14731,7 +14617,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "66.253.144.21 - 66.253.147.223",
 //              "deny": [
 //                "member of ruckus",
@@ -14797,7 +14682,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "10.144.152.3 - 10.144.153.254",
 //              "deny": [
 //                "member of ruckus",
@@ -14863,7 +14747,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "10.144.154.3 - 10.144.155.254",
 //              "deny": [
 //                "member of ruckus",
@@ -15000,7 +14883,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "76.10.38.21 - 76.10.39.254",
 //              "deny": [
 //                "member of ruckus",
@@ -15049,7 +14931,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.147.134.100 - 10.147.134.239",
@@ -15128,7 +15009,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "50.30.176.21 - 50.30.179.254",
 //              "deny": [
 //                "member of ruckus",
@@ -15177,7 +15057,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.149.154.100 - 10.149.154.239",
@@ -15256,7 +15135,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "68.234.224.21 - 68.234.231.254",
 //              "deny": [
 //                "member of ruckus",
@@ -15297,7 +15175,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.147.30.100 - 10.147.30.239",
@@ -15376,7 +15253,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "76.10.56.21 - 76.10.57.254",
 //              "deny": [
 //                "member of ruckus",
@@ -15424,7 +15300,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.147.54.100 - 10.147.54.239",
@@ -15503,7 +15378,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "68.180.4.21 - 68.180.5.254",
 //              "deny": [
 //                "member of ruckus",
@@ -15569,7 +15443,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "68.180.38.3 - 68.180.39.254",
 //              "deny": [
 //                "member of ruckus",
@@ -15610,7 +15483,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.147.58.100 - 10.147.58.239",
@@ -15671,7 +15543,6 @@
 //            #default-lease-time dTlease0;
 //            #max-lease-time mdTlease0;
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "68.234.188.21 - 68.234.191.254",
 //              "deny": [
 //                "member of ruckus",
@@ -15719,7 +15590,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.151.26.100 - 10.151.26.239",
@@ -15782,7 +15652,6 @@
 //            #        default-lease-time dTlease0;
 //            #        max-lease-time mdTlease0;
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "173.230.14.229 - 173.230.14.254",
 //              "deny": [
 //                "member of ruckus",
@@ -15816,7 +15685,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              #            default-lease-time dTruk;
 //              #            max-lease-time mdTruk;
 //              "pool": "10.159.189.100 - 10.159.189.239",
@@ -15894,7 +15762,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "96.63.205.133 - 96.63.205.190",
 //              "deny": [
 //                "member of ruckus",
@@ -15929,7 +15796,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.159.11.100 - 10.159.11.239",
@@ -15993,7 +15859,6 @@
 //            #        default-lease-time dTlease0;
 //            #        max-lease-time mdTlease0;
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "173.230.10.37 - 173.230.10.62",
 //              "deny": [
 //                "member of ruckus",
@@ -16027,7 +15892,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              #            default-lease-time dTruk;
 //              #            max-lease-time mdTruk;
 //              "pool": "10.159.221.100 - 10.159.221.239",
@@ -16090,7 +15954,6 @@
 //            #        default-lease-time dTlease0;
 //            #        max-lease-time mdTlease0;
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "173.230.16.133 - 173.230.16.190",
 //              "deny": [
 //                "member of ruckus",
@@ -16124,7 +15987,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              #            default-lease-time dTruk;
 //              #            max-lease-time mdTruk;
 //              "pool": "10.159.121.100 - 10.159.121.239",
@@ -16202,7 +16064,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "173.230.28.197 - 173.230.28.222",
 //              "deny": [
 //                "member of ruckus",
@@ -16237,7 +16098,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.159.171.100 - 10.159.171.239",
@@ -16316,7 +16176,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "173.230.18.37 - 173.230.18.62",
 //              "deny": [
 //                "member of ruckus",
@@ -16351,7 +16210,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.159.222.100 - 10.159.222.239",
@@ -16415,7 +16273,6 @@
 //            #        default-lease-time dTlease0;
 //            #        max-lease-time mdTlease0;
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "173.230.16.197 - 173.230.16.254",
 //              "deny": [
 //                "member of ruckus",
@@ -16449,7 +16306,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              #            default-lease-time dTruk;
 //              #            max-lease-time mdTruk;
 //              "pool": "10.159.133.100 - 10.159.133.239",
@@ -16530,7 +16386,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "96.63.200.69 - 96.63.200.94",
 //              "deny": [
 //                "member of ruckus",
@@ -16565,7 +16420,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.159.17.100 - 10.159.17.239",
@@ -16644,7 +16498,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "216.171.3.197 - 216.171.3.254",
 //              "deny": [
 //                "member of ruckus",
@@ -16679,7 +16532,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.159.18.100 - 10.159.18.239",
@@ -16758,7 +16610,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "96.63.200.101 - 96.63.200.126",
 //              "deny": [
 //                "member of ruckus",
@@ -16824,7 +16675,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "173.230.11.67 - 173.230.11.94",
 //              "deny": [
 //                "member of ruckus",
@@ -16859,7 +16709,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.159.19.100 - 10.159.19.239",
@@ -16932,7 +16781,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "173.230.11.5 - 173.230.11.30",
 //              "deny": [
 //                "member of ruckus",
@@ -16966,7 +16814,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              #            default-lease-time dTruk;
 //              #            max-lease-time mdTruk;
 //              "pool": "10.159.214.100 - 10.159.214.239",
@@ -17044,7 +16891,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "66.253.172.133 - 66.253.172.158",
 //              "deny": [
 //                "member of ruckus",
@@ -17110,7 +16956,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "66.253.172.195 - 66.253.172.222",
 //              "deny": [
 //                "member of ruckus",
@@ -17145,7 +16990,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.159.26.100 - 10.159.26.239",
@@ -17209,7 +17053,6 @@
 //            #        default-lease-time dTlease0;
 //            #        max-lease-time mdTlease0;
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "173.230.17.5 - 173.230.17.30",
 //              "deny": [
 //                "member of ruckus",
@@ -17243,7 +17086,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              #            default-lease-time dTruk;
 //              #            max-lease-time mdTruk;
 //              "pool": "10.159.122.100 - 10.159.122.239",
@@ -17321,7 +17163,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "173.230.17.133 - 173.230.17.190",
 //              "deny": [
 //                "member of ruckus",
@@ -17356,7 +17197,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.159.134.100 - 10.159.134.239",
@@ -17435,7 +17275,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "173.230.13.37 - 173.230.13.62",
 //              "deny": [
 //                "member of ruckus",
@@ -17501,7 +17340,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "173.230.19.163 - 173.230.19.190",
 //              "deny": [
 //                "member of ruckus",
@@ -17536,7 +17374,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.159.157.100 - 10.159.157.239",
@@ -17600,7 +17437,6 @@
 //            #        default-lease-time dTlease0;
 //            #        max-lease-time mdTlease0;
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "173.230.17.69 - 173.230.17.126",
 //              "deny": [
 //                "member of ruckus",
@@ -17634,7 +17470,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              #            default-lease-time dTruk;
 //              #            max-lease-time mdTruk;
 //              "pool": "10.159.115.100 - 10.159.115.239",
@@ -17697,7 +17532,6 @@
 //            #        default-lease-time dTlease0;
 //            #        max-lease-time mdTlease0;
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "173.230.25.101 - 173.230.25.126",
 //              "deny": [
 //                "member of ruckus",
@@ -17731,7 +17565,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              #            default-lease-time dTruk;
 //              #            max-lease-time mdTruk;
 //              "pool": "10.159.165.100 - 10.159.165.239",
@@ -17809,7 +17642,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "173.230.8.69 - 173.230.8.94",
 //              "deny": [
 //                "member of ruckus",
@@ -17875,7 +17707,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "173.230.18.3 - 173.230.18.30",
 //              "deny": [
 //                "member of ruckus",
@@ -17910,7 +17741,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.159.120.100 - 10.159.120.239",
@@ -17972,7 +17802,6 @@
 //            #default-lease-time dTlease0;
 //            #max-lease-time mdTlease0;
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "173.230.18.69 - 173.230.18.126",
 //              "deny": [
 //                "member of ruckus",
@@ -18007,7 +17836,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.159.102.100 - 10.159.102.239",
@@ -18071,7 +17899,6 @@
 //            #        default-lease-time dTlease0;
 //            #        max-lease-time mdTlease0;
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "173.230.23.101 - 173.230.23.126",
 //              "deny": [
 //                "member of ruckus",
@@ -18105,7 +17932,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              #            default-lease-time dTruk;
 //              #            max-lease-time mdTruk;
 //              "pool": "10.159.162.100 - 10.159.162.239",
@@ -18168,7 +17994,6 @@
 //            #        default-lease-time dTlease0;
 //            #        max-lease-time mdTlease0;
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "173.230.14.101 - 173.230.14.126",
 //              "deny": [
 //                "member of ruckus",
@@ -18202,7 +18027,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              #            default-lease-time dTruk;
 //              #            max-lease-time mdTruk;
 //              "pool": "10.159.16.100 - 10.159.16.239",
@@ -18280,7 +18104,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "173.230.24.101 - 173.230.24.126",
 //              "deny": [
 //                "member of ruckus",
@@ -18315,7 +18138,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.159.163.100 - 10.159.163.239",
@@ -18394,7 +18216,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "96.63.206.21 - 96.63.206.254",
 //              "deny": [
 //                "member of ruckus",
@@ -18429,7 +18250,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.151.108.100 - 10.151.108.239",
@@ -18493,7 +18313,6 @@
 //            #        default-lease-time dTlease0;
 //            #        max-lease-time mdTlease0;
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "173.230.14.197 - 173.230.14.222",
 //              "deny": [
 //                "member of ruckus",
@@ -18527,7 +18346,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              #            default-lease-time dTruk;
 //              #            max-lease-time mdTruk;
 //              "pool": "10.159.13.100 - 10.159.13.239",
@@ -18605,7 +18423,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "173.230.8.133 - 173.230.8.142",
 //              "deny": [
 //                "member of ruckus",
@@ -18671,7 +18488,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "96.63.203.147 - 96.63.203.158",
 //              "deny": [
 //                "member of ruckus",
@@ -18706,7 +18522,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.159.236.100 - 10.159.236.239",
@@ -18770,7 +18585,6 @@
 //            #        default-lease-time dTlease0;
 //            #        max-lease-time mdTlease0;
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "173.230.10.229 - 173.230.10.254",
 //              "deny": [
 //                "member of ruckus",
@@ -18804,7 +18618,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              #            default-lease-time dTruk;
 //              #            max-lease-time mdTruk;
 //              "pool": "10.159.217.100 - 10.159.217.239",
@@ -18882,7 +18695,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "173.230.27.37 - 173.230.27.62",
 //              "deny": [
 //                "member of ruckus",
@@ -18917,7 +18729,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.159.166.100 - 10.159.166.239",
@@ -18996,7 +18807,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "66.253.172.69 - 66.253.172.94",
 //              "deny": [
 //                "member of ruckus",
@@ -19031,7 +18841,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.159.24.100 - 10.159.24.239",
@@ -19095,7 +18904,6 @@
 //            #        default-lease-time dTlease0;
 //            #        max-lease-time mdTlease0;
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "173.230.14.37 - 173.230.14.62",
 //              "deny": [
 //                "member of ruckus",
@@ -19129,7 +18937,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              #            default-lease-time dTruk;
 //              #            max-lease-time mdTruk;
 //              "pool": "10.159.191.100 - 10.159.191.239",
@@ -19207,7 +19014,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "96.63.207.5 - 96.63.207.62",
 //              "deny": [
 //                "member of ruckus",
@@ -19242,7 +19048,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.159.116.100 - 10.159.116.239",
@@ -19321,7 +19126,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "173.230.27.5 - 173.230.27.30",
 //              "deny": [
 //                "member of ruckus",
@@ -19356,7 +19160,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.159.154.100 - 10.159.154.239",
@@ -19435,7 +19238,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "173.230.20.69 - 173.230.20.94",
 //              "deny": [
 //                "member of ruckus",
@@ -19501,7 +19303,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "173.230.17.227 - 173.230.17.254",
 //              "deny": [
 //                "member of ruckus",
@@ -19536,7 +19337,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.159.148.100 - 10.159.148.239",
@@ -19600,7 +19400,6 @@
 //            #        default-lease-time dTlease0;
 //            #        max-lease-time mdTlease0;
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "173.230.14.165 - 173.230.14.190",
 //              "deny": [
 //                "member of ruckus",
@@ -19634,7 +19433,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              #            default-lease-time dTruk;
 //              #            max-lease-time mdTruk;
 //              "pool": "10.159.14.100 - 10.159.14.239",
@@ -19697,7 +19495,6 @@
 //            #        default-lease-time dTlease0;
 //            #        max-lease-time mdTlease0;
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "173.230.19.197 - 173.230.19.254",
 //              "deny": [
 //                "member of ruckus",
@@ -19731,7 +19528,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              #            default-lease-time dTruk;
 //              #            max-lease-time mdTruk;
 //              "pool": "10.159.112.100 - 10.159.112.239",
@@ -19794,7 +19590,6 @@
 //            #        default-lease-time dTlease0;
 //            #        max-lease-time mdTlease0;
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "173.230.29.69 - 173.230.29.94",
 //              "deny": [
 //                "member of ruckus",
@@ -19828,7 +19623,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              #            default-lease-time dTruk;
 //              #            max-lease-time mdTruk;
 //              "pool": "10.159.175.100 - 10.159.175.239",
@@ -19891,7 +19685,6 @@
 //            #        default-lease-time dTlease0;
 //            #        max-lease-time mdTlease0;
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "173.230.20.5 - 173.230.20.30",
 //              "deny": [
 //                "member of ruckus",
@@ -19925,7 +19718,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              #            default-lease-time dTruk;
 //              #            max-lease-time mdTruk;
 //              "pool": "10.159.113.100 - 10.159.113.239",
@@ -19988,7 +19780,6 @@
 //            #        default-lease-time dTlease0;
 //            #        max-lease-time mdTlease0;
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "173.230.19.5 - 173.230.19.30",
 //              "deny": [
 //                "member of ruckus",
@@ -20022,7 +19813,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              #            default-lease-time dTruk;
 //              #            max-lease-time mdTruk;
 //              "pool": "10.159.142.100 - 10.159.142.239",
@@ -20085,7 +19875,6 @@
 //            #        default-lease-time dTlease0;
 //            #        max-lease-time mdTlease0;
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "173.230.15.69 - 173.230.15.94",
 //              "deny": [
 //                "member of ruckus",
@@ -20119,7 +19908,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              #            default-lease-time dTruk;
 //              #            max-lease-time mdTruk;
 //              "pool": "10.159.186.100 - 10.159.186.239",
@@ -20197,7 +19985,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "173.230.8.37 - 173.230.8.62",
 //              "deny": [
 //                "member of ruckus",
@@ -20263,7 +20050,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "173.230.9.227 - 173.230.9.254",
 //              "deny": [
 //                "member of ruckus",
@@ -20298,7 +20084,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.159.4.100 - 10.159.4.239",
@@ -20360,7 +20145,6 @@
 //            #default-lease-time dTlease0;
 //            #max-lease-time mdTlease0;
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "173.230.112.37 - 173.230.112.62",
 //              "deny": [
 //                "member of ruckus",
@@ -20395,7 +20179,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.159.250.100 - 10.159.250.239",
@@ -20459,7 +20242,6 @@
 //            #        default-lease-time dTlease0;
 //            #        max-lease-time mdTlease0;
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "173.230.14.133 - 173.230.14.158",
 //              "deny": [
 //                "member of ruckus",
@@ -20493,7 +20275,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              #            default-lease-time dTruk;
 //              #            max-lease-time mdTruk;
 //              "pool": "10.159.15.100 - 10.159.15.239",
@@ -20571,7 +20352,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "96.63.203.21 - 96.63.203.126",
 //              "deny": [
 //                "member of ruckus",
@@ -20606,7 +20386,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.159.10.100 - 10.159.10.239",
@@ -20670,7 +20449,6 @@
 //            #        default-lease-time dTlease0;
 //            #        max-lease-time mdTlease0;
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "173.230.29.197 - 173.230.29.222",
 //              "deny": [
 //                "member of ruckus",
@@ -20704,7 +20482,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              #            default-lease-time dTruk;
 //              #            max-lease-time mdTruk;
 //              "pool": "10.159.179.100 - 10.159.179.239",
@@ -20767,7 +20544,6 @@
 //            #default-lease-time dTlease0;
 //            #max-lease-time mdTlease0;
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "173.230.9.197 - 173.230.9.222",
 //              "deny": [
 //                "member of ruckus",
@@ -20801,7 +20577,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.159.225.100 - 10.159.225.239",
@@ -20864,7 +20639,6 @@
 //            #        default-lease-time dTlease0;
 //            #        max-lease-time mdTlease0;
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "173.230.9.101 - 173.230.9.126",
 //              "deny": [
 //                "member of ruckus",
@@ -20898,7 +20672,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              #            default-lease-time dTruk;
 //              #            max-lease-time mdTruk;
 //              "pool": "10.159.230.100 - 10.159.230.239",
@@ -20976,7 +20749,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "173.230.21.5 - 173.230.21.62",
 //              "deny": [
 //                "member of ruckus",
@@ -21011,7 +20783,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.159.108.100 - 10.159.108.239",
@@ -21090,7 +20861,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "173.230.16.5 - 173.230.16.30",
 //              "deny": [
 //                "member of ruckus",
@@ -21125,7 +20895,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.159.8.100 - 10.159.8.239",
@@ -21189,7 +20958,6 @@
 //            #        default-lease-time dTlease0;
 //            #        max-lease-time mdTlease0;
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "173.230.12.197 - 173.230.12.222",
 //              "deny": [
 //                "member of ruckus",
@@ -21223,7 +20991,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              #            default-lease-time dTruk;
 //              #            max-lease-time mdTruk;
 //              "pool": "10.159.201.100 - 10.159.201.239",
@@ -21301,7 +21068,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "173.230.21.133 - 173.230.21.158",
 //              "deny": [
 //                "member of ruckus",
@@ -21417,7 +21183,6 @@
 //            #        default-lease-time dTlease0;
 //            #        max-lease-time mdTlease0;
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "173.230.29.229 - 173.230.29.254",
 //              "deny": [
 //                "member of ruckus",
@@ -21451,7 +21216,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              #            default-lease-time dTruk;
 //              #            max-lease-time mdTruk;
 //              "pool": "10.159.180.100 - 10.159.180.239",
@@ -21514,7 +21278,6 @@
 //            #default-lease-time dTlease0;
 //            #max-lease-time mdTlease0;
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "173.230.9.69 - 173.230.9.94",
 //              "deny": [
 //                "member of ruckus",
@@ -21548,7 +21311,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.159.231.100 - 10.159.231.239",
@@ -21626,7 +21388,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "173.230.16.37 - 173.230.16.62",
 //              "deny": [
 //                "member of ruckus",
@@ -21661,7 +21422,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.159.227.100 - 10.159.227.239",
@@ -21739,7 +21499,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "68.234.168.21 - 68.234.171.254",
 //              "deny": [
 //                "member of ruckus",
@@ -21890,7 +21649,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "173.230.21.197 - 173.230.21.254",
 //              "deny": [
 //                "member of ruckus",
@@ -21925,7 +21683,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.159.125.100 - 10.159.125.239",
@@ -21989,7 +21746,6 @@
 //            #        default-lease-time dTlease0;
 //            #        max-lease-time mdTlease0;
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "173.230.20.101 - 173.230.20.126",
 //              "deny": [
 //                "member of ruckus",
@@ -22023,7 +21779,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              #            default-lease-time dTruk;
 //              #            max-lease-time mdTruk;
 //              "pool": "10.159.158.100 - 10.159.158.239",
@@ -22093,7 +21848,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "173.230.23.37 - 173.230.23.62",
 //              "deny": [
 //                "member of ruckus",
@@ -22128,7 +21882,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.159.155.100 - 10.159.155.239",
@@ -22192,7 +21945,6 @@
 //            #        default-lease-time dTlease0;
 //            #        max-lease-time mdTlease0;
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "173.230.9.165 - 173.230.9.190",
 //              "deny": [
 //                "member of ruckus",
@@ -22226,7 +21978,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              #            default-lease-time dTruk;
 //              #            max-lease-time mdTruk;
 //              "pool": "10.159.226.100 - 10.159.226.239",
@@ -22289,7 +22040,6 @@
 //            #        default-lease-time dTlease0;
 //            #        max-lease-time mdTlease0;
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "173.230.19.101 - 173.230.19.126",
 //              "deny": [
 //                "member of ruckus",
@@ -22323,7 +22073,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              #            default-lease-time dTruk;
 //              #            max-lease-time mdTruk;
 //              "pool": "10.159.229.100 - 10.159.229.239",
@@ -22386,7 +22135,6 @@
 //            #        default-lease-time dTlease0;
 //            #        max-lease-time mdTlease0;
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "173.230.15.229 - 173.230.15.254",
 //              "deny": [
 //                "member of ruckus",
@@ -22420,7 +22168,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              #            default-lease-time dTruk;
 //              #            max-lease-time mdTruk;
 //              "pool": "10.159.172.100 - 10.159.172.239",
@@ -22483,7 +22230,6 @@
 //            #        default-lease-time dTlease0;
 //            #        max-lease-time mdTlease0;
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "173.230.16.69 - 173.230.16.94",
 //              "deny": [
 //                "member of ruckus",
@@ -22517,7 +22263,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              #            default-lease-time dTruk;
 //              #            max-lease-time mdTruk;
 //              "pool": "10.159.228.100 - 10.159.228.239",
@@ -22595,7 +22340,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "216.171.8.21 - 216.171.9.223",
 //              "deny": [
 //                "member of ruckus",
@@ -22681,7 +22425,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "66.253.193.2 - 66.253.193.254",
 //              "deny": [
 //                "member of ruckus",
@@ -22747,7 +22490,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "216.171.27.2 - 216.171.27.254",
 //              "deny": [
 //                "member of ruckus",
@@ -22782,7 +22524,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.151.10.50 - 10.151.10.239",
@@ -22846,7 +22587,6 @@
 //            #        default-lease-time dTlease0;
 //            #        max-lease-time mdTlease0;
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "173.230.22.5 - 173.230.22.30",
 //              "deny": [
 //                "member of ruckus",
@@ -22880,7 +22620,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              #            default-lease-time dTruk;
 //              #            max-lease-time mdTruk;
 //              "pool": "10.159.128.100 - 10.159.128.239",
@@ -22943,7 +22682,6 @@
 //            #        default-lease-time dTlease0;
 //            #        max-lease-time mdTlease0;
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "173.230.29.101 - 173.230.29.126",
 //              "deny": [
 //                "member of ruckus",
@@ -22977,7 +22715,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              #            default-lease-time dTruk;
 //              #            max-lease-time mdTruk;
 //              "pool": "10.159.176.100 - 10.159.176.239",
@@ -23055,7 +22792,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "173.230.29.133 - 173.230.29.158",
 //              "deny": [
 //                "member of ruckus",
@@ -23090,7 +22826,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.159.177.100 - 10.159.177.239",
@@ -23169,7 +22904,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "173.230.8.165 - 173.230.8.190",
 //              "deny": [
 //                "member of ruckus",
@@ -23204,7 +22938,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.159.118.100 - 10.159.118.239",
@@ -23268,7 +23001,6 @@
 //            #        default-lease-time dTlease0;
 //            #        max-lease-time mdTlease0;
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "173.230.23.69 - 173.230.23.94",
 //              "deny": [
 //                "member of ruckus",
@@ -23302,7 +23034,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              #            default-lease-time dTruk;
 //              #            max-lease-time mdTruk;
 //              "pool": "10.159.156.100 - 10.159.156.239",
@@ -23380,7 +23111,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "173.230.22.197 - 173.230.22.254",
 //              "deny": [
 //                "member of ruckus",
@@ -23429,7 +23159,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.159.126.100 - 10.159.126.239",
@@ -23507,7 +23236,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "173.230.15.197 - 173.230.15.222",
 //              "deny": [
 //                "member of ruckus",
@@ -23623,7 +23351,6 @@
 //            #        default-lease-time dTlease0;
 //            #        max-lease-time mdTlease0;
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "173.230.10.5 - 173.230.10.30",
 //              "deny": [
 //                "member of ruckus",
@@ -23657,7 +23384,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              #            default-lease-time dTruk;
 //              #            max-lease-time mdTruk;
 //              "pool": "10.159.198.100 - 10.159.198.239",
@@ -23720,7 +23446,6 @@
 //            #default-lease-time dTlease0;
 //            #max-lease-time mdTlease0;
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "173.230.12.37 - 173.230.12.62",
 //              "deny": [
 //                "member of ruckus",
@@ -23754,7 +23479,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.159.193.100 - 10.159.193.239",
@@ -23817,7 +23541,6 @@
 //            #default-lease-time dTlease0;
 //            #max-lease-time mdTlease0;
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "173.230.20.165 - 173.230.20.190",
 //              "deny": [
 //                "member of ruckus",
@@ -23851,7 +23574,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.159.151.100 - 10.159.151.239",
@@ -23929,7 +23651,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "173.230.15.165 - 173.230.15.190",
 //              "deny": [
 //                "member of ruckus",
@@ -23964,7 +23685,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.159.183.100 - 10.159.183.239",
@@ -24043,7 +23763,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "173.230.12.101 - 173.230.12.126",
 //              "deny": [
 //                "member of ruckus",
@@ -24078,7 +23797,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.159.203.100 - 10.159.203.239",
@@ -24145,7 +23863,6 @@
 //            #default-lease-time dTlease0;
 //            #max-lease-time mdTlease0;
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "173.230.12.69 - 173.230.12.94",
 //              "deny": [
 //                "member of ruckus",
@@ -24179,7 +23896,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.159.194.100 - 10.159.194.239",
@@ -24257,7 +23973,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "173.230.20.133 - 173.230.20.158",
 //              "deny": [
 //                "member of ruckus",
@@ -24292,7 +24007,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.159.150.100 - 10.159.150.239",
@@ -24356,7 +24070,6 @@
 //            #default-lease-time dTlease0;
 //            #max-lease-time mdTlease0;
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "173.230.19.37 - 173.230.19.62",
 //              "deny": [
 //                "member of ruckus",
@@ -24390,7 +24103,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.159.144.100 - 10.159.144.239",
@@ -24468,7 +24180,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "96.63.203.165 - 96.63.203.190",
 //              "deny": [
 //                "member of ruckus",
@@ -24503,7 +24214,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.159.3.100 - 10.159.3.239",
@@ -24582,7 +24292,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "173.230.13.229 - 173.230.13.254",
 //              "deny": [
 //                "member of ruckus",
@@ -24617,7 +24326,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.159.22.100 - 10.159.22.239",
@@ -24696,7 +24404,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "66.253.172.5 - 66.253.172.30",
 //              "deny": [
 //                "member of ruckus",
@@ -24731,7 +24438,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.159.242.100 - 10.159.242.239",
@@ -24810,7 +24516,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "216.171.3.165 - 216.171.3.190",
 //              "deny": [
 //                "member of ruckus",
@@ -24941,7 +24646,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "173.230.23.197 - 173.230.23.222",
 //              "deny": [
 //                "member of ruckus",
@@ -24976,7 +24680,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.159.110.100 - 10.159.110.239",
@@ -25040,7 +24743,6 @@
 //            #        default-lease-time dTlease0;
 //            #        max-lease-time mdTlease0;
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "173.230.10.69 - 173.230.10.94",
 //              "deny": [
 //                "member of ruckus",
@@ -25074,7 +24776,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              #            default-lease-time dTruk;
 //              #            max-lease-time mdTruk;
 //              "pool": "10.159.196.100 - 10.159.196.239",
@@ -25137,7 +24838,6 @@
 //            #default-lease-time dTlease0;
 //            #max-lease-time mdTlease0;
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "173.230.10.197 - 173.230.10.222",
 //              "deny": [
 //                "member of ruckus",
@@ -25171,7 +24871,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.159.216.100 - 10.159.216.239",
@@ -25234,7 +24933,6 @@
 //            #        default-lease-time dTlease0;
 //            #        max-lease-time mdTlease0;
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "173.230.27.197 - 173.230.27.222",
 //              "deny": [
 //                "member of ruckus",
@@ -25268,7 +24966,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              #            default-lease-time dTruk;
 //              #            max-lease-time mdTruk;
 //              "pool": "10.159.167.100 - 10.159.167.239",
@@ -25331,7 +25028,6 @@
 //            #        default-lease-time dTlease0;
 //            #        max-lease-time mdTlease0;
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "173.230.16.101 - 173.230.16.126",
 //              "deny": [
 //                "member of ruckus",
@@ -25365,7 +25061,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              #            default-lease-time dTruk;
 //              #            max-lease-time mdTruk;
 //              "pool": "10.159.5.100 - 10.159.5.239",
@@ -25428,7 +25123,6 @@
 //            #default-lease-time dTlease0;
 //            #max-lease-time mdTlease0;
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "173.230.24.5 - 173.230.24.30",
 //              "deny": [
 //                "member of ruckus",
@@ -25462,7 +25156,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.159.117.100 - 10.159.117.239",
@@ -25525,7 +25218,6 @@
 //            #        default-lease-time dTlease0;
 //            #        max-lease-time mdTlease0;
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "173.230.15.133 - 173.230.15.158",
 //              "deny": [
 //                "member of ruckus",
@@ -25559,7 +25251,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              #            default-lease-time dTruk;
 //              #            max-lease-time mdTruk;
 //              "pool": "10.159.184.100 - 10.159.184.239",
@@ -25622,7 +25313,6 @@
 //            #        default-lease-time dTlease0;
 //            #        max-lease-time mdTlease0;
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "173.230.19.133 - 173.230.19.158",
 //              "deny": [
 //                "member of ruckus",
@@ -25656,7 +25346,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              #            default-lease-time dTruk;
 //              #            max-lease-time mdTruk;
 //              "pool": "10.159.147.100 - 10.159.147.239",
@@ -25734,7 +25423,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "96.63.200.165 - 96.63.200.190",
 //              "deny": [
 //                "member of ruckus",
@@ -25769,7 +25457,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.159.7.100 - 10.159.7.239",
@@ -25848,7 +25535,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "173.230.18.133 - 173.230.18.158",
 //              "deny": [
 //                "member of ruckus",
@@ -25883,7 +25569,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.159.152.100 - 10.159.152.239",
@@ -25962,7 +25647,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "173.230.12.229 - 173.230.12.254",
 //              "deny": [
 //                "member of ruckus",
@@ -25997,7 +25681,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.159.200.100 - 10.159.200.239",
@@ -26076,7 +25759,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "173.230.24.133 - 173.230.24.190",
 //              "deny": [
 //                "member of ruckus",
@@ -26111,7 +25793,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.159.109.100 - 10.159.109.239",
@@ -26175,7 +25856,6 @@
 //            #        default-lease-time dTlease0;
 //            #        max-lease-time mdTlease0;
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "173.230.24.37 - 173.230.24.62",
 //              "deny": [
 //                "member of ruckus",
@@ -26209,7 +25889,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              #            default-lease-time dTruk;
 //              #            max-lease-time mdTruk;
 //              "pool": "10.159.223.100 - 10.159.223.239",
@@ -26272,7 +25951,6 @@
 //            #        default-lease-time dTlease0;
 //            #        max-lease-time mdTlease0;
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "173.230.29.37 - 173.230.29.62",
 //              "deny": [
 //                "member of ruckus",
@@ -26306,7 +25984,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              #            default-lease-time dTruk;
 //              #            max-lease-time mdTruk;
 //              "pool": "10.159.174.100 - 10.159.174.239",
@@ -26384,7 +26061,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "96.63.200.133 - 96.63.200.158",
 //              "deny": [
 //                "member of ruckus",
@@ -26450,7 +26126,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "173.230.8.3 - 173.230.8.30",
 //              "deny": [
 //                "member of ruckus",
@@ -26485,7 +26160,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.159.12.100 - 10.159.12.239",
@@ -26549,7 +26223,6 @@
 //            #        default-lease-time dTlease0;
 //            #        max-lease-time mdTlease0;
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "173.230.29.5 - 173.230.29.30",
 //              "deny": [
 //                "member of ruckus",
@@ -26583,7 +26256,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              #            default-lease-time dTruk;
 //              #            max-lease-time mdTruk;
 //              "pool": "10.159.173.100 - 10.159.173.239",
@@ -26646,7 +26318,6 @@
 //            #        default-lease-time dTlease0;
 //            #        max-lease-time mdTlease0;
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "173.230.25.5 - 173.230.25.62",
 //              "deny": [
 //                "member of ruckus",
@@ -26680,7 +26351,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              #            default-lease-time dTruk;
 //              #            max-lease-time mdTruk;
 //              "pool": "10.159.107.100 - 10.159.107.239",
@@ -26758,7 +26428,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "173.230.19.69 - 173.230.19.94",
 //              "deny": [
 //                "member of ruckus",
@@ -26793,7 +26462,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.159.145.100 - 10.159.145.239",
@@ -26872,7 +26540,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "173.230.10.165 - 173.230.10.190",
 //              "deny": [
 //                "member of ruckus",
@@ -27003,7 +26670,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "66.253.172.37 - 66.253.172.62",
 //              "deny": [
 //                "member of ruckus",
@@ -27038,7 +26704,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.159.241.100 - 10.159.241.239",
@@ -27102,7 +26767,6 @@
 //            #        default-lease-time dTlease0;
 //            #        max-lease-time mdTlease0;
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "173.230.10.133 - 173.230.10.158",
 //              "deny": [
 //                "member of ruckus",
@@ -27136,7 +26800,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              #            default-lease-time dTruk;
 //              #            max-lease-time mdTruk;
 //              "pool": "10.159.219.100 - 10.159.219.239",
@@ -27214,7 +26877,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "173.230.10.101 - 173.230.10.126",
 //              "deny": [
 //                "member of ruckus",
@@ -27249,7 +26911,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.159.220.100 - 10.159.220.239",
@@ -27328,7 +26989,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "173.230.13.5 - 173.230.13.14",
 //              "deny": [
 //                "member of ruckus",
@@ -27363,7 +27023,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.159.161.100 - 10.159.161.239",
@@ -27427,7 +27086,6 @@
 //            #        default-lease-time dTlease0;
 //            #        max-lease-time mdTlease0;
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "173.230.12.165 - 173.230.12.190",
 //              "deny": [
 //                "member of ruckus",
@@ -27461,7 +27119,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              #            default-lease-time dTruk;
 //              #            max-lease-time mdTruk;
 //              "pool": "10.159.197.100 - 10.159.197.239",
@@ -27524,7 +27181,6 @@
 //            #        default-lease-time dTlease0;
 //            #        max-lease-time mdTlease0;
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "173.230.24.69 - 173.230.24.94",
 //              "deny": [
 //                "member of ruckus",
@@ -27558,7 +27214,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              #            default-lease-time dTruk;
 //              #            max-lease-time mdTruk;
 //              "pool": "10.159.160.100 - 10.159.160.239",
@@ -27621,7 +27276,6 @@
 //            #        default-lease-time dTlease0;
 //            #        max-lease-time mdTlease0;
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "173.230.24.197 - 173.230.24.222",
 //              "deny": [
 //                "member of ruckus",
@@ -27655,7 +27309,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              #            default-lease-time dTruk;
 //              #            max-lease-time mdTruk;
 //              "pool": "10.159.149.100 - 10.159.149.239",
@@ -27718,7 +27371,6 @@
 //            #        default-lease-time dTlease0;
 //            #        max-lease-time mdTlease0;
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "173.230.24.229 - 173.230.24.254",
 //              "deny": [
 //                "member of ruckus",
@@ -27752,7 +27404,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              #            default-lease-time dTruk;
 //              #            max-lease-time mdTruk;
 //              "pool": "10.159.153.100 - 10.159.153.239",
@@ -27830,7 +27481,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "173.230.25.197 - 173.230.25.222",
 //              "deny": [
 //                "member of ruckus",
@@ -27865,7 +27515,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.159.130.100 - 10.159.130.239",
@@ -27929,7 +27578,6 @@
 //            #default-lease-time dTlease0;
 //            #max-lease-time mdTlease0;
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "173.230.26.133 - 173.230.26.190",
 //              "deny": [
 //                "member of ruckus",
@@ -27963,7 +27611,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.159.124.100 - 10.159.124.239",
@@ -28026,7 +27673,6 @@
 //            #        default-lease-time dTlease0;
 //            #        max-lease-time mdTlease0;
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "173.230.9.37 - 173.230.9.62",
 //              "deny": [
 //                "member of ruckus",
@@ -28060,7 +27706,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              #            default-lease-time dTruk;
 //              #            max-lease-time mdTruk;
 //              "pool": "10.159.205.100 - 10.159.205.239",
@@ -28138,7 +27783,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "173.230.12.5 - 173.230.12.30",
 //              "deny": [
 //                "member of ruckus",
@@ -28173,7 +27817,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.159.206.100 - 10.159.206.239",
@@ -28252,7 +27895,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "173.230.26.197 - 173.230.26.222",
 //              "deny": [
 //                "member of ruckus",
@@ -28287,7 +27929,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.159.114.100 - 10.159.114.239",
@@ -28351,7 +27992,6 @@
 //            #        default-lease-time dTlease0;
 //            #        max-lease-time mdTlease0;
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "173.230.11.197 - 173.230.11.222",
 //              "deny": [
 //                "member of ruckus",
@@ -28385,7 +28025,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              #            default-lease-time dTruk;
 //              #            max-lease-time mdTruk;
 //              "pool": "10.159.208.100 - 10.159.208.239",
@@ -28448,7 +28087,6 @@
 //            #        default-lease-time dTlease0;
 //            #        max-lease-time mdTlease0;
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "173.230.27.69 - 173.230.27.126",
 //              "deny": [
 //                "member of ruckus",
@@ -28482,7 +28120,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              #            default-lease-time dTruk;
 //              #            max-lease-time mdTruk;
 //              "pool": "10.159.105.100 - 10.159.105.239",
@@ -28545,7 +28182,6 @@
 //            #        default-lease-time dTlease0;
 //            #        max-lease-time mdTlease0;
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "173.230.27.229 - 173.230.27.254",
 //              "deny": [
 //                "member of ruckus",
@@ -28579,7 +28215,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              #            default-lease-time dTruk;
 //              #            max-lease-time mdTruk;
 //              "pool": "10.159.168.100 - 10.159.168.239",
@@ -28642,7 +28277,6 @@
 //            #        default-lease-time dTlease0;
 //            #        max-lease-time mdTlease0;
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "173.230.28.5 - 173.230.28.30",
 //              "deny": [
 //                "member of ruckus",
@@ -28676,7 +28310,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              #            default-lease-time dTruk;
 //              #            max-lease-time mdTruk;
 //              "pool": "10.159.169.100 - 10.159.169.239",
@@ -28739,7 +28372,6 @@
 //            #        default-lease-time dTlease0;
 //            #        max-lease-time mdTlease0;
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "173.230.27.133 - 173.230.27.190",
 //              "deny": [
 //                "member of ruckus",
@@ -28773,7 +28405,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              #            default-lease-time dTruk;
 //              #            max-lease-time mdTruk;
 //              "pool": "10.159.111.100 - 10.159.111.239",
@@ -28836,7 +28467,6 @@
 //            #        default-lease-time dTlease0;
 //            #        max-lease-time mdTlease0;
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "173.230.28.37 - 173.230.28.62",
 //              "deny": [
 //                "member of ruckus",
@@ -28870,7 +28500,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              #            default-lease-time dTruk;
 //              #            max-lease-time mdTruk;
 //              "pool": "10.159.170.100 - 10.159.170.239",
@@ -28933,7 +28562,6 @@
 //            #        default-lease-time dTlease0;
 //            #        max-lease-time mdTlease0;
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "173.230.28.69 - 173.230.28.126",
 //              "deny": [
 //                "member of ruckus",
@@ -28967,7 +28595,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              #            default-lease-time dTruk;
 //              #            max-lease-time mdTruk;
 //              "pool": "10.159.101.100 - 10.159.101.239",
@@ -29030,7 +28657,6 @@
 //            #        default-lease-time dTlease0;
 //            #        max-lease-time mdTlease0;
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "173.230.11.37 - 173.230.11.62",
 //              "deny": [
 //                "member of ruckus",
@@ -29064,7 +28690,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              #            default-lease-time dTruk;
 //              #            max-lease-time mdTruk;
 //              "pool": "10.159.213.100 - 10.159.213.239",
@@ -29142,7 +28767,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "50.30.140.21 - 50.30.143.254",
 //              "deny": [
 //                "member of ruckus",
@@ -32368,7 +31992,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.144.118.100 - 10.144.118.239",
@@ -32776,7 +32399,6 @@
 //            #default-lease-time dTlease0;
 //            #max-lease-time mdTlease0;
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "96.63.207.149 - 96.63.207.254",
 //              "deny": [
 //                "member of ruckus",
@@ -32811,7 +32433,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.159.237.100 - 10.159.237.239",
@@ -32875,7 +32496,6 @@
 //            #default-lease-time dTlease0;
 //            #max-lease-time mdTlease0;
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "216.171.6.21 - 216.171.6.254",
 //              "deny": [
 //                "member of ruckus",
@@ -32915,7 +32535,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.151.90.100 - 10.151.90.239",
@@ -32976,7 +32595,6 @@
 //            #default-lease-time dTlease0;
 //            #max-lease-time mdTlease0;
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "216.171.20.21 - 216.171.23.254",
 //              "deny": [
 //                "member of ruckus",
@@ -33032,7 +32650,6 @@
 //            #default-lease-time dTlease0;
 //            #max-lease-time mdTlease0;
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "216.171.28.3 - 216.171.29.254",
 //              "deny": [
 //                "member of ruckus",
@@ -33072,7 +32689,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.151.34.100 - 10.151.34.239",
@@ -33149,7 +32765,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "68.180.36.21 - 68.180.36.254",
 //              "deny": [
 //                "member of ruckus",
@@ -33277,7 +32892,6 @@
 //            #default-lease-time dTlease0;
 //            #max-lease-time mdTlease0;
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "66.253.183.69 - 66.253.183.94",
 //              "deny": [
 //                "member of ruckus",
@@ -33317,7 +32931,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.151.62.100 - 10.151.62.239",
@@ -33395,7 +33008,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "66.253.181.37 - 66.253.181.62",
 //              "deny": [
 //                "member of ruckus",
@@ -33461,7 +33073,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "66.253.181.131 - 66.253.181.190",
 //              "deny": [
 //                "member of ruckus",
@@ -33502,7 +33113,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.151.98.100 - 10.151.98.199",
@@ -33514,7 +33124,6 @@
 //              ]
 //            },
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.151.98.200 - 10.151.98.239",
@@ -33591,7 +33200,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "66.253.228.81 - 66.253.229.254",
 //              "deny": [
 //                "member of ruckus",
@@ -34271,7 +33879,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.144.138.100 - 10.144.138.239",
@@ -34335,7 +33942,6 @@
 //            #        default-lease-time dTlease0;
 //            #        max-lease-time mdTlease0;
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "173.230.8.146 - 173.230.8.150",
 //              "deny": [
 //                "member of ruckus",
@@ -34409,7 +34015,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "66.253.172.165 - 66.253.172.190",
 //              "deny": [
 //                "member of ruckus",
@@ -34444,7 +34049,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.159.25.100 - 10.159.25.239",
@@ -34506,7 +34110,6 @@
 //            #default-lease-time dTlease0;
 //            #max-lease-time mdTlease0;
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "68.234.160.21 - 68.234.161.254",
 //              "deny": [
 //                "member of ruckus",
@@ -34562,7 +34165,6 @@
 //            #default-lease-time dTlease0;
 //            #max-lease-time mdTlease0;
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "68.234.180.3 - 68.234.180.254",
 //              "deny": [
 //                "member of ruckus",
@@ -34603,7 +34205,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.151.114.100 - 10.151.114.239",
@@ -34681,7 +34282,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "68.234.240.21 - 68.234.243.223",
 //              "deny": [
 //                "member of ruckus",
@@ -34747,7 +34347,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "10.180.120.3 - 10.180.121.254",
 //              "deny": [
 //                "member of ruckus",
@@ -34884,7 +34483,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "216.171.40.21 - 216.171.43.254",
 //              "deny": [
 //                "member of ruckus",
@@ -34925,7 +34523,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.151.94.100 - 10.151.94.239",
@@ -35005,7 +34602,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "173.230.112.133 - 173.230.112.190",
 //              "deny": [
 //                "member of ruckus",
@@ -35136,7 +34732,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "216.171.7.21 - 216.171.7.254",
 //              "deny": [
 //                "member of ruckus",
@@ -35171,7 +34766,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.159.215.100 - 10.159.215.239",
@@ -35250,7 +34844,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "173.230.12.133 - 173.230.12.158",
 //              "deny": [
 //                "member of ruckus",
@@ -35285,7 +34878,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.159.202.100 - 10.159.202.239",
@@ -35363,7 +34955,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "216.171.16.21 - 216.171.19.254",
 //              "deny": [
 //                "member of ruckus",
@@ -35424,7 +35015,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.151.66.100 - 10.151.66.239",
@@ -35502,7 +35092,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "96.63.203.197 - 96.63.203.254",
 //              "deny": [
 //                "member of ruckus",
@@ -35537,7 +35126,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.159.190.100 - 10.159.190.239",
@@ -35599,7 +35187,6 @@
 //            #default-lease-time dTlease0;
 //            #max-lease-time mdTlease0;
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "216.171.10.21 - 216.171.11.254",
 //              "deny": [
 //                "member of ruckus",
@@ -35661,7 +35248,6 @@
 //            #default-lease-time dTlease0;
 //            #max-lease-time mdTlease0;
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "66.253.179.3 - 66.253.179.254",
 //              "deny": [
 //                "member of ruckus",
@@ -35701,7 +35287,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.151.70.100 - 10.151.70.239",
@@ -35760,7 +35345,6 @@
 //            #        default-lease-time dTlease0;
 //            #        max-lease-time mdTlease0;
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "216.171.12.21 - 216.171.15.254",
 //              "deny": [
 //                "member of ruckus",
@@ -35800,7 +35384,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #            default-lease-time dTruk;
 //              #            max-lease-time mdTruk;
 //              "pool": "10.151.78.100 - 10.151.78.239",
@@ -35878,7 +35461,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "96.63.224.21 - 96.63.227.254",
 //              "deny": [
 //                "member of ruckus",
@@ -35935,7 +35517,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.150.66.100 - 10.150.66.239",
@@ -36014,7 +35595,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "173.230.72.21 - 173.230.75.254",
 //              "deny": [
 //                "member of ruckus",
@@ -36063,7 +35643,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.150.6.100 - 10.150.6.239",
@@ -36142,7 +35721,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "68.234.156.21 - 68.234.159.254",
 //              "deny": [
 //                "member of ruckus",
@@ -36183,7 +35761,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.150.118.100 - 10.150.118.239",
@@ -36261,7 +35838,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "68.234.144.21 - 68.234.147.254",
 //              "deny": [
 //                "member of ruckus",
@@ -36377,7 +35953,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "68.234.182.3 - 68.234.183.254",
 //              "deny": [
 //                "member of ruckus",
@@ -36418,7 +35993,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.150.94.100 - 10.150.94.239",
@@ -36496,7 +36070,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "50.30.236.21 - 50.30.239.254",
 //              "deny": [
 //                "member of ruckus",
@@ -36640,7 +36213,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "173.230.60.21 - 173.230.63.254",
 //              "deny": [
 //                "member of ruckus",
@@ -36776,7 +36348,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "66.253.136.21 - 66.253.137.254",
 //              "deny": [
 //                "member of ruckus",
@@ -36842,7 +36413,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "66.253.240.3 - 66.253.241.254",
 //              "deny": [
 //                "member of ruckus",
@@ -36979,7 +36549,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "50.30.162.21 - 50.30.163.254",
 //              "deny": [
 //                "member of ruckus",
@@ -37045,7 +36614,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "50.30.187.3 - 50.30.187.254",
 //              "deny": [
 //                "member of ruckus",
@@ -37086,7 +36654,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.250.78.100 - 10.250.78.239",
@@ -37165,7 +36732,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "216.171.32.21 - 216.171.33.254",
 //              "deny": [
 //                "member of ruckus",
@@ -37244,7 +36810,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "216.171.38.3 - 216.171.38.254",
 //              "deny": [
 //                "member of ruckus",
@@ -37284,7 +36849,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.150.98.100 - 10.150.98.239",
@@ -37362,7 +36926,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "50.30.154.21 - 50.30.155.254",
 //              "deny": [
 //                "member of ruckus",
@@ -37467,7 +37030,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "50.30.183.3 - 50.30.183.254",
 //              "deny": [
 //                "member of ruckus",
@@ -37508,7 +37070,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.144.122.100 - 10.144.122.239",
@@ -37587,7 +37148,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "76.10.50.21 - 76.10.51.254",
 //              "deny": [
 //                "member of ruckus",
@@ -37661,7 +37221,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "68.234.162.3 - 68.234.163.254",
 //              "deny": [
 //                "member of ruckus",
@@ -37702,7 +37261,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.150.82.100 - 10.150.82.239",
@@ -37780,7 +37338,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "76.10.52.21 - 76.10.53.254",
 //              "deny": [
 //                "member of ruckus",
@@ -37846,7 +37403,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "68.180.68.3 - 68.180.71.254",
 //              "deny": [
 //                "member of ruckus",
@@ -37982,7 +37538,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "68.234.140.21 - 68.234.143.254",
 //              "deny": [
 //                "member of ruckus",
@@ -38056,7 +37611,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "68.234.193.3 - 68.234.193.254",
 //              "deny": [
 //                "member of ruckus",
@@ -38192,7 +37746,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "68.234.134.21 - 68.234.135.254",
 //              "deny": [
 //                "member of ruckus",
@@ -38258,7 +37811,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "68.234.194.3 - 68.234.194.254",
 //              "deny": [
 //                "member of ruckus",
@@ -38398,7 +37950,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "173.230.84.21 - 173.230.87.254",
 //              "deny": [
 //                "member of ruckus",
@@ -38478,7 +38029,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "68.180.116.3 - 68.180.117.254",
 //              "deny": [
 //                "member of ruckus",
@@ -38544,7 +38094,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "66.253.157.3 - 66.253.157.254",
 //              "deny": [
 //                "member of ruckus",
@@ -38585,7 +38134,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.150.110.100 - 10.150.110.239",
@@ -38673,7 +38221,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "66.253.184.21 - 66.253.187.254",
 //              "deny": [
 //                "member of ruckus",
@@ -38714,7 +38261,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.150.86.100 - 10.150.86.239",
@@ -38792,7 +38338,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "76.10.20.21 - 76.10.23.254",
 //              "deny": [
 //                "member of ruckus",
@@ -38935,7 +38480,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "66.253.164.21 - 66.253.165.254",
 //              "deny": [
 //                "member of ruckus",
@@ -39009,7 +38553,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "216.171.50.3 - 216.171.50.254",
 //              "deny": [
 //                "member of ruckus",
@@ -39050,7 +38593,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.145.14.100 - 10.145.14.239",
@@ -39129,7 +38671,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "68.180.124.21 - 68.180.125.254",
 //              "deny": [
 //                "member of ruckus",
@@ -39202,7 +38743,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "68.180.126.3 - 68.180.126.254",
 //              "deny": [
 //                "member of ruckus",
@@ -39243,7 +38783,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.145.18.100 - 10.145.18.239",
@@ -39322,7 +38861,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "68.180.114.26 - 68.180.115.254",
 //              "deny": [
 //                "member of ruckus",
@@ -39363,7 +38901,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.145.78.100 - 10.145.78.239",
@@ -39442,7 +38979,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "66.253.141.21 - 66.253.141.254",
 //              "deny": [
 //                "member of ruckus",
@@ -39508,7 +39044,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "68.234.185.3 - 68.234.185.254",
 //              "deny": [
 //                "member of ruckus",
@@ -39549,7 +39084,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.145.22.100 - 10.145.22.239",
@@ -39627,7 +39161,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "68.180.72.25 - 68.180.73.254",
 //              "deny": [
 //                "member of ruckus",
@@ -39693,7 +39226,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "68.180.60.3 - 68.180.61.254",
 //              "deny": [
 //                "member of ruckus",
@@ -39734,7 +39266,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.153.2.100 - 10.153.2.239",
@@ -39813,7 +39344,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "173.230.32.21 - 173.230.39.254",
 //              "deny": [
 //                "member of ruckus",
@@ -39854,7 +39384,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.146.146.100 - 10.146.146.239",
@@ -39933,7 +39462,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "216.171.56.21 - 216.171.59.254",
 //              "deny": [
 //                "member of ruckus",
@@ -40043,7 +39571,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "68.180.20.3 - 68.180.21.254",
 //              "deny": [
 //                "member of ruckus",
@@ -40109,7 +39636,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "66.253.142.3 - 66.253.142.254",
 //              "deny": [
 //                "member of ruckus",
@@ -40175,7 +39701,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "68.180.79.3 - 68.180.79.254",
 //              "deny": [
 //                "member of ruckus",
@@ -40216,7 +39741,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.150.102.100 - 10.150.102.239",
@@ -40294,7 +39818,7 @@
 //          ],
 //          "pools": [
 //            {
-//              #          #failover peer "NATIONAL";
+//              #failover peer "NATIONAL";
 //              "pool": "50.30.245.21 - 50.30.245.223",
 //              "deny": [
 //                "member of ruckus",
@@ -40368,7 +39892,7 @@
 //          ],
 //          "pools": [
 //            {
-//              #          #failover peer "NATIONAL";
+//              #failover peer "NATIONAL";
 //              "pool": "10.180.10.3 - 10.180.10.254",
 //              "deny": [
 //                "member of ruckus",
@@ -40505,7 +40029,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "76.10.0.21 - 76.10.3.254",
 //              "deny": [
 //                "member of ruckus",
@@ -40546,7 +40069,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.150.42.100 - 10.150.42.239",
@@ -40694,7 +40216,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "68.180.32.21 - 68.180.35.254",
 //              "deny": [
 //                "member of ruckus",
@@ -40760,7 +40281,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "66.253.140.3 - 66.253.140.254",
 //              "deny": [
 //                "member of ruckus",
@@ -40801,7 +40321,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.144.134.100 - 10.144.134.239",
@@ -40879,7 +40398,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "216.171.48.130 - 216.171.48.254",
 //              "deny": [
 //                "member of ruckus",
@@ -42303,7 +41821,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "66.253.168.21 - 66.253.171.254",
 //              "deny": [
 //                "member of ruckus",
@@ -42377,7 +41894,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "66.253.138.3 - 66.253.139.254",
 //              "deny": [
 //                "member of ruckus",
@@ -42418,7 +41934,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.150.46.100 - 10.150.46.239",
@@ -42497,7 +42012,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "66.253.238.21 - 66.253.239.254",
 //              "deny": [
 //                "member of Trapeze",
@@ -42545,7 +42059,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.147.2.100 - 10.147.2.239",
@@ -42633,7 +42146,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "96.63.240.21 - 96.63.243.254",
 //              "deny": [
 //                "member of ruckus",
@@ -42682,7 +42194,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.149.126.100 - 10.149.126.239",
@@ -42760,7 +42271,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "96.63.244.21 - 96.63.247.254",
 //              "deny": [
 //                "member of ruckus",
@@ -42801,7 +42311,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.149.130.100 - 10.149.130.239",
@@ -42871,7 +42380,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "68.180.48.21 - 68.180.51.223",
 //              "deny": [
 //                "member of ruckus",
@@ -42941,7 +42449,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "68.180.63.3 - 68.180.63.254",
 //              "deny": [
 //                "member of ruckus",
@@ -42998,7 +42505,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "50.30.247.3 - 50.30.247.254",
 //              "deny": [
 //                "member of ruckus",
@@ -43055,7 +42561,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "216.171.51.3 - 216.171.51.254",
 //              "deny": [
 //                "member of ruckus",
@@ -43120,7 +42625,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "68.180.80.3 - 68.180.81.254",
 //              "deny": [
 //                "member of ruckus",
@@ -43160,7 +42664,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.145.154.50 - 10.145.154.200",
@@ -43237,7 +42740,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "68.180.37.21 - 68.180.37.254",
 //              "deny": [
 //                "member of ruckus",
@@ -43382,7 +42884,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "50.30.248.21 - 50.30.249.254",
 //              "deny": [
 //                "member of ruckus",
@@ -43431,7 +42932,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.144.66.100 - 10.144.66.239",
@@ -43487,7 +42987,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.149.158.100 - 10.149.158.239",
@@ -43566,7 +43065,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "50.30.204.21 - 50.30.207.254",
 //              "deny": [
 //                "member of ruckus",
@@ -43641,7 +43139,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "50.30.191.3 - 50.30.191.254",
 //              "deny": [
 //                "member of ruckus",
@@ -43788,7 +43285,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "96.63.232.21 - 96.63.235.254",
 //              "deny": [
 //                "member of ruckus",
@@ -43829,7 +43325,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.149.118.100 - 10.149.118.239",
@@ -43907,7 +43402,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "68.180.74.21 - 68.180.75.254",
 //              "deny": [
 //                "member of ruckus",
@@ -44038,7 +43532,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "50.30.240.21 - 50.30.243.254",
 //              "deny": [
 //                "member of ruckus",
@@ -44148,7 +43641,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "50.30.246.3 - 50.30.246.254",
 //              "deny": [
 //                "member of ruckus",
@@ -44189,7 +43681,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.144.2.100 - 10.144.2.239",
@@ -44306,7 +43797,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "216.171.39.21 - 216.171.39.254",
 //              "deny": [
 //                "member of ruckus",
@@ -44341,7 +43831,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.144.56.100 - 10.144.56.239",
@@ -44419,7 +43908,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "68.234.212.21 - 68.234.215.254",
 //              "deny": [
 //                "member of ruckus",
@@ -44557,7 +44045,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "68.180.104.21 - 68.180.105.254",
 //              "deny": [
 //                "member of ruckus",
@@ -44598,7 +44085,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.146.150.100 - 10.146.150.239",
@@ -44659,7 +44145,6 @@
 //            #default-lease-time dTlease0;
 //            #max-lease-time mdTlease0;
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "68.180.109.150 - 68.180.109.254",
 //              "deny": [
 //                "member of ruckus",
@@ -49564,7 +49049,6 @@
 //            #default-lease-time dTlease0;
 //            #max-lease-time mdTlease0;
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "173.230.54.3 - 173.230.54.254",
 //              "deny": [
 //                "member of ruckus",
@@ -49604,7 +49088,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.146.154.100 - 10.146.154.239",
@@ -49681,7 +49164,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "66.253.153.21 - 66.253.153.254",
 //              "deny": [
 //                "member of ruckus",
@@ -49747,7 +49229,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "216.171.47.3 - 216.171.47.254",
 //              "deny": [
 //                "member of ruckus",
@@ -49813,7 +49294,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "173.230.55.3 - 173.230.55.254",
 //              "deny": [
 //                "member of ruckus",
@@ -49950,7 +49430,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "96.63.212.221 - 96.63.212.254",
 //              "deny": [
 //                "member of ruckus",
@@ -50017,7 +49496,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "66.253.154.3 - 66.253.155.254",
 //              "deny": [
 //                "member of ruckus",
@@ -50083,7 +49561,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "216.171.52.3 - 216.171.52.254",
 //              "deny": [
 //                "member of ruckus",
@@ -50124,7 +49601,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.146.158.100 - 10.146.158.239",
@@ -50203,7 +49679,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "66.253.130.21 - 66.253.130.254",
 //              "deny": [
 //                "member of ruckus",
@@ -50238,7 +49713,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.146.4.100 - 10.146.4.239",
@@ -50316,7 +49790,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "173.230.66.1 - 173.230.67.254",
 //              "deny": [
 //                "member of ruckus",
@@ -55708,7 +55181,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.146.2.100 - 10.146.2.239",
@@ -55786,7 +55258,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "173.230.68.21 - 173.230.69.254",
 //              "deny": [
 //                "member of ruckus",
@@ -55827,7 +55298,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.146.18.100 - 10.146.18.239",
@@ -55908,7 +55378,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "68.234.167.21 - 68.234.167.254",
 //              "deny": [
 //                "member of ruckus",
@@ -55949,7 +55418,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.146.42.100 - 10.146.42.239",
@@ -56028,7 +55496,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "68.234.164.21 - 68.234.165.254",
 //              "deny": [
 //                "member of ruckus",
@@ -56077,7 +55544,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.146.38.100 - 10.146.38.239",
@@ -56156,7 +55622,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "76.10.30.21 - 76.10.31.254",
 //              "deny": [
 //                "member of ruckus",
@@ -56301,7 +55766,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "66.253.174.21 - 66.253.175.254",
 //              "deny": [
 //                "member of ruckus",
@@ -56336,7 +55800,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.146.48.100 - 10.146.48.239",
@@ -56414,7 +55877,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "68.180.107.1 - 68.180.107.254",
 //              "deny": [
 //                "member of ruckus",
@@ -59363,7 +58825,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.146.162.100 - 10.146.162.239",
@@ -59444,7 +58905,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "66.253.128.21 - 66.253.129.254",
 //              "deny": [
 //                "member of ruckus",
@@ -59485,7 +58945,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.146.130.100 - 10.146.130.239",
@@ -59564,7 +59023,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "66.253.246.21 - 66.253.246.254",
 //              "deny": [
 //                "member of ruckus",
@@ -59649,7 +59107,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.146.138.100 - 10.146.138.239",
@@ -59728,7 +59185,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "68.234.176.21 - 68.234.179.254",
 //              "deny": [
 //                "member of ruckus",
@@ -59769,7 +59225,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.144.42.100 - 10.144.42.239",
@@ -59847,7 +59302,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "68.180.84.21 - 68.180.87.223",
 //              "deny": [
 //                "member of ruckus",
@@ -59913,7 +59367,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "10.180.124.3 - 10.180.125.254",
 //              "deny": [
 //                "member of ruckus",
@@ -60050,7 +59503,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "50.30.200.21 - 50.30.203.254",
 //              "deny": [
 //                "member of ruckus",
@@ -60091,7 +59543,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.146.214.100 - 10.146.214.239",
@@ -60169,7 +59620,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "50.30.232.21 - 50.30.235.254",
 //              "deny": [
 //                "member of ruckus",
@@ -60235,7 +59685,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "66.253.250.3 - 66.253.251.254",
 //              "deny": [
 //                "member of ruckus",
@@ -60371,7 +59820,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "68.234.208.21 - 68.234.211.254",
 //              "deny": [
 //                "member of ruckus",
@@ -60515,7 +59963,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "50.30.136.181 - 50.30.137.254",
 //              "deny": [
 //                "member of ruckus",
@@ -62366,7 +61813,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.145.158.100 - 10.145.158.239",
@@ -62444,7 +61890,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "216.171.34.21 - 216.171.35.223",
 //              "deny": [
 //                "member of ruckus",
@@ -62510,7 +61955,7 @@
 //          ],
 //          "pools": [
 //            {
-//              #          #failover peer "NATIONAL";
+//              #failover peer "NATIONAL";
 //              "pool": "10.180.11.3 - 10.180.11.254",
 //              "deny": [
 //                "member of ruckus",
@@ -62632,7 +62077,6 @@
 //            #default-lease-time dTlease0;
 //            #max-lease-time mdTlease0;
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "10.180.0.21 - 10.180.7.254",
 //              "deny": [
 //                "member of ruckus",
@@ -62673,7 +62117,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.250.134.100 - 10.250.134.239",
@@ -62750,7 +62193,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "96.63.252.21 - 96.63.255.254",
 //              "deny": [
 //                "member of ruckus",
@@ -62830,7 +62272,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "216.171.46.3 - 216.171.46.254",
 //              "deny": [
 //                "member of ruckus",
@@ -62871,7 +62312,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.150.70.100 - 10.150.70.239",
@@ -62949,7 +62389,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "68.180.88.21 - 68.180.91.223",
 //              "deny": [
 //                "member of ruckus",
@@ -63015,7 +62454,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "50.30.132.3 - 50.30.132.254",
 //              "deny": [
 //                "member of ruckus",
@@ -63081,7 +62519,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "10.180.122.3 - 10.180.123.254",
 //              "deny": [
 //                "member of ruckus",
@@ -63217,7 +62654,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "68.180.56.21 - 68.180.57.254",
 //              "deny": [
 //                "member of ruckus",
@@ -63283,7 +62719,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "68.180.6.3 - 68.180.6.254",
 //              "deny": [
 //                "member of ruckus",
@@ -63420,7 +62855,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "66.253.236.21 - 66.253.237.254",
 //              "deny": [
 //                "member of ruckus",
@@ -63461,7 +62895,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.145.62.100 - 10.145.62.239",
@@ -63540,7 +62973,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "68.180.24.21 - 68.180.27.254",
 //              "deny": [
 //                "member of ruckus",
@@ -63581,7 +63013,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.145.86.100 - 10.145.86.239",
@@ -63659,7 +63090,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "96.63.248.21 - 96.63.251.254",
 //              "deny": [
 //                "member of ruckus",
@@ -63810,7 +63240,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "50.30.170.21 - 50.30.171.254",
 //              "deny": [
 //                "member of ruckus",
@@ -63876,7 +63305,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "50.30.180.3 - 50.30.181.254",
 //              "deny": [
 //                "member of ruckus",
@@ -63917,7 +63345,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.144.130.100 - 10.144.130.239",
@@ -63995,7 +63422,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "68.180.98.21 - 68.180.99.223",
 //              "deny": [
 //                "member of ruckus",
@@ -64069,7 +63495,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "10.180.34.3 - 10.180.34.254",
 //              "deny": [
 //                "member of ruckus",
@@ -64205,7 +63630,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "68.180.120.21 - 68.180.123.223",
 //              "deny": [
 //                "member of ruckus",
@@ -64271,7 +63695,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "66.253.196.3 - 66.253.197.254",
 //              "deny": [
 //                "member of ruckus",
@@ -64337,7 +63760,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "66.253.198.3 - 66.253.198.254",
 //              "deny": [
 //                "member of ruckus",
@@ -64403,7 +63825,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "10.180.14.3 - 10.180.15.254",
 //              "deny": [
 //                "member of ruckus",
@@ -64540,7 +63961,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "76.10.16.21 - 76.10.19.254",
 //              "deny": [
 //                "member of ruckus",
@@ -64589,7 +64009,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.153.42.100 - 10.153.42.239",
@@ -64668,7 +64087,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "96.63.228.21 - 96.63.231.254",
 //              "deny": [
 //                "member of ruckus",
@@ -64709,7 +64127,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.146.194.100 - 10.146.194.239",
@@ -64797,7 +64214,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "68.234.152.21 - 68.234.155.223",
 //              "deny": [
 //                "member of ruckus",
@@ -64863,7 +64279,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "66.253.199.3 - 66.253.199.254",
 //              "deny": [
 //                "member of ruckus",
@@ -64929,7 +64344,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "216.171.53.3 - 216.171.53.254",
 //              "deny": [
 //                "member of ruckus",
@@ -65066,7 +64480,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "68.180.100.21 - 68.180.103.254",
 //              "deny": [
 //                "member of ruckus",
@@ -65146,7 +64559,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "68.180.28.3 - 68.180.29.254",
 //              "deny": [
 //                "member of ruckus",
@@ -65187,7 +64599,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.146.126.100 - 10.146.126.239",
@@ -65265,7 +64676,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "76.10.24.21 - 76.10.27.254",
 //              "deny": [
 //                "member of ruckus",
@@ -65402,7 +64812,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "50.30.131.21 - 50.30.131.254",
 //              "deny": [
 //                "member of ruckus",
@@ -65468,7 +64877,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "68.180.7.3 - 68.180.7.254",
 //              "deny": [
 //                "member of ruckus",
@@ -65503,7 +64911,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.251.4.100 - 10.251.4.239",
@@ -65582,7 +64989,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "173.230.80.21 - 173.230.83.254",
 //              "deny": [
 //                "member of ruckus",
@@ -65623,7 +65029,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.149.134.100 - 10.149.134.239",
@@ -65702,7 +65107,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "173.230.48.21 - 173.230.51.254",
 //              "deny": [
 //                "member of ruckus",
@@ -65743,7 +65147,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.144.10.100 - 10.144.10.239",
@@ -65822,7 +65225,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "68.180.30.21 - 68.180.31.254",
 //              "deny": [
 //                "member of ruckus",
@@ -65908,7 +65310,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "68.180.58.3 - 68.180.59.254",
 //              "deny": [
 //                "member of ruckus",
@@ -65949,7 +65350,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.149.94.100 - 10.149.94.239",
@@ -66036,7 +65436,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "173.230.96.21 - 173.230.103.254",
 //              "deny": [
 //                "member of ruckus",
@@ -66077,7 +65476,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.144.54.100 - 10.144.54.239",
@@ -66156,7 +65554,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "76.10.60.21 - 76.10.63.254",
 //              "deny": [
 //                "member of ruckus",
@@ -66293,7 +65690,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "76.10.58.21 - 76.10.59.254",
 //              "deny": [
 //                "member of ruckus",
@@ -66359,7 +65755,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "76.10.37.3 - 76.10.37.254",
 //              "deny": [
 //                "member of ruckus",
@@ -66400,7 +65795,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.149.70.100 - 10.149.70.239",
@@ -66479,7 +65873,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "68.180.22.21 - 68.180.23.254",
 //              "deny": [
 //                "member of ruckus",
@@ -66534,7 +65927,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.149.98.100 - 10.149.98.239",
@@ -66595,7 +65987,6 @@
 //            #default-lease-time dTlease0;
 //            #max-lease-time mdTlease0;
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "216.171.60.21 - 216.171.63.254",
 //              "deny": [
 //                "member of ruckus",
@@ -66644,7 +66035,6 @@
 //            #default-lease-time dTlease0;
 //            #max-lease-time mdTlease0;
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "68.234.181.3 - 68.234.181.254",
 //              "deny": [
 //                "member of ruckus",
@@ -66693,7 +66083,6 @@
 //            #default-lease-time dTlease0;
 //            #max-lease-time mdTlease0;
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "76.10.28.3 - 76.10.28.254",
 //              "deny": [
 //                "member of ruckus",
@@ -66740,7 +66129,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.149.78.50 - 10.149.78.250",
@@ -66818,7 +66206,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "50.30.164.21 - 50.30.165.254",
 //              "deny": [
 //                "member of ruckus",
@@ -66884,7 +66271,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "50.30.188.3 - 50.30.188.254",
 //              "deny": [
 //                "member of ruckus",
@@ -66933,7 +66319,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.250.62.100 - 10.250.62.239",
@@ -67020,7 +66405,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "66.253.216.21 - 66.253.219.254",
 //              "deny": [
 //                "member of ruckus",
@@ -67075,7 +66459,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.144.74.100 - 10.144.74.239",
@@ -67153,7 +66536,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "68.234.187.223 - 68.234.187.241",
 //              "deny": [
 //                "member of ruckus",
@@ -69809,7 +69191,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "10.180.35.10 - 10.180.35.254",
 //              "deny": [
 //                "member of ruckus",
@@ -69945,7 +69326,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "50.30.254.21 - 50.30.255.254",
 //              "deny": [
 //                "member of ruckus",
@@ -70000,7 +69380,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.144.94.100 - 10.144.94.239",
@@ -70093,7 +69472,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "66.253.148.21 - 66.253.148.254",
 //              "deny": [
 //                "member of ruckus",
@@ -70128,7 +69506,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.146.228.100 - 10.146.228.239",
@@ -70207,7 +69584,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "173.230.44.21 - 173.230.47.254",
 //              "deny": [
 //                "member of ruckus",
@@ -70242,7 +69618,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.145.96.100 - 10.145.96.239",
@@ -70321,7 +69696,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "96.63.216.21 - 96.63.219.254",
 //              "deny": [
 //                "member of ruckus",
@@ -70376,7 +69750,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.145.90.100 - 10.145.90.239",
@@ -70455,7 +69828,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "50.30.220.21 - 50.30.223.254",
 //              "deny": [
 //                "member of ruckus",
@@ -70504,7 +69876,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.153.22.100 - 10.153.22.239",
@@ -70592,7 +69963,6 @@
 //          "valid-lifetime": 14400,
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "50.30.144.21 - 50.30.147.254",
 //              "deny": [
 //                "member of ruckus",
@@ -70667,7 +70037,6 @@
 //          "valid-lifetime": 14400,
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "50.30.128.3 - 50.30.128.254",
 //              "deny": [
 //                "member of ruckus",
@@ -70742,7 +70111,6 @@
 //          "valid-lifetime": 14400,
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "50.30.150.3 - 50.30.151.254",
 //              "deny": [
 //                "member of ruckus",
@@ -70783,7 +70151,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.144.70.100 - 10.144.70.239",
@@ -70861,7 +70228,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "68.180.96.21 - 68.180.97.254",
 //              "deny": [
 //                "member of ruckus",
@@ -70910,7 +70276,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.145.38.100 - 10.145.38.239",
@@ -70989,7 +70354,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "50.30.192.21 - 50.30.199.254",
 //              "deny": [
 //                "member of ruckus",
@@ -71030,7 +70394,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.145.46.100 - 10.145.46.239",
@@ -71109,7 +70472,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "96.63.236.21 - 96.63.239.254",
 //              "deny": [
 //                "member of ruckus",
@@ -71158,7 +70520,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.145.94.100 - 10.145.94.239",
@@ -71237,7 +70598,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "68.234.172.21 - 68.234.175.254",
 //              "deny": [
 //                "member of ruckus",
@@ -71303,7 +70663,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "66.253.158.3 - 66.253.158.7",
 //              "deny": [
 //                "member of ruckus",
@@ -71312,7 +70671,6 @@
 //              ]
 //            },
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "66.253.158.9 - 66.253.159.254",
 //              "deny": [
 //                "member of ruckus",
@@ -71367,7 +70725,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.145.58.100 - 10.145.58.239",
@@ -71446,7 +70803,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "71.42.232.21 - 71.42.235.254",
 //              "deny": [
 //                "member of ruckus",
@@ -71487,7 +70843,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.145.82.100 - 10.145.82.239",
@@ -71565,7 +70920,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "68.180.14.21 - 68.180.15.254",
 //              "deny": [
 //                "member of ruckus",
@@ -71614,7 +70968,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.144.102.100 - 10.144.102.239",
@@ -71676,7 +71029,6 @@
 //            #default-lease-time dTlease0;
 //            #max-lease-time mdTlease0;
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "68.234.216.21 - 68.234.223.254",
 //              "deny": [
 //                "member of ruckus",
@@ -71717,7 +71069,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.145.54.100 - 10.145.54.239",
@@ -71796,7 +71147,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "173.230.88.21 - 173.230.91.254",
 //              "deny": [
 //                "member of ruckus",
@@ -71933,7 +71283,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "173.230.40.21 - 173.230.43.254",
 //              "deny": [
 //                "member of ruckus",
@@ -71988,7 +71337,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.145.50.100 - 10.145.50.239",
@@ -72067,7 +71415,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "50.30.166.21 - 50.30.167.254",
 //              "deny": [
 //                "member of ruckus",
@@ -72141,7 +71488,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "50.30.189.3 - 50.30.189.254",
 //              "deny": [
 //                "member of ruckus",
@@ -72182,7 +71528,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.250.70.100 - 10.250.70.239",
@@ -72260,7 +71605,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "50.30.168.21 - 50.30.169.254",
 //              "deny": [
 //                "member of ruckus",
@@ -72334,7 +71678,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "50.30.190.3 - 50.30.190.254",
 //              "deny": [
 //                "member of ruckus",
@@ -72375,7 +71718,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.250.74.100 - 10.250.74.239",
@@ -72454,7 +71796,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "68.180.12.21 - 68.180.13.254",
 //              "deny": [
 //                "member of ruckus",
@@ -72509,7 +71850,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.144.98.100 - 10.144.98.239",
@@ -72604,7 +71944,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "10.16.8.21 - 10.16.11.254",
 //              "deny": [
 //                "member of ruckus",
@@ -72645,7 +71984,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.148.38.100 - 10.148.38.239",
@@ -72724,7 +72062,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "173.230.0.21 - 173.230.7.254",
 //              "deny": [
 //                "member of ruckus",
@@ -72804,7 +72141,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "66.253.180.3 - 66.253.180.254",
 //              "deny": [
 //                "member of ruckus",
@@ -72859,7 +72195,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.149.150.50 - 10.149.150.239",
@@ -72938,7 +72273,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "50.30.158.21 - 50.30.159.254",
 //              "deny": [
 //                "member of ruckus",
@@ -73012,7 +72346,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "50.30.185.3 - 50.30.185.254",
 //              "deny": [
 //                "member of ruckus",
@@ -73053,7 +72386,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.250.34.100 - 10.250.34.239",
@@ -73131,7 +72463,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "68.234.244.21 - 68.234.247.254",
 //              "deny": [
 //                "member of ruckus",
@@ -73250,7 +72581,6 @@
 //            #default-lease-time dTlease0;
 //            #max-lease-time mdTlease0;
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "66.253.232.21 - 66.253.235.254",
 //              "deny": [
 //                "member of ruckus",
@@ -73318,7 +72648,6 @@
 //            #default-lease-time dTlease0;
 //            #max-lease-time mdTlease0;
 //            {
-//              #           failover peer "NATIONAL";
 //              "pool": "66.253.242.3 - 66.253.243.254",
 //              "deny": [
 //                "member of ruckus",
@@ -73358,7 +72687,6 @@
 //          ],
 //          "pools": [
 //            {
-//              #               failover peer "NATIONAL";
 //              #default-lease-time dTruk;
 //              #max-lease-time mdTruk;
 //              "pool": "10.149.50.100 - 10.149.50.239",
@@ -75127,7 +74455,6 @@
 //            #        default-lease-time dTlease0;
 //            #        max-lease-time mdTlease0;
 //            {
-//              #	    failover peer "NATIONAL";
 //              "pool": "66.253.183.135 - 66.253.183.155",
 //              "deny": [
 //                "member of ruckus",

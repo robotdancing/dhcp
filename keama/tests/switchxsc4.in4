@@ -1,0 +1,21 @@
+# switch executable statement construct
+
+# authoritative is mandatory
+authoritative;
+
+# empty configs are not accepted by Kea
+default-lease-time 1800;
+
+# a switch
+switch (option user-class) {
+case "accounting":
+ add "acct";
+ send ip-forwarding false;
+ default-lease-time 3600;
+ break;
+case "engineering":
+ allow booting;
+ log (debug, option host-name);
+ set foo = "bar";
+ break;
+}

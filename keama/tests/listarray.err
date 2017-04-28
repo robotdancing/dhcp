@@ -1,0 +1,10 @@
+# option definition config
+
+# authoritative is mandatory
+authoritative;
+
+# options
+option space foobar;
+
+# arrays of domain lists are forbidden
+option foobar.array-list code 1 = array of domain-list;
