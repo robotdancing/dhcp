@@ -324,6 +324,7 @@ TODO finish this
 Groups:
 -------
 TODO: search missing parameters from the Kea syntax.
+ (will be done in the third pass)
 
 Shared-Networks:
 ----------------
@@ -481,3 +482,10 @@ TODO reduce more hexa aka const-data
  because the variable "true" is not defined by default.
  Reduced expressions are pretty printed to allow an extra check.
 
+Variables:
+----------
+ ISC DHCP has a notion of variables in a scope where the scope can be
+ a lexical scope in the config or a scope in a function body
+ (ISC DHCP has even an unused "let" statement).
+ There is a variant of bindings for lease files using types and able
+ to recognize booleans and numbers. Unfortunately this is very spcific...

@@ -19,7 +19,7 @@ shared-network mnro318 {
         max-lease-time 28800;
 	min-lease-time 3600;
         pool {
-#           failover peer "NATIONAL";
+            failover peer "NATIONAL";
             deny members of "Trapeze";
             deny members of "Trapeze2";
             deny dynamic bootp clients;
@@ -57,7 +57,7 @@ shared-network mnro318 {
             option subnet-mask 255.255.255.0;
             option broadcast-address 10.147.2.255;
             pool {
-#               failover peer "NATIONAL";
+                failover peer "NATIONAL";
                 allow members of "Trapeze";
                 allow members of "Trapeze2";
                 deny dynamic bootp clients;

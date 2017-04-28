@@ -1,0 +1,22 @@
+Tests are dividing on error vs working, and DHCPv4 vs DHCPv6.
+
+Names of files about test xyz have xyz as body and an extension.
+
+Extensions:
+ - .err4 = source for error test in DHCPv4
+ - .errF = source for error test in DHCPv4 with -r fatal
+ - .errP = source for error test in DHCPv4 with -r pass
+ - .err6 = source for error test in DHCPv6
+ - .err  = source for error test in DHCPv4 and DHCPv6
+ - .msg  = resultat (first line of standard error) for error test
+ - .in4  = source for working test in DHCPv4
+ - .in6  = source for working test in DHCPv6
+ - .out  = resultat for working test
+There is no working test in DHCPv4 and DHCPv6.
+The body of the name of a working test must include 4 or 6 so
+the .out can be submitted to kea-dhcp4 or kea-dhcp6
+
+runone.sh xyz.ext
+ -> run the xyz test
+runall.sh
+ -> run all tests

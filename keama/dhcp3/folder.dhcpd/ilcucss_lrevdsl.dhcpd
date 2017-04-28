@@ -18,15 +18,14 @@ shared-network ilcucss_lrevdsl {
         #default-lease-time dTlease0;
         #max-lease-time mdTlease0;
         pool {
-#           failover peer "NATIONAL";
+            failover peer "NATIONAL";
             deny members of "ruckus";
             deny dynamic bootp clients;
             range 66.253.181.90 66.253.181.119;
         }
   # 
         host 66-253-181-113 {
-            #hardware ethernet 00:1e:67:a3:68:be;
-            hardware ethernet 00:1e:67:a3:68:bb;
+            hardware ethernet 00:1e:67:a3:68:be;	            
 	    fixed-address 66.253.181.113;
 	}
   #	Device 1

@@ -16,7 +16,7 @@ shared-network wvmodis {
         #default-lease-time dTlease0;
         #max-lease-time mdTlease0;
         pool {
-#           failover peer "NATIONAL";
+            failover peer "NATIONAL";
             deny members of "ruckus";
             deny dynamic bootp clients;
             range 66.253.232.21 66.253.235.254;
@@ -48,7 +48,7 @@ shared-network wvmodis {
         #default-lease-time dTlease0;
         #max-lease-time mdTlease0;
         pool {
-#           failover peer "NATIONAL";
+            failover peer "NATIONAL";
             deny members of "ruckus";
             deny dynamic bootp clients;
             range 66.253.242.3 66.253.243.254;
@@ -67,7 +67,7 @@ shared-network wvmodis {
             option subnet-mask 255.255.255.0;
             option broadcast-address 10.149.50.255;
             pool {
-#               failover peer "NATIONAL";
+                failover peer "NATIONAL";
                 allow members of "ruckus";
                 deny dynamic bootp clients;
                 #default-lease-time dTruk;

@@ -19,15 +19,9 @@
     ],
     "client-classes": [
       # superclass declaration
+      /// match: option dhcp6.hardware
       {
         "name": "foobar",
-//      "spawning": false,
-//      "submatch": {
-//        "option": {
-//          "universe": "dhcp6",
-//          "name": "hardware"
-//        }
-//      },
         "option-data": [
           # no harware in DHCPv6
           {

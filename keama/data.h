@@ -124,6 +124,8 @@ struct {								\
 	else								\
 		(head)->tqh_last = (elm)->next.tqe_prev;		\
 	*(elm)->next.tqe_prev = TAILQ_NEXT((elm));			\
+	(elm)->next.tqe_next = (void *)-1;				\
+	(elm)->next.tqe_prev = (void *)-1;				\
 } while (0)
 
 #define TAILQ_SWAP(head1, head2, type) do {				\

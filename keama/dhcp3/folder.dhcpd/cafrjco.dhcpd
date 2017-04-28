@@ -19,7 +19,7 @@ shared-network cafrjco {
         max-lease-time 28800;
 	min-lease-time 3600;
         pool {
-#           failover peer "NATIONAL";
+            failover peer "NATIONAL";
             deny members of "ruckus";
             deny members of "ubnt";
             deny dynamic bootp clients;
@@ -47,7 +47,7 @@ shared-network cafrjco {
         max-lease-time 28800;
 	min-lease-time 3600;
         pool {
-#           failover peer "NATIONAL";
+            failover peer "NATIONAL";
             deny members of "ruckus";
             deny members of "ubnt";
             deny dynamic bootp clients;
@@ -66,7 +66,7 @@ shared-network cafrjco {
         max-lease-time 28800;
 	min-lease-time 3600;
         pool {
-#           failover peer "NATIONAL";
+            failover peer "NATIONAL";
             deny members of "ruckus";
             deny members of "ubnt";
             deny dynamic bootp clients;
@@ -86,7 +86,7 @@ shared-network cafrjco {
             option subnet-mask 255.255.255.0;
             option broadcast-address 10.144.6.255;
             pool {
-#               failover peer "NATIONAL";
+                failover peer "NATIONAL";
                 allow members of "ruckus";
                 allow members of "ubnt";
                 deny dynamic bootp clients;

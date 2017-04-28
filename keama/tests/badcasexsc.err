@@ -1,0 +1,10 @@
+# bad case executable statement construct
+
+# authoritative is mandatory
+authoritative;
+
+# empty configs are not accepted by Kea
+default-lease-time 1800;
+
+# a raw default statement
+case "foo": break;

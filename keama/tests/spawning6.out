@@ -1,0 +1,38 @@
+{
+  # spawning declaration config
+  # authoritative is mandatory
+  "Dhcp6": {
+    "option-def": [
+      # options
+      {
+        "space": "dhcp6",
+        "name": "mysystem",
+        "code": 1250,
+        "type": "string"
+      },
+      {
+        "space": "dhcp6",
+        "name": "myversion",
+        "code": 1251,
+        "type": "uint16"
+      }
+    ],
+    "client-classes": [
+//    # superclass declaration
+//    /// Spawning classes are not supported by Kea
+//    /// Reference Kea #5269
+//    /// spawn with: option dhcp6.mysystem
+//    {
+//      "name": "foobar",
+//      "option-data": [
+//        {
+//          "space": "dhcp6",
+//          "name": "myversion",
+//          "code": 1251,
+//          "data": "1"
+//        }
+//      ]
+//    }
+    ]
+  }
+}

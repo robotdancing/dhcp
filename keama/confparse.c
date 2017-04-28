@@ -33,6 +33,9 @@
 #include <stdlib.h>
 #include <string.h>
 
+/* Print failover stuff once */
+isc_boolean_t failover_once = ISC_TRUE;
+
 /* To manage host-reservation-identifiers */
 isc_boolean_t use_client_id = ISC_FALSE;
 isc_boolean_t use_flex_id = ISC_FALSE;
@@ -159,6 +162,7 @@ conf_file_parse(struct parse *cfile)
 			struct element *entry;
 			struct string *msg;
 			struct comment *comment;
+			isc_boolean_t lose;
 
 			class = listGet(classes, i);
 			if ((class == NULL) || (class->type != ELEMENT_MAP))
@@ -169,7 +173,9 @@ conf_file_parse(struct parse *cfile)
 				parse_error(cfile, "global class at %u "
 					    "without a name", (unsigned)i);
 			if (!mapContains(class, "super"))
-				continue;
+				goto cleanup_superclass;
+
+			/* cleanup subclass */
 			mapRemove(class,"super");
 			entry = mapGet(class, "string");
 			if (entry != NULL) {
@@ -197,6 +203,58 @@ conf_file_parse(struct parse *cfile)
 			comment = createComment(msg->content);
 			TAILQ_INSERT_TAIL(&class->comments, comment);
 			mapRemove(class, "binary");
+
+		cleanup_superclass:
+			/* cleanup superclass */
+			entry = mapGet(class, "spawning");
+			if (entry == NULL)
+				goto cleanup_class;
+			if (entry->type != ELEMENT_BOOLEAN)
+				parse_error(cfile, "superclass %s has bad "
+					    "spawning flag",
+					    stringValue(name)->content);
+			if (boolValue(entry)) {
+				msg = makeString(-1, "/// Spawning classes "
+						 "are not supported by Kea");
+				comment = createComment(msg->content);
+				TAILQ_INSERT_TAIL(&class->comments, comment);
+				msg = makeString(-1, "/// Reference Kea "
+						 "#5269");
+				comment = createComment(msg->content);
+				TAILQ_INSERT_TAIL(&class->comments, comment);
+				msg = makeString(-1, "/// spawn with: ");
+			} else
+				msg = makeString(-1, "/// match: ");
+			entry = mapGet(class, "submatch");
+
+			if (entry == NULL)
+				parse_error(cfile, "superclass %s has no "
+					    "submatch",
+					    stringValue(name)->content);
+			lose = ISC_FALSE;
+			appendString(msg, print_data_expression(entry, &lose));
+			if (!lose) {
+				comment = createComment(msg->content);
+				TAILQ_INSERT_TAIL(&class->comments, comment);
+				mapRemove(class, "spawning");
+				mapRemove(class, "submatch");
+			}
+
+		cleanup_class:
+			/* cleanup class */
+			entry = mapGet(class, "match-if");
+			if (entry == NULL)
+				continue;
+			lose = ISC_FALSE;
+			msg = makeString(-1, "/// match if: ");
+			TAILQ_INSERT_TAIL(&class->comments, comment);
+			appendString(msg, print_boolean_expression(entry,
+								   &lose));
+			if (!lose) {
+				comment = createComment(msg->content);
+				TAILQ_INSERT_TAIL(&class->comments, comment);
+				mapRemove(class, "match-if");
+			}
 		}
 
 	/* Add a warning when interfaces-config is not present */
@@ -228,6 +286,7 @@ read_conf_file(struct parse *parent, const char *filename, int group_type)
 	size_t cnt;
 
 	if ((file = open (filename, O_RDONLY)) < 0)
+
 		parse_error(parent, "Can't open %s: %s",
 			    filename, strerror(errno));
 
@@ -655,8 +714,11 @@ parse_statement(struct parse *cfile, int type, isc_boolean_t declaration)
 		break;
 
 	case FAILOVER:
-		skip_token(&val, NULL, cfile);
-		parse_error(cfile, "No failover support.");
+		if (failover_once)
+			fprintf(stderr, "ignoring failover\n");
+		failover_once = ISC_FALSE;
+		skip_to_semi(cfile);
+		break;
 			
 	case SERVER_DUID:
 		if (local_family != AF_INET6)
@@ -861,8 +923,11 @@ parse_pool_statement(struct parse *cfile, int type)
 		switch (token) {
 		case TOKEN_NO:
 		case FAILOVER:
-			skip_token(&val, NULL, cfile);
-			parse_error(cfile, "No failover support.");
+			if (failover_once)
+				fprintf(stderr, "ignoring failover\n");
+			failover_once = ISC_FALSE;
+			skip_to_semi(cfile);
+			break;
 
 		case RANGE:
 			skip_token(&val, NULL, cfile);
@@ -1043,15 +1108,21 @@ parse_host_declaration(struct parse *cfile)
 
 		if (token == GROUP) {
 			struct element *group;
+			struct comment *comment;
+
 			skip_token(&val, NULL, cfile);
 			token = next_token(&val, NULL, cfile);
 			if (token != STRING && !is_identifier(token))
 				parse_error(cfile,
 					    "expecting string or identifier.");
-			/* Kea Todo */
 			group = createString(makeString(-1, val));
 			group->skip = ISC_TRUE;
 			cfile->issue_counter++;
+			comment = createComment("/// Unsupported group in "
+						"host reservations");
+			TAILQ_INSERT_TAIL(&group->comments, comment);
+			comment = createComment("/// Reference Kea #5268");
+			TAILQ_INSERT_TAIL(&group->comments, comment);
 			mapSet(host, group, "group");
 			parse_semi(cfile);
 			continue;
@@ -1098,7 +1169,6 @@ parse_host_declaration(struct parse *cfile)
 					appendString(client_id, buf);
 				}
 			}
-			/* Kea todo: get text */
 			mapSet(host, createString(client_id), "client-id");
 
 			parse_semi(cfile);
@@ -1176,6 +1246,7 @@ parse_host_declaration(struct parse *cfile)
 
 			mapSet(host, data, "flex-id");
 			/* Kea todo: push the flex-id glue */
+			/* "identifier-expression": "option[xx].hex" */
 			continue;
 		}
 
@@ -2646,6 +2717,52 @@ parse_fixed_addr_param(struct parse *cfile, enum dhcp_token type) {
 
 }
 
+#ifdef notyet
+/* Parse the right side of a 'binding value'.
+ *
+ * set foo = "bar"; is a string
+ * set foo = false; is a boolean
+ * set foo = %31; is a numeric value.
+ */
+static struct element *
+parse_binding_value(struct parse *cfile)
+{
+	struct element *value = NULL;
+	struct string *data;
+	const char *val;
+	unsigned buflen;
+	int token;
+
+	token = peek_token(&val, NULL, cfile);
+	if (token == STRING) {
+		skip_token(&val, &buflen, cfile);
+		data = makeString(buflen, val);
+		value = createString(data);
+	} else if (token == NUMBER_OR_NAME) {
+		value = createMap();
+		data = parse_hexa(cfile);
+		mapSet(value, createHexa(data), "const-data");
+	} else if (token == PERCENT) {
+		skip_token(&val, NULL, cfile);
+		token = next_token(&val, NULL, cfile);
+		if (token != NUMBER)
+			parse_error(cfile, "expecting decimal number.");
+		value = createInt(atol(val));
+	} else if (token == NAME) {
+		token = next_token(&val, NULL, cfile);
+		if (!strcasecmp(val, "true"))
+			value = createBool(ISC_TRUE);
+		else if (!strcasecmp(val, "false"))
+			value = createBool(ISC_FALSE);
+		else
+			parse_error(cfile, "expecting true or false");
+	} else
+		parse_error(cfile, "expecting a constant value.");
+
+	return value;
+}
+#endif
+
 /* address-range-declaration :== ip-address ip-address SEMI
 			       | DYNAMIC_BOOTP ip-address ip-address SEMI */
 
@@ -3249,57 +3366,58 @@ parse_allow_deny(struct parse *cfile, int flag)
 {
 	enum dhcp_token token;
 	const char *val;
-	const char *action;
-	const char *option;
-	struct element *sv_option;
+	const char *value;
+	const char *name;
+	struct element *config;
+	struct option *option;
 
 	switch (flag) {
 	case 0:
-		action = "deny";
+		value = "deny";
 		break;
 	case 1:
-		action = "allow";
+		value = "allow";
 		break;
 	case 2:
-		action = "ignore";
+		value = "ignore";
 		break;
 	default:
-		action = "unknown?";
+		value = "unknown?";
 		break;
 	}
 
 	token = next_token(&val, NULL, cfile);
 	switch (token) {
 	case TOKEN_BOOTP:
-		option = "allow-bootp";
+		name = "allow-bootp";
 		break;
 
 	case BOOTING:
-		option = "allow-booting";
+		name = "allow-booting";
 		break;
 
 	case DYNAMIC_BOOTP:
-		option = "dynamic-bootp";
+		name = "dynamic-bootp";
 		break;
 
 	case UNKNOWN_CLIENTS:
-		option = "boot-unknown-clients";
+		name = "boot-unknown-clients";
 		break;
 
 	case DUPLICATES:
-		option = "duplicates";
+		name = "duplicates";
 		break;
 
 	case DECLINES:
-		option = "declines";
+		name = "declines";
 		break;
 
 	case CLIENT_UPDATES:
-		option = "client-updates";
+		name = "client-updates";
 		break;
 
 	case LEASEQUERY:
-		option = "leasequery";
+		name = "leasequery";
 		break;
 
 	default:
@@ -3307,13 +3425,16 @@ parse_allow_deny(struct parse *cfile, int flag)
 	}
 	parse_semi(cfile);
 
-	sv_option = createMap();
-	mapSet(sv_option, createString(makeString(-1, action)), "data");
-	mapSet(sv_option, createString(makeString(-1, option)), "name");
-	mapSet(sv_option, createString(makeString(-1, "_server_")), "space");
-	sv_option->skip = ISC_TRUE;
+	config = createMap();
+	mapSet(config, createString(makeString(-1, value)), "value");
+	mapSet(config, createString(makeString(-1, name)), "name");
+	option = option_lookup_name("server", name);
+	if (option == NULL)
+		parse_error(cfile, "unknown allow/deny keyword (%s)", name);
+	mapSet(config, createInt(option->code), "code");
+	config->skip = ISC_TRUE;
 	cfile->issue_counter++;
-	return sv_option;
+	return config;
 }
 
 /*

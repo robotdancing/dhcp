@@ -1,0 +1,77 @@
+{
+  # switch executable statement construct
+  # authoritative is mandatory
+  "Dhcp4": {
+    "valid-lifetime": 1800
+//  # a switch
+//  "statement": {
+//    "switch": {
+//      "condition": {
+//        "option": {
+//          "universe": "dhcp",
+//          "name": "user-class",
+//          "code": 77
+//        }
+//      },
+//      "body": [
+//        {
+//          "case": "accounting"
+//        },
+//        {
+//          "add-class": "acct"
+//        },
+//        {
+//          /// Kea does not support option data set variants (send)
+//          "option": {
+//            "space": "dhcp4",
+//            "name": "ip-forwarding",
+//            "code": 19,
+//            "data": "false"
+//          }
+//        },
+//        {
+//          "config": {
+//            "name": "default-lease-time",
+//            "code": 1,
+//            "value": 3600
+//          }
+//        },
+//        {
+//          "break": null
+//        },
+//        {
+//          "case": "engineering"
+//        },
+//        {
+//          "config": {
+//            "value": "allow",
+//            "name": "allow-booting",
+//            "code": 9
+//          }
+//        },
+//        {
+//          "log": {
+//            "priority": "debug",
+//            "message": {
+//              "option": {
+//                "universe": "dhcp",
+//                "name": "host-name",
+//                "code": 12
+//              }
+//            }
+//          }
+//        },
+//        {
+//          "set": {
+//            "name": "foo",
+//            "value": "bar"
+//          }
+//        },
+//        {
+//          "break": null
+//        }
+//      ]
+//    }
+//  }
+  }
+}

@@ -19,7 +19,7 @@ shared-network ilcu1103euc {
 #        default-lease-time dTlease0;
 #        max-lease-time mdTlease0;
         pool {
-#           failover peer "NATIONAL";
+            failover peer "NATIONAL";
             deny members of "ruckus";
             deny dynamic bootp clients;
             range 173.230.23.101 173.230.23.126;
@@ -32,7 +32,7 @@ shared-network ilcu1103euc {
         option subnet-mask 255.255.255.0;
         option broadcast-address 10.159.162.255;
         pool {
-#           failover peer "NATIONAL";
+            failover peer "NATIONAL";
             allow members of "ruckus";
             deny dynamic bootp clients;
 #            default-lease-time dTruk;

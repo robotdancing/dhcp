@@ -21,10 +21,10 @@
 //  # if this section is edited and you try to configure DHCP again.
 //  # Written at: 04/12/2017 14:00:17
 //  "statement": {
-//    "server-control": {
-//      "data": "allow",
+//    "config": {
+//      "value": "allow",
 //      "name": "boot-unknown-clients",
-//      "space": "_server_"
+//      "code": 6
 //    }
 //  },
     "valid-lifetime": 1800,

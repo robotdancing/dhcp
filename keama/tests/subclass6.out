@@ -19,15 +19,9 @@
     ],
     "client-classes": [
       # superclass declaration
+      /// match: option dhcp6.mysystem
       {
         "name": "foobar",
-//      "spawning": false,
-//      "submatch": {
-//        "option": {
-//          "universe": "dhcp6",
-//          "name": "mysystem"
-//        }
-//      },
         "option-data": [
           {
             "space": "dhcp6",

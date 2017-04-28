@@ -1,0 +1,46 @@
+{
+  # exists boolean expression
+  # authoritative is mandatory
+  "Dhcp4": {
+    "valid-lifetime": 1800,
+    "client-classes": [
+      # use exists in a reductible match if
+      {
+        "name": "reductible",
+        /// from: match if exists dhcp.host-name
+        "test": "option[12].exists"
+      }
+    ]
+//  # if test is a boolean too
+//  "statement": {
+//    "if": {
+//      "condition": {
+//        "exists": {
+//          "universe": "dhcp",
+//          "name": "host-name",
+//          "code": 12
+//        }
+//      },
+//      "then": [
+//        {
+//          "log": {
+//            "priority": "info",
+//            "message": {
+//              "concat": {
+//                "left": "hostname:",
+//                "right": {
+//                  "option": {
+//                    "universe": "dhcp",
+//                    "name": "host-name",
+//                    "code": 12
+//                  }
+//                }
+//              }
+//            }
+//          }
+//        }
+//      ]
+//    }
+//  }
+  }
+}

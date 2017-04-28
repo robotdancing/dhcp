@@ -18,7 +18,7 @@ shared-network ilcudg {
         #default-lease-time dTlease0;
         #max-lease-time mdTlease0;
         pool {
-#           failover peer "NATIONAL";
+            failover peer "NATIONAL";
             deny members of "ruckus";
             deny members of "ubnt";
             deny dynamic bootp clients;
@@ -32,7 +32,7 @@ shared-network ilcudg {
             option subnet-mask 255.255.255.0;
             option broadcast-address 10.159.237.255;
             pool {
-#               failover peer "NATIONAL";
+                failover peer "NATIONAL";
                 allow members of "ruckus";
                 allow members of "ubnt";
                 deny dynamic bootp clients;

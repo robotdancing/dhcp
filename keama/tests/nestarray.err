@@ -1,0 +1,10 @@
+# option definition config
+
+# authoritative is mandatory
+authoritative;
+
+# options
+option space foobar;
+
+# nested arrays are forbidden
+option foobar.nestarray code 1 = array of array of unsigned integer 32;

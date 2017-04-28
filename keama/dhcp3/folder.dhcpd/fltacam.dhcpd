@@ -16,7 +16,7 @@ shared-network fltacam {
         #default-lease-time dTlease0;
         #max-lease-time mdTlease0;
         pool {
-#           failover peer "NATIONAL";
+            failover peer "NATIONAL";
             deny members of "ruckus";
             deny dynamic bootp clients;
             range 68.234.136.21 68.234.139.254;
@@ -44,7 +44,7 @@ shared-network fltacam {
         #default-lease-time dTlease0;
         #max-lease-time mdTlease0;
         pool {
-#           failover peer "NATIONAL";
+            failover peer "NATIONAL";
             deny members of "ruckus";
             deny dynamic bootp clients;
             range 68.234.254.3 68.234.254.254;
@@ -63,7 +63,7 @@ shared-network fltacam {
             option subnet-mask 255.255.255.0;
             option broadcast-address 10.144.82.255;
             pool {
-#               failover peer "NATIONAL";
+                failover peer "NATIONAL";
                 allow members of "ruckus";
                 allow members of "BEC";
                 deny dynamic bootp clients;
@@ -73,7 +73,7 @@ shared-network fltacam {
            }
  
             pool {
-#               failover peer "NATIONAL";
+                failover peer "NATIONAL";
                 allow members of "ruckus";
                 allow members of "BEC";
                 deny dynamic bootp clients;
@@ -83,7 +83,7 @@ shared-network fltacam {
            }
  
             pool {
-#               failover peer "NATIONAL";
+                failover peer "NATIONAL";
                 allow members of "ruckus";
                 allow members of "BEC";
                 deny dynamic bootp clients;
@@ -93,7 +93,7 @@ shared-network fltacam {
            }
  
             pool {
-#               failover peer "NATIONAL";
+                failover peer "NATIONAL";
                 allow members of "ruckus";
                 allow members of "BEC";
                 deny dynamic bootp clients;
@@ -103,7 +103,7 @@ shared-network fltacam {
            }
  
             pool {
-#               failover peer "NATIONAL";
+                failover peer "NATIONAL";
                 allow members of "ruckus";
                 allow members of "BEC";
                 deny dynamic bootp clients;
@@ -113,7 +113,7 @@ shared-network fltacam {
            }
  
             pool {
-#               failover peer "NATIONAL";
+                failover peer "NATIONAL";
                 allow members of "ruckus";
                 allow members of "BEC";
                 deny dynamic bootp clients;
@@ -123,7 +123,7 @@ shared-network fltacam {
            }
  
             pool {
-#               failover peer "NATIONAL";
+                failover peer "NATIONAL";
                 allow members of "ruckus";
                 allow members of "BEC";
                 deny dynamic bootp clients;
@@ -133,7 +133,7 @@ shared-network fltacam {
            }
  
             pool {
-#               failover peer "NATIONAL";
+                failover peer "NATIONAL";
                 allow members of "ruckus";
                 allow members of "BEC";
                 deny dynamic bootp clients;
@@ -143,7 +143,7 @@ shared-network fltacam {
            }
  
             pool {
-#               failover peer "NATIONAL";
+                failover peer "NATIONAL";
                 allow members of "ruckus";
                 allow members of "BEC";
                 deny dynamic bootp clients;
@@ -153,7 +153,7 @@ shared-network fltacam {
            }
  
             pool {
-#               failover peer "NATIONAL";
+                failover peer "NATIONAL";
                 allow members of "ruckus";
                 allow members of "BEC";
                 deny dynamic bootp clients;
@@ -163,7 +163,7 @@ shared-network fltacam {
            }
  
             pool {
-#               failover peer "NATIONAL";
+                failover peer "NATIONAL";
                 allow members of "ruckus";
                 allow members of "BEC";
                 deny dynamic bootp clients;
@@ -173,7 +173,7 @@ shared-network fltacam {
            }
  
             pool {
-#               failover peer "NATIONAL";
+                failover peer "NATIONAL";
                 allow members of "ruckus";
                 allow members of "BEC";
                 deny dynamic bootp clients;
@@ -183,7 +183,7 @@ shared-network fltacam {
            }
  
             pool {
-#               failover peer "NATIONAL";
+                failover peer "NATIONAL";
                 allow members of "ruckus";
                 allow members of "BEC";
                 deny dynamic bootp clients;

@@ -13,12 +13,9 @@
     ],
     "client-classes": [
       # superclass declaration
+      /// match: hardware
       {
         "name": "foobar",
-//      "spawning": false,
-//      "submatch": {
-//        "hardware": null
-//      },
         "option-data": [
           {
             "space": "dhcp4",

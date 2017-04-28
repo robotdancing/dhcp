@@ -96,7 +96,8 @@
 //      "condition": {
 //        "exists": {
 //          "universe": "dhcp",
-//          "name": "vendor-class-identifier"
+//          "name": "vendor-class-identifier",
+//          "code": 60
 //        }
 //      },
 //      "then": [
@@ -106,7 +107,8 @@
 //            "value": {
 //              "option": {
 //                "universe": "dhcp",
-//                "name": "vendor-class-identifier"
+//                "name": "vendor-class-identifier",
+//                "code": 60
 //              }
 //            }
 //          }
@@ -119,7 +121,8 @@
 //      "condition": {
 //        "exists": {
 //          "universe": "dhcp",
-//          "name": "user-class"
+//          "name": "user-class",
+//          "code": 77
 //        }
 //      },
 //      "then": [
@@ -129,7 +132,8 @@
 //            "value": {
 //              "option": {
 //                "universe": "dhcp",
-//                "name": "user-class"
+//                "name": "user-class",
+//                "code": 77
 //              }
 //            }
 //          }
@@ -810,7 +814,8 @@
 //              "left": {
 //                "option": {
 //                  "universe": "dhcp",
-//                  "name": "dhcp-parameter-request-list"
+//                  "name": "dhcp-parameter-request-list",
+//                  "code": 55
 //                }
 //              },
 //              "right": {
@@ -921,7 +926,8 @@
 //          "condition": {
 //            "exists": {
 //              "universe": "dhcp",
-//              "name": "dhcp-parameter-request-list"
+//              "name": "dhcp-parameter-request-list",
+//              "code": 55
 //            }
 //          },
 //          "then": [
@@ -936,7 +942,8 @@
 //                    "left": {
 //                      "option": {
 //                        "universe": "dhcp",
-//                        "name": "dhcp-parameter-request-list"
+//                        "name": "dhcp-parameter-request-list",
+//                        "code": 55
 //                      }
 //                    },
 //                    "right": {
@@ -980,7 +987,8 @@
 //          "condition": {
 //            "exists": {
 //              "universe": "dhcp",
-//              "name": "dhcp-parameter-request-list"
+//              "name": "dhcp-parameter-request-list",
+//              "code": 55
 //            }
 //          },
 //          "then": [
@@ -995,7 +1003,8 @@
 //                    "left": {
 //                      "option": {
 //                        "universe": "dhcp",
-//                        "name": "dhcp-parameter-request-list"
+//                        "name": "dhcp-parameter-request-list",
+//                        "code": 55
 //                      }
 //                    },
 //                    "right": {
