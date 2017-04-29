@@ -4051,6 +4051,7 @@ parse_option_statement(struct element *result,
 	} else if (token == EQUAL) {
 		struct element *data;
 		const char *fmt;
+		isc_boolean_t modified = ISC_FALSE;
 
 		/* Eat the equals sign. */
 		skip_token(&val, NULL, cfile);
@@ -4066,6 +4067,9 @@ parse_option_statement(struct element *result,
 					    "expecting a data expression.");
 			return ISC_FALSE;
 		}
+		/* evaluate the expression */
+		expr = eval_data_expression(expr, &modified);
+
 		fmt = option->format;
 		/* protect againt empty format */
 		if (fmt == NULL)

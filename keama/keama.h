@@ -423,11 +423,19 @@ struct element *json_parse(struct parse *);
 struct element *json_list_parse(struct parse *);
 struct element *json_map_parse(struct parse *);
 
-/* reduce.c */
-const char *print_boolean_expression(struct element *, isc_boolean_t *);
-struct element *reduce_boolean_expression(struct element *);
-const char *print_data_expression(struct element *, isc_boolean_t *);
-struct element *reduce_data_expression(struct element *, isc_boolean_t *);
-const char *print_numeric_expression(struct element *, isc_boolean_t *);
-struct element *reduce_numeric_expression(struct element *);
+/* print.c */
 const char *print_expression(struct element *, isc_boolean_t *);
+const char *print_boolean_expression(struct element *, isc_boolean_t *);
+const char *print_data_expression(struct element *, isc_boolean_t *);
+const char *print_numeric_expression(struct element *, isc_boolean_t *);
+
+/* reduce.c */
+struct element *reduce_boolean_expression(struct element *);
+struct element *reduce_data_expression(struct element *);
+struct element *reduce_numeric_expression(struct element *);
+
+/* eval */
+struct element *eval_expression(struct element *, isc_boolean_t *);
+struct element *eval_boolean_expression(struct element *, isc_boolean_t *);
+struct element *eval_data_expression(struct element *, isc_boolean_t *);
+struct element *eval_numeric_expression(struct element *, isc_boolean_t *);
