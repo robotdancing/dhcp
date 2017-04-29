@@ -16,11 +16,11 @@
         /// data: 'domain=com'
         "test": "concat('domain=', substring(option[12].hex,-3,all)) == 'domain=com'"
       },
-      # reduce literals too (but only once)
+      # reduce literals too
       {
         "name": "literal",
         /// from: match if (option dhcp.host-name) = (concat('www.', concat('example.', 'com')))
-        "test": "option[12].hex == concat('www.', 'example.com')"
+        "test": "option[12].hex == 'www.example.com'"
       }
     ],
     "option-data": [

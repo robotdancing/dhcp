@@ -1528,7 +1528,7 @@ parse_class_declaration(struct parse *cfile, int type)
 					parse_error(cfile,
 						    "expecting boolean expr.");
 			} else {
-				add_match_class(cfile, class, expr);
+				add_match_class(cfile, class, copy(expr));
 				parse_semi(cfile);
 			}
 		} else if (token == SPAWN) {
@@ -1612,6 +1612,7 @@ subclass_inherit(struct parse *cfile,
 	struct comment *comment;
 	isc_boolean_t marked = ISC_FALSE;
 	isc_boolean_t lose = ISC_FALSE;
+	isc_boolean_t modified = ISC_FALSE;
 
 	expr = mapGet(superclass, "name");
 	if (expr == NULL)
@@ -1686,7 +1687,7 @@ subclass_inherit(struct parse *cfile,
 		parse_error(cfile, "can't get subclass %s data",
 			    name->content);
 	match = createMap();
-	mapSet(match, submatch, "left");
+	mapSet(match, copy(submatch), "left");
 	mapSet(match, copy(data), "right");
 	expr = createMap();
 	mapSet(expr, match, "equal");
@@ -1696,9 +1697,11 @@ subclass_inherit(struct parse *cfile,
 	dmsg = makeString(-1, "/// data: ");
 	appendString(dmsg, print_data_expression(data, &lose));
 
-	reduced = reduce_boolean_expression(expr);
+	/* evaluate the expression and try to reduce it */
+	reduced = eval_boolean_expression(expr, &modified);
+	reduced = reduce_boolean_expression(reduced);
 	if ((reduced != NULL) && (reduced->type == ELEMENT_BOOLEAN))
-		parse_error(cfile, "class matching rule reduced to a "
+		parse_error(cfile, "class matching rule evaluated to a "
 			    "constant boolean expression: %s = %s",
 			    print_data_expression(submatch, &lose),
 			    print_data_expression(data, &lose));
@@ -1726,13 +1729,16 @@ add_match_class(struct parse *cfile,
 	struct comment *comment;
 	struct string *msg;
 	isc_boolean_t lose = ISC_FALSE;
+	isc_boolean_t modified = ISC_FALSE;
 
 	msg = makeString(-1, "/// from: match if ");
 	appendString(msg, print_boolean_expression(expr, &lose));
 	if (!lose)
 		comment = createComment(msg->content);
 
-	reduced = reduce_boolean_expression(expr);
+	/* evaluate the expression and try to reduce it */
+	reduced = eval_boolean_expression(expr, &modified);
+	reduced = reduce_boolean_expression(reduced);
 	if ((reduced != NULL) && (reduced->type == ELEMENT_BOOLEAN))
 		parse_error(cfile, "'match if' with a constant boolean "
 			    "expression %s",

@@ -13,7 +13,7 @@ class "reductible" {
 
 subclass "reductible" "domain=com" { }
 
-# reduce literals too (but only once)
+# reduce literals too
 class "literal" {
     match if option host-name = concat("www.", "example.", "com");
 }

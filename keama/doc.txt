@@ -9,7 +9,7 @@ Files:
  - keama.c (main() code)
  - json.c (JSON parser)
  - option.c (option tables and code)
- - keama.8
+ - keama.8 (man page)
 
 The code heavily uses tailq lists, i.e. doubled linked lists with
 a pointer to the last (tail) element.
@@ -81,6 +81,9 @@ Files:
  - parse.c (from common)
 
 4 classes: parameters, declarations, executable statements and expressions.
+
+the original code parses config and lease files, I kept only the first
+at the exception of parse_binding_value().
 
 entry point
   |
@@ -181,7 +184,7 @@ result: map element where to put the statement
 cfile: parser context
 lose: set to ISC_TRUE on failure
 case_context: expression context
-direct: called directly by parse_statement so can execute config stuff
+direct: called directly by parse_statement so can execute config statements
 return: success
 
 parse_executable_statement
@@ -265,11 +268,15 @@ Part 4: Expression processing
 
 Files:
 ------
+ - print.c (new)
+ - eval.c (new)
  - reduce.c (new)
 
 Print:
 ------
 
+const char *
+print_expression(struct element *expr, isc_boolean_t *lose);
 const char *
 print_boolean_expression(struct element *expr, isc_boolean_t *lose);
 const char *
@@ -281,18 +288,38 @@ expr: expression to print
 lose: failure (??? in output) flag
 return: the text representing the expression
 
+Eval:
+-----
+
+struct element *
+eval_expression(struct element *expr, isc_boolean_t *modifiedp);
+struct element *
+eval_boolean_expression(struct element *expr, isc_boolean_t *modifiedp);
+struct element *
+eval_data_expression(struct element *expr, isc_boolean_t *modifiedp);
+struct element *
+eval_numeric_expression(struct element *expr, isc_boolean_t *modifiedp);
+
+expr: expression to evaluate
+modifiedp: a different element was returned (still false for updates
+ inside a map)
+return: the evaluated element (can have been updated for a map or a list,
+ or can be a fully different element)
+
+Evaluation is at parsing time so it is mainly a constant propagation.
+(no beta reduction for instance)
+
 Reduce:
 -------
 
 struct element *
 reduce_boolean_expression(struct element *expr);
 struct element *
-reduce_data_expression(struct element *expr, isc_boolean_t *literalp);
+reduce_data_expression(struct element *expr);
 struct element *
 reduce_numeric_expression(struct element *expr);
 
 expr: expression to reduce
-literalp: string literal flag for quoting
 return: NULL or the reduced expression as a Kea eval string
 
 reducing works for a limited (but interesting) set of expressions which
@@ -393,7 +420,7 @@ Authoritative declaration:
 
 Failover:
 ---------
- Raise a fatal error on usage attempts.
+ Display a warning on the first use.
 
 Interfaces:
 -----------

@@ -103,7 +103,8 @@ am__installdirs = "$(DESTDIR)$(sbindir)" "$(DESTDIR)$(man8dir)"
 PROGRAMS = $(sbin_PROGRAMS)
 am_keama_OBJECTS = keama.$(OBJEXT) data.$(OBJEXT) conflex.$(OBJEXT) \
 	json.$(OBJEXT) confparse.$(OBJEXT) parse.$(OBJEXT) \
-	options.$(OBJEXT) reduce.$(OBJEXT)
+	options.$(OBJEXT) reduce.$(OBJEXT) print.$(OBJEXT) \
+	eval.$(OBJEXT)
 keama_OBJECTS = $(am_keama_OBJECTS)
 keama_LDADD = $(LDADD)
 AM_V_P = $(am__v_P_@AM_V@)
@@ -315,7 +316,7 @@ top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 keama_SOURCES = keama.c data.c conflex.c json.c confparse.c parse.c \
-	options.c reduce.c
+	options.c reduce.c print.c eval.c
 man_MANS = keama.8
 EXTRA_DIST = $(man_MANS)
 all: all-am
@@ -407,10 +408,12 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/conflex.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/confparse.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/data.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/eval.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/json.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/keama.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/options.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/parse.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/print.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/reduce.Po@am__quote@
 
 .c.o:
