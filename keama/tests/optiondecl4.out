@@ -18,7 +18,7 @@
       },
       {
         "space": "foobar",
-        "name": "fmt-b-i8",
+        "name": "fmt-b-si8",
         "code": 3,
         "type": "int8"
       },
@@ -26,7 +26,7 @@
         "space": "foobar",
         "name": "fmt-B-ui8",
         "code": 4,
-        "type": "int8"
+        "type": "uint8"
       },
       {
         "space": "foobar",
@@ -36,7 +36,7 @@
       },
       {
         "space": "foobar",
-        "name": "fmt-s-i16",
+        "name": "fmt-s-si16",
         "code": 6,
         "type": "int16"
       },
@@ -44,7 +44,7 @@
         "space": "foobar",
         "name": "fmt-S-ui16",
         "code": 7,
-        "type": "int16"
+        "type": "uint16"
       },
       {
         "space": "foobar",
@@ -54,7 +54,7 @@
       },
       {
         "space": "foobar",
-        "name": "fmt-l-i32",
+        "name": "fmt-l-si32",
         "code": 9,
         "type": "int32"
       },
@@ -62,7 +62,7 @@
         "space": "foobar",
         "name": "fmt-L-ui32",
         "code": 10,
-        "type": "int32"
+        "type": "uint32"
       },
       {
         "space": "foobar",

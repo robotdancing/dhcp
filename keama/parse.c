@@ -215,7 +215,6 @@ parse_ip_addr_or_hostname(struct parse *cfile, isc_boolean_t check_multi)
 	unsigned len = sizeof(addr);
 	isc_boolean_t ipaddr = ISC_FALSE;
 	struct string *bin = NULL;
-	char buf[80];
 
 	token = peek_token(&val, NULL, cfile);
 	if (token == NUMBER) {
@@ -276,10 +275,7 @@ parse_ip_addr_or_hostname(struct parse *cfile, isc_boolean_t check_multi)
 			    val, token);
 	}
 
-	memset(buf, 0, sizeof(buf));
-	if (!inet_ntop(AF_INET, bin->content, buf, sizeof(buf)))
-		parse_error(cfile, "can't print IP address");                 
-        return makeString(-1, buf);
+	return makeStringExt(bin->length, bin->content, 'I');
 }
 	
 /*
@@ -378,13 +374,9 @@ struct string *
 parse_ip6_addr_txt(struct parse *cfile)
 {
 	const struct string *bin;
-	char buf[80];
 
 	bin = parse_ip6_addr(cfile);
-	memset(buf, 0, sizeof(buf));
-	if (!inet_ntop(AF_INET6, bin->content, buf, sizeof(buf)))
-		parse_error(cfile, "can't print IPv6 address");
-	return makeString(-1, buf);
+	return makeStringExt(bin->length, bin->content, '6');
 }
 
 /*
@@ -400,10 +392,9 @@ parse_hardware_param(struct parse *cfile)
 	const char *val;
 	enum dhcp_token token;
 	isc_boolean_t ether = ISC_FALSE;
-	unsigned hlen, i;
+	unsigned hlen;
 	struct string *t, *r;
 	struct element *hw;
-	char buf[HARDWARE_ADDR_LEN * 4];
 
 	token = next_token(&val, NULL, cfile);
 	if (token == ETHERNET)
@@ -432,23 +423,10 @@ parse_hardware_param(struct parse *cfile)
 	token = next_token(&val, NULL, cfile);
 	if (token != SEMI)
 		parse_error(cfile, "expecting semicolon.");
-
-	memset(buf, 0, sizeof(buf));
-	for (i = 0; i < hlen; ++i) {
-		size_t used;
-		if (i == 0) {
-			(void)snprintf(buf, sizeof(buf),
-				       "%02hhx", t->content[i]);
-			continue;
-		}
-		used = strlen(buf);
-		(void)snprintf(buf + used, sizeof(buf) - used,
-			       ":%02hhx", t->content[i]);
-	}
 	if (ether)
-		r = makeString(-1, buf);
+		r = makeStringExt(hlen, t->content, 'H');
 	else
-		appendString(r, buf);
+		concatString(r, makeStringExt(hlen,t->content, 'H'));
 	hw = createString(r);
 	TAILQ_CONCAT(&hw->comments, &cfile->comments);
 	if (!ether || (hlen != 6)) {
@@ -496,7 +474,7 @@ parse_numeric_aggregate(struct parse *cfile, unsigned char *buf,
 	}
 	s = bufp;
 	if (!s) {
-		r = makeString(0, NULL);
+		r = allocString();
 		t = makeString(size / 8, "bigger than needed");
 	}
 
@@ -1014,7 +992,7 @@ parse_option_code_definition(struct parse *cfile, struct option *option)
 	token = next_token(&val, NULL, cfile);
 	if (token != EQUAL)
 		parse_error(cfile, "expecting \"=\"");
-	saved = makeString(0, NULL);
+	saved = allocString();
 
 	/* See if this is an array. */
 	token = next_token(&val, NULL, cfile);
@@ -1036,9 +1014,9 @@ parse_option_code_definition(struct parse *cfile, struct option *option)
 	}
 
 	/* At this point we're expecting a data type. */
-	datatype = makeString(0, NULL);
+	datatype = allocString();
 	/* We record the format essentially for the binary one */
-	format = makeString(0, NULL);
+	format = allocString();
     next_type:
 	if (saved->length > 0)
 		appendString(saved, " ");
@@ -1346,7 +1324,7 @@ parse_base64(struct parse *cfile)
 	struct string *r;
 	isc_boolean_t valid_base64;
 	
-	r = makeString(0, NULL);
+	r = allocString();
 
 	/* It's possible for a + or a / to cause a base64 quantity to be
 	   tokenized into more than one token, so we have to parse them all
@@ -1389,7 +1367,7 @@ parse_cshl(struct parse *cfile)
 	enum dhcp_token token;
 	const char *val;
 
-	data = makeString(0, NULL);
+	data = allocString();
 
 	for (;;) {
 		token = next_token(&val, NULL, cfile);
@@ -1423,7 +1401,7 @@ parse_hexa(struct parse *cfile)
 	enum dhcp_token token;
 	const char *val;
 
-	data = makeString(0, NULL);
+	data = allocString();
 
 	for (;;) {
 		token = next_token(&val, NULL, cfile);
@@ -1499,6 +1477,7 @@ parse_executable_statement(struct element *result,
 	int i;
 	struct element *zone;
 	struct string *s;
+	static isc_boolean_t log_warning = ISC_TRUE;
 
 	token = peek_token(&val, NULL, cfile);
 	switch (token) {
@@ -1674,7 +1653,7 @@ parse_executable_statement(struct element *result,
 			struct string *args;
 
 			func = createMap();
-			args = makeString(0, NULL);
+			args = allocString();
 			do {
 				token = next_token(&val, NULL, cfile);
 				if (token == RPAREN)
@@ -1830,6 +1809,16 @@ parse_executable_statement(struct element *result,
 		st->skip = ISC_TRUE;
 		cfile->issue_counter++;
 		mapSet(result, st, "log");
+		if (log_warning) {
+			struct comment *comment;
+
+			comment = createComment("/// Kea does not support "
+						"yet log statements");
+			TAILQ_INSERT_TAIL(&st->comments, comment);
+			comment= createComment("/// Reference Kea #5271");
+			TAILQ_INSERT_TAIL(&st->comments, comment);
+			log_warning = ISC_FALSE;
+		}
 
 		token = next_token(&val, NULL, cfile);
 		if (token != LPAREN)
@@ -2206,7 +2195,7 @@ parse_on_statement(struct element *result,
 	cfile->issue_counter++;
 	mapSet(result, statement, "on");
 
-	cond = makeString(0, NULL);
+	cond = allocString();
 	do {
 		token = next_token(&val, NULL, cfile);
 		switch (token) {
@@ -3786,8 +3775,8 @@ escape_option_string(unsigned len, const char *val)
 	unsigned i;
 	char s[2];
 
-	result = makeString(0, NULL);
-	add = makeString(0, NULL);
+	result = allocString();
+	add = allocString();
 #if 0
 	if (len > 0) {
 		if (isspace(val[0]))
@@ -3832,10 +3821,10 @@ parse_option_data(struct element *expr,
 	isc_boolean_t modified = ISC_FALSE;
 	isc_boolean_t consumed;
 
-	data = makeString(0, NULL);
+	data = allocString();
 
 	/* Save the initial content */
-	saved = makeString(0, NULL);
+	saved = allocString();
 	save_parse_state(cfile);
 	for (;;) {
 		token = peek_token(&val, NULL, cfile);
@@ -3854,7 +3843,7 @@ parse_option_data(struct element *expr,
 	}
 	restore_parse_state(cfile);
 
-	format = makeString(0, NULL);
+	format = allocString();
 	appendString(format, option->format);
 	/* To be sure we should never go outside it... */
 	appendString(format, "Ba");
@@ -4075,7 +4064,7 @@ parse_option_statement(struct element *result,
 		if (fmt == NULL)
 			fmt = "z";
 
-		/* boolean */
+		/* boolean (should not happen) */
 		if (strcmp(fmt, "f") == 0) {
 			if (expr->type != ELEMENT_BOOLEAN)
 				goto giveup;
@@ -4111,10 +4100,10 @@ parse_option_statement(struct element *result,
 		}
 		/* string */
 		else if (((*fmt == 't') || (*fmt == 'X')) &&
-			 (expr->type == ELEMENT_STRING))
+			 (expr->type == ELEMENT_STRING)) {
 			mapSet(opt_data, expr, "data");
 		/* binary */
-		else if ((*fmt == 'E') || (*fmt == 'X')) {
+		} else if ((*fmt == 'E') || (*fmt == 'X')) {
 			if (expr->type != ELEMENT_MAP)
 				goto giveup;
 			data = mapGet(expr, "const-data");
@@ -4611,6 +4600,7 @@ config_next_server(struct element *config, struct parse *cfile)
 		if ((kind == ROOT_GROUP) ||
 		    (kind == HOST_DECL) ||
 		    (kind == CLASS_DECL) ||
+		    (kind == SUBNET_DECL) ||
 		    (kind == GROUP_DECL))
 			break;
 		popped = ISC_TRUE;
@@ -4752,6 +4742,7 @@ static void
 config_preferred_lifetime(struct element *config, struct parse *cfile)
 {
 	struct element *value;
+	struct element *child;
 	struct comment *comment;
 	size_t scope;
 	isc_boolean_t pop_from_pool = ISC_FALSE;
@@ -4783,18 +4774,26 @@ config_preferred_lifetime(struct element *config, struct parse *cfile)
 		break;
 	}
 	if (pop_from_pool) {
-		comment= createComment("/// preferred-lifetime moved from "
-				       "an internal pool scope");
+		comment = createComment("/// preferred-lifetime moved from "
+					"an internal pool scope");
 		TAILQ_INSERT_TAIL(&value->comments, comment);
+		/* if there is another specified value and we are
+		 * enough lucky to have already got it... */
+		if (mapContains(cfile->stack[scope], "preferred-lifetime")) {
+			comment = createComment("/// Avoid to overwrite "
+						"current value...");
+			TAILQ_INSERT_TAIL(&value->comments, comment);
+			value->skip = ISC_TRUE;
+		}
 	}
 	mapSet(cfile->stack[scope], value, "preferred-lifetime");
 	/* derive T1 and T2 */
-	mapSet(cfile->stack[scope],
-	       createInt(intValue(value) / 2),
-	       "renew-timer");
-	mapSet(cfile->stack[scope],
-	       createInt(intValue(value) * 4 / 5),
-	       "rebind-timer");
+	child = createInt(intValue(value) / 2);
+	child->skip = value->skip;
+	mapSet(cfile->stack[scope], child, "renew-timer");
+	child = createInt(intValue(value) * 4 / 5);
+	child->skip = value->skip;
+	mapSet(cfile->stack[scope], child, "rebind-timer");
 }
 
 static void

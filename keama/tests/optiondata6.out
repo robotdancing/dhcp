@@ -1,0 +1,171 @@
+{
+  # option definition config
+  # authoritative is mandatory
+  "Dhcp6": {
+    "option-def": [
+      # options
+      {
+        "space": "foobar",
+        "name": "fmt-f",
+        "code": 1,
+        "type": "boolean"
+      },
+      {
+        "space": "foobar",
+        "name": "fmt-b-i8",
+        "code": 2,
+        "type": "int8"
+      },
+      {
+        "space": "foobar",
+        "name": "fmt-s-i16",
+        "code": 5,
+        "type": "int16"
+      },
+      {
+        "space": "foobar",
+        "name": "fmt-S-ui16",
+        "code": 7,
+        "type": "uint16"
+      },
+      {
+        "space": "foobar",
+        "name": "fmt-l-i32",
+        "code": 8,
+        "type": "int32"
+      },
+      {
+        "space": "foobar",
+        "name": "fmt-I",
+        "code": 11,
+        "type": "ipv4-address"
+      },
+      {
+        "space": "foobar",
+        "name": "fmt-6",
+        "code": 12,
+        "type": "ipv6-address"
+      },
+      {
+        "space": "foobar",
+        "name": "fmt-d",
+        "code": 13,
+        "type": "fqdn"
+      },
+      {
+        "space": "foobar",
+        "name": "fmt-Ia",
+        "code": 50,
+        "array": true,
+        "type": "uint8"
+      },
+      {
+        "space": "foobar",
+        "name": "fmt-Ia",
+        "code": 100,
+        "record-types": "boolean, uint8",
+        "type": "record"
+      }
+    ],
+    "option-data": [
+      {
+        "space": "foobar",
+        "name": "fmt-f",
+        "code": 1,
+        "data": "true"
+      },
+      {
+        "space": "foobar",
+        "name": "fmt-b-i8",
+        "code": 2,
+        "data": "-10"
+      },
+      {
+        "space": "dhcp6",
+        "name": "preference",
+        "code": 7,
+        "data": "20"
+      },
+      {
+        "space": "foobar",
+        "name": "fmt-s-i16",
+        "code": 5,
+        "data": "-10000"
+      },
+      {
+        "space": "foobar",
+        "name": "fmt-S-ui16",
+        "code": 7,
+        "data": "36000"
+      },
+      {
+        "space": "foobar",
+        "name": "fmt-l-i32",
+        "code": 8,
+        "data": "-86400"
+      },
+      {
+        "space": "dhcp6",
+        "name": "clt-time",
+        "code": 46,
+        "data": "604800"
+      },
+      {
+        "space": "foobar",
+        "name": "fmt-I",
+        "code": 11,
+        "data": "10.5.5.1"
+      },
+      {
+        "space": "dhcp6",
+        "name": "unicast",
+        "code": 12,
+        "data": "2001::1"
+      },
+      {
+        "space": "foobar",
+        "name": "fmt-d",
+        "code": 13,
+        "data": "www.example.com"
+      },
+      {
+        "space": "dhcp6",
+        "name": "domain-search",
+        "code": 24,
+        "data": "example.com, example.org"
+      },
+      {
+        "space": "dhcp6",
+        "name": "bootfile-url",
+        "code": 59,
+        "data": "http://nowhere/"
+      },
+      {
+        "space": "dhcp6",
+        "name": "geoconf-civic",
+        "code": 36,
+        "csv-format": false,
+//      "original-data": "de:ad:be:ef",
+        "data": "deadbeef"
+      },
+      {
+        "space": "dhcp6",
+        "name": "rapid-commit",
+        "code": 14,
+        "data": ""
+      },
+      {
+        "space": "foobar",
+        "name": "fmt-Ia",
+        "code": 50,
+        "data": "1, 2, 3"
+      },
+      {
+        "space": "foobar",
+        "name": "fmt-Ia",
+        "code": 50,
+        "data": "false, 66"
+      }
+    ]
+  }
+}

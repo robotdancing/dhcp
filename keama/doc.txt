@@ -336,15 +336,13 @@ Reservations:
    reservations with an address which match no subnets
   - a reservation can have no fixed address. In this case the MA puts
    the reservation in the last declared subnet.
-TODO: add a comment
   - a reservation can have more than one fixed address and these
    addresses can belong to different subnets. Current code pushes
    IPv4 extra addresses in a commented extra-ip-addresses but
    it is legal feature for IPv6.
-TODO: use fixed prefix6 too
+  - it is not easy to use prefix6
  The use of groups in host declarations is unclear.
  ISC DHCP UID is mapped to client-id, host-identifier to flex-id
-TODO finish this
  Only the two extreme cases for DHCPv6 relay options work (cf #5249)
  Host reservation identifiers are generated on first use.
 
@@ -360,7 +358,11 @@ Shared-Networks:
   - if there is no subnets it is a fatal error
   - if there is one subnet the shared-network is squeezed
   - if there are more than one subnet the shared-network is commented
-TODO: put the reference when the ticket will be created.
+TODO (useful only with Kea support for shared networks): combine permit /
+deny classes (e.g. create negation) and pop filters to subnets when
+there is one pool.
+TODO (put here even not so related) simplify not o not or convert
+not-equal into != vs not =.
 
 Vendor-Classes and User-Classes:
 --------------------------------
@@ -376,7 +378,6 @@ Classes:
  To spawn classes is not supported.
  Match class selector is converted to Kea eval test when the corresponding
  expression can be reduced. Fortunately it seems to be the common case!
-TODO: simplify the hardware address matching
   Lease limit is not supported.
 
 Subclasses:

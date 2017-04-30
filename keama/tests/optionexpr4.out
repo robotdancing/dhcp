@@ -1,0 +1,78 @@
+{
+  # option data expressions
+  # authoritative is mandatory
+  "Dhcp4": {
+    "option-def": [
+      # options
+      {
+        "space": "dhcp4",
+        "name": "mytext",
+        "code": 250,
+        "type": "string"
+      },
+      {
+        "space": "dhcp4",
+        "name": "mydata",
+        "code": 251,
+        "type": "string"
+      },
+      {
+        "space": "dhcp4",
+        "name": "mydata2",
+        "code": 252,
+        "type": "string"
+      },
+      # not yet
+      {
+        "space": "dhcp4",
+        "name": "mydata3",
+        "code": 253,
+        "type": "string"
+      }
+    ],
+    "option-data": [
+      {
+        "space": "dhcp4",
+        "name": "mytext",
+        "code": 250,
+        "data": "oob"
+      },
+      {
+        "space": "dhcp4",
+        "name": "mydata",
+        "code": 251,
+        "data": "\bUV"
+      },
+      {
+        "space": "dhcp4",
+        "name": "mydata2",
+        "code": 252,
+        "data": "aabbcc",
+        "csv-format": false
+      }
+//    {
+//      "space": "dhcp4",
+//      "name": "mydata3",
+//      "code": 253,
+//      "csv-format": false,
+//      "expression": {
+//        "concat": {
+//          "left": {
+//            "const-data": "0xaa"
+//          },
+//          "right": {
+//            "concat": {
+//              "left": {
+//                "const-data": "0xbb"
+//              },
+//              "right": {
+//                "const-data": "0xcc"
+//              }
+//            }
+//          }
+//        }
+//      }
+//    }
+    ]
+  }
+}

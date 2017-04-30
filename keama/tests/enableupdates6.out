@@ -1,0 +1,17 @@
+{
+  # ddns-updates (aka enable-updates)
+  # authoritative is mandatory
+  "Dhcp6": {
+    "dhcp-ddns": {
+      "enable-updates": true
+    },
+    "client-classes": [
+      # embedded
+      {
+        "name": "foo"
+//      /// Only global enable-updates is supported
+//      "enable-updates": false
+      }
+    ]
+  }
+}

@@ -948,7 +948,9 @@
         /// from: match if (substring(hardware, 1, 3)) = 0x0004ed
         "test": "substring(concat(substring(pkt4.htype,-1,all),pkt4.mac),1,3) == 0x0004ed"
       }
-    ],
+    ]
+//  /// Kea does not support yet shared networks
+//  /// Reference Kea #5273
 //  "shared-networks": [
 //    {
 //      "name": "alaucre",
@@ -72761,6 +72763,7 @@
 //              "data": "-18000"
 //            }
 //          ],
+//          "next-server": "68.234.128.73",
 //          /// valid-lifetime moved from an internal pool scope
 //          "valid-lifetime": 14400,
 //          "config": [
@@ -72781,6 +72784,8 @@
 //              ]
 //            }
 //          ],
+//          /// Host reservations without fixed addresses were put in the last last declared subnet
+//          /// Reference Kea #5246
 //          "reservations": [
 //            {
 //              "hostname": "A4-7A-A4-6B-3C-60",
@@ -74112,6 +74117,7 @@
 //              "data": "-18000"
 //            }
 //          ],
+//          "next-server": "68.234.128.73",
 //          /// valid-lifetime moved from an internal pool scope
 //          "valid-lifetime": 86400,
 //          "config": [
@@ -74132,6 +74138,8 @@
 //              ]
 //            }
 //          ],
+//          /// Host reservations without fixed addresses were put in the last last declared subnet
+//          /// Reference Kea #5246
 //          "reservations": [
 //            {
 //              "hostname": "00-10-95-0A-23-8F",
@@ -74373,6 +74381,7 @@
 //              "data": "-18000"
 //            }
 //          ],
+//          "next-server": "68.234.128.73",
 //          /// valid-lifetime moved from an internal pool scope
 //          "valid-lifetime": 1200,
 //          "config": [
@@ -74393,6 +74402,8 @@
 //              ]
 //            }
 //          ],
+//          /// Host reservations without fixed addresses were put in the last last declared subnet
+//          /// Reference Kea #5246
 //          "reservations": [
 //            {
 //              "hostname": "00-E0-6F-35-53-40",
@@ -74529,6 +74540,7 @@
 //              "data": "-18000"
 //            }
 //          ],
+//          "next-server": "68.234.128.73",
 //          /// valid-lifetime moved from an internal pool scope
 //          "valid-lifetime": 1200,
 //          "config": [
@@ -74666,6 +74678,7 @@
 //              "data": "-18000"
 //            }
 //          ],
+//          "next-server": "68.234.128.73",
 //          /// valid-lifetime moved from an internal pool scope
 //          "valid-lifetime": 2400,
 //          "config": [
@@ -74686,6 +74699,8 @@
 //              ]
 //            }
 //          ],
+//          /// Host reservations without fixed addresses were put in the last last declared subnet
+//          /// Reference Kea #5246
 //          "reservations": [
 //            {
 //              "hostname": "00-E0-6F-36-90-96",
@@ -74853,6 +74868,7 @@
 //              "data": "-18000"
 //            }
 //          ],
+//          "next-server": "68.234.128.73",
 //          /// valid-lifetime moved from an internal pool scope
 //          "valid-lifetime": 86400,
 //          "config": [
@@ -74873,6 +74889,8 @@
 //              ]
 //            }
 //          ],
+//          /// Host reservations without fixed addresses were put in the last last declared subnet
+//          /// Reference Kea #5246
 //          "reservations": [
 //            {
 //              "hostname": "3C-75-4A-63-7B-6A",
@@ -75097,6 +75115,7 @@
 //              "data": "-18000"
 //            }
 //          ],
+//          "next-server": "68.234.128.73",
 //          /// valid-lifetime moved from an internal pool scope
 //          "valid-lifetime": 2400,
 //          "config": [
@@ -75117,6 +75136,8 @@
 //              ]
 //            }
 //          ],
+//          /// Host reservations without fixed addresses were put in the last last declared subnet
+//          /// Reference Kea #5246
 //          "reservations": [
 //            {
 //              "hostname": "00-E0-6F-66-82-6C",
@@ -75269,6 +75290,7 @@
 //              "data": "-18000"
 //            }
 //          ],
+//          "next-server": "68.234.128.73",
 //          /// valid-lifetime moved from an internal pool scope
 //          "valid-lifetime": 2400,
 //          "config": [
@@ -75417,6 +75439,7 @@
 //              "data": "-18000"
 //            }
 //          ],
+//          "next-server": "68.234.128.73",
 //          /// valid-lifetime moved from an internal pool scope
 //          "valid-lifetime": 86400,
 //          "config": [
@@ -75437,6 +75460,8 @@
 //              ]
 //            }
 //          ],
+//          /// Host reservations without fixed addresses were put in the last last declared subnet
+//          /// Reference Kea #5246
 //          "reservations": [
 //            {
 //              "hostname": "00-E0-6F-7C-8D-96",
@@ -75580,6 +75605,7 @@
 //              "data": "-18000"
 //            }
 //          ],
+//          "next-server": "68.234.128.73",
 //          /// valid-lifetime moved from an internal pool scope
 //          "valid-lifetime": 1200,
 //          "config": [
@@ -75723,6 +75749,7 @@
 //              "data": "-18000"
 //            }
 //          ],
+//          "next-server": "68.234.128.73",
 //          /// valid-lifetime moved from an internal pool scope
 //          "valid-lifetime": 86400,
 //          "config": [
@@ -75812,49 +75839,27 @@
 //        }
 //      ]
 //    }
-//  ],
-    /// next-server moved from an internal unsupported scope
-    "next-server": "68.234.128.73",
+//  ]
 //  /// boot-file-name was defined in an unsupported scope
-//  "boot-file-name": "P2_TOS_DOC11.bin",
-    /// next-server moved from an internal unsupported scope
-    "next-server": "68.234.128.73",
+//  "boot-file-name": "P2_TOS_DOC11.bin"
 //  /// boot-file-name was defined in an unsupported scope
-//  "boot-file-name": "P2_TOS_DOC11.bin",
-    /// next-server moved from an internal unsupported scope
-    "next-server": "68.234.128.73",
+//  "boot-file-name": "P2_TOS_DOC11.bin"
 //  /// boot-file-name was defined in an unsupported scope
-//  "boot-file-name": "Casa-Vlan2.bin",
-    /// next-server moved from an internal unsupported scope
-    "next-server": "68.234.128.73",
+//  "boot-file-name": "Casa-Vlan2.bin"
 //  /// boot-file-name was defined in an unsupported scope
-//  "boot-file-name": "P2_TOS_DOC11.bin",
-    /// next-server moved from an internal unsupported scope
-    "next-server": "68.234.128.73",
+//  "boot-file-name": "P2_TOS_DOC11.bin"
 //  /// boot-file-name was defined in an unsupported scope
-//  "boot-file-name": "P2_TOS_DOC11.bin",
-    /// next-server moved from an internal unsupported scope
-    "next-server": "68.234.128.73",
+//  "boot-file-name": "P2_TOS_DOC11.bin"
 //  /// boot-file-name was defined in an unsupported scope
-//  "boot-file-name": "P2_TOS_DOC11.bin",
-    /// next-server moved from an internal unsupported scope
-    "next-server": "68.234.128.73",
+//  "boot-file-name": "P2_TOS_DOC11.bin"
 //  /// boot-file-name was defined in an unsupported scope
-//  "boot-file-name": "P2_TOS_DOC11.bin",
-    /// next-server moved from an internal unsupported scope
-    "next-server": "68.234.128.73",
+//  "boot-file-name": "P2_TOS_DOC11.bin"
 //  /// boot-file-name was defined in an unsupported scope
-//  "boot-file-name": "standard.cm",
-    /// next-server moved from an internal unsupported scope
-    "next-server": "68.234.128.73",
+//  "boot-file-name": "standard.cm"
 //  /// boot-file-name was defined in an unsupported scope
-//  "boot-file-name": "P2_TOS_DOC11.bin",
-    /// next-server moved from an internal unsupported scope
-    "next-server": "68.234.128.73",
+//  "boot-file-name": "P2_TOS_DOC11.bin"
 //  /// boot-file-name was defined in an unsupported scope
-//  "boot-file-name": "standard.cm",
-    /// next-server moved from an internal unsupported scope
-    "next-server": "68.234.128.73"
+//  "boot-file-name": "standard.cm"
 //  /// boot-file-name was defined in an unsupported scope
 //  "boot-file-name": "Casa-Vlan2.bin"
 //  /// Orphan reservations

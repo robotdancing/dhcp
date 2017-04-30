@@ -1,0 +1,12 @@
+# ddns-domainname (aka qualifying-suffix)
+
+# authoritative is mandatory
+authoritative;
+
+ddns-domainname ".biz";
+ddns-updates true;
+
+# embedded
+class "foo" {
+    ddns-domainname ".bar";
+}

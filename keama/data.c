@@ -22,6 +22,8 @@
 
 #include "data.h"
 
+#include <sys/types.h>
+#include <arpa/inet.h>
 #include <assert.h>
 #include <stdlib.h>
 #include <string.h>
@@ -55,6 +57,209 @@ makeString(int l, const char *s)
 		result->content[result->length] = 0;
 	}
 
+	return result;
+}
+
+struct string *
+makeStringExt(int l, const char *s, char fmt)
+{
+	switch (fmt) {
+	case 'Z':
+		/* zero-length */
+		return allocString();
+
+	case 'l': {
+		/* 32-bit signed integer */
+		int32_t x;
+		char buf[40];
+
+		assert(s != NULL);
+		assert(l > 3);
+
+		memcpy(&x, s, 4);
+		x = (int32_t)ntohl((uint32_t)x);
+		snprintf(buf, sizeof(buf), "%lld", (long long)x);
+		return makeString(-1, buf);
+	}
+
+	case 'L': {
+		/* 32-bit unsigned integer */
+		uint32_t x;
+		char buf[40];
+
+		assert(s != NULL);
+		assert(l > 3);
+
+		memcpy(&x, s, 4);
+		x = ntohl(x);
+		snprintf(buf, sizeof(buf), "%llu", (unsigned long long)x);
+		return makeString(-1, buf);
+	}
+
+	case 's': {
+		/* 16-bit signed integer */
+		int16_t x;
+		char buf[20];
+
+		assert(s != NULL);
+		assert(l > 1);
+
+		memcpy(&x, s, 2);
+		x = (int16_t)ntohs((uint16_t)x);
+		snprintf(buf, sizeof(buf), "%hd", x);
+		return makeString(-1, buf);
+	}
+
+	case 'S': {
+		/* 16-bit unsigned integer */
+		uint16_t x;
+		char buf[20];
+
+		assert(s != NULL);
+		assert(l > 1);
+
+		memcpy(&x, s, 2);
+		x = ntohs(x);
+		snprintf(buf, sizeof(buf), "%hu", x);
+		return makeString(-1, buf);
+	}
+
+	case 'b': {
+		/* 8-bit signed integer */
+		int8_t x;
+		char buf[10];
+
+		assert(s != NULL);
+		assert(l > 0);
+
+		memcpy(&x, s, 1);
+		snprintf(buf, sizeof(buf), "%hhd", x);
+		return makeString(-1, buf);
+	}
+
+	case 'B': {
+		/* 8-bit unsigned integer */
+		uint8_t x;
+		char buf[10];
+
+		assert(s != NULL);
+		assert(l > 0);
+
+		memcpy(&x, s, 1);
+		snprintf(buf, sizeof(buf), "%hhu", x);
+		return makeString(-1, buf);
+	}
+
+	case 'f': {
+		/* flag (true or false) */
+		uint8_t f;
+
+		assert(s != NULL);
+		assert(l > 0);
+
+		f = *s;
+		return makeString(-1, f ? "true" : "false");
+	}
+
+	case 'X': {
+		/* binary data */
+		struct string *result;
+		size_t i;
+		char buf[4];
+
+		assert((l == 0) || (s != NULL));
+
+		result = allocString();
+		for (i = 0; i < l; i++) {
+			snprintf(buf, sizeof(buf), "%02hhx", (uint8_t)s[i]);
+			appendString(result, buf);
+		}
+		return result;
+	}
+
+	case 'H': {
+		/* binary data with colons */
+		struct string *result;
+		size_t i;
+		isc_boolean_t first = ISC_TRUE;
+		char buf[4];
+
+		assert((l == 0) || (s != NULL));
+
+		result = allocString();
+		for (i = 0; i < l; i++) {
+			if (!first)
+				appendString(result, ":");
+			first = ISC_FALSE;
+			snprintf(buf, sizeof(buf), "%02hhx", (uint8_t)s[i]);
+			appendString(result, buf);
+		}
+		return result;
+	}
+
+	case 'I': {
+		/* IPv4 address */
+		char buf[40 /* INET_ADDRSTRLEN == 26 */]; 
+
+		assert(l > 3);
+		assert(inet_ntop(AF_INET, s, buf, sizeof(buf)) != NULL);
+		return makeString(-1, buf);
+	}
+
+	case '6': {
+		/* IPv6 address */
+		char buf[80 /* INET6_ADDRSTRLEN == 46 */];
+
+		assert(l > 15);
+		assert(inet_ntop(AF_INET6, s, buf, sizeof(buf)) != NULL);
+		return makeString(-1, buf);
+	}
+
+	default:
+		assert(0);
+	}
+}
+	
+struct string *
+makeStringArray(int l, const char *s, char fmt)
+{
+	struct string *result;
+	size_t step;
+	isc_boolean_t first = ISC_TRUE;
+
+	switch (fmt) {
+	case '6':
+		step = 16;
+		break;
+	case 'l':
+	case 'L':
+	case 'I':
+		step = 4;
+		break;
+	case 's':
+	case 'S':
+		step = 2;
+		break;
+	case 'b':
+	case 'B':
+	case 'f':
+		step = 1;
+		break;
+	default:
+		assert(0);
+	}
+
+	assert((l % step) == 0);
+
+	result = allocString();
+	while (l > 0) {
+		if (!first)
+			appendString(result, ",");
+		first = ISC_FALSE;
+		concatString(result, makeStringExt(l, s, fmt));
+		s += step;
+		l -= step;
+	}
 	return result;
 }
 

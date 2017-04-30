@@ -14,7 +14,7 @@ option my-id code 250 = text;
 
 # host declarations
 host test1 {
-    host-identifier option my-id = test1;
+    host-identifier option my-id test1;
     option domain-search example.com, example.org;
     default-lease-time 1800;
     fixed-address 10.5.5.1, 10.10.10.10;
