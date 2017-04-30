@@ -71,7 +71,11 @@ print_boolean_expression(struct element *expr, isc_boolean_t *lose)
 	/*
 	 * From is_boolean_expression
 	 */
-	result = makeString(0, NULL);
+	if (expr->type != ELEMENT_MAP) {
+		*lose = ISC_TRUE;
+		return "???";
+	}
+	result = allocString();
 
 	/* check */
 	if (mapContains(expr, "check")) {
@@ -152,7 +156,7 @@ print_boolean_expression(struct element *expr, isc_boolean_t *lose)
 			appendString(result, "???");
 			return result->content;
 		}
-		result = makeString(0, NULL);
+		result = allocString();
 		add_parenthesis = ISC_TF(expr_precedence(expr_equal,
 							 left) < 0);
 		if (add_parenthesis)
@@ -197,7 +201,7 @@ print_boolean_expression(struct element *expr, isc_boolean_t *lose)
 			appendString(result, "???");
 			return result->content;
 		}
-		result = makeString(0, NULL);
+		result = allocString();
 		add_parenthesis = ISC_TF(expr_precedence(expr_not_equal,
 							 left) < 0);
 		if (add_parenthesis)
@@ -242,7 +246,7 @@ print_boolean_expression(struct element *expr, isc_boolean_t *lose)
 			appendString(result, "???");
 			return result->content;
 		}
-		result = makeString(0, NULL);
+		result = allocString();
 		add_parenthesis = ISC_TF(expr_precedence(expr_regex_match,
 							 left) < 0);
 		if (add_parenthesis)
@@ -281,7 +285,7 @@ print_boolean_expression(struct element *expr, isc_boolean_t *lose)
 			appendString(result, "???");
 			return result->content;
 		}
-		result = makeString(0, NULL);
+		result = allocString();
 		add_parenthesis = ISC_TF(expr_precedence(expr_iregex_match,
 							 left) < 0);
 		if (add_parenthesis)
@@ -320,7 +324,7 @@ print_boolean_expression(struct element *expr, isc_boolean_t *lose)
 			appendString(result, "???");
 			return result->content;
 		}
-		result = makeString(0, NULL);
+		result = allocString();
 		add_parenthesis = ISC_TF(expr_precedence(expr_and,
 							 left) < 0);
 		if (add_parenthesis)
@@ -365,7 +369,7 @@ print_boolean_expression(struct element *expr, isc_boolean_t *lose)
 			appendString(result, "???");
 			return result->content;
 		}
-		result = makeString(0, NULL);
+		result = allocString();
 		add_parenthesis = ISC_TF(expr_precedence(expr_or,
 							 left) < 0);
 		if (add_parenthesis)
@@ -456,7 +460,7 @@ print_boolean_expression(struct element *expr, isc_boolean_t *lose)
 			appendString(result, "???");
 			return result->content;
 		}
-		result = makeString(0, NULL);
+		result = allocString();
 		concatString(result, stringValue(name));
 		appendString(result, "(");
 		args = mapGet(arg, "arguments");
@@ -500,7 +504,11 @@ print_data_expression(struct element *expr, isc_boolean_t *lose)
 	/*
 	 * From is_data_expression
 	 */
-	result = makeString(0, NULL);
+	if (expr->type != ELEMENT_MAP) {
+		*lose = ISC_TRUE;
+		return "???";
+	}
+	result = allocString();
 
 	/* substring */
 	if (mapContains(expr, "substring")) {
@@ -1020,7 +1028,11 @@ print_numeric_expression(struct element *expr, isc_boolean_t *lose)
 	/*
 	 * From is_numeric_expression
 	 */
-	result = makeString(0, NULL);
+	if (expr->type != ELEMENT_MAP) {
+		*lose = ISC_TRUE;
+		return "???";
+	}
+	result = allocString();
 
 	/* extract-int8 */
 	if (mapContains(expr, "extract-int8")) {
@@ -1033,7 +1045,7 @@ print_numeric_expression(struct element *expr, isc_boolean_t *lose)
 			appendString(result, "???, 8)");
 			return result->content;
 		}
-		appendString(result, print_numeric_expression(arg, lose));
+		appendString(result, print_data_expression(arg, lose));
 		appendString(result, ", 8)");
 		return result->content;
 	}
@@ -1049,7 +1061,7 @@ print_numeric_expression(struct element *expr, isc_boolean_t *lose)
 			appendString(result, "???, 16)");
 			return result->content;
 		}
-		appendString(result, print_numeric_expression(arg, lose));
+		appendString(result, print_data_expression(arg, lose));
 		appendString(result, ", 16)");
 		return result->content;
 	}
@@ -1065,7 +1077,7 @@ print_numeric_expression(struct element *expr, isc_boolean_t *lose)
 			appendString(result, "???, 32)");
 			return result->content;
 		}
-		appendString(result, print_numeric_expression(arg, lose));
+		appendString(result, print_data_expression(arg, lose));
 		appendString(result, ", 32)");
 		return result->content;
 	}
@@ -1110,7 +1122,7 @@ print_numeric_expression(struct element *expr, isc_boolean_t *lose)
 			appendString(result, "???");
 			return result->content;
 		}
-		result = makeString(0, NULL);
+		result = allocString();
 		add_parenthesis = ISC_TF(expr_precedence(expr_add,
 							 left) < 0);
 		if (add_parenthesis)
@@ -1155,7 +1167,7 @@ print_numeric_expression(struct element *expr, isc_boolean_t *lose)
 			appendString(result, "???");
 			return result->content;
 		}
-		result = makeString(0, NULL);
+		result = allocString();
 		add_parenthesis = ISC_TF(expr_precedence(expr_subtract,
 							 left) < 0);
 		if (add_parenthesis)
@@ -1200,7 +1212,7 @@ print_numeric_expression(struct element *expr, isc_boolean_t *lose)
 			appendString(result, "???");
 			return result->content;
 		}
-		result = makeString(0, NULL);
+		result = allocString();
 		add_parenthesis = ISC_TF(expr_precedence(expr_multiply,
 							 left) < 0);
 		if (add_parenthesis)
@@ -1245,7 +1257,7 @@ print_numeric_expression(struct element *expr, isc_boolean_t *lose)
 			appendString(result, "???");
 			return result->content;
 		}
-		result = makeString(0, NULL);
+		result = allocString();
 		add_parenthesis = ISC_TF(expr_precedence(expr_divide,
 							 left) < 0);
 		if (add_parenthesis)
@@ -1290,7 +1302,7 @@ print_numeric_expression(struct element *expr, isc_boolean_t *lose)
 			appendString(result, "???");
 			return result->content;
 		}
-		result = makeString(0, NULL);
+		result = allocString();
 		add_parenthesis = ISC_TF(expr_precedence(expr_remainder,
 							 left) < 0);
 		if (add_parenthesis)
@@ -1335,7 +1347,7 @@ print_numeric_expression(struct element *expr, isc_boolean_t *lose)
 			appendString(result, "???");
 			return result->content;
 		}
-		result = makeString(0, NULL);
+		result = allocString();
 		add_parenthesis = ISC_TF(expr_precedence(expr_binary_and,
 							 left) < 0);
 		if (add_parenthesis)
@@ -1380,7 +1392,7 @@ print_numeric_expression(struct element *expr, isc_boolean_t *lose)
 			appendString(result, "???");
 			return result->content;
 		}
-		result = makeString(0, NULL);
+		result = allocString();
 		add_parenthesis = ISC_TF(expr_precedence(expr_binary_or,
 							 left) < 0);
 		if (add_parenthesis)
@@ -1425,7 +1437,7 @@ print_numeric_expression(struct element *expr, isc_boolean_t *lose)
 			appendString(result, "???");
 			return result->content;
 		}
-		result = makeString(0, NULL);
+		result = allocString();
 		add_parenthesis = ISC_TF(expr_precedence(expr_binary_xor,
 							 left) < 0);
 		if (add_parenthesis)

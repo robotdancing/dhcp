@@ -50,6 +50,7 @@ enum resolve {
 
 /* From includes/dhcp6.h */
 #define D6O_VENDOR_OPTS				17
+#define MAX_V6RELAY_HOPS			32
 
 /* From includes/dhcpd.h */
 

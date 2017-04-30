@@ -23,6 +23,8 @@
 //      },
 //      "then": [
 //        {
+//          /// Kea does not support yet log statements
+//          /// Reference Kea #5271
 //          "log": {
 //            "priority": "info",
 //            "message": {

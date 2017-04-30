@@ -136,6 +136,8 @@
 //          "value": 7200
 //        }
 //      ],
+        /// Host reservations without fixed addresses were put in the last last declared subnet
+        /// Reference Kea #5246
         "reservations": [
           # Hosts which require special configuration options can be listed in
           # host statements.   If no address is specified, the address will be
@@ -176,6 +178,8 @@
         "test": "substring(option[60].hex,0,4) == 'SUNW'"
       }
     ]
+//  /// Kea does not support yet shared networks
+//  /// Reference Kea #5273
 //  "shared-networks": [
 //    {
 //      "name": "224-29",

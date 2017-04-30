@@ -1,0 +1,25 @@
+{
+  # ddns-update-style
+  # authoritative is mandatory
+  /// This configuration declares some subnets but has no interfaces-config
+  /// Reference Kea #5256
+  "Dhcp6": {
+    "dhcp-ddns": {
+      "enable-updates": true
+    },
+    "subnet6": [
+      # embedded in pool
+      {
+        "subnet": "2001::/64",
+        "pools": [
+          {
+//          /// Unsupported ddns-update-style interim
+//          /// Only global ddns-update-style is supported
+//          "ddns-update-style": "interim",
+            "pool": "2001::1000 - 2001::1fff"
+          }
+        ]
+      }
+    ]
+  }
+}

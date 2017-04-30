@@ -872,7 +872,7 @@ reduce_data_expression(struct element *expr)
 		/* unfortunately Kea nested level is incompatible */
 		/* ISC DHCP 0 means at client, ISC DHCP > max (32)
 		 * means closest to server. Cf #5249 */
-		if ((r != 0) && (r <= 32))
+		if ((r != 0) && (r <= MAX_V6RELAY_HOPS))
 			return NULL;
 		arg = mapGet(arg, "relay-option");
 		if ((arg == NULL) || (arg->type != ELEMENT_MAP)) {
@@ -936,7 +936,7 @@ reduce_equal_expression(struct element *left, struct element *right)
 		right = reduce_data_expression(right);
 		if ((right == NULL) || (right->type != ELEMENT_STRING))
 			return NULL;
-		result = makeString(0, NULL);
+		result = allocString();
 		concatString(result, quote(stringValue(left)));
 		appendString(result, " == ");
 		concatString(result, stringValue(right));
@@ -949,7 +949,7 @@ reduce_equal_expression(struct element *left, struct element *right)
 	/* right is a literal case */
 	if (right->type == ELEMENT_STRING) {
 		/* literal left was handled before */
-		result = makeString(0, NULL);
+		result = allocString();
 		concatString(result, stringValue(left));
 		appendString(result, " == ");
 		concatString(result, quote(stringValue(right)));
@@ -959,7 +959,7 @@ reduce_equal_expression(struct element *left, struct element *right)
 	if ((right == NULL) || (right->type != ELEMENT_STRING))
 		return NULL;
 
-	result = makeString(0, NULL);
+	result = allocString();
 	concatString(result, stringValue(left));
 	appendString(result, " == ");
 	concatString(result, stringValue(right));

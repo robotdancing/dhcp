@@ -41,6 +41,10 @@ isc_boolean_t use_client_id = ISC_FALSE;
 isc_boolean_t use_flex_id = ISC_FALSE;
 isc_boolean_t use_hw_address = ISC_FALSE;
 
+/* option and relays used for flexible host identifier */
+const struct option *host_id_option = NULL;
+int host_id_relays = 0;
+
 /* To avoid late authoritative declaration */
 unsigned subnet_counter = 0;
 
@@ -58,6 +62,7 @@ struct subnet {
 TAILQ_HEAD(subnets, subnet) known_subnets;
 
 static void add_host_reservation_identifiers(struct parse *, const char *);
+static void add_host_id_option(struct parse *, const struct option *, int);
 static void subclass_inherit(struct parse *, struct element *,
 			     struct element *);
 static void add_match_class(struct parse *, struct element *,
@@ -67,7 +72,8 @@ static void option_data_derive(struct parse *, struct handle *,
 static void derive_classes(struct parse *, struct handle *, struct handle *);
 static void new_network_interface(struct parse *, struct element *);
 static struct string *addrmask(const struct string *, const struct string *);
-static struct element *find_match(struct parse *, struct element *);
+static struct element *find_match(struct parse *, struct element *,
+				  isc_boolean_t *);
 static int get_prefix_length(const char *, const char *);
 static struct element *get_class(struct parse *, struct element *);
 static void concat_classes(struct parse *, struct element *, struct element *);
@@ -118,6 +124,7 @@ conf_file_parse(struct parse *cfile)
 		struct element *host;
 		struct element *where;
 		struct element *dest;
+		isc_boolean_t used_heuristic;
 
 		mapRemove(cfile->stack[1], "reservations");
 		orphans = createList();
@@ -125,7 +132,8 @@ conf_file_parse(struct parse *cfile)
 		while (listSize(hosts) > 0) {
 			host = listGet(hosts, 0);
 			listRemove(hosts, 0);
-			where = find_match(cfile, host);
+			used_heuristic = ISC_FALSE;
+			where = find_match(cfile, host, &used_heuristic);
 			if (where == cfile->stack[1])
 				dest = orphans;
 			else
@@ -247,7 +255,6 @@ conf_file_parse(struct parse *cfile)
 				continue;
 			lose = ISC_FALSE;
 			msg = makeString(-1, "/// match if: ");
-			TAILQ_INSERT_TAIL(&class->comments, comment);
 			appendString(msg, print_boolean_expression(entry,
 								   &lose));
 			if (!lose) {
@@ -1068,6 +1075,7 @@ parse_host_declaration(struct parse *cfile)
 	struct element *where;
 	struct element *hosts = NULL;
 	int declaration = 0;
+	isc_boolean_t used_heuristic = ISC_FALSE;
 
 	host = createMap();
 	host->kind = HOST_DECL;
@@ -1152,22 +1160,14 @@ parse_host_declaration(struct parse *cfile)
 			} else {
 				struct string *bin;
 				unsigned len = 0;
-				unsigned i;
-				char buf[4];
 
 				bin = parse_numeric_aggregate
 					(cfile, NULL, &len, ':', 16, 8);
 				if (!bin)
 					parse_error(cfile,
 						    "expecting hex list.");
-				client_id = makeString(0, NULL);
-				for (i = 0; i < bin->length; i++) {
-					if (i != 0)
-						appendString(client_id, ":");
-					snprintf(buf, sizeof(buf),
-						 "%02hhx", bin->content[i]);
-					appendString(client_id, buf);
-				}
+				client_id = makeStringExt(bin->length,
+							  bin->content, 'H');
 			}
 			mapSet(host, createString(client_id), "client-id");
 
@@ -1181,7 +1181,7 @@ parse_host_declaration(struct parse *cfile)
 			struct option *option;
 			struct element *expr;
 			struct element *data;
-			int relays;
+			int relays = 0;
 
 			if (!use_flex_id) {
 				add_host_reservation_identifiers(cfile,
@@ -1189,7 +1189,8 @@ parse_host_declaration(struct parse *cfile)
 				use_flex_id = ISC_TRUE;
 			}
 
-			if (mapContains(host, "host-identifier"))
+			if (mapContains(host, "host-identifier") ||
+			    mapContains(host, "flex-id"))
 				parse_error(cfile,
 					    "only one host-identifier allowed "
 					    "per host");
@@ -1211,6 +1212,8 @@ parse_host_declaration(struct parse *cfile)
 					parse_error(cfile,
 						    "host-identifier v6relopt "
 						    "must have a number >= 0");
+				if (relays > MAX_V6RELAY_HOPS)
+					relays = MAX_V6RELAY_HOPS + 1;
 			} else if (token != OPTION)
 				parse_error(cfile, 
 					    "host-identifier must be an option"
@@ -1244,9 +1247,46 @@ parse_host_declaration(struct parse *cfile)
 			cfile->issue_counter++;
 			mapSet(host, expr, "host-identifier");
 
+			if ((relays > 0) && (relays <= MAX_V6RELAY_HOPS)) {
+				struct comment *comment;
+				char buf[100];
+
+				snprintf(buf, sizeof(buf),
+					 "/// Only v6relopt 0 or > %d are %s",
+					 MAX_V6RELAY_HOPS, "supported by Kea");
+				comment = createComment(buf);
+				TAILQ_INSERT_TAIL(&expr->comments, comment);
+				snprintf(buf, sizeof(buf),
+					 "/// v6relopt %d was specified",
+					 relays);
+				comment= createComment(buf);
+				TAILQ_INSERT_TAIL(&expr->comments, comment);
+				continue;
+			}
+
+			if (host_id_option == NULL)
+				add_host_id_option(cfile, option, relays);
+			else if ((host_id_option != option) ||
+				 (host_id_relays != relays)) {
+				struct string *msg;
+				struct comment *comment;
+
+				msg = allocString();
+				appendString(msg, "/// Another option (");
+				appendString(msg, host_id_option->name);
+				appendString(msg, ") is already used as ");
+				appendString(msg, "host-identifier");
+				comment = createComment(msg->content);
+				TAILQ_INSERT_TAIL(&expr->comments, comment);
+				continue;
+			}
+
+			/*
+			 * Everything good: set a flex-id and remove
+			 * the host-identifier entry.
+			 */
 			mapSet(host, data, "flex-id");
-			/* Kea todo: push the flex-id glue */
-			/* "identifier-expression": "option[xx].hex" */
+			mapRemove(host, "host-identifier");
 			continue;
 		}
 
@@ -1255,12 +1295,23 @@ parse_host_declaration(struct parse *cfile)
 
 	cfile->stack_top--;
 
-	where = find_match(cfile, host);
+	where = find_match(cfile, host, &used_heuristic);
 	hosts = mapGet(where, "reservations");
 	if (hosts == NULL) {
 		hosts = createList();
 		hosts->kind = HOST_DECL;
 		mapSet(where, hosts, "reservations");
+		if (used_heuristic) {
+			struct comment *comment;
+
+			comment = createComment("/// Host reservations "
+						"without fixed addresses were "
+						"put in the last last "
+						"declared subnet");
+			TAILQ_INSERT_TAIL(&hosts->comments, comment);
+			comment = createComment("/// Reference Kea #5246");
+			TAILQ_INSERT_TAIL(&hosts->comments, comment);
+		}
 	}
 	listPush(hosts, host);
 }
@@ -1279,6 +1330,46 @@ add_host_reservation_identifiers(struct parse *cfile, const char *id)
 	listPush(ids, createString(makeString(-1, id)));
 }
 
+/* Add the flexible host identifier glue */
+static void
+add_host_id_option(struct parse *cfile,
+		   const struct option *option, int relays)
+{
+	struct string *expr;
+	struct element *params;
+	struct element *entry;
+	struct element *hooks;
+	struct comment *comment;
+	char buf[40];
+
+	host_id_option = option;
+	host_id_relays = relays;
+
+	/*
+	 * Using the example from the Kea Administrator Reference Manual
+	 * as recommended by Tomek
+	 */
+	hooks = createList();
+	mapSet(cfile->stack[1], hooks, "hooks-libraries");
+	comment = createComment("/// The flexible host identifier "
+				"is a premium feature");
+	TAILQ_INSERT_TAIL(&hooks->comments, comment);
+	entry = createMap();
+	listPush(hooks, entry);
+	params = createString(makeString(-1, "/path/libdhcp_flex_id.so"));
+	comment = createComment("/// Please update the path here");
+	TAILQ_INSERT_TAIL(&params->comments, comment);
+	mapSet(entry, params, "library");
+	params = createMap();
+	mapSet(entry, params, "parameters");
+
+	snprintf(buf, sizeof(buf), "%soption[%u].hex",
+		 relays > 0 ? "relay[0]." : "", option->code);
+	expr = makeString(-1, buf);
+	mapSet(params, createString(expr), "identifier-expression");
+}
+
+static void add_host_reservation_identifiers(struct parse *, const char *);
 /* class-declaration :== STRING LBRACE parameters declarations RBRACE
  *
  * in fact:
@@ -1726,7 +1817,7 @@ add_match_class(struct parse *cfile,
 		struct element *expr)
 {
 	struct element *reduced;
-	struct comment *comment;
+	struct comment *comment = NULL;
 	struct string *msg;
 	isc_boolean_t lose = ISC_FALSE;
 	isc_boolean_t modified = ISC_FALSE;
@@ -1746,10 +1837,12 @@ add_match_class(struct parse *cfile,
 	if ((reduced == NULL) || (reduced->type != ELEMENT_STRING)) {
 		expr->skip = ISC_TRUE;
 		cfile->issue_counter++;
-		TAILQ_INSERT_TAIL(&expr->comments, comment);
+		if (comment != NULL)
+			TAILQ_INSERT_TAIL(&expr->comments, comment);
 		mapSet(class, expr, "match-if");
 	} else {
-		TAILQ_INSERT_TAIL(&reduced->comments, comment);
+		if (comment != NULL)
+			TAILQ_INSERT_TAIL(&reduced->comments, comment);
 		mapSet(class, reduced, "test");
 	}
 }
@@ -1838,11 +1931,18 @@ parse_shared_net_declaration(struct parse *cfile)
 		shares = mapGet(cfile->stack[cfile->stack_top],
 				"shared-networks");
 		if (shares == NULL) {
+			struct comment *comment;
+
 			shares = createList();
 			shares->skip = ISC_TRUE;
 			shares->kind = SHARED_NET_DECL;
 			mapSet(cfile->stack[cfile->stack_top],
 			       shares, "shared-networks");
+			comment = createComment("/// Kea does not support "
+						"yet shared networks");
+			TAILQ_INSERT_TAIL(&shares->comments, comment);
+			comment= createComment("/// Reference Kea #5273");
+			TAILQ_INSERT_TAIL(&shares->comments, comment);
 		}
 		listPush(shares, share);
 		return;
@@ -2099,7 +2199,6 @@ parse_subnet6_declaration(struct parse *cfile)
 	size_t parent;
         size_t i;
         int kind = 0;
-	char paddr[80];
 	char *p;
 
         if (local_family != AF_INET6)
@@ -2149,10 +2248,7 @@ parse_subnet6_declaration(struct parse *cfile)
 		parse_error(cfile, "bad IPv6 address length");
 	chain->addr = address;
 
-	memset(paddr, 0, sizeof(paddr));
-	if (!inet_ntop(AF_INET6, address->content, paddr, sizeof(paddr)))
-		parse_error(cfile, "can't print network number");
-	prefix = makeString(-1, paddr);
+	prefix = makeStringExt(address->length, address->content, '6');
 
 	token = next_token(&val, NULL, cfile);
 	if (token != SLASH)
@@ -2782,7 +2878,6 @@ parse_address_range(struct parse *cfile, int type, size_t where)
 	const char *val;
 	isc_boolean_t dynamic = ISC_FALSE;
 	struct element *pool;
-	char taddr[40];
 	struct element *r;
 
 	if ((token = peek_token(&val, NULL, cfile)) == DYNAMIC_BOOTP) {
@@ -2858,16 +2953,9 @@ parse_address_range(struct parse *cfile, int type, size_t where)
 		low = high;
 		high = swap;
 	}
-	memset(taddr, 0, sizeof(taddr));
-	if (!inet_ntop(AF_INET, low->content, taddr, sizeof(taddr)))
-		parse_error(cfile, "can't print range address (low)");
-	range = makeString(-1, taddr);
+	range = makeStringExt(low->length, low->content, 'I');
 	appendString(range, " - ");
-
-	memset(taddr, 0, sizeof(taddr));
-	if (!inet_ntop(AF_INET, high->content, taddr, sizeof(taddr)))
-		parse_error(cfile, "can't print range address (high)");
-	appendString(range, taddr);
+	concatString(range, makeStringExt(high->length, high->content, 'I'));
 
 	r = createString(range);
 	TAILQ_CONCAT(&r->comments, &cfile->comments);
@@ -3690,13 +3778,11 @@ static const uint32_t bitmasks[32 + 1] = {
 static struct string *
 addrmask(const struct string *address, const struct string *netmask)
 {
-	char addr[40], buf[40];
-	int plen, cc;
+	struct string *result;
+	uint8_t plen;
 	uint32_t mask;
 
-	memset(addr, 0, sizeof(addr));
-	if (!inet_ntop(AF_INET, address->content, addr, sizeof(addr)))
-		return NULL;
+	result = makeStringExt(address->length, address->content, 'I');
 
 	memcpy(&mask, netmask->content, 4);
 	mask = ntohl(mask);
@@ -3706,11 +3792,9 @@ addrmask(const struct string *address, const struct string *netmask)
 	if (plen > 32)
 		return NULL;
 
-	memset(buf, 0, sizeof(buf));
-	cc = snprintf(buf, sizeof(buf), "%s/%d", addr, plen);
-	if (cc < 0 || cc >= 40)
-		return NULL;
-	return makeString(-1, buf);
+	appendString(result, "/");
+	concatString(result, makeStringExt(1, (char *)&plen, 'B'));
+	return result;
 }
 
 /*
@@ -3722,7 +3806,8 @@ addrmask(const struct string *address, const struct string *netmask)
  */
 
 static struct element *
-find_match(struct parse *cfile, struct element *host)
+find_match(struct parse *cfile, struct element *host,
+	   isc_boolean_t *used_heuristicp)
 {
 	struct element *address;
 	struct subnet *subnet;
@@ -3746,6 +3831,8 @@ find_match(struct parse *cfile, struct element *host)
 		if (address == NULL) {
 			if (TAILQ_EMPTY(&known_subnets))
 				return cfile->stack[1];
+			if (used_heuristicp)
+				*used_heuristicp = ISC_TRUE;
 			return TAILQ_LAST(&known_subnets, subnets)->subnet;
 		}
 		len = 4;
@@ -3754,6 +3841,8 @@ find_match(struct parse *cfile, struct element *host)
 		if (address == NULL) {
 			if (TAILQ_EMPTY(&known_subnets))
 				return cfile->stack[1];
+			if (used_heuristicp)
+				*used_heuristicp = ISC_TRUE;
 			return TAILQ_LAST(&known_subnets, subnets)->subnet;
 		}
 		address = listGet(address, 0);

@@ -525,6 +525,8 @@
 //          ]
           }
         ],
+        /// Host reservations without fixed addresses were put in the last last declared subnet
+        /// Reference Kea #5246
         "reservations": [
           {
             "hostname": "test-7960",

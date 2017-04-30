@@ -1,0 +1,11 @@
+# ddns-updates (aka enable-updates)
+
+# authoritative is mandatory
+authoritative;
+
+ddns-updates on;
+
+# embedded
+class "foo" {
+    ddns-updates off;
+}

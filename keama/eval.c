@@ -516,7 +516,7 @@ eval_data_expression(struct element *expr, isc_boolean_t *modifiedp)
 		*modifiedp = ISC_TRUE;
 		s = stringValue(string);
 		if (s->length <= off)
-			r = makeString(0, NULL);
+			r = allocString();
 		else {
 			r = makeString(s->length - off, s->content + off);
 			if (r->length > len)
@@ -613,7 +613,7 @@ eval_data_expression(struct element *expr, isc_boolean_t *modifiedp)
 		if (arg->type != ELEMENT_STRING)
 			return expr;
 		*modifiedp = ISC_TRUE;
-		r = makeString(0, NULL);
+		r = allocString();
 		concatString(r, stringValue(arg));
 		for (i = 0; i < r->length; i++)
 			r->content[i] = tolower(r->content[i]);
@@ -648,7 +648,7 @@ eval_data_expression(struct element *expr, isc_boolean_t *modifiedp)
 		if (arg->type != ELEMENT_STRING)
 			return expr;
 		*modifiedp = ISC_TRUE;
-		r = makeString(0, NULL);
+		r = allocString();
 		concatString(r, stringValue(arg));
 		for (i = 0; i < r->length; i++)
 			r->content[i] = toupper(r->content[i]);
@@ -738,7 +738,7 @@ eval_data_expression(struct element *expr, isc_boolean_t *modifiedp)
 		    (right->type != ELEMENT_STRING))
 			return expr;
 		*modifiedp = ISC_TRUE;
-		r = makeString(0, NULL);
+		r = allocString();
 		concatString(r, stringValue(left));
 		concatString(r, stringValue(right));
 		result = createString(r);
@@ -879,7 +879,7 @@ eval_data_expression(struct element *expr, isc_boolean_t *modifiedp)
 			return expr;
 		hostname = stringValue(arg)->content;
 		h = gethostbyname(hostname);
-		r = makeString(0, NULL);
+		r = allocString();
 		if (h == NULL) {
 			switch (h_errno) {
 			case HOST_NOT_FOUND:
@@ -907,6 +907,7 @@ eval_data_expression(struct element *expr, isc_boolean_t *modifiedp)
 				concatString(r, addr);
 			}
 		*modifiedp = ISC_TRUE;
+		r = makeStringExt(r->length, r->content, 'X');
 		result = createString(r);
 		TAILQ_CONCAT(&result->comments, &arg->comments);
 		return result;
@@ -991,7 +992,7 @@ eval_data_expression(struct element *expr, isc_boolean_t *modifiedp)
 			return expr;
 		sep = stringValue(separator);
 		buf = stringValue(buffer);
-		r = makeString(0, NULL);
+		r = allocString();
 		if (w == 8) {
 			size_t i;
 			char *fmt;
@@ -1157,7 +1158,7 @@ eval_data_expression(struct element *expr, isc_boolean_t *modifiedp)
 		if ((buf->length % w) != 0)
 			return expr;
 		*modifiedp = ISC_TRUE;
-		r = makeString(0, NULL);
+		r = allocString();
 		concatString(r, buf);
 		for (i = 0; i < buf->length; i += w) {
 			memcpy(r->content + i,
@@ -1219,7 +1220,7 @@ eval_data_expression(struct element *expr, isc_boolean_t *modifiedp)
 		if (!can_decide)
 			return expr;
 		*modifiedp = ISC_TRUE;
-		result = createString(makeString(0, NULL));
+		result = createString(allocString());
 		TAILQ_CONCAT(&result->comments, &expr->comments);
 		TAILQ_CONCAT(&result->comments,  &arg->comments);
 		return result;
@@ -1263,7 +1264,7 @@ eval_data_expression(struct element *expr, isc_boolean_t *modifiedp)
 		struct element *result;
 
 		*modifiedp = ISC_TRUE;
-		result = createString(makeString(0, NULL));
+		result = createString(allocString());
 		TAILQ_CONCAT(&result->comments, &expr->comments);
 		return result;
 	}
@@ -1275,7 +1276,7 @@ eval_data_expression(struct element *expr, isc_boolean_t *modifiedp)
 		 * semantic: return gethostname
 		 */
 		struct element *result;
-		char buf[300];
+		char buf[300 /* >= 255 + 1 */];
 
 		if (gethostname(buf, sizeof(buf)) != 0) {
 			debug("gethostname fails: %s", strerror(errno));
@@ -1385,7 +1386,7 @@ eval_numeric_expression(struct element *expr, isc_boolean_t *modifiedp)
 		uint16_t val;
 		isc_boolean_t modified = ISC_FALSE;
 
-		arg = mapGet(expr, "extract-int8");
+		arg = mapGet(expr, "extract-int16");
 		if (arg == NULL)
 			return expr;
 		arg = eval_data_expression(arg, &modified);
@@ -1419,7 +1420,7 @@ eval_numeric_expression(struct element *expr, isc_boolean_t *modifiedp)
 		uint32_t val;
 		isc_boolean_t modified = ISC_FALSE;
 
-		arg = mapGet(expr, "extract-int8");
+		arg = mapGet(expr, "extract-int32");
 		if (arg == NULL)
 			return expr;
 		arg = eval_data_expression(arg, &modified);
@@ -1509,6 +1510,7 @@ eval_numeric_expression(struct element *expr, isc_boolean_t *modifiedp)
 		if ((left->type != ELEMENT_INTEGER) ||
 		    (right->type != ELEMENT_INTEGER))
 			return expr;
+		*modifiedp = ISC_TRUE;
 		result = createInt(intValue(left) + intValue(right));
 		TAILQ_CONCAT(&result->comments, &expr->comments);
 		TAILQ_CONCAT(&result->comments, &arg->comments);
@@ -1557,6 +1559,7 @@ eval_numeric_expression(struct element *expr, isc_boolean_t *modifiedp)
 		if ((left->type != ELEMENT_INTEGER) ||
 		    (right->type != ELEMENT_INTEGER))
 			return expr;
+		*modifiedp = ISC_TRUE;
 		result = createInt(intValue(left) - intValue(right));
 		TAILQ_CONCAT(&result->comments, &expr->comments);
 		TAILQ_CONCAT(&result->comments, &arg->comments);
@@ -1605,6 +1608,7 @@ eval_numeric_expression(struct element *expr, isc_boolean_t *modifiedp)
 		if ((left->type != ELEMENT_INTEGER) ||
 		    (right->type != ELEMENT_INTEGER))
 			return expr;
+		*modifiedp = ISC_TRUE;
 		result = createInt(intValue(left) * intValue(right));
 		TAILQ_CONCAT(&result->comments, &expr->comments);
 		TAILQ_CONCAT(&result->comments, &arg->comments);
@@ -1655,6 +1659,7 @@ eval_numeric_expression(struct element *expr, isc_boolean_t *modifiedp)
 			return expr;
 		if (intValue(right) == 0)
 			return expr;
+		*modifiedp = ISC_TRUE;
 		result = createInt(intValue(left) / intValue(right));
 		TAILQ_CONCAT(&result->comments, &expr->comments);
 		TAILQ_CONCAT(&result->comments, &arg->comments);
@@ -1705,6 +1710,7 @@ eval_numeric_expression(struct element *expr, isc_boolean_t *modifiedp)
 			return expr;
 		if (intValue(right) == 0)
 			return expr;
+		*modifiedp = ISC_TRUE;
 		result = createInt(intValue(left) % intValue(right));
 		TAILQ_CONCAT(&result->comments, &expr->comments);
 		TAILQ_CONCAT(&result->comments, &arg->comments);
@@ -1753,6 +1759,7 @@ eval_numeric_expression(struct element *expr, isc_boolean_t *modifiedp)
 		if ((left->type != ELEMENT_INTEGER) ||
 		    (right->type != ELEMENT_INTEGER))
 			return expr;
+		*modifiedp = ISC_TRUE;
 		result = createInt(intValue(left) & intValue(right));
 		TAILQ_CONCAT(&result->comments, &expr->comments);
 		TAILQ_CONCAT(&result->comments, &arg->comments);
@@ -1801,6 +1808,7 @@ eval_numeric_expression(struct element *expr, isc_boolean_t *modifiedp)
 		if ((left->type != ELEMENT_INTEGER) ||
 		    (right->type != ELEMENT_INTEGER))
 			return expr;
+		*modifiedp = ISC_TRUE;
 		result = createInt(intValue(left) | intValue(right));
 		TAILQ_CONCAT(&result->comments, &expr->comments);
 		TAILQ_CONCAT(&result->comments, &arg->comments);
@@ -1849,6 +1857,7 @@ eval_numeric_expression(struct element *expr, isc_boolean_t *modifiedp)
 		if ((left->type != ELEMENT_INTEGER) ||
 		    (right->type != ELEMENT_INTEGER))
 			return expr;
+		*modifiedp = ISC_TRUE;
 		result = createInt(intValue(left) ^ intValue(right));
 		TAILQ_CONCAT(&result->comments, &expr->comments);
 		TAILQ_CONCAT(&result->comments, &arg->comments);
@@ -2041,20 +2050,13 @@ cmp_hexa(struct element *left, isc_boolean_t left_is_hexa,
 	struct string *sleft;
 	struct string *sright;
 	struct string *hexa;
-	size_t i;
 
 	/* both are not hexa */
 	if (!left_is_hexa && !right_is_hexa) {
 		sleft = stringValue(left);
 		sright = stringValue(right);
-		if (sleft->length != sright->length)
-			return ISC_FALSE;
-		if (sleft->length == 0)
-			return ISC_TRUE;
-		/* use byte compare here */
-		return ISC_TF(memcmp(sleft->content,
-				     sright->content,
-				     sleft->length) == 0);
+		/* eqString() compares lengths them use memcmp() */
+		return eqString(sleft, sright);
 	}
 
 	/* both are hexa */
@@ -2085,15 +2087,8 @@ cmp_hexa(struct element *left, isc_boolean_t left_is_hexa,
 		return ISC_FALSE;
 
 	/* build the hexa representation */
-	hexa = makeString(0, NULL);
-	for (i = 0; i < sright->length; i++) {
-		char c;
-		char buf[4];
+	hexa = makeStringExt(sright->length, sright->content, 'X');
 
-		c = sright->content[i];
-		snprintf(buf, sizeof(buf), "%02hhx", (uint8_t)c);
-		appendString(hexa, buf);
-	}
 	return ISC_TF(strcasecmp(sleft->content, sright->content) == 0);
 }
 

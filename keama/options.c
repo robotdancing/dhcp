@@ -186,7 +186,6 @@ struct option_def options4[] = {
 	/// not supported by Kea
 	{ "subnet-selection", "I",		"dhcp", 118, 2},
 	{ "domain-search", "Dc",		"dhcp", 119, 2},
-	/// Kea uses different format
 	{ "vivco", "Evendor-class.",		"dhcp", 124, 2},
 	/// vivco vivco-suboptions
 	{ "vivso", "Evendor.",			"dhcp", 125, 2},

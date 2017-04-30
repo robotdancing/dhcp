@@ -85,6 +85,16 @@
     "host-reservation-identifiers": [
       "flex-id"
     ],
+    /// The flexible host identifier is a premium feature
+    "hooks-libraries": [
+      {
+        /// Please update the path here
+        "library": "/path/libdhcp_flex_id.so",
+        "parameters": {
+          "identifier-expression": "option[1].hex"
+        }
+      }
+    ],
     "subnet6": [
       #host cablemodem-2 {
       #	host-identifier option docsis.device-id 00:06:5B:50:99:F6;
@@ -106,7 +116,6 @@
           #
           {
             "hostname": "cablemodem-1",
-//          "host-identifier": "option dhcp6.clientid 000100010c00a14100065b5099f6",
             "flex-id": "000100010c00a14100065b5099f6",
             "ip-addresses": [
               "3ffe:aaaa:aaaa:aaaa::ffff"

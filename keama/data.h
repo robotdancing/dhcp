@@ -176,6 +176,10 @@ struct string {
 struct string *allocString(void);
 /* In makeString() l == -1 means use strlen(s) */
 struct string *makeString(int l, const char *s);
+/* format ZlLsSbBfXI6 + h */
+struct string *makeStringExt(int l, const char *s, char fmt);
+/* format 6lLIsSbBj */
+struct string *makeStringArray(int l, const char *s, char fmt);
 void appendString(struct string *s, const char *a);
 void concatString(struct string *s, const struct string *a);
 isc_boolean_t eqString(const struct string *s, const struct string *o);
