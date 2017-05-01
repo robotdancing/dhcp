@@ -19,12 +19,12 @@
         ],
         "valid-lifetime": 1800,
         "pools": [
-          {
+//        {
 //          "pool": "2001::100/64 temporary"
-          },
-          {
+//        }
+//        {
 //          "pool": "2001::1000/116 temporary"
-          }
+//        }
         ]
       }
     ]

@@ -106,11 +106,17 @@
       },
       {
         "space": "foobar",
-        "name": "fmt-Ia",
-        "code": 50,
+        "name": "fmt-fB",
+        "code": 100,
 //      "original-data": "off, 66",
         /// canonized booleans to lowercase true or false
         "data": "false, 66"
+      },
+      {
+        "space": "dhcp4",
+        "name": "routers",
+        "code": 3,
+        "data": "10.5.5.1, 10.5.5.2, 10.5.5.3"
       }
     ],
     "option-def": [
@@ -146,14 +152,14 @@
       },
       {
         "space": "foobar",
-        "name": "fmt-Ia",
+        "name": "fmt-Ba",
         "code": 50,
         "array": true,
         "type": "uint8"
       },
       {
         "space": "foobar",
-        "name": "fmt-Ia",
+        "name": "fmt-fB",
         "code": 100,
         "record-types": "boolean, uint8",
         "type": "record"

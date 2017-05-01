@@ -213,13 +213,13 @@
 //        {
 //          "pool": "10.17.224.10 - 10.17.224.250",
 //          "allow": [
-//            "member of foo"
+//            "members of foo"
 //          ]
 //        },
 //        {
 //          "pool": "10.0.29.10 - 10.0.29.230",
 //          "deny": [
-//            "member of foo"
+//            "members of foo"
 //          ]
 //        }
 //      ]

@@ -116,14 +116,14 @@
       },
       {
         "space": "foobar",
-        "name": "fmt-Ia",
+        "name": "fmt-Ba",
         "code": 50,
         "array": true,
         "type": "uint8"
       },
       {
         "space": "foobar",
-        "name": "fmt-Ia",
+        "name": "fmt-fB",
         "code": 100,
         "record-types": "boolean, uint8",
         "type": "record"

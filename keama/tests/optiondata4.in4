@@ -41,8 +41,10 @@ option dhcp-client-identifier 01:02:aa:bb;
 option foobar.fmt-Z code 18 = zerolen;
 option foobar.fmt-Z;
 
-option foobar.fmt-Ia code 50 = array of unsigned integer 8;
+option foobar.fmt-Ba code 50 = array of unsigned integer 8;
 option dhcp-parameter-request-list 1, 2, 3;
 
-option foobar.fmt-Ia code 100 = { boolean, unsigned integer 8 };
-option foobar.fmt-Ia off, 66;
+option foobar.fmt-fB code 100 = { boolean, unsigned integer 8 };
+option foobar.fmt-fB off, 66;
+
+option routers 10.5.5.1, 10.5.5.2, 10.5.5.3;

@@ -25,6 +25,6 @@ option foobar.fmt-t code 16 = text;
 option foobar.fmt-X code 17 = string;
 option foobar.fmt-Z code 18 = zerolen;
 
-option foobar.fmt-Ia code 50 = array of unsigned integer 8;
-option foobar.fmt-Ia code 100 = { boolean, unsigned integer 8 };
+option foobar.fmt-Ba code 50 = array of unsigned integer 8;
+option foobar.fmt-fB code 100 = { boolean, unsigned integer 8 };
 option foobar.fmt-Ia code 150 = { unsigned integer 32, array of boolean };

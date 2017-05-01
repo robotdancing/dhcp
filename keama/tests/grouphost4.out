@@ -49,22 +49,22 @@
       {
         "subnet": "10.10.10.0/27",
         "reservations": [
-          {
-            "hostname": "test3",
+//        {
+//          "hostname": "test3",
 //          "hw-address": "fddi 00:07:0e:36:48:19",
-            "ip-address": "10.10.10.1",
+//          "ip-address": "10.10.10.1",
 //          /// valid-lifetime in unsupported scope
 //          "valid-lifetime": 3600,
-            "option-data": [
-              {
-                "space": "dhcp4",
-                "name": "domain-search",
-                "code": 119,
-                "data": "example.com, example.org"
-              }
-            ],
-            "next-server": "192.168.0.1"
-          }
+//          "option-data": [
+//            {
+//              "space": "dhcp4",
+//              "name": "domain-search",
+//              "code": 119,
+//              "data": "example.com, example.org"
+//            }
+//          ],
+//          "next-server": "192.168.0.1"
+//        }
         ]
       }
     ],

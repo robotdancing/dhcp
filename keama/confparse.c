@@ -28,6 +28,7 @@
 #include <sys/errno.h>
 #include <arpa/inet.h>
 #include <assert.h>
+#include <ctype.h>
 #include <fcntl.h>
 #include <time.h>
 #include <stdlib.h>
@@ -70,6 +71,7 @@ static void add_match_class(struct parse *, struct element *,
 static void option_data_derive(struct parse *, struct handle *,
 			       struct handle *, isc_boolean_t);
 static void derive_classes(struct parse *, struct handle *, struct handle *);
+static isc_boolean_t is_hexa_only(const char *, unsigned len);
 static void new_network_interface(struct parse *, struct element *);
 static struct string *addrmask(const struct string *, const struct string *);
 static struct element *find_match(struct parse *, struct element *,
@@ -94,6 +96,8 @@ conf_file_parse(struct parse *cfile)
 
 	top = createMap();
 	top->kind = TOPLEVEL;
+	TAILQ_CONCAT(&top->comments, &cfile->comments);
+
 	dhcp = createMap();
 	dhcp->kind = ROOT_GROUP;
 	(void) peek_token(NULL, NULL, cfile);
@@ -289,6 +293,8 @@ read_conf_file(struct parse *parent, const char *filename, int group_type)
 {
 	int file;
 	struct parse *cfile;
+	struct string *msg;
+	struct comment *comment;
 	size_t amount = parent->stack_size * sizeof(struct element *);
 	size_t cnt;
 
@@ -309,6 +315,11 @@ read_conf_file(struct parse *parent, const char *filename, int group_type)
 	cfile->stack_top = parent->stack_top;
 	cfile->issue_counter = parent->issue_counter;
 
+	msg = makeString(-1, "/// Begin file ");
+	concatString(msg, makeString(-1, filename));
+	comment = createComment(msg->content);
+	TAILQ_INSERT_TAIL(&cfile->comments, comment);
+
 	cnt = conf_file_subparse(cfile, group_type);
 
 	amount = cfile->stack_size * sizeof(struct element *);
@@ -322,6 +333,10 @@ read_conf_file(struct parse *parent, const char *filename, int group_type)
 	parent->stack_size = cfile->stack_size;
 	parent->stack_top = cfile->stack_top;
 	parent->issue_counter = cfile->issue_counter;
+	msg = makeString(-1, "/// End file ");
+	concatString(msg, makeString(-1, filename));
+	comment= createComment(msg->content);
+	TAILQ_INSERT_TAIL(&parent->comments, comment);
 	end_parse(cfile);
 }
 
@@ -492,6 +507,8 @@ parse_statement(struct parse *cfile, int type, isc_boolean_t declaration)
 				    "configured.");
 		hardware = parse_hardware_param(cfile);
 		mapSet(cfile->stack[host_decl], hardware, "hw-address");
+		if (hardware->skip)
+			cfile->stack[host_decl]->skip = ISC_TRUE;
 		break;
 
 	case FIXED_ADDR:
@@ -847,7 +864,7 @@ get_permit(struct parse *cfile, struct element *permit_head)
 			parse_error(cfile, "expecting \"of\"");
 		if (next_token(&val, NULL, cfile) != STRING)
 			parse_error(cfile, "expecting class name.");
-		permit = makeString(-1, "member of ");
+		permit = makeString(-1, "members of ");
 		appendString(permit, val);
 		break;
 
@@ -1634,10 +1651,9 @@ parse_class_declaration(struct parse *cfile, int type)
 				parse_error(cfile,
 					    "A class may only have "
 					    "one 'match' or 'spawn' clause.");
-			class->skip = ISC_TRUE;
-			cfile->issue_counter++;
 			expr = createBool(ISC_TRUE);
 			expr->skip = ISC_TRUE;
+			cfile->issue_counter++;
 			mapSet(class, expr, "spawning");
 			token = next_token(&val, NULL, cfile);
 			if (token != WITH)
@@ -3060,7 +3076,7 @@ parse_address_range6(struct parse *cfile, int type, size_t where)
 	range = createString(lo);
 	TAILQ_CONCAT(&range->comments, &cfile->comments);
 	if (is_temporary) {
-		range->skip = ISC_TRUE;
+		pool->skip = ISC_TRUE;
 		cfile->issue_counter++;
 	}
 	mapSet(pool, range, "pool");
@@ -3585,7 +3601,11 @@ parse_server_duid_conf(struct parse *cfile) {
 		token = next_token(&val, &len, cfile);
 		if (token != STRING)
 			parse_error(cfile, "identifier expected");
-		item = createString(makeString(len, val));
+		/* Kea requires a hexadecimal identifier */
+		if (is_hexa_only(val, len))
+			item = createString(makeString(len, val));
+		else
+			item = createString(makeStringExt(len, val, 'X'));
 		mapSet(duid, item, "identifier");
 	}
 
@@ -3723,6 +3743,18 @@ parse_server_duid_conf(struct parse *cfile) {
 		cfile->issue_counter++;
 	}
 	mapSet(cfile->stack[1], duid, "server-id");
+}
+
+/* Check whether the argument is encoded in hexadecimal or not */
+static isc_boolean_t
+is_hexa_only(const char *s, unsigned l)
+{
+	unsigned i;
+
+	for (i = 0; i < l; i++)
+		if (!isxdigit((int)s[i]))
+			return ISC_FALSE;
+	return ISC_TRUE;
 }
 
 /*
