@@ -7,16 +7,16 @@
       # reduce literals
       {
         "name": "literal",
-        /// from: match if (substring(option dhcp6.client-data, 0, 393231 % 128)) = 0xabcd
-        "test": "substring(option[45].hex,0,15) == 0xabcd"
+        /// from: match if (substring(option dhcp6.interface-id, 0, 393231 % 128)) = 0xabcd
+        "test": "substring(option[18].hex,0,15) == 0xabcd"
       }
     ],
     "option-data": [
       # raw
       {
         "space": "dhcp6",
-        "name": "client-data",
-        "code": 45,
+        "name": "interface-id",
+        "code": 18,
         /// constant DHCP_R_NXDOMAIN(393231)
         /// constant S_BOUND(5)
         "data": "\u0000\u0006\u0000\u0014"

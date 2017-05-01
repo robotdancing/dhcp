@@ -43,11 +43,11 @@
       {
         "subnet": "10.10.10.0/27",
         "reservations": [
-          {
-            "hostname": "test3",
+//        {
+//          "hostname": "test3",
 //          "hw-address": "fddi 00:07:0e:36:48:19",
-            "ip-address": "10.10.10.1"
-          }
+//          "ip-address": "10.10.10.1"
+//        }
         ]
       }
     ],

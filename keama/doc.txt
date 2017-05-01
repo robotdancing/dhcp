@@ -459,6 +459,9 @@ Options:
    Note there is only one standard option with a problematic format,
    the issue is more with user defined options.
 TODO check lq-relay-data DHCPv6 6X code 47
+TODO introduce a format x
+TODO add an option definition file
+TODO fix vendor option (of course when Kea will have what is needed)
  We have no example in ISC DHCP, Kea or standard but it is possible
  than an option defined as a fixed sized record followed by
  (encapsulated) suboptions bugs (it already bugs toElement).

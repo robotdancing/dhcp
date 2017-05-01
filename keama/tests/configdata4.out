@@ -2,6 +2,7 @@
   # config (aka server option space data config
   # authoritative is mandatory
   "Dhcp4": {
+    "valid-lifetime": 1800
 //  "config": [
 //    /// bootp protocol is not supported
 //    {

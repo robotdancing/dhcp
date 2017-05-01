@@ -110,14 +110,14 @@
       },
       {
         "space": "foobar",
-        "name": "fmt-Ia",
+        "name": "fmt-Ba",
         "code": 50,
         "array": true,
         "type": "uint8"
       },
       {
         "space": "foobar",
-        "name": "fmt-Ia",
+        "name": "fmt-fB",
         "code": 100,
         "record-types": "boolean, uint8",
         "type": "record"
@@ -125,7 +125,7 @@
 //    /// unsupported array inside a record
 //    {
 //      "space": "foobar",
-//      "name": "fmt-Ia",
+//      "name": "fmt-Lfa",
 //      "code": 150,
 //      "array": true,
 //      "record-types": "uint32, boolean",

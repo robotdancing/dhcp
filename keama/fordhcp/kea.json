@@ -141,6 +141,7 @@
 //      ]
 //    }
 //  },
+//  /// Begin file fordhcp/dhcpd.omapi.key
 //  # This key is used for OMAPI/omshell access.
 //  "statement": {
 //    "tsig-keys": [
@@ -152,6 +153,7 @@
 //    ]
 //  },
     "subnet4": [
+//    /// Begin file fordhcp/dhcpd.stubs.conf
 //    # These are stub subnets to inform the DHCP server that they exist.
 //    # sql1-blue, the "outside" network
 //    /// Not authorized subnet
@@ -181,6 +183,7 @@
 //    {
 //      "subnet": "149.20.60.0/24"
 //    },
+      /// Begin file fordhcp/dhcpd.voip.conf
       # dhcpd.voip.conf file for Voice over IP phone network served by the 950
       # charter #failover peerset.  This file may be copied to /etc between these
       # two systems without modifications.
@@ -223,6 +226,7 @@
           }
         ]
       },
+      /// Begin file fordhcp/dhcpd.wvlan.conf
       # dhcpd.wvlan.conf file for 950 Charter Wireless network, served by the 950
       # charter #failover peerset.  This file may be copied to /etc between these
       # two systems without modifications.
@@ -292,6 +296,7 @@
           }
         ]
       },
+      /// Begin file fordhcp/dhcpd.emp-wireless-149-20.conf
       # dhcpd.emp-wireless-149-20.conf file for 950 Charter Wireless network,
       # served by the 950 charter #failover peerset.  This file may be copied
       # to /etc between these two systems without modifications.
@@ -381,6 +386,7 @@
           }
         ],
         "reservations": [
+          /// Begin file fordhcp/dhcpd.office-static-149-20.conf
           #######################################################################
           # Static DHCP leases
           #
@@ -478,6 +484,7 @@
           }
         ]
       },
+      /// Begin file fordhcp/dhcpd.voip-149-20.conf
       # dhcpd.voip-149-20.conf file for Voice over IP phone network served by the
       # 950 charter #failover peerset.  This file may be copied to /etc between these
       # two systems without modifications.
@@ -696,6 +703,7 @@
       "hw-address"
     ],
     "option-def": [
+      /// Begin file fordhcp/dhcpd.office-149-20.conf
       # dhcpd.office-149-20.conf file for office-net DHCP pools served by the
       # 950 Charter #failover peerset. This file may be copied to /etc between
       # these two systems without modifications.
@@ -857,6 +865,7 @@
             "code": 211,
             "data": "30"
           },
+          /// Begin file fordhcp/dhcpd.staging.conf
           # dhcpd.staging.conf file for the SQL1 staging network,
           # served by the 950 charter #failover peerset.  This file may be copied
           # to /etc between these two systems without modifications.
