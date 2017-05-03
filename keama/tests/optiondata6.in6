@@ -32,7 +32,8 @@ option foobar.fmt-6 code 12 = ip6-address;
 option dhcp6.unicast 2001::1;
 
 option foobar.fmt-d code 13 = domain-name;
-option foobar.fmt-d "www.example.com";
+# Silly, d aka domain-name are without quotes, D aka domain-list are with
+option foobar.fmt-d www.example.com;
 
 option dhcp6.domain-search "example.com", "example.org";
 

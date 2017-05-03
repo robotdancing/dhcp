@@ -122,6 +122,7 @@
         "code": 12,
         "data": "2001::1"
       },
+      # Silly, d aka domain-name are without quotes, D aka domain-list are with
       {
         "space": "foobar",
         "name": "fmt-d",
