@@ -3880,17 +3880,29 @@ parse_option_data(struct element *expr,
 		if (token == COMMA) {
 			skip_token(&val, NULL, cfile);
 			appendString(data, ", ");
-			fmt++;
+			if (*fmt != 'D')
+				fmt++;
 			continue;
 		}
 
 		/* Addresses */
 		if (*fmt == 'I') {
 			item = parse_ip_addr_or_hostname(cfile, ISC_FALSE);
+			if (item == NULL)
+				parse_error(cfile,
+					    "expecting IP addr or hostname.");
 			modified = ISC_TRUE;
 			consumed = ISC_TRUE;
 		} else if (*fmt == '6') {
 			item = parse_ip6_addr_txt(cfile);
+			modified = ISC_TRUE;
+			consumed = ISC_TRUE;
+		} else
+		/* Domain names */
+		if (*fmt == 'd') {
+			item = parse_host_name(cfile);
+			if (item == NULL)
+				parse_error(cfile, "not a valid domain name.");
 			modified = ISC_TRUE;
 			consumed = ISC_TRUE;
 		} else
