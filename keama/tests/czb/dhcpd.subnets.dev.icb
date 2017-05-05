@@ -1,0 +1,161 @@
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM62 
+subnet 140.101.132.0 netmask 255.255.252.0 {
+     option tftp-server-name "140.169.107.254";
+     filename "zitdboot";
+     next-server 140.169.107.254;
+     option broadcast-address 140.101.135.255;
+     option subnet-mask 255.255.252.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.101.133.1 140.101.133.255;
+             range 140.101.134.1 140.101.134.255;
+        }
+     option domain-name "dev.icb.commerzbank.com";
+     option routers 140.101.132.6;
+     option ntp-servers 140.169.100.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+     option netbios-name-servers 140.104.46.30, 140.104.47.30;
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM80 
+subnet 140.15.133.0 netmask 255.255.255.0 {
+     option tftp-server-name "140.169.107.254";
+     filename "zitdboot";
+     next-server 140.169.107.254;
+     option broadcast-address 140.15.133.255;
+     option subnet-mask 255.255.255.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.15.133.64 140.15.133.127;
+             range 140.15.133.128 140.15.133.191;
+        }
+     option domain-name "dev.icb.commerzbank.com";
+     option routers 140.15.133.6;
+     option ntp-servers 140.15.133.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+     option netbios-name-servers 140.104.46.30, 140.104.47.30;
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM80 
+subnet 140.15.135.0 netmask 255.255.255.0 {
+     option tftp-server-name "140.169.107.254";
+     filename "zitdboot";
+     next-server 140.169.107.254;
+     option broadcast-address 140.15.135.255;
+     option subnet-mask 255.255.255.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.15.135.64 140.15.135.127;
+             range 140.15.135.128 140.15.135.191;
+        }
+     option domain-name "dev.icb.commerzbank.com";
+     option routers 140.15.135.6;
+     option ntp-servers 140.15.135.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+     option netbios-name-servers 140.104.46.30, 140.104.47.30;
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM48 
+subnet 140.152.80.0 netmask 255.255.252.0 {
+     option tftp-server-name "140.169.19.184";
+     filename "zitdboot";
+     next-server 140.169.19.184;
+     option broadcast-address 140.152.83.255;
+     option subnet-mask 255.255.252.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.152.81.1 140.152.81.255;
+             range 140.152.82.1 140.152.82.255;
+        }
+     option domain-name "dev.icb.commerzbank.com";
+     option routers 140.152.80.6;
+     option ntp-servers 140.152.80.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+     option netbios-name-servers 140.60.19.208, 140.13.52.210;
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM56 
+subnet 140.154.156.0 netmask 255.255.252.0 {
+     option tftp-server-name "140.169.107.254";
+     filename "zitdboot";
+     next-server 140.169.107.254;
+     option broadcast-address 140.154.159.255;
+     option subnet-mask 255.255.252.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.154.157.1 140.154.157.255;
+             range 140.154.158.1 140.154.158.255;
+        }
+     option domain-name "dev.icb.commerzbank.com";
+     option routers 140.154.156.6;
+     option ntp-servers 140.154.156.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+     option netbios-name-servers 140.104.46.30, 140.104.47.30;
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM03 
+subnet 140.169.112.0 netmask 255.255.252.0 {
+     option tftp-server-name "140.169.107.254";
+     filename "zitdboot";
+     next-server 140.169.107.254;
+     option broadcast-address 140.169.115.255;
+     option subnet-mask 255.255.252.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.169.113.1 140.169.113.255;
+             range 140.169.114.1 140.169.114.255;
+        }
+     option domain-name "dev.icb.commerzbank.com";
+     option routers 140.169.112.6;
+     option ntp-servers 140.169.112.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+     option netbios-name-servers 140.60.19.208, 140.13.52.210;
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# LNG03 
+subnet 140.199.190.0 netmask 255.255.255.0 {
+     option tftp-server-name "140.169.107.254";
+     filename "zitdboot";
+     next-server 140.169.107.254;
+     option broadcast-address 140.199.190.255;
+     option subnet-mask 255.255.255.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.199.190.64 140.199.190.127;
+             range 140.199.190.128 140.199.190.191;
+        }
+     option domain-name "dev.icb.commerzbank.com";
+     option routers 140.199.190.6;
+     option ntp-servers 140.199.190.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+     option netbios-name-servers 140.104.46.30, 140.104.47.30;
+}
+#

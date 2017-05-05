@@ -26,6 +26,7 @@
             "space": "dhcp4",
             "name": "domain-search",
             "code": 119,
+//          "original-data": "\"example.com\", \"example.org\"",
             "data": "example.com, example.org"
           }
         ],

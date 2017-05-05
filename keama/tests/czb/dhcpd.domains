@@ -1,0 +1,360 @@
+zone ambc.commerzbank.com. {
+        primary 11.2.2.111;
+        key dhcp;
+}
+zone backoffice.ztb.icb.commerzbank.com. {
+        primary 11.2.2.111;
+        key dhcp;
+}
+zone brzent.commerzbank.com. {
+        primary 11.2.2.111;
+        key dhcp;
+}
+zone cfm.commerzbank.com. {
+        primary 11.2.2.111;
+        key dhcp;
+}
+zone ci.icb.commerzbank.com. {
+        primary 11.2.2.111;
+        key dhcp;
+}
+zone test.commerzbank.com. {
+        primary 11.2.2.111;
+        key dhcp;
+}
+zone dhcp.test.commerzbank.com. {
+        primary 11.2.2.111;
+        key dhcp;
+}
+zone hhtanw.commerzbank.com. {
+        primary 11.2.2.111;
+        key dhcp;
+}
+zone hhtanw01.commerzbank.com. {
+        primary 11.2.2.111;
+        key dhcp;
+}
+zone hhtanw03.commerzbank.com. {
+        primary 11.2.2.111;
+        key dhcp;
+}
+zone hhtanw04.commerzbank.com. {
+        primary 11.2.2.111;
+        key dhcp;
+}
+zone hhtanw05.commerzbank.com. {
+        primary 11.2.2.111;
+        key dhcp;
+}
+zone hhtist.commerzbank.com. {
+        primary 11.2.2.111;
+        key dhcp;
+}
+zone hhtist01.commerzbank.com. {
+        primary 11.2.2.111;
+        key dhcp;
+}
+zone hhtist02.commerzbank.com. {
+        primary 11.2.2.111;
+        key dhcp;
+}
+zone hhtist03.commerzbank.com. {
+        primary 11.2.2.111;
+        key dhcp;
+}
+zone hhtist04.commerzbank.com. {
+        primary 11.2.2.111;
+        key dhcp;
+}
+zone ubs.commerzbank.com. {
+        primary 11.2.2.111;
+        key dhcp;
+}
+zone voip.commerzbank.com. {
+        primary 11.2.2.111;
+        key dhcp;
+}
+zone wie01.voip.commerzbank.com. {
+        primary 11.2.2.111;
+        key dhcp;
+}
+zone man01.voip.commerzbank.com. {
+        primary 11.2.2.111;
+        key dhcp;
+}
+zone maz01.voip.commerzbank.com. {
+        primary 11.2.2.111;
+        key dhcp;
+}
+zone dar02.voip.commerzbank.com. {
+        primary 11.2.2.111;
+        key dhcp;
+}
+zone ffm81.voip.commerzbank.com. {
+        primary 11.2.2.111;
+        key dhcp;
+}
+zone ffm82.voip.commerzbank.com. {
+        primary 11.2.2.111;
+        key dhcp;
+}
+zone ffm13.voip.commerzbank.com. {
+        primary 11.2.2.111;
+        key dhcp;
+}
+zone ffm15.voip.commerzbank.com. {
+        primary 11.2.2.111;
+        key dhcp;
+}
+zone ffm06.voip.commerzbank.com. {
+        primary 11.2.2.111;
+        key dhcp;
+}
+zone ffm04.voip.commerzbank.com. {
+        primary 11.2.2.111;
+        key dhcp;
+}
+zone vpn.commerzbank.com. {
+        primary 11.2.2.111;
+        key dhcp;
+}
+zone vs.commerzbank.com. {
+        primary 11.2.2.111;
+        key dhcp;
+}
+zone zbs.commerzbank.com. {
+        primary 11.2.2.111;
+        key dhcp;
+}
+zone zcf.commerzbank.com. {
+        primary 11.2.2.111;
+        key dhcp;
+}
+zone zcs.commerzbank.com. {
+        primary 11.2.2.111;
+        key dhcp;
+}
+zone zfc.commerzbank.com. {
+        primary 11.2.2.111;
+        key dhcp;
+}
+zone zfk.commerzbank.com. {
+        primary 11.2.2.111;
+        key dhcp;
+}
+zone zfo.commerzbank.com. {
+        primary 11.2.2.111;
+        key dhcp;
+}
+zone zib.commerzbank.com. {
+        primary 11.2.2.111;
+        key dhcp;
+}
+zone zit.commerzbank.com. {
+        primary 11.2.2.111;
+        key dhcp;
+}
+zone zitd.global.commerzbank.com. {
+        primary 11.2.2.111;
+        key dhcp;
+}
+zone zka.commerzbank.com. {
+        primary 11.2.2.111;
+        key dhcp;
+}
+zone zke.commerzbank.com. {
+        primary 11.2.2.111;
+        key dhcp;
+}
+zone zkv.commerzbank.com. {
+        primary 11.2.2.111;
+        key dhcp;
+}
+zone zpa.commerzbank.com. {
+        primary 11.2.2.111;
+        key dhcp;
+}
+zone zpk.commerzbank.com. {
+        primary 11.2.2.111;
+        key dhcp;
+}
+zone zra.commerzbank.com. {
+        primary 11.2.2.111;
+        key dhcp;
+}
+zone zrc.commerzbank.com. {
+        primary 11.2.2.111;
+        key dhcp;
+}
+zone zrev.commerzbank.com. {
+        primary 11.2.2.111;
+        key dhcp;
+}
+zone ztb.icb.commerzbank.com. {
+        primary 11.2.2.111;
+        key dhcp;
+}
+zone ztbpre.icbpre.commerzbank.com. {
+        primary 11.2.2.111;
+        key dhcp;
+}
+zone ffm81.voipt.commerzbank.com. {
+        primary 11.2.2.111;
+        key dhcp;
+}
+zone hhtanw00.commerzbank.com. {
+        primary 11.2.2.111;
+        key dhcp;
+}
+zone hhtanw02.commerzbank.com. {
+        primary 11.2.2.111;
+        key dhcp;
+}
+zone hhtist00.commerzbank.com. {
+        primary 11.2.2.111;
+        key dhcp;
+}
+zone hhtist05.commerzbank.com. {
+        primary 11.2.2.111;
+        key dhcp;
+}
+zone stu15.voip.commerzbank.com. {
+        primary 11.2.2.111;
+        key dhcp;
+}
+zone dev.icb.commerzbank.com. {
+        primary 11.2.2.111;
+        key dhcp;
+}
+zone ast01.voip.commerzbank.com. {
+        primary 11.2.2.111;
+        key dhcp;
+}
+zone bhb01.voip.commerzbank.com. {
+        primary 11.2.2.111;
+        key dhcp;
+}
+zone hbg30.voip.commerzbank.com. {
+        primary 11.2.2.111;
+        key dhcp;
+}
+zone ilm01.voip.commerzbank.com. {
+        primary 11.2.2.111;
+        key dhcp;
+}
+zone rwl01.voip.commerzbank.com. {
+        primary 11.2.2.111;
+        key dhcp;
+}
+zone pap02.voip.commerzbank.com. {
+        primary 11.2.2.111;
+        key dhcp;
+}
+zone nrd02.voip.commerzbank.com. {
+        primary 11.2.2.111;
+        key dhcp;
+}
+zone wlo01.voip.commerzbank.com. {
+        primary 11.2.2.111;
+        key dhcp;
+}
+zone lon11.voip.commerzbank.com. {
+        primary 11.2.2.111;
+        key dhcp;
+}
+zone swl01.voip.commerzbank.com. {
+        primary 11.2.2.111;
+        key dhcp;
+}
+zone bvd01.voip.commerzbank.com. {
+        primary 11.2.2.111;
+        key dhcp;
+}
+zone nom01.voip.commerzbank.com. {
+        primary 11.2.2.111;
+        key dhcp;
+}
+zone stw01.voip.commerzbank.com. {
+        primary 11.2.2.111;
+        key dhcp;
+}
+zone gra01.voip.commerzbank.com. {
+        primary 11.2.2.111;
+        key dhcp;
+}
+zone bxl01.voip.commerzbank.com. {
+        primary 11.2.2.111;
+        key dhcp;
+}
+zone ffm85.voip.commerzbank.com. {
+        primary 11.2.2.111;
+        key dhcp;
+}
+zone ffm01.voip.commerzbank.com. {
+        primary 11.2.2.111;
+        key dhcp;
+}
+zone ffm22.voip.commerzbank.com. {
+        primary 11.2.2.111;
+        key dhcp;
+}
+zone ffm14.voip.commerzbank.com. {
+        primary 11.2.2.111;
+        key dhcp;
+}
+zone ddf01.voip.commerzbank.com. {
+        primary 11.2.2.111;
+        key dhcp;
+}
+zone sgp04.voip.commerzbank.com. {
+        primary 11.2.2.111;
+        key dhcp;
+}
+zone sgp02.voip.commerzbank.com. {
+        primary 11.2.2.111;
+        key dhcp;
+}
+zone sha04.voip.commerzbank.com. {
+        primary 11.2.2.111;
+        key dhcp;
+}
+zone sgp01.voip.commerzbank.com. {
+        primary 11.2.2.111;
+        key dhcp;
+}
+zone ffm24.voip.commerzbank.com. {
+        primary 11.2.2.111;
+        key dhcp;
+}
+zone wsf02.voip.commerzbank.com. {
+        primary 11.2.2.111;
+        key dhcp;
+}
+zone ffm03.voip.commerzbank.com. {
+        primary 11.2.2.111;
+        key dhcp;
+}
+zone tij01.voip.commerzbank.com. {
+        primary 11.2.2.111;
+        key dhcp;
+}
+zone spo01.voip.commerzbank.com. {
+        primary 11.2.2.111;
+        key dhcp;
+}
+zone ffm62.voip.commerzbank.com. {
+        primary 11.2.2.111;
+        key dhcp;
+}
+zone ffm19.voip.commerzbank.com. {
+        primary 11.2.2.111;
+        key dhcp;
+}
+zone ffm91.voip.commerzbank.com. {
+        primary 11.2.2.111;
+        key dhcp;
+}
+zone ffm49.voip.commerzbank.com. {
+        primary 11.2.2.111;
+        key dhcp;
+}

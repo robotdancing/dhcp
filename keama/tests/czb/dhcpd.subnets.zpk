@@ -1,0 +1,390 @@
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM02 
+subnet 140.130.32.0 netmask 255.255.252.0 {
+     option broadcast-address 140.130.35.255;
+     option subnet-mask 255.255.252.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.130.33.1 140.130.33.254;
+             range 140.130.34.1 140.130.34.254;
+        }
+     option domain-name "zpk.commerzbank.com";
+     option routers 140.130.32.6;
+     option ntp-servers 140.130.32.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+     option netbios-name-servers 140.131.11.3, 140.131.11.4;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.15.248.57;
+     option tftp-server-name "140.15.248.57";
+     next-server 140.15.248.57;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8c:0f:f8:39:09:18:ff:f0:15:4e:65:74:53:75:70:70:6f:72:74:42:6f:6f:74:43:6f:6e:74:72:6f:6c:0a:04:00:41:41:41:47:03:00:00:00:ff;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8c:0f:f8:39:07:d0;
+     log (info, "*****_____ Matched PXE zpk Netz 140.130.32.0/255.255.252.0 _____*****");
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM02 
+subnet 140.201.16.0 netmask 255.255.252.0 {
+     option broadcast-address 140.201.19.255;
+     option subnet-mask 255.255.252.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.201.17.1 140.201.17.254;
+             range 140.201.18.1 140.201.18.254;
+        }
+     option domain-name "zpk.commerzbank.com";
+     option routers 140.201.16.6;
+     option ntp-servers 140.201.16.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+     option netbios-name-servers 140.131.11.3, 140.131.11.4;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.15.248.57;
+     option tftp-server-name "140.15.248.57";
+     next-server 140.15.248.57;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8c:0f:f8:39:09:18:ff:f0:15:4e:65:74:53:75:70:70:6f:72:74:42:6f:6f:74:43:6f:6e:74:72:6f:6c:0a:04:00:41:41:41:47:03:00:00:00:ff;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8c:0f:f8:39:07:d0;
+     log (info, "*****_____ Matched PXE zpk Netz 140.201.16.0/255.255.252.0 _____*****");
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM02 
+subnet 140.202.16.0 netmask 255.255.252.0 {
+     option broadcast-address 140.202.19.255;
+     option subnet-mask 255.255.252.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.202.17.1 140.202.17.254;
+             range 140.202.18.1 140.202.18.254;
+        }
+     option domain-name "zpk.commerzbank.com";
+     option routers 140.202.16.6;
+     option ntp-servers 140.202.16.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+     option netbios-name-servers 140.131.11.3, 140.131.11.4;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.15.248.57;
+     option tftp-server-name "140.15.248.57";
+     next-server 140.15.248.57;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8c:0f:f8:39:09:18:ff:f0:15:4e:65:74:53:75:70:70:6f:72:74:42:6f:6f:74:43:6f:6e:74:72:6f:6c:0a:04:00:41:41:41:47:03:00:00:00:ff;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8c:0f:f8:39:07:d0;
+     log (info, "*****_____ Matched PXE zpk Netz 140.202.16.0/255.255.252.0 _____*****");
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM02 
+subnet 140.203.16.0 netmask 255.255.252.0 {
+     option broadcast-address 140.203.19.255;
+     option subnet-mask 255.255.252.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.203.17.1 140.203.17.254;
+             range 140.203.18.1 140.203.18.254;
+        }
+     option domain-name "zpk.commerzbank.com";
+     option routers 140.203.16.6;
+     option ntp-servers 140.203.16.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+     option netbios-name-servers 140.131.11.3, 140.131.11.4;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.15.248.57;
+     option tftp-server-name "140.15.248.57";
+     next-server 140.15.248.57;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8c:0f:f8:39:09:18:ff:f0:15:4e:65:74:53:75:70:70:6f:72:74:42:6f:6f:74:43:6f:6e:74:72:6f:6c:0a:04:00:41:41:41:47:03:00:00:00:ff;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8c:0f:f8:39:07:d0;
+     log (info, "*****_____ Matched PXE zpk Netz 140.203.16.0/255.255.252.0 _____*****");
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM02 
+subnet 140.204.16.0 netmask 255.255.252.0 {
+     option broadcast-address 140.204.19.255;
+     option subnet-mask 255.255.252.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.204.17.1 140.204.17.254;
+             range 140.204.18.1 140.204.18.254;
+        }
+     option domain-name "zpk.commerzbank.com";
+     option routers 140.204.16.6;
+     option ntp-servers 140.204.16.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+     option netbios-name-servers 140.131.11.3, 140.131.11.4;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.15.248.57;
+     option tftp-server-name "140.15.248.57";
+     next-server 140.15.248.57;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8c:0f:f8:39:09:18:ff:f0:15:4e:65:74:53:75:70:70:6f:72:74:42:6f:6f:74:43:6f:6e:74:72:6f:6c:0a:04:00:41:41:41:47:03:00:00:00:ff;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8c:0f:f8:39:07:d0;
+     log (info, "*****_____ Matched PXE zpk Netz 140.204.16.0/255.255.252.0 _____*****");
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM02 
+subnet 140.205.16.0 netmask 255.255.252.0 {
+     option broadcast-address 140.205.19.255;
+     option subnet-mask 255.255.252.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.205.17.1 140.205.17.254;
+             range 140.205.18.1 140.205.18.254;
+        }
+     option domain-name "zpk.commerzbank.com";
+     option routers 140.205.16.6;
+     option ntp-servers 140.205.16.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+     option netbios-name-servers 140.131.11.3, 140.131.11.4;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.15.248.57;
+     option tftp-server-name "140.15.248.57";
+     next-server 140.15.248.57;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8c:0f:f8:39:09:18:ff:f0:15:4e:65:74:53:75:70:70:6f:72:74:42:6f:6f:74:43:6f:6e:74:72:6f:6c:0a:04:00:41:41:41:47:03:00:00:00:ff;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8c:0f:f8:39:07:d0;
+     log (info, "*****_____ Matched PXE zpk Netz 140.205.16.0/255.255.252.0 _____*****");
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM02 
+subnet 140.207.16.0 netmask 255.255.252.0 {
+     option broadcast-address 140.207.19.255;
+     option subnet-mask 255.255.252.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.207.17.1 140.207.17.254;
+             range 140.207.18.1 140.207.18.254;
+        }
+     option domain-name "zpk.commerzbank.com";
+     option routers 140.207.16.6;
+     option ntp-servers 140.207.16.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+     option netbios-name-servers 140.131.11.3, 140.131.11.4;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.15.248.57;
+     option tftp-server-name "140.15.248.57";
+     next-server 140.15.248.57;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8c:0f:f8:39:09:18:ff:f0:15:4e:65:74:53:75:70:70:6f:72:74:42:6f:6f:74:43:6f:6e:74:72:6f:6c:0a:04:00:41:41:41:47:03:00:00:00:ff;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8c:0f:f8:39:07:d0;
+     log (info, "*****_____ Matched PXE zpk Netz 140.207.16.0/255.255.252.0 _____*****");
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM02 
+subnet 140.208.16.0 netmask 255.255.252.0 {
+     option broadcast-address 140.208.19.255;
+     option subnet-mask 255.255.252.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.208.17.1 140.208.17.254;
+             range 140.208.18.1 140.208.18.254;
+        }
+     option domain-name "zpk.commerzbank.com";
+     option routers 140.208.16.6;
+     option ntp-servers 140.208.16.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+     option netbios-name-servers 140.131.11.3, 140.131.11.4;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.15.248.57;
+     option tftp-server-name "140.15.248.57";
+     next-server 140.15.248.57;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8c:0f:f8:39:09:18:ff:f0:15:4e:65:74:53:75:70:70:6f:72:74:42:6f:6f:74:43:6f:6e:74:72:6f:6c:0a:04:00:41:41:41:47:03:00:00:00:ff;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8c:0f:f8:39:07:d0;
+     log (info, "*****_____ Matched PXE zpk Netz 140.208.16.0/255.255.252.0 _____*****");
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM02 
+subnet 140.209.16.0 netmask 255.255.252.0 {
+     option broadcast-address 140.209.19.255;
+     option subnet-mask 255.255.252.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.209.17.1 140.209.17.254;
+             range 140.209.18.1 140.209.18.254;
+        }
+     option domain-name "zpk.commerzbank.com";
+     option routers 140.209.16.6;
+     option ntp-servers 140.209.16.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+     option netbios-name-servers 140.131.11.3, 140.131.11.4;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.15.248.57;
+     option tftp-server-name "140.15.248.57";
+     next-server 140.15.248.57;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8c:0f:f8:39:09:18:ff:f0:15:4e:65:74:53:75:70:70:6f:72:74:42:6f:6f:74:43:6f:6e:74:72:6f:6c:0a:04:00:41:41:41:47:03:00:00:00:ff;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8c:0f:f8:39:07:d0;
+     log (info, "*****_____ Matched PXE zpk Netz 140.209.16.0/255.255.252.0 _____*****");
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM02 
+subnet 140.210.16.0 netmask 255.255.252.0 {
+     option broadcast-address 140.210.19.255;
+     option subnet-mask 255.255.252.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.210.17.1 140.210.17.254;
+             range 140.210.18.1 140.210.18.254;
+        }
+     option domain-name "zpk.commerzbank.com";
+     option routers 140.210.16.6;
+     option ntp-servers 140.210.16.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+     option netbios-name-servers 140.131.11.3, 140.131.11.4;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.15.248.57;
+     option tftp-server-name "140.15.248.57";
+     next-server 140.15.248.57;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8c:0f:f8:39:09:18:ff:f0:15:4e:65:74:53:75:70:70:6f:72:74:42:6f:6f:74:43:6f:6e:74:72:6f:6c:0a:04:00:41:41:41:47:03:00:00:00:ff;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8c:0f:f8:39:07:d0;
+     log (info, "*****_____ Matched PXE zpk Netz 140.210.16.0/255.255.252.0 _____*****");
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM02 
+subnet 140.211.16.0 netmask 255.255.252.0 {
+     option broadcast-address 140.211.19.255;
+     option subnet-mask 255.255.252.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.211.17.1 140.211.17.254;
+             range 140.211.18.1 140.211.18.254;
+        }
+     option domain-name "zpk.commerzbank.com";
+     option routers 140.211.16.6;
+     option ntp-servers 140.211.16.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+     option netbios-name-servers 140.131.11.3, 140.131.11.4;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.15.248.57;
+     option tftp-server-name "140.15.248.57";
+     next-server 140.15.248.57;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8c:0f:f8:39:09:18:ff:f0:15:4e:65:74:53:75:70:70:6f:72:74:42:6f:6f:74:43:6f:6e:74:72:6f:6c:0a:04:00:41:41:41:47:03:00:00:00:ff;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8c:0f:f8:39:07:d0;
+     log (info, "*****_____ Matched PXE zpk Netz 140.211.16.0/255.255.252.0 _____*****");
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM02 
+subnet 140.212.16.0 netmask 255.255.252.0 {
+     option broadcast-address 140.212.19.255;
+     option subnet-mask 255.255.252.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.212.17.1 140.212.17.254;
+             range 140.212.18.1 140.212.18.254;
+        }
+     option domain-name "zpk.commerzbank.com";
+     option routers 140.212.16.6;
+     option ntp-servers 140.212.16.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+     option netbios-name-servers 140.131.11.3, 140.131.11.4;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.15.248.57;
+     option tftp-server-name "140.15.248.57";
+     next-server 140.15.248.57;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8c:0f:f8:39:09:18:ff:f0:15:4e:65:74:53:75:70:70:6f:72:74:42:6f:6f:74:43:6f:6e:74:72:6f:6c:0a:04:00:41:41:41:47:03:00:00:00:ff;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8c:0f:f8:39:07:d0;
+     log (info, "*****_____ Matched PXE zpk Netz 140.212.16.0/255.255.252.0 _____*****");
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM02 
+subnet 140.213.16.0 netmask 255.255.252.0 {
+     option broadcast-address 140.213.19.255;
+     option subnet-mask 255.255.252.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.213.17.1 140.213.17.254;
+             range 140.213.18.1 140.213.18.254;
+        }
+     option domain-name "zpk.commerzbank.com";
+     option routers 140.213.16.6;
+     option ntp-servers 140.213.16.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+     option netbios-name-servers 140.131.11.3, 140.131.11.4;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.15.248.57;
+     option tftp-server-name "140.15.248.57";
+     next-server 140.15.248.57;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8c:0f:f8:39:09:18:ff:f0:15:4e:65:74:53:75:70:70:6f:72:74:42:6f:6f:74:43:6f:6e:74:72:6f:6c:0a:04:00:41:41:41:47:03:00:00:00:ff;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8c:0f:f8:39:07:d0;
+     log (info, "*****_____ Matched PXE zpk Netz 140.213.16.0/255.255.252.0 _____*****");
+   }
+}
+#

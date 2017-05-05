@@ -198,11 +198,22 @@ makeStringExt(int l, const char *s, char fmt)
 	}
 
 	case 'I': {
-		/* IPv4 address */
+		/* IPv4 address to text */
 		char buf[40 /* INET_ADDRSTRLEN == 26 */]; 
 
 		assert(l > 3);
 		assert(inet_ntop(AF_INET, s, buf, sizeof(buf)) != NULL);
+		return makeString(-1, buf);
+	}
+
+	case 'i': {
+		/* IPv4 address to hexa */
+		uint8_t a[4];
+		char buf[10];
+
+		assert(inet_pton(AF_INET, s, a) == 1);
+		snprintf(buf, sizeof(buf), "%02hhx%02hhx%02hhx%02hhx",
+			 a[0], a[1], a[2], a[3]);
 		return makeString(-1, buf);
 	}
 
@@ -213,6 +224,39 @@ makeStringExt(int l, const char *s, char fmt)
 		assert(l > 15);
 		assert(inet_ntop(AF_INET6, s, buf, sizeof(buf)) != NULL);
 		return makeString(-1, buf);
+	}
+
+	case 'd': {
+		/* FQDN to DNS wire format */
+		struct string *result;
+		const char *p;
+		const char *dot;
+		char ll;
+
+		assert(s[l] == '0');
+
+		result = allocString();
+		p = s;
+		while ((dot = strchr(p, '.')) != NULL) {
+			int len;
+
+			len = dot - p - 1;
+			if ((len & 0xc0) != 0)
+				return NULL;
+			if (dot - s >= l)
+				return NULL;
+			ll = len & 0x3f;
+			concatString(result, makeString(1, &ll));
+			concatString(result, makeString(len, p));
+			p = dot + 1;
+			if (p - s == l)
+				break;
+		}
+		if (dot == NULL) {
+			ll = 0;
+			concatString(result, makeString(1, &ll));
+		}
+		return result;
 	}
 
 	default:

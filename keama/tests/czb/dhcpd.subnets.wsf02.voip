@@ -1,0 +1,23 @@
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# WSF02 
+subnet 145.90.130.0 netmask 255.255.255.0 {
+     option broadcast-address 145.90.130.255;
+     option subnet-mask 255.255.255.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 145.90.130.64 145.90.130.127;
+             range 145.90.130.128 145.90.130.191;
+        }
+     option domain-name "wsf02.voip.commerzbank.com";
+     option routers 145.90.130.6;
+     option ntp-servers 145.90.130.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+   if substring (option vendor-class-identifier, 0, 11) = "OptiIpPhone" {
+     option vendor-encapsulated-options 01:07:53:69:65:6D:65:6E:73:03:19:73:64:6c:70:3a:2f:2f:31:34:30:2e:31:37:2e:31:35:2e:31:30:3a:31:38:34:34:33;
+     log (info, "*****_____ SIEMENS IP-Phone wsf02.voip DLS2 Netz 145.90.130.0/255.255.255.0 _____*****");
+   }
+}
+#

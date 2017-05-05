@@ -1,0 +1,635 @@
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM80 
+subnet 140.15.179.0 netmask 255.255.255.0 {
+     option broadcast-address 140.15.179.255;
+     option subnet-mask 255.255.255.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.15.179.64 140.15.179.127;
+             range 140.15.179.128 140.15.179.191;
+        }
+     option domain-name "ffm85.voip.commerzbank.com";
+     option routers 140.15.179.6;
+     option ntp-servers 140.15.179.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+   if substring (option vendor-class-identifier, 0, 11) = "OptiIpPhone" {
+     option vendor-encapsulated-options 01:07:53:69:65:6D:65:6E:73:03:19:73:64:6c:70:3a:2f:2f:31:34:30:2e:31:37:2e:31:35:2e:31:30:3a:31:38:34:34:33;
+     log (info, "*****_____ SIEMENS IP-Phone ffm85.voip DLS2 Netz 140.15.179.0/255.255.255.0 _____*****");
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM80 
+subnet 140.15.180.0 netmask 255.255.255.0 {
+     option broadcast-address 140.15.180.255;
+     option subnet-mask 255.255.255.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.15.180.64 140.15.180.127;
+             range 140.15.180.128 140.15.180.191;
+        }
+     option domain-name "ffm85.voip.commerzbank.com";
+     option routers 140.15.180.6;
+     option ntp-servers 140.15.180.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+   if substring (option vendor-class-identifier, 0, 11) = "OptiIpPhone" {
+     option vendor-encapsulated-options 01:07:53:69:65:6D:65:6E:73:03:19:73:64:6c:70:3a:2f:2f:31:34:30:2e:31:37:2e:31:35:2e:31:30:3a:31:38:34:34:33;
+     log (info, "*****_____ SIEMENS IP-Phone ffm85.voip DLS2 Netz 140.15.180.0/255.255.255.0 _____*****");
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM80 
+subnet 140.15.181.0 netmask 255.255.255.0 {
+     option broadcast-address 140.15.181.255;
+     option subnet-mask 255.255.255.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.15.181.64 140.15.181.127;
+             range 140.15.181.128 140.15.181.191;
+        }
+     option domain-name "ffm85.voip.commerzbank.com";
+     option routers 140.15.181.6;
+     option ntp-servers 140.15.181.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+   if substring (option vendor-class-identifier, 0, 11) = "OptiIpPhone" {
+     option vendor-encapsulated-options 01:07:53:69:65:6D:65:6E:73:03:19:73:64:6c:70:3a:2f:2f:31:34:30:2e:31:37:2e:31:35:2e:31:30:3a:31:38:34:34:33;
+     log (info, "*****_____ SIEMENS IP-Phone ffm85.voip DLS2 Netz 140.15.181.0/255.255.255.0 _____*****");
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM80 
+subnet 140.15.182.0 netmask 255.255.255.0 {
+     option broadcast-address 140.15.182.255;
+     option subnet-mask 255.255.255.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.15.182.64 140.15.182.127;
+             range 140.15.182.128 140.15.182.191;
+        }
+     option domain-name "ffm85.voip.commerzbank.com";
+     option routers 140.15.182.6;
+     option ntp-servers 140.15.182.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+   if substring (option vendor-class-identifier, 0, 11) = "OptiIpPhone" {
+     option vendor-encapsulated-options 01:07:53:69:65:6D:65:6E:73:03:19:73:64:6c:70:3a:2f:2f:31:34:30:2e:31:37:2e:31:35:2e:31:30:3a:31:38:34:34:33;
+     log (info, "*****_____ SIEMENS IP-Phone ffm85.voip DLS2 Netz 140.15.182.0/255.255.255.0 _____*****");
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM80 
+subnet 140.15.183.0 netmask 255.255.255.0 {
+     option broadcast-address 140.15.183.255;
+     option subnet-mask 255.255.255.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.15.183.64 140.15.183.127;
+             range 140.15.183.128 140.15.183.191;
+        }
+     option domain-name "ffm85.voip.commerzbank.com";
+     option routers 140.15.183.6;
+     option ntp-servers 140.15.183.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+   if substring (option vendor-class-identifier, 0, 11) = "OptiIpPhone" {
+     option vendor-encapsulated-options 01:07:53:69:65:6D:65:6E:73:03:19:73:64:6c:70:3a:2f:2f:31:34:30:2e:31:37:2e:31:35:2e:31:30:3a:31:38:34:34:33;
+     log (info, "*****_____ SIEMENS IP-Phone ffm85.voip DLS2 Netz 140.15.183.0/255.255.255.0 _____*****");
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM80 
+subnet 140.15.184.0 netmask 255.255.255.0 {
+     option broadcast-address 140.15.184.255;
+     option subnet-mask 255.255.255.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.15.184.64 140.15.184.127;
+             range 140.15.184.128 140.15.184.191;
+        }
+     option domain-name "ffm85.voip.commerzbank.com";
+     option routers 140.15.184.6;
+     option ntp-servers 140.15.184.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+   if substring (option vendor-class-identifier, 0, 11) = "OptiIpPhone" {
+     option vendor-encapsulated-options 01:07:53:69:65:6D:65:6E:73:03:19:73:64:6c:70:3a:2f:2f:31:34:30:2e:31:37:2e:31:35:2e:31:30:3a:31:38:34:34:33;
+     log (info, "*****_____ SIEMENS IP-Phone ffm85.voip DLS2 Netz 140.15.184.0/255.255.255.0 _____*****");
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM80 
+subnet 140.15.185.0 netmask 255.255.255.0 {
+     option broadcast-address 140.15.185.255;
+     option subnet-mask 255.255.255.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.15.185.64 140.15.185.127;
+             range 140.15.185.128 140.15.185.191;
+        }
+     option domain-name "ffm85.voip.commerzbank.com";
+     option routers 140.15.185.6;
+     option ntp-servers 140.15.185.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+   if substring (option vendor-class-identifier, 0, 11) = "OptiIpPhone" {
+     option vendor-encapsulated-options 01:07:53:69:65:6D:65:6E:73:03:19:73:64:6c:70:3a:2f:2f:31:34:30:2e:31:37:2e:31:35:2e:31:30:3a:31:38:34:34:33;
+     log (info, "*****_____ SIEMENS IP-Phone ffm85.voip DLS2 Netz 140.15.185.0/255.255.255.0 _____*****");
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM80 
+subnet 140.15.186.0 netmask 255.255.255.0 {
+     option broadcast-address 140.15.186.255;
+     option subnet-mask 255.255.255.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.15.186.64 140.15.186.127;
+             range 140.15.186.128 140.15.186.191;
+        }
+     option domain-name "ffm85.voip.commerzbank.com";
+     option routers 140.15.186.6;
+     option ntp-servers 140.15.186.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+   if substring (option vendor-class-identifier, 0, 11) = "OptiIpPhone" {
+     option vendor-encapsulated-options 01:07:53:69:65:6D:65:6E:73:03:19:73:64:6c:70:3a:2f:2f:31:34:30:2e:31:37:2e:31:35:2e:31:30:3a:31:38:34:34:33;
+     log (info, "*****_____ SIEMENS IP-Phone ffm85.voip DLS2 Netz 140.15.186.0/255.255.255.0 _____*****");
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM80 
+subnet 140.15.187.0 netmask 255.255.255.0 {
+     option broadcast-address 140.15.187.255;
+     option subnet-mask 255.255.255.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.15.187.64 140.15.187.127;
+             range 140.15.187.128 140.15.187.191;
+        }
+     option domain-name "ffm85.voip.commerzbank.com";
+     option routers 140.15.187.6;
+     option ntp-servers 140.15.187.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+   if substring (option vendor-class-identifier, 0, 11) = "OptiIpPhone" {
+     option vendor-encapsulated-options 01:07:53:69:65:6D:65:6E:73:03:19:73:64:6c:70:3a:2f:2f:31:34:30:2e:31:37:2e:31:35:2e:31:30:3a:31:38:34:34:33;
+     log (info, "*****_____ SIEMENS IP-Phone ffm85.voip DLS2 Netz 140.15.187.0/255.255.255.0 _____*****");
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM80 
+subnet 140.15.188.0 netmask 255.255.255.0 {
+     option broadcast-address 140.15.188.255;
+     option subnet-mask 255.255.255.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.15.188.64 140.15.188.127;
+             range 140.15.188.128 140.15.188.191;
+        }
+     option domain-name "ffm85.voip.commerzbank.com";
+     option routers 140.15.188.6;
+     option ntp-servers 140.15.188.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+   if substring (option vendor-class-identifier, 0, 11) = "OptiIpPhone" {
+     option vendor-encapsulated-options 01:07:53:69:65:6D:65:6E:73:03:19:73:64:6c:70:3a:2f:2f:31:34:30:2e:31:37:2e:31:35:2e:31:30:3a:31:38:34:34:33;
+     log (info, "*****_____ SIEMENS IP-Phone ffm85.voip DLS2 Netz 140.15.188.0/255.255.255.0 _____*****");
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM80 
+subnet 140.15.189.0 netmask 255.255.255.0 {
+     option broadcast-address 140.15.189.255;
+     option subnet-mask 255.255.255.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.15.189.64 140.15.189.127;
+             range 140.15.189.128 140.15.189.191;
+        }
+     option domain-name "ffm85.voip.commerzbank.com";
+     option routers 140.15.189.6;
+     option ntp-servers 140.15.189.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+   if substring (option vendor-class-identifier, 0, 11) = "OptiIpPhone" {
+     option vendor-encapsulated-options 01:07:53:69:65:6D:65:6E:73:03:19:73:64:6c:70:3a:2f:2f:31:34:30:2e:31:37:2e:31:35:2e:31:30:3a:31:38:34:34:33;
+     log (info, "*****_____ SIEMENS IP-Phone ffm85.voip DLS2 Netz 140.15.189.0/255.255.255.0 _____*****");
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM80 
+subnet 140.15.190.0 netmask 255.255.255.0 {
+     option broadcast-address 140.15.190.255;
+     option subnet-mask 255.255.255.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.15.190.64 140.15.190.127;
+             range 140.15.190.128 140.15.190.191;
+        }
+     option domain-name "ffm85.voip.commerzbank.com";
+     option routers 140.15.190.6;
+     option ntp-servers 140.15.190.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+   if substring (option vendor-class-identifier, 0, 11) = "OptiIpPhone" {
+     option vendor-encapsulated-options 01:07:53:69:65:6D:65:6E:73:03:19:73:64:6c:70:3a:2f:2f:31:34:30:2e:31:37:2e:31:35:2e:31:30:3a:31:38:34:34:33;
+     log (info, "*****_____ SIEMENS IP-Phone ffm85.voip DLS2 Netz 140.15.190.0/255.255.255.0 _____*****");
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM80 
+subnet 140.15.191.0 netmask 255.255.255.0 {
+     option broadcast-address 140.15.191.255;
+     option subnet-mask 255.255.255.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.15.191.64 140.15.191.127;
+             range 140.15.191.128 140.15.191.191;
+        }
+     option domain-name "ffm85.voip.commerzbank.com";
+     option routers 140.15.191.6;
+     option ntp-servers 140.15.191.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+   if substring (option vendor-class-identifier, 0, 11) = "OptiIpPhone" {
+     option vendor-encapsulated-options 01:07:53:69:65:6D:65:6E:73:03:19:73:64:6c:70:3a:2f:2f:31:34:30:2e:31:37:2e:31:35:2e:31:30:3a:31:38:34:34:33;
+     log (info, "*****_____ SIEMENS IP-Phone ffm85.voip DLS2 Netz 140.15.191.0/255.255.255.0 _____*****");
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM80 
+subnet 140.15.192.0 netmask 255.255.255.0 {
+     option broadcast-address 140.15.192.255;
+     option subnet-mask 255.255.255.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.15.192.64 140.15.192.127;
+             range 140.15.192.128 140.15.192.191;
+        }
+     option domain-name "ffm85.voip.commerzbank.com";
+     option routers 140.15.192.6;
+     option ntp-servers 140.15.192.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+   if substring (option vendor-class-identifier, 0, 11) = "OptiIpPhone" {
+     option vendor-encapsulated-options 01:07:53:69:65:6D:65:6E:73:03:19:73:64:6c:70:3a:2f:2f:31:34:30:2e:31:37:2e:31:35:2e:31:30:3a:31:38:34:34:33;
+     log (info, "*****_____ SIEMENS IP-Phone ffm85.voip DLS2 Netz 140.15.192.0/255.255.255.0 _____*****");
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM80 
+subnet 140.15.193.0 netmask 255.255.255.0 {
+     option broadcast-address 140.15.193.255;
+     option subnet-mask 255.255.255.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.15.193.64 140.15.193.127;
+             range 140.15.193.128 140.15.193.191;
+        }
+     option domain-name "ffm85.voip.commerzbank.com";
+     option routers 140.15.193.6;
+     option ntp-servers 140.15.193.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+   if substring (option vendor-class-identifier, 0, 11) = "OptiIpPhone" {
+     option vendor-encapsulated-options 01:07:53:69:65:6D:65:6E:73:03:19:73:64:6c:70:3a:2f:2f:31:34:30:2e:31:37:2e:31:35:2e:31:30:3a:31:38:34:34:33;
+     log (info, "*****_____ SIEMENS IP-Phone ffm85.voip DLS2 Netz 140.15.193.0/255.255.255.0 _____*****");
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM80 
+subnet 140.15.194.0 netmask 255.255.255.0 {
+     option broadcast-address 140.15.194.255;
+     option subnet-mask 255.255.255.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.15.194.64 140.15.194.127;
+             range 140.15.194.128 140.15.194.191;
+        }
+     option domain-name "ffm85.voip.commerzbank.com";
+     option routers 140.15.194.6;
+     option ntp-servers 140.15.194.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+   if substring (option vendor-class-identifier, 0, 11) = "OptiIpPhone" {
+     option vendor-encapsulated-options 01:07:53:69:65:6D:65:6E:73:03:19:73:64:6c:70:3a:2f:2f:31:34:30:2e:31:37:2e:31:35:2e:31:30:3a:31:38:34:34:33;
+     log (info, "*****_____ SIEMENS IP-Phone ffm85.voip DLS2 Netz 140.15.194.0/255.255.255.0 _____*****");
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM80 
+subnet 140.15.195.0 netmask 255.255.255.0 {
+     option broadcast-address 140.15.195.255;
+     option subnet-mask 255.255.255.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.15.195.64 140.15.195.127;
+             range 140.15.195.128 140.15.195.191;
+        }
+     option domain-name "ffm85.voip.commerzbank.com";
+     option routers 140.15.195.6;
+     option ntp-servers 140.15.195.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+   if substring (option vendor-class-identifier, 0, 11) = "OptiIpPhone" {
+     option vendor-encapsulated-options 01:07:53:69:65:6D:65:6E:73:03:19:73:64:6c:70:3a:2f:2f:31:34:30:2e:31:37:2e:31:35:2e:31:30:3a:31:38:34:34:33;
+     log (info, "*****_____ SIEMENS IP-Phone ffm85.voip DLS2 Netz 140.15.195.0/255.255.255.0 _____*****");
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM80 
+subnet 140.15.196.0 netmask 255.255.255.0 {
+     option broadcast-address 140.15.196.255;
+     option subnet-mask 255.255.255.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.15.196.64 140.15.196.127;
+             range 140.15.196.128 140.15.196.191;
+        }
+     option domain-name "ffm85.voip.commerzbank.com";
+     option routers 140.15.196.6;
+     option ntp-servers 140.15.196.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+   if substring (option vendor-class-identifier, 0, 11) = "OptiIpPhone" {
+     option vendor-encapsulated-options 01:07:53:69:65:6D:65:6E:73:03:19:73:64:6c:70:3a:2f:2f:31:34:30:2e:31:37:2e:31:35:2e:31:30:3a:31:38:34:34:33;
+     log (info, "*****_____ SIEMENS IP-Phone ffm85.voip DLS2 Netz 140.15.196.0/255.255.255.0 _____*****");
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM80 
+subnet 140.15.197.0 netmask 255.255.255.0 {
+     option broadcast-address 140.15.197.255;
+     option subnet-mask 255.255.255.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.15.197.64 140.15.197.127;
+             range 140.15.197.128 140.15.197.191;
+        }
+     option domain-name "ffm85.voip.commerzbank.com";
+     option routers 140.15.197.6;
+     option ntp-servers 140.15.197.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+   if substring (option vendor-class-identifier, 0, 11) = "OptiIpPhone" {
+     option vendor-encapsulated-options 01:07:53:69:65:6D:65:6E:73:03:19:73:64:6c:70:3a:2f:2f:31:34:30:2e:31:37:2e:31:35:2e:31:30:3a:31:38:34:34:33;
+     log (info, "*****_____ SIEMENS IP-Phone ffm85.voip DLS2 Netz 140.15.197.0/255.255.255.0 _____*****");
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM80 
+subnet 140.15.198.0 netmask 255.255.255.0 {
+     option broadcast-address 140.15.198.255;
+     option subnet-mask 255.255.255.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.15.198.64 140.15.198.127;
+             range 140.15.198.128 140.15.198.191;
+        }
+     option domain-name "ffm85.voip.commerzbank.com";
+     option routers 140.15.198.6;
+     option ntp-servers 140.15.198.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+   if substring (option vendor-class-identifier, 0, 11) = "OptiIpPhone" {
+     option vendor-encapsulated-options 01:07:53:69:65:6D:65:6E:73:03:19:73:64:6c:70:3a:2f:2f:31:34:30:2e:31:37:2e:31:35:2e:31:30:3a:31:38:34:34:33;
+     log (info, "*****_____ SIEMENS IP-Phone ffm85.voip DLS2 Netz 140.15.198.0/255.255.255.0 _____*****");
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM80 
+subnet 140.15.199.0 netmask 255.255.255.0 {
+     option broadcast-address 140.15.199.255;
+     option subnet-mask 255.255.255.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.15.199.64 140.15.199.127;
+             range 140.15.199.128 140.15.199.191;
+        }
+     option domain-name "ffm85.voip.commerzbank.com";
+     option routers 140.15.199.6;
+     option ntp-servers 140.15.199.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+   if substring (option vendor-class-identifier, 0, 11) = "OptiIpPhone" {
+     option vendor-encapsulated-options 01:07:53:69:65:6D:65:6E:73:03:19:73:64:6c:70:3a:2f:2f:31:34:30:2e:31:37:2e:31:35:2e:31:30:3a:31:38:34:34:33;
+     log (info, "*****_____ SIEMENS IP-Phone ffm85.voip DLS2 Netz 140.15.199.0/255.255.255.0 _____*****");
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM80 
+subnet 140.15.200.0 netmask 255.255.255.0 {
+     option broadcast-address 140.15.200.255;
+     option subnet-mask 255.255.255.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.15.200.64 140.15.200.127;
+             range 140.15.200.128 140.15.200.191;
+        }
+     option domain-name "ffm85.voip.commerzbank.com";
+     option routers 140.15.200.6;
+     option ntp-servers 140.15.200.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+   if substring (option vendor-class-identifier, 0, 11) = "OptiIpPhone" {
+     option vendor-encapsulated-options 01:07:53:69:65:6D:65:6E:73:03:19:73:64:6c:70:3a:2f:2f:31:34:30:2e:31:37:2e:31:35:2e:31:30:3a:31:38:34:34:33;
+     log (info, "*****_____ SIEMENS IP-Phone ffm85.voip DLS2 Netz 140.15.200.0/255.255.255.0 _____*****");
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM80 
+subnet 140.15.201.0 netmask 255.255.255.0 {
+     option broadcast-address 140.15.201.255;
+     option subnet-mask 255.255.255.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.15.201.64 140.15.201.127;
+             range 140.15.201.128 140.15.201.191;
+        }
+     option domain-name "ffm85.voip.commerzbank.com";
+     option routers 140.15.201.6;
+     option ntp-servers 140.15.201.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+   if substring (option vendor-class-identifier, 0, 11) = "OptiIpPhone" {
+     option vendor-encapsulated-options 01:07:53:69:65:6D:65:6E:73:03:19:73:64:6c:70:3a:2f:2f:31:34:30:2e:31:37:2e:31:35:2e:31:30:3a:31:38:34:34:33;
+     log (info, "*****_____ SIEMENS IP-Phone ffm85.voip DLS2 Netz 140.15.201.0/255.255.255.0 _____*****");
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM80 
+subnet 140.15.202.0 netmask 255.255.255.0 {
+     option broadcast-address 140.15.202.255;
+     option subnet-mask 255.255.255.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.15.202.64 140.15.202.127;
+             range 140.15.202.128 140.15.202.191;
+        }
+     option domain-name "ffm85.voip.commerzbank.com";
+     option routers 140.15.202.6;
+     option ntp-servers 140.15.202.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+   if substring (option vendor-class-identifier, 0, 11) = "OptiIpPhone" {
+     option vendor-encapsulated-options 01:07:53:69:65:6D:65:6E:73:03:19:73:64:6c:70:3a:2f:2f:31:34:30:2e:31:37:2e:31:35:2e:31:30:3a:31:38:34:34:33;
+     log (info, "*****_____ SIEMENS IP-Phone ffm85.voip DLS2 Netz 140.15.202.0/255.255.255.0 _____*****");
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM80 
+subnet 140.15.203.0 netmask 255.255.255.0 {
+     option broadcast-address 140.15.203.255;
+     option subnet-mask 255.255.255.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.15.203.64 140.15.203.127;
+             range 140.15.203.128 140.15.203.191;
+        }
+     option domain-name "ffm85.voip.commerzbank.com";
+     option routers 140.15.203.6;
+     option ntp-servers 140.15.203.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+   if substring (option vendor-class-identifier, 0, 11) = "OptiIpPhone" {
+     option vendor-encapsulated-options 01:07:53:69:65:6D:65:6E:73:03:19:73:64:6c:70:3a:2f:2f:31:34:30:2e:31:37:2e:31:35:2e:31:30:3a:31:38:34:34:33;
+     log (info, "*****_____ SIEMENS IP-Phone ffm85.voip DLS2 Netz 140.15.203.0/255.255.255.0 _____*****");
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM80 
+subnet 140.15.204.0 netmask 255.255.255.0 {
+     option broadcast-address 140.15.204.255;
+     option subnet-mask 255.255.255.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.15.204.64 140.15.204.127;
+             range 140.15.204.128 140.15.204.191;
+        }
+     option domain-name "ffm85.voip.commerzbank.com";
+     option routers 140.15.204.6;
+     option ntp-servers 140.15.204.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+   if substring (option vendor-class-identifier, 0, 11) = "OptiIpPhone" {
+     option vendor-encapsulated-options 01:07:53:69:65:6D:65:6E:73:03:19:73:64:6c:70:3a:2f:2f:31:34:30:2e:31:37:2e:31:35:2e:31:30:3a:31:38:34:34:33;
+     log (info, "*****_____ SIEMENS IP-Phone ffm85.voip DLS2 Netz 140.15.204.0/255.255.255.0 _____*****");
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1244108151
+# FFM80 
+subnet 140.13.4.0 netmask 255.255.255.0 {
+     option broadcast-address 140.13.4.255;
+     option subnet-mask 255.255.255.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.13.4.12 140.13.4.254;
+        }
+     option domain-name "ffm85.voip.commerzbank.com";
+     option routers 140.13.4.6;
+     option ntp-servers 140.13.4.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+     option netbios-name-servers 140.15.241.27, 140.15.248.27;
+     min-lease-time 35999;
+     default-lease-time 36000;
+     max-lease-time 36002;
+     option cisco-callmanager 140.14.115.208;
+   if substring (option vendor-class-identifier, 0, 11) = "OptiIpPhone" {
+     option vendor-encapsulated-options 01:07:53:69:65:6D:65:6E:73:03:19:73:64:6c:70:3a:2f:2f:31:34:30:2e:31:37:2e:31:35:2e:31:30:3a:31:38:34:34:33;
+     log (info, "*****_____ SIEMENS IP-Phone ffm85.voip Netz 140.13.4.0/255.255.255.0 _____*****");
+   }
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.15.248.57;
+     option tftp-server-name "140.15.248.57";
+     next-server 140.15.248.57;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8c:0f:f8:39:09:18:ff:f0:15:4e:65:74:53:75:70:70:6f:72:74:42:6f:6f:74:43:6f:6e:74:72:6f:6c:0a:04:00:41:41:41:47:03:00:00:00:ff;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8c:0f:f8:39:07:d0;
+     log (info, "*****_____ Matched PXE ffm85.voip Netz 140.13.4.0/255.255.255.0 _____*****");
+   }
+}
+#

@@ -121,17 +121,18 @@
         "code": 100,
         "record-types": "boolean, uint8",
         "type": "record"
+      },
+      /// unsupported array inside a record
+      {
+        "space": "foobar",
+        "name": "fmt-Lfa",
+        "code": 150,
+        "array": true,
+//      "definition": "{ uint32, array of boolean}",
+        /// Option definition is not compatible with Kea
+        /// Fallback to full binary
+        "type": "binary"
       }
-//    /// unsupported array inside a record
-//    {
-//      "space": "foobar",
-//      "name": "fmt-Lfa",
-//      "code": 150,
-//      "array": true,
-//      "record-types": "uint32, boolean",
-//      "type": "record",
-//      "definition": "[ uint32, array of boolean]"
-//    }
     ]
   }
 }

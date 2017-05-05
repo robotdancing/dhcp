@@ -35,20 +35,24 @@
         "space": "dhcp4",
         "name": "mytext",
         "code": 250,
-        "data": "oob"
+        "csv-format": false,
+//      "original-data": "oob",
+        "data": "6f6f62"
       },
       {
         "space": "dhcp4",
         "name": "mydata",
         "code": 251,
-        "data": "\bUV"
+        "csv-format": false,
+//      "original-data": "\bUV",
+        "data": "085556"
       },
       {
         "space": "dhcp4",
         "name": "mydata2",
         "code": 252,
-        "data": "aabbcc",
-        "csv-format": false
+        "csv-format": false,
+        "data": "aabbcc"
       }
 //    {
 //      "space": "dhcp4",

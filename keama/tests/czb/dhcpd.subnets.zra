@@ -1,0 +1,420 @@
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# HBG01 
+subnet 132.30.184.0 netmask 255.255.252.0 {
+     option broadcast-address 132.30.187.255;
+     option subnet-mask 255.255.252.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 132.30.185.1 132.30.185.254;
+             range 132.30.186.1 132.30.186.254;
+        }
+     option domain-name "zra.commerzbank.com";
+     option routers 132.30.184.6;
+     option ntp-servers 132.30.184.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+     option netbios-name-servers 140.131.11.3, 140.131.11.4;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.15.248.57;
+     option tftp-server-name "140.15.248.57";
+     next-server 140.15.248.57;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8c:0f:f8:39:09:18:ff:f0:15:4e:65:74:53:75:70:70:6f:72:74:42:6f:6f:74:43:6f:6e:74:72:6f:6c:0a:04:00:41:41:41:47:03:00:00:00:ff;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8c:0f:f8:39:07:d0;
+     log (info, "*****_____ Matched PXE zra Netz 132.30.184.0/255.255.252.0 _____*****");
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM02 
+subnet 140.201.148.0 netmask 255.255.252.0 {
+     option broadcast-address 140.201.151.255;
+     option subnet-mask 255.255.252.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.201.149.1 140.201.149.254;
+             range 140.201.150.1 140.201.150.254;
+        }
+     option domain-name "zra.commerzbank.com";
+     option routers 140.201.148.6;
+     option ntp-servers 140.201.148.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+     option netbios-name-servers 140.131.11.3, 140.131.11.4;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.15.248.57;
+     option tftp-server-name "140.15.248.57";
+     next-server 140.15.248.57;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8c:0f:f8:39:09:18:ff:f0:15:4e:65:74:53:75:70:70:6f:72:74:42:6f:6f:74:43:6f:6e:74:72:6f:6c:0a:04:00:41:41:41:47:03:00:00:00:ff;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8c:0f:f8:39:07:d0;
+     log (info, "*****_____ Matched PXE zra Netz 140.201.148.0/255.255.252.0 _____*****");
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM02 
+subnet 140.202.148.0 netmask 255.255.252.0 {
+     option broadcast-address 140.202.151.255;
+     option subnet-mask 255.255.252.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.202.149.1 140.202.149.254;
+             range 140.202.150.1 140.202.150.254;
+        }
+     option domain-name "zra.commerzbank.com";
+     option routers 140.202.148.6;
+     option ntp-servers 140.202.148.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+     option netbios-name-servers 140.131.11.3, 140.131.11.4;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.15.248.57;
+     option tftp-server-name "140.15.248.57";
+     next-server 140.15.248.57;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8c:0f:f8:39:09:18:ff:f0:15:4e:65:74:53:75:70:70:6f:72:74:42:6f:6f:74:43:6f:6e:74:72:6f:6c:0a:04:00:41:41:41:47:03:00:00:00:ff;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8c:0f:f8:39:07:d0;
+     log (info, "*****_____ Matched PXE zra Netz 140.202.148.0/255.255.252.0 _____*****");
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM02 
+subnet 140.203.148.0 netmask 255.255.252.0 {
+     option broadcast-address 140.203.151.255;
+     option subnet-mask 255.255.252.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.203.149.1 140.203.149.254;
+             range 140.203.150.1 140.203.150.254;
+        }
+     option domain-name "zra.commerzbank.com";
+     option routers 140.203.148.6;
+     option ntp-servers 140.203.148.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+     option netbios-name-servers 140.131.11.3, 140.131.11.4;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.15.248.57;
+     option tftp-server-name "140.15.248.57";
+     next-server 140.15.248.57;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8c:0f:f8:39:09:18:ff:f0:15:4e:65:74:53:75:70:70:6f:72:74:42:6f:6f:74:43:6f:6e:74:72:6f:6c:0a:04:00:41:41:41:47:03:00:00:00:ff;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8c:0f:f8:39:07:d0;
+     log (info, "*****_____ Matched PXE zra Netz 140.203.148.0/255.255.252.0 _____*****");
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM02 
+subnet 140.204.148.0 netmask 255.255.252.0 {
+     option broadcast-address 140.204.151.255;
+     option subnet-mask 255.255.252.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.204.149.1 140.204.149.254;
+             range 140.204.150.1 140.204.150.254;
+        }
+     option domain-name "zra.commerzbank.com";
+     option routers 140.204.148.6;
+     option ntp-servers 140.204.148.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+     option netbios-name-servers 140.131.11.3, 140.131.11.4;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.15.248.57;
+     option tftp-server-name "140.15.248.57";
+     next-server 140.15.248.57;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8c:0f:f8:39:09:18:ff:f0:15:4e:65:74:53:75:70:70:6f:72:74:42:6f:6f:74:43:6f:6e:74:72:6f:6c:0a:04:00:41:41:41:47:03:00:00:00:ff;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8c:0f:f8:39:07:d0;
+     log (info, "*****_____ Matched PXE zra Netz 140.204.148.0/255.255.252.0 _____*****");
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM02 
+subnet 140.205.148.0 netmask 255.255.252.0 {
+     option broadcast-address 140.205.151.255;
+     option subnet-mask 255.255.252.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.205.149.1 140.205.149.254;
+             range 140.205.150.1 140.205.150.254;
+        }
+     option domain-name "zra.commerzbank.com";
+     option routers 140.205.148.6;
+     option ntp-servers 140.205.148.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+     option netbios-name-servers 140.131.11.3, 140.131.11.4;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.15.248.57;
+     option tftp-server-name "140.15.248.57";
+     next-server 140.15.248.57;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8c:0f:f8:39:09:18:ff:f0:15:4e:65:74:53:75:70:70:6f:72:74:42:6f:6f:74:43:6f:6e:74:72:6f:6c:0a:04:00:41:41:41:47:03:00:00:00:ff;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8c:0f:f8:39:07:d0;
+     log (info, "*****_____ Matched PXE zra Netz 140.205.148.0/255.255.252.0 _____*****");
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM02 
+subnet 140.206.148.0 netmask 255.255.252.0 {
+     option broadcast-address 140.206.151.255;
+     option subnet-mask 255.255.252.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.206.149.1 140.206.149.254;
+             range 140.206.150.1 140.206.150.254;
+        }
+     option domain-name "zra.commerzbank.com";
+     option routers 140.206.148.6;
+     option ntp-servers 140.206.148.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+     option netbios-name-servers 140.131.11.3, 140.131.11.4;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.15.248.57;
+     option tftp-server-name "140.15.248.57";
+     next-server 140.15.248.57;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8c:0f:f8:39:09:18:ff:f0:15:4e:65:74:53:75:70:70:6f:72:74:42:6f:6f:74:43:6f:6e:74:72:6f:6c:0a:04:00:41:41:41:47:03:00:00:00:ff;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8c:0f:f8:39:07:d0;
+     log (info, "*****_____ Matched PXE zra Netz 140.206.148.0/255.255.252.0 _____*****");
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM02 
+subnet 140.207.148.0 netmask 255.255.252.0 {
+     option broadcast-address 140.207.151.255;
+     option subnet-mask 255.255.252.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.207.149.1 140.207.149.254;
+             range 140.207.150.1 140.207.150.254;
+        }
+     option domain-name "zra.commerzbank.com";
+     option routers 140.207.148.6;
+     option ntp-servers 140.207.148.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+     option netbios-name-servers 140.131.11.3, 140.131.11.4;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.15.248.57;
+     option tftp-server-name "140.15.248.57";
+     next-server 140.15.248.57;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8c:0f:f8:39:09:18:ff:f0:15:4e:65:74:53:75:70:70:6f:72:74:42:6f:6f:74:43:6f:6e:74:72:6f:6c:0a:04:00:41:41:41:47:03:00:00:00:ff;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8c:0f:f8:39:07:d0;
+     log (info, "*****_____ Matched PXE zra Netz 140.207.148.0/255.255.252.0 _____*****");
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM02 
+subnet 140.208.148.0 netmask 255.255.252.0 {
+     option broadcast-address 140.208.151.255;
+     option subnet-mask 255.255.252.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.208.149.1 140.208.149.254;
+             range 140.208.150.1 140.208.150.254;
+        }
+     option domain-name "zra.commerzbank.com";
+     option routers 140.208.148.6;
+     option ntp-servers 140.208.148.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+     option netbios-name-servers 140.131.11.3, 140.131.11.4;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.15.248.57;
+     option tftp-server-name "140.15.248.57";
+     next-server 140.15.248.57;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8c:0f:f8:39:09:18:ff:f0:15:4e:65:74:53:75:70:70:6f:72:74:42:6f:6f:74:43:6f:6e:74:72:6f:6c:0a:04:00:41:41:41:47:03:00:00:00:ff;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8c:0f:f8:39:07:d0;
+     log (info, "*****_____ Matched PXE zra Netz 140.208.148.0/255.255.252.0 _____*****");
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM02 
+subnet 140.209.148.0 netmask 255.255.252.0 {
+     option broadcast-address 140.209.151.255;
+     option subnet-mask 255.255.252.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.209.149.1 140.209.149.254;
+             range 140.209.150.1 140.209.150.254;
+        }
+     option domain-name "zra.commerzbank.com";
+     option routers 140.209.148.6;
+     option ntp-servers 140.209.148.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+     option netbios-name-servers 140.131.11.3, 140.131.11.4;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.15.248.57;
+     option tftp-server-name "140.15.248.57";
+     next-server 140.15.248.57;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8c:0f:f8:39:09:18:ff:f0:15:4e:65:74:53:75:70:70:6f:72:74:42:6f:6f:74:43:6f:6e:74:72:6f:6c:0a:04:00:41:41:41:47:03:00:00:00:ff;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8c:0f:f8:39:07:d0;
+     log (info, "*****_____ Matched PXE zra Netz 140.209.148.0/255.255.252.0 _____*****");
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM02 
+subnet 140.210.148.0 netmask 255.255.252.0 {
+     option broadcast-address 140.210.151.255;
+     option subnet-mask 255.255.252.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.210.149.1 140.210.149.254;
+             range 140.210.150.1 140.210.150.254;
+        }
+     option domain-name "zra.commerzbank.com";
+     option routers 140.210.148.6;
+     option ntp-servers 140.210.148.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+     option netbios-name-servers 140.131.11.3, 140.131.11.4;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.15.248.57;
+     option tftp-server-name "140.15.248.57";
+     next-server 140.15.248.57;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8c:0f:f8:39:09:18:ff:f0:15:4e:65:74:53:75:70:70:6f:72:74:42:6f:6f:74:43:6f:6e:74:72:6f:6c:0a:04:00:41:41:41:47:03:00:00:00:ff;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8c:0f:f8:39:07:d0;
+     log (info, "*****_____ Matched PXE zra Netz 140.210.148.0/255.255.252.0 _____*****");
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM02 
+subnet 140.211.148.0 netmask 255.255.252.0 {
+     option broadcast-address 140.211.151.255;
+     option subnet-mask 255.255.252.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.211.149.1 140.211.149.254;
+             range 140.211.150.1 140.211.150.254;
+        }
+     option domain-name "zra.commerzbank.com";
+     option routers 140.211.148.6;
+     option ntp-servers 140.211.148.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+     option netbios-name-servers 140.131.11.3, 140.131.11.4;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.15.248.57;
+     option tftp-server-name "140.15.248.57";
+     next-server 140.15.248.57;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8c:0f:f8:39:09:18:ff:f0:15:4e:65:74:53:75:70:70:6f:72:74:42:6f:6f:74:43:6f:6e:74:72:6f:6c:0a:04:00:41:41:41:47:03:00:00:00:ff;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8c:0f:f8:39:07:d0;
+     log (info, "*****_____ Matched PXE zra Netz 140.211.148.0/255.255.252.0 _____*****");
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM02 
+subnet 140.212.148.0 netmask 255.255.252.0 {
+     option broadcast-address 140.212.151.255;
+     option subnet-mask 255.255.252.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.212.149.1 140.212.149.254;
+             range 140.212.150.1 140.212.150.254;
+        }
+     option domain-name "zra.commerzbank.com";
+     option routers 140.212.148.6;
+     option ntp-servers 140.212.148.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+     option netbios-name-servers 140.131.11.3, 140.131.11.4;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.15.248.57;
+     option tftp-server-name "140.15.248.57";
+     next-server 140.15.248.57;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8c:0f:f8:39:09:18:ff:f0:15:4e:65:74:53:75:70:70:6f:72:74:42:6f:6f:74:43:6f:6e:74:72:6f:6c:0a:04:00:41:41:41:47:03:00:00:00:ff;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8c:0f:f8:39:07:d0;
+     log (info, "*****_____ Matched PXE zra Netz 140.212.148.0/255.255.252.0 _____*****");
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# BER01 
+subnet 145.0.104.0 netmask 255.255.252.0 {
+     option broadcast-address 145.0.107.255;
+     option subnet-mask 255.255.252.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 145.0.105.1 145.0.105.254;
+             range 145.0.106.1 145.0.106.254;
+        }
+     option domain-name "zra.commerzbank.com";
+     option routers 145.0.104.6;
+     option ntp-servers 145.0.104.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+     option netbios-name-servers 140.131.11.3, 140.131.11.4;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.15.248.57;
+     option tftp-server-name "140.15.248.57";
+     next-server 140.15.248.57;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8c:0f:f8:39:09:18:ff:f0:15:4e:65:74:53:75:70:70:6f:72:74:42:6f:6f:74:43:6f:6e:74:72:6f:6c:0a:04:00:41:41:41:47:03:00:00:00:ff;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8c:0f:f8:39:07:d0;
+     log (info, "*****_____ Matched PXE zra Netz 145.0.104.0/255.255.252.0 _____*****");
+   }
+}
+#

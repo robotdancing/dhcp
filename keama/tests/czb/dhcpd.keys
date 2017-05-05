@@ -1,0 +1,19 @@
+#
+#Das ist der Schluessel fuer den alten produktiven DNS-Server
+key dhcp {
+        algorithm hmac-md5;
+        secret "InHgN5hAa9m7eCkkPCrVBsLpmKhfWZ3L9+X8pLkg/uM=";
+}
+
+key OMAPIKEY {
+        algorithm hmac-md5;
+        secret "aQ5XiRuI9hczDCvp9B5kXgUGQjDcj5gYdwGxcv99+pc=";
+}
+key RNDC {
+        algorithm hmac-md5;
+        secret "5uAEhbBBRRWd2I1brsigjC5E+RsYMv6man+/DcN/iFA=";
+}
+
+
+
+

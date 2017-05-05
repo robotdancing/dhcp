@@ -1,0 +1,68 @@
+# default-werte
+option domain-name "error.dhcp.test.commerzbank.com";
+option domain-name-servers 39.101.101.101, 39.102.102.102;
+option ntp-servers 140.12.250.1, 140.12.250.2;
+option time-offset 3600;
+
+
+option cisco-callmanager code 150 = ip-address;
+option searchlist code 119 = string;
+
+
+option option-128 code 128 = string;
+option option-129 code 129 = string;
+#option space PXE;
+class "PXE" {
+    match if substring(option vendor-class-identifier, 0, 9) = "PXEClient";
+        log (info, " * * * * * __________Matched PXE__________ * * * * *");
+	ddns-updates false;
+	default-lease-time 300;
+  	max-lease-time 301;
+}
+
+
+
+#SunRay-Thinclients
+option space SunRay;
+option SunRay.AuthSrvr  code 21 = ip-address;
+option SunRay.FWSrvr    code 31 = ip-address;
+option SunRay.AltAuth   code 35 = array of ip-address;
+option SunRay.AuthPort  code 22 = integer 16;
+option SunRay.AuthPort  7009;
+option SunRay.NewTVer   code 23 = text;
+#option SunRay.NewTVer   "1.3_12.c_111891-05,REV=2002.05.10.11.53";
+class "SunRay" {
+        match if option vendor-class-identifier="SUNW.NewT.SUNW";
+        vendor-option-space SunRay;
+        log (info, " ##########________Sun Ray_________###########");
+}
+
+
+
+#Um dem Problem RAS-Services von WIndows zu begegnen:
+class "RAS" {
+  	match if substring (option dhcp-client-identifier, 1, 4) = 52:41:53:20; ### "RAS ";
+	 #auskommentiert um die Groesse der Logfiles zu verkleinern:
+	 #	log (concat("Windows RAS-Service denied: ", substring (option dhcp-client-identifier, 1, 4) ));
+	 # geaendert in ignore, um die groesse des Logfiles weiter zu verkleinern:
+	 #  	deny booting; 
+	ignore booting;
+}
+
+
+
+#class "SiemensOptiphones" { 
+#	match if substring (option vendor-class-identifier, 0, 11) = "OptiIpPhone";
+#	log (info, " SIEMENS___IP-Telefon___SIEMENS ");
+#	option vendor-encapsulated-options 01:07:53:69:65:6D:65:6E:73:03:1b:73:64:6c:70:3a:2f:2f:31:34:30:2e:31:33:2e:32:34:39:2e:32:30:37:3a:31:38:34:34:33; 
+#} 
+
+
+#Fuer Nils Hanke
+class "CiscoAccessPoints" {
+	match if substring (option vendor-class-identifier, 0, 8) = "Cisco AP";
+	log (info, " Cisco AccessPoint fuer Wlan ######## ");
+	option vendor-encapsulated-options f1:08:8c:10:cb:f9:8c:10:cb:fa;
+}
+
+

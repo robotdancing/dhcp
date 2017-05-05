@@ -453,19 +453,19 @@ Options:
    of a corresponding syntax). BTW there is no known use too.
   - no support in Kea for an array at the end of a record
    (more useful, cf #5226)
-  - X format means ASCII or hexa, it is mapped to string and
-   the data parser checks for hexa and uses not CSV in such case.
-   It works well for monotyped options, less at the end of a record.
-   Note there is only one standard option with a problematic format,
-   the issue is more with user defined options.
+   All unsupported option declarations are set to full binary (X).
+  - X format means ASCII or hexa:
+    * standard options are in general mapped to binary
+    * new options are mapped to string with format x (vs x)
+    * when a string got hexadecimal data a warning in added in comments
+     suggesting to switch to plain binary.
   - ISC DHCP use quotes for a domain-list but not for a domain-name,
    this is no very coherent and makes domain-list different than
    domain-name array.
+Each time an option data has a format which is not convertible than
+a CSV false binary data is produced.
 TODO revamp parse_option_data & co
- test bad I6d
- check lq-relay-data DHCPv6 6X code 47
- introduce a format x and Y indicator
- add an option definition file
+ add option directives
 TODO fix vendor option (of course when Kea will have what is needed)
  We have no example in ISC DHCP, Kea or standard but it is possible
  than an option defined as a fixed sized record followed by

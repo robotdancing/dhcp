@@ -1,0 +1,1057 @@
+{
+  # dhcpd.conf file for jaguar in 950 charter failover pair jaguar and
+  # gozer.
+  #
+  # NOTE: DHCP Service for the 950 Wireless Network is now being
+  # handled by sauber.isc.org.
+  #
+  #######################################################################
+  # Global Configuration
+  #
+  /// This configuration declares some subnets but has no interfaces-config
+  /// Reference Kea #5256
+  "Dhcp4": {
+//  "config": [
+//    /// lease-file-name is an internal ISC DHCP feature
+//    {
+//      "name": "lease-file-name",
+//      "code": 26,
+//      "value": "/var/db/dhcpd/dhcpd.leases"
+//    },
+//    /// log-facility is not supported
+//    /// Please use the KEA_LOGGER_DESTINATION environment variable instead
+//    {
+//      "name": "log-facility",
+//      "code": 44,
+//      "value": "local0"
+//    },
+//    /// one-lease-per-client is not supported
+//    /// Reference Kea #5228
+//    {
+//      "name": "one-lease-per-client",
+//      "code": 10,
+//      "value": true
+//    },
+//    /// max-lease-time is not supported
+//    /// use default-lease-time instead
+//    /// Reference Kea #5219
+//    {
+//      "name": "max-lease-time",
+//      "code": 2,
+//      "value": 1800
+//    },
+//    /// omapi-port is an internal ISC DHCP feature
+//    {
+//      "name": "omapi-port",
+//      "code": 31,
+//      "value": 500
+//    },
+//    /// omapi-key is an internal ISC DHCP feature
+//    {
+//      "name": "omapi-key",
+//      "code": 36,
+//      "value": "OM_KEY"
+//    }
+//  ],
+    "dhcp-ddns": {
+      "enable-updates": false
+    },
+    "option-data": [
+      {
+        "space": "dhcp4",
+        "name": "domain-name",
+        "code": 15,
+        "data": "sql1.isc.org isc.org"
+      },
+      # Comment this out for 3.0.x (no support).
+      #option domain-search "sql1.isc.org", "isc.org";
+      {
+        "space": "dhcp4",
+        "name": "domain-name-servers",
+        "code": 6,
+        "data": "149.20.50.10, 149.20.64.127, 149.20.64.63"
+      },
+      {
+        "space": "APC",
+        "name": "cookie",
+        "code": 1,
+        "data": "1APC"
+      },
+      # The least potentially damaging empty value to hopefully convince clients not
+      # to engage in DNS.
+      {
+        "space": "dhcp4",
+        "name": "wpad",
+        "code": 252,
+//      "original-data": "\"\n\u0000\"",
+        "csv-format": false,
+        "data": "0a00"
+      }
+    ],
+    "valid-lifetime": 1800,
+//  # 30 week
+//  #default-lease-time 3100;	# 51 minutes.
+//  #max-lease-time 604800;		# 1 week
+//  # If the client supplied these values, log them in the leases file.
+//  "statement": {
+//    "if": {
+//      "condition": {
+//        "exists": {
+//          "universe": "dhcp",
+//          "name": "vendor-class-identifier",
+//          "code": 60
+//        }
+//      },
+//      "then": [
+//        {
+//          "set": {
+//            "name": "vendor-string",
+//            "value": {
+//              "option": {
+//                "universe": "dhcp",
+//                "name": "vendor-class-identifier",
+//                "code": 60
+//              }
+//            }
+//          }
+//        }
+//      ]
+//    }
+//  },
+//  "statement": {
+//    "if": {
+//      "condition": {
+//        "exists": {
+//          "universe": "dhcp",
+//          "name": "user-class",
+//          "code": 77
+//        }
+//      },
+//      "then": [
+//        {
+//          "set": {
+//            "name": "user-string",
+//            "value": {
+//              "option": {
+//                "universe": "dhcp",
+//                "name": "user-class",
+//                "code": 77
+//              }
+//            }
+//          }
+//        }
+//      ]
+//    }
+//  },
+//  /// Begin file fordhcp/dhcpd.omapi.key
+//  # This key is used for OMAPI/omshell access.
+//  "statement": {
+//    "tsig-keys": [
+//      {
+//        "name": "OM_KEY",
+//        "algorithm": "HMAC-MD5.SIG-ALG.REG.INT.",
+//        "secret": "dvEmB76cVjskCznFKv9GMw=="
+//      }
+//    ]
+//  },
+    "subnet4": [
+//    /// Begin file fordhcp/dhcpd.stubs.conf
+//    # These are stub subnets to inform the DHCP server that they exist.
+//    # sql1-blue, the "outside" network
+//    /// Not authorized subnet
+//    /// This feature is not supported by Kea
+//    /// Skipping the subnet only partially simulates it
+//    {
+//      "subnet": "149.20.48.0/25"
+//    },
+//    # 187-net is all but dead
+//    /// Not authorized subnet
+//    /// This feature is not supported by Kea
+//    /// Skipping the subnet only partially simulates it
+//    {
+//      "subnet": "204.152.187.0/24"
+//    },
+//    # QuickBooks/GreatPlains VLAN
+//    /// Not authorized subnet
+//    /// This feature is not supported by Kea
+//    /// Skipping the subnet only partially simulates it
+//    {
+//      "subnet": "149.20.48.128/28"
+//    },
+//    # Device management VLAN
+//    /// Not authorized subnet
+//    /// This feature is not supported by Kea
+//    /// Skipping the subnet only partially simulates it
+//    {
+//      "subnet": "149.20.60.0/24"
+//    },
+      /// Begin file fordhcp/dhcpd.voip.conf
+      # dhcpd.voip.conf file for Voice over IP phone network served by the 950
+      # charter #failover peerset.  This file may be copied to /etc between these
+      # two systems without modifications.
+      #
+      {
+        "subnet": "204.152.185.128/26",
+        "option-data": [
+          {
+            "space": "dhcp4",
+            "name": "subnet-mask",
+            "code": 1,
+            "data": "255.255.255.192"
+          },
+          {
+            "space": "dhcp4",
+            "name": "broadcast-address",
+            "code": 28,
+            "data": "204.152.185.191"
+          },
+          {
+            "space": "dhcp4",
+            "name": "routers",
+            "code": 3,
+            "data": "204.152.185.129"
+          },
+          {
+            "space": "dhcp4",
+            "name": "tftp-server-name",
+            "code": 66,
+            "data": "149.20.32.15"
+          }
+        ],
+        "pools": [
+          {
+            #failover peer "isc";
+            "pool": "204.152.185.135 - 204.152.185.185"
+//          "deny": [
+//            "dynamic bootp clients"
+//          ]
+          }
+        ]
+      },
+      /// Begin file fordhcp/dhcpd.wvlan.conf
+      # dhcpd.wvlan.conf file for 950 Charter Wireless network, served by the 950
+      # charter #failover peerset.  This file may be copied to /etc between these
+      # two systems without modifications.
+      #
+      {
+        "subnet": "204.152.189.0/26",
+        "option-data": [
+          {
+            "space": "dhcp4",
+            "name": "routers",
+            "code": 3,
+            "data": "204.152.189.1"
+          },
+          {
+            "space": "dhcp4",
+            "name": "subnet-mask",
+            "code": 1,
+            "data": "255.255.255.192"
+          },
+          {
+            "space": "dhcp4",
+            "name": "broadcast-address",
+            "code": 28,
+            "data": "204.152.189.63"
+          }
+        ],
+//      "config": [
+//        /// always-broadcast is not supported
+//        /// Reference Kea #5232
+//        {
+//          "name": "always-broadcast",
+//          "code": 22,
+//          "value": true
+//        },
+//        /// max-lease-time is not supported
+//        /// use default-lease-time instead
+//        /// Reference Kea #5219
+//        {
+//          "name": "max-lease-time",
+//          "code": 2,
+//          "value": 3100
+//        }
+//      ],
+        "valid-lifetime": 3100,
+        "pools": [
+          # 51 minutes
+          {
+            #failover peer "isc";
+            "pool": "204.152.189.15 - 204.152.189.50"
+//          "deny": [
+//            "dynamic bootp clients"
+//          ]
+          }
+        ],
+        "reservations": [
+          # wavelan-in-hallway
+          {
+            "hostname": "wavelan-in-hallway",
+            "hw-address": "00:60:1d:1b:97:5b",
+            "ip-address": "204.152.189.11"
+          },
+          # wavelan-in-backroom
+          {
+            "hostname": "wavelan-in-backroom",
+            "hw-address": "00:60:1d:1b:97:6e",
+            "ip-address": "204.152.189.10"
+          }
+        ]
+      },
+      /// Begin file fordhcp/dhcpd.emp-wireless-149-20.conf
+      # dhcpd.emp-wireless-149-20.conf file for 950 Charter Wireless network,
+      # served by the 950 charter #failover peerset.  This file may be copied
+      # to /etc between these two systems without modifications.
+      #
+      {
+        "subnet": "149.20.50.192/26",
+        "option-data": [
+          {
+            "space": "dhcp4",
+            "name": "subnet-mask",
+            "code": 1,
+            "data": "255.255.255.192"
+          },
+          {
+            "space": "dhcp4",
+            "name": "routers",
+            "code": 3,
+            "data": "149.20.50.193"
+          },
+          {
+            "space": "dhcp4",
+            "name": "broadcast-address",
+            "code": 28,
+            "data": "149.20.50.255"
+          }
+        ],
+//      "config": [
+//        /// always-broadcast is not supported
+//        /// Reference Kea #5232
+//        {
+//          "name": "always-broadcast",
+//          "code": 22,
+//          "value": true
+//        },
+//        /// max-lease-time is not supported
+//        /// use default-lease-time instead
+//        /// Reference Kea #5219
+//        {
+//          "name": "max-lease-time",
+//          "code": 2,
+//          "value": 1200
+//        }
+//      ],
+        "valid-lifetime": 1200,
+        "pools": [
+          # 20 minutes
+          {
+            #failover peer "isc";
+            "pool": "149.20.50.196 - 149.20.50.254"
+//          "deny": [
+//            "dynamic bootp clients"
+//          ]
+          }
+        ]
+      },
+      {
+        "subnet": "149.20.50.0/25",
+        "option-data": [
+          {
+            "space": "dhcp4",
+            "name": "subnet-mask",
+            "code": 1,
+            "data": "255.255.255.128"
+          },
+          {
+            "space": "dhcp4",
+            "name": "routers",
+            "code": 3,
+            "data": "149.20.50.1"
+          },
+          {
+            "space": "dhcp4",
+            "name": "broadcast-address",
+            "code": 28,
+            "data": "149.20.50.127"
+          }
+        ],
+//      /// Only global enable-updates is supported
+//      "enable-updates": false,
+        "pools": [
+          {
+            #failover peer "isc";
+            "pool": "149.20.50.33 - 149.20.50.120"
+//          "deny": [
+//            "dynamic bootp clients"
+//          ]
+          }
+        ],
+        "reservations": [
+          /// Begin file fordhcp/dhcpd.office-static-149-20.conf
+          #######################################################################
+          # Static DHCP leases
+          #
+          # gone
+          #host draft.isc.org {
+          #        hardware ethernet 00:80:77:3a:5f:24;
+          #        fixed-address 149.20.50.19;
+          #}
+          {
+            "hostname": "the-edge.isc.org",
+            "hw-address": "00:80:77:48:ed:5d",
+            "ip-address": "149.20.50.18"
+          },
+          {
+            "hostname": "stupidapc.isc.org",
+            "hw-address": "00:c0:b7:7f:41:f0",
+            "ip-address": "149.20.50.126"
+          },
+          {
+            "hostname": "redraft.isc.org",
+            "hw-address": "00:80:77:96:e1:2c",
+            "ip-address": "149.20.50.17"
+          },
+          {
+            "hostname": "pres.isc.org",
+            "hw-address": "2c:41:38:7e:b0:b8",
+            "ip-address": "149.20.50.5"
+          },
+          {
+            "hostname": "virtalarm.isc.org",
+            "hw-address": "00:19:bb:e1:32:13",
+            "ip-address": "149.20.50.12"
+          },
+          {
+            "hostname": "colour-q.isc.org",
+            "hw-address": "00:20:6b:52:4a:c2",
+            "ip-address": "149.20.50.16"
+          },
+          {
+            "hostname": "finance-printer.isc.org",
+            "hw-address": "00:80:77:3b:57:1f",
+            "ip-address": "149.20.50.15"
+          },
+          {
+            "hostname": "backdraft.isc.org",
+            "hw-address": "00:14:d1:72:10:c9",
+            "ip-address": "149.20.50.14"
+          },
+          {
+            "hostname": "hr-printer.isc.org",
+            "hw-address": "00:24:81:2d:ab:22",
+            "ip-address": "149.20.50.21"
+          },
+          {
+            "hostname": "lincoln.isc.org",
+            "hw-address": "30:05:5c:4a:a2:a1",
+            "ip-address": "149.20.50.23"
+          },
+          {
+            "hostname": "sql1a.kvm.isc.org",
+            "hw-address": "00:80:a3:8c:4c:91",
+            "ip-address": "149.20.50.9"
+          },
+          {
+            "hostname": "sql1b.kvm.isc.org",
+            "hw-address": "00:80:a3:8c:96:ba",
+            "ip-address": "149.20.50.19"
+          },
+          # Dan WS
+          {
+            "hostname": "sphynx.isc.org",
+            "hw-address": "c4:2c:03:04:e0:86",
+            "ip-address": "149.20.50.7"
+          },
+          {
+            "hostname": "ycam-bullet-1",
+            "hw-address": "00:22:c0:10:0d:63"
+          },
+          # duplicate address
+          # fixed-address 149.20.50.12;
+          {
+            "hostname": "ycam-bullet-2",
+            "hw-address": "00:22:c0:10:0d:5a",
+            "ip-address": "149.20.50.13"
+          },
+          {
+            "hostname": "ycam-knight-1",
+            "hw-address": "78:12:b8:00:20:da",
+            "ip-address": "149.20.50.20"
+          },
+          {
+            "hostname": "ycam-knight-2",
+            "hw-address": "78:12:b8:00:20:d4",
+            "ip-address": "149.20.50.22"
+          }
+        ]
+      },
+      /// Begin file fordhcp/dhcpd.voip-149-20.conf
+      # dhcpd.voip-149-20.conf file for Voice over IP phone network served by the
+      # 950 charter #failover peerset.  This file may be copied to /etc between these
+      # two systems without modifications.
+      #
+      {
+        "subnet": "149.20.50.128/26",
+        "option-data": [
+          {
+            "space": "dhcp4",
+            "name": "subnet-mask",
+            "code": 1,
+            "data": "255.255.255.192"
+          },
+          {
+            "space": "dhcp4",
+            "name": "routers",
+            "code": 3,
+            "data": "149.20.50.129"
+          },
+          {
+            "space": "dhcp4",
+            "name": "broadcast-address",
+            "code": 28,
+            "data": "149.20.50.191"
+          },
+          {
+            "space": "dhcp4",
+            "name": "tftp-server-name",
+            "code": 66,
+            "data": "149.20.32.15"
+          },
+          {
+            "space": "dhcp4",
+            "name": "ntp-servers",
+            "code": 42,
+            "data": "149.20.64.28"
+          }
+        ],
+        "pools": [
+          {
+            #		#failover peer "isc";
+            "pool": "149.20.50.140 - 149.20.50.190"
+//          "deny": [
+//            "dynamic bootp clients"
+//          ]
+          }
+        ],
+        /// Host reservations without fixed addresses were put in the last last declared subnet
+        /// Reference Kea #5246
+        "reservations": [
+          {
+            "hostname": "test-7960",
+            "hw-address": "00:0b:fd:32:e6:fa",
+            "option-data": [
+              {
+                "space": "dhcp4",
+                "name": "tftp-server-name",
+                "code": 66,
+                "data": "149.20.48.24"
+              }
+            ]
+          },
+          {
+            "hostname": "test-7960A",
+            "hw-address": "00:07:0e:36:48:19",
+            "option-data": [
+              {
+                "space": "dhcp4",
+                "name": "tftp-server-name",
+                "code": 66,
+                "data": "149.20.48.24"
+              }
+            ]
+          },
+          {
+            "hostname": "test-7960B",
+            "hw-address": "00:03:e3:a5:20:31",
+            "option-data": [
+              {
+                "space": "dhcp4",
+                "name": "tftp-server-name",
+                "code": 66,
+                "data": "149.20.48.24"
+              }
+            ]
+          },
+          {
+            "hostname": "polycom-6000a",
+            "hw-address": "00:04:f2:e4:c2:79",
+            "option-data": [
+              {
+                "space": "dhcp4",
+                "name": "tftp-server-name",
+                "code": 66,
+                "data": "http://asterisk.isc.org/polycom"
+              }
+            ]
+          },
+          {
+            "hostname": "polycom-5000b",
+            "hw-address": "00:04:f2:e7:3d:53",
+            "option-data": [
+              {
+                "space": "dhcp4",
+                "name": "tftp-server-name",
+                "code": 66,
+                "data": "http://asterisk.isc.org/polycom"
+              }
+            ]
+          },
+          {
+            "hostname": "polycom-5000c",
+            "hw-address": "00:04:f2:e7:74:e8",
+            "option-data": [
+              {
+                "space": "dhcp4",
+                "name": "tftp-server-name",
+                "code": 66,
+                "data": "http://asterisk.isc.org/polycom"
+              }
+            ]
+          },
+          {
+            "hostname": "polycom-5000d",
+            "hw-address": "00:04:f2:e7:95:40",
+            "option-data": [
+              {
+                "space": "dhcp4",
+                "name": "tftp-server-name",
+                "code": 66,
+                "data": "http://asterisk.isc.org/polycom"
+              }
+            ]
+          },
+          {
+            "hostname": "polycom-5000e",
+            "hw-address": "00:04:f2:f3:32:58",
+            "option-data": [
+              {
+                "space": "dhcp4",
+                "name": "tftp-server-name",
+                "code": 66,
+                "data": "http://asterisk.isc.org/polycom"
+              }
+            ]
+          },
+          {
+            "hostname": "polycom-5000a",
+            "hw-address": "00:04:f2:e7:3e:f2",
+            "option-data": [
+              {
+                "space": "dhcp4",
+                "name": "tftp-server-name",
+                "code": 66,
+                "data": "http://asterisk.isc.org/polycom"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "subnet": "149.20.49.224/27",
+        "option-data": [
+          {
+            "space": "dhcp4",
+            "name": "subnet-mask",
+            "code": 1,
+            "data": "255.255.255.224"
+          },
+          {
+            "space": "dhcp4",
+            "name": "routers",
+            "code": 3,
+            "data": "149.20.49.225"
+          },
+          {
+            "space": "dhcp4",
+            "name": "broadcast-address",
+            "code": 28,
+            "data": "149.20.49.255"
+          }
+        ],
+//      "config": [
+//        /// always-broadcast is not supported
+//        /// Reference Kea #5232
+//        {
+//          "name": "always-broadcast",
+//          "code": 22,
+//          "value": true
+//        },
+//        /// max-lease-time is not supported
+//        /// use default-lease-time instead
+//        /// Reference Kea #5219
+//        {
+//          "name": "max-lease-time",
+//          "code": 2,
+//          "value": 60
+//        }
+//      ],
+        "valid-lifetime": 60,
+        "pools": [
+          # 1 minutes
+          #	default-lease-time 1200;	# 20 minutes
+          #	max-lease-time 1200;		# 20 minutes
+          {
+            #failover peer "isc";
+            "pool": "149.20.49.240 - 149.20.49.252"
+//          "deny": [
+//            "dynamic bootp clients"
+//          ]
+          }
+        ]
+      }
+    ],
+    "host-reservation-identifiers": [
+      "hw-address"
+    ],
+    "option-def": [
+      /// Begin file fordhcp/dhcpd.office-149-20.conf
+      # dhcpd.office-149-20.conf file for office-net DHCP pools served by the
+      # 950 Charter #failover peerset. This file may be copied to /etc between
+      # these two systems without modifications.
+      #
+      # APC powerrack systems need tender care and loving molestation to behave
+      # appropriately by default.
+      {
+        "space": "APC",
+        "name": "cookie",
+        "code": 1,
+        "type": "string"
+      },
+      # This option is in the site-local space, but it is a de-facto standard
+      # today.
+      {
+        "space": "dhcp4",
+        "name": "wpad",
+        "code": 252,
+        "type": "string"
+      },
+      # Local PXE support.  For now we only boot SUSE.
+      {
+        "space": "PXE",
+        "name": "mtftp-ip",
+        "code": 1,
+        "type": "ipv4-address"
+      },
+      {
+        "space": "PXE",
+        "name": "mtftp-oport",
+        "code": 2,
+        "type": "uint16"
+      },
+      {
+        "space": "PXE",
+        "name": "mtftp-sport",
+        "code": 3,
+        "type": "uint16"
+      },
+      {
+        "space": "PXE",
+        "name": "mtftp-tmout",
+        "code": 4,
+        "type": "uint8"
+      },
+      {
+        "space": "PXE",
+        "name": "mtftp-delay",
+        "code": 5,
+        "type": "uint8"
+      },
+      {
+        "space": "PXE",
+        "name": "discovery-control",
+        "code": 6,
+        "type": "uint8"
+      },
+      {
+        "space": "PXE",
+        "name": "discovery-mcast-addr",
+        "code": 7,
+        "type": "uint8"
+      },
+      # These are 'site local' options the PXELinux bootloader uses.
+      {
+        "space": "pxelinux",
+        "name": "magic",
+        "code": 208,
+        "type": "string"
+      },
+      {
+        "space": "pxelinux",
+        "name": "configfile",
+        "code": 209,
+        "type": "string"
+      },
+      {
+        "space": "pxelinux",
+        "name": "pathprefix",
+        "code": 210,
+        "type": "string"
+      },
+      {
+        "space": "pxelinux",
+        "name": "reboottime",
+        "code": 211,
+        "type": "uint32"
+      }
+    ],
+    "client-classes": [
+      {
+        "name": "APC",
+        /// from: match if (substring(option dhcp.vendor-class-identifier, 0, 3)) = 'APC'
+        "test": "substring(option[60].hex,0,3) == 'APC'"
+//      "config": [
+//        /// vendor-option-space is not (yet?) supported
+//        /// Reference Kea #5073
+//        {
+//          "name": "vendor-option-space",
+//          "code": 19,
+//          "value": "APC"
+//        }
+//      ]
+      },
+      {
+        "name": "MSFT",
+        /// from: match if (substring(option dhcp.vendor-class-identifier, 0, 4)) = 'MSFT'
+        "test": "substring(option[60].hex,0,4) == 'MSFT'",
+        "option-data": [
+//        # Windows doesn't put WPAD on its PRL, but does consume it.
+//        {
+//          "space": "dhcp4",
+//          "name": "dhcp-parameter-request-list",
+//          "code": 55,
+//          "csv-format": false,
+//          "expression": {
+//            "concat": {
+//              "left": {
+//                "option": {
+//                  "universe": "dhcp",
+//                  "name": "dhcp-parameter-request-list",
+//                  "code": 55
+//                }
+//              },
+//              "right": {
+//                "const-data": "0xfc"
+//              }
+//            }
+//          }
+//        }
+        ]
+      },
+      {
+        "name": "pxeclients",
+        /// from: match if (substring(option dhcp.vendor-class-identifier, 0, 9)) = 'PXEClient'
+        "test": "substring(option[60].hex,0,9) == 'PXEClient'",
+        "option-data": [
+          # Some PXE clients are said to require that the vci be sent.
+          # But it seems clear that if we send these PXE and vendor-class
+          # options, it also expects "extended DHCP" via port 4011.  For
+          # PXE versions 2 and onwards.
+          {
+            "space": "dhcp4",
+            "name": "vendor-class-identifier",
+            "code": 60,
+            "data": "PXEClient"
+          },
+          # Some PXE clients refuse to tftp if mtftp fails.  Others take
+          # longer.
+          {
+            "space": "PXE",
+            "name": "mtftp-ip",
+            "code": 1,
+            "data": "0.0.0.0"
+          },
+          {
+            "space": "pxelinux",
+            "name": "reboottime",
+            "code": 211,
+            "data": "30"
+          },
+          /// Begin file fordhcp/dhcpd.staging.conf
+          # dhcpd.staging.conf file for the SQL1 staging network,
+          # served by the 950 charter #failover peerset.  This file may be copied
+          # to /etc between these two systems without modifications.
+          #
+          # Removed already defined PXE
+          # match if substring (option vendor-class-identifier, 0, 9) = "PXEClient";
+          # Some PXE clients are said to require that the vci be sent.
+          # But it seems clear that if we send these PXE and vendor-class
+          # options, it also expects "extended DHCP" via port 4011.  For
+          # PXE versions 2 and onwards.
+          {
+            "space": "dhcp4",
+            "name": "vendor-class-identifier",
+            "code": 60,
+            "data": "PXEClient"
+          },
+          # Some PXE clients refuse to tftp if mtftp fails.  Others take
+          # longer.
+          {
+            "space": "PXE",
+            "name": "mtftp-ip",
+            "code": 1,
+            "data": "0.0.0.0"
+          },
+          {
+            "space": "pxelinux",
+            "name": "reboottime",
+            "code": 211,
+            "data": "30"
+          }
+        ],
+//      "config": [
+//        /// vendor-option-space is not (yet?) supported
+//        /// Reference Kea #5073
+//        {
+//          "name": "vendor-option-space",
+//          "code": 19,
+//          "value": "PXE"
+//        },
+//        /// site-option-space is not supported
+//        /// Reference Kea #5240
+//        {
+//          "name": "site-option-space",
+//          "code": 21,
+//          "value": "pxelinux"
+//        },
+//        /// vendor-option-space is not (yet?) supported
+//        /// Reference Kea #5073
+//        {
+//          "name": "vendor-option-space",
+//          "code": 19,
+//          "value": "PXE"
+//        },
+//        /// site-option-space is not supported
+//        /// Reference Kea #5240
+//        {
+//          "name": "site-option-space",
+//          "code": 21,
+//          "value": "pxelinux"
+//        }
+//      ],
+//      /// Only global enable-updates is supported
+//      "enable-updates": false,
+        "boot-file-name": "pxelinux.0",
+        "next-server": "204.152.187.81",
+//      # PXE does not request site-local options.
+//      "statement": {
+//        "if": {
+//          "condition": {
+//            "exists": {
+//              "universe": "dhcp",
+//              "name": "dhcp-parameter-request-list",
+//              "code": 55
+//            }
+//          },
+//          "then": [
+//            {
+//              "option": {
+//                "space": "dhcp4",
+//                "name": "dhcp-parameter-request-list",
+//                "code": 55,
+//                "csv-format": false,
+//                "expression": {
+//                  "concat": {
+//                    "left": {
+//                      "option": {
+//                        "universe": "dhcp",
+//                        "name": "dhcp-parameter-request-list",
+//                        "code": 55
+//                      }
+//                    },
+//                    "right": {
+//                      "concat": {
+//                        "left": {
+//                          "const-data": "0xd0"
+//                        },
+//                        "right": {
+//                          "concat": {
+//                            "left": {
+//                              "const-data": "0xd1"
+//                            },
+//                            "right": {
+//                              "concat": {
+//                                "left": {
+//                                  "const-data": "0xd2"
+//                                },
+//                                "right": {
+//                                  "const-data": "0xd3"
+//                                }
+//                              }
+//                            }
+//                          }
+//                        }
+//                      }
+//                    }
+//                  }
+//                }
+//              }
+//            }
+//          ]
+//        }
+//      },
+//      /// Only global enable-updates is supported
+//      "enable-updates": false,
+        "boot-file-name": "pxelinux.0",
+        "next-server": "149.20.49.228"
+//      # PXE does not request site-local options.
+//      "statement": {
+//        "if": {
+//          "condition": {
+//            "exists": {
+//              "universe": "dhcp",
+//              "name": "dhcp-parameter-request-list",
+//              "code": 55
+//            }
+//          },
+//          "then": [
+//            {
+//              "option": {
+//                "space": "dhcp4",
+//                "name": "dhcp-parameter-request-list",
+//                "code": 55,
+//                "csv-format": false,
+//                "expression": {
+//                  "concat": {
+//                    "left": {
+//                      "option": {
+//                        "universe": "dhcp",
+//                        "name": "dhcp-parameter-request-list",
+//                        "code": 55
+//                      }
+//                    },
+//                    "right": {
+//                      "concat": {
+//                        "left": {
+//                          "const-data": "0xd0"
+//                        },
+//                        "right": {
+//                          "concat": {
+//                            "left": {
+//                              "const-data": "0xd1"
+//                            },
+//                            "right": {
+//                              "concat": {
+//                                "left": {
+//                                  "const-data": "0xd2"
+//                                },
+//                                "right": {
+//                                  "const-data": "0xd3"
+//                                }
+//                              }
+//                            }
+//                          }
+//                        }
+//                      }
+//                    }
+//                  }
+//                }
+//              }
+//            }
+//          ]
+//        }
+//      }
+      }
+    ]
+  }
+}

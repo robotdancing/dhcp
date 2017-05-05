@@ -53,6 +53,8 @@ new_parse(int file, char *inbuf, size_t buflen, const char *name, int eolp)
 	assert(tmp != NULL);
 	memset(tmp, 0, sizeof(struct parse));
 
+	TAILQ_INSERT_TAIL(&parses, tmp);
+
 	tmp->tlname = name;
 	tmp->lpos = tmp->line = 1;
 	tmp->cur_line = tmp->line1;
@@ -100,14 +102,20 @@ end_parse(struct parse *cfile)
 		close(cfile->file);
 	}
 
-	if (cfile->saved_state != NULL)
-		free(cfile->saved_state);
-	cfile->saved_state = NULL;
+	while (TAILQ_NEXT(cfile) != NULL) {
+		struct parse *saved_state;
+
+		saved_state = TAILQ_NEXT(cfile);
+		TAILQ_REMOVE(&parses, saved_state);
+		free(saved_state);
+	}
 
 	cfile->stack_size = 0;
 	if (cfile->stack != NULL)
 		free(cfile->stack);
 	cfile->stack = NULL;
+	TAILQ_REMOVE(&parses, cfile);
+	free(cfile);
 }
 
 /*
@@ -118,19 +126,29 @@ end_parse(struct parse *cfile)
  */
 void
 save_parse_state(struct parse *cfile) {
+	struct parse *tmp;
+
 	/*
-	 * Free any previous saved state.
+	 * Free any previous saved states.
 	 */
-	if (cfile->saved_state != NULL) {
-		free(cfile->saved_state);
+	while (TAILQ_NEXT(cfile) != NULL) {
+		struct parse *saved_state;
+
+		saved_state = TAILQ_NEXT(cfile);
+		TAILQ_REMOVE(&parses, saved_state);
+		free(saved_state);
 	}
 
 	/*
 	 * Save our current state.
 	 */
-	cfile->saved_state = (struct parse *)malloc(sizeof(struct parse));
-	assert(cfile->saved_state != NULL);
-	memcpy(cfile->saved_state, cfile, sizeof(struct parse));
+	tmp = (struct parse *)malloc(sizeof(struct parse));
+	if (tmp == NULL)
+		parse_error(cfile, "can't allocate state to be saved");
+	memset(tmp, 0, sizeof(struct parse));
+	/* save up to comments field */
+	memcpy(tmp, cfile, (size_t)&(((struct parse *)0)->comments));
+	TAILQ_INSERT_AFTER(&parses, cfile, tmp);
 }
 
 /*
@@ -143,12 +161,14 @@ void
 restore_parse_state(struct parse *cfile) {
 	struct parse *saved_state;
 
-	assert(cfile->saved_state != NULL);
+	if (TAILQ_NEXT(cfile) == NULL)
+		parse_error(cfile, "can't find saved state");
 
-	saved_state = cfile->saved_state;
-	memcpy(cfile, saved_state, sizeof(struct parse));
+	saved_state = TAILQ_NEXT(cfile);
+	TAILQ_REMOVE(&parses, saved_state);
+	/* restore up to comments field */
+	memcpy(cfile, saved_state, (size_t)&(((struct parse *)0)->comments));
 	free(saved_state);
-	cfile->saved_state = NULL;
 }
 
 static int

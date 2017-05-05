@@ -17,9 +17,11 @@
         "space": "dhcp6",
         "name": "interface-id",
         "code": 18,
-        /// constant DHCP_R_NXDOMAIN(393231)
-        /// constant S_BOUND(5)
-        "data": "\u0000\u0006\u0000\u0014"
+        "csv-format": false,
+//      /// constant DHCP_R_NXDOMAIN(393231)
+//      /// constant S_BOUND(5)
+//      "original-data": "\u0000\u0006\u0000\u0014",
+        "data": "00060014"
       }
     ]
   }

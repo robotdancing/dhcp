@@ -1,0 +1,20 @@
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM62 
+subnet 140.135.48.0 netmask 255.255.252.0 {
+     option broadcast-address 140.135.51.255;
+     option subnet-mask 255.255.252.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.135.49.1 140.135.49.254;
+             range 140.135.50.1 140.135.50.254;
+        }
+     option domain-name "hhtist04.commerzbank.com";
+     option routers 140.135.48.6;
+     option ntp-servers 140.135.48.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+     option netbios-name-servers 140.135.11.244, 140.135.11.245;
+}
+#

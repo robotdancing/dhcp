@@ -1,0 +1,186 @@
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM79 
+subnet 10.144.150.0 netmask 255.255.255.0 {
+     option broadcast-address 10.144.150.255;
+     option subnet-mask 255.255.255.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 10.144.150.64 10.144.150.127;
+             range 10.144.150.128 10.144.150.191;
+        }
+     option domain-name "voip.commerzbank.com";
+     option routers 10.144.150.6;
+     option ntp-servers 10.144.150.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+   if substring (option vendor-class-identifier, 0, 11) = "OptiIpPhone" {
+     option vendor-encapsulated-options 01:07:53:69:65:6D:65:6E:73:03:1a:73:64:6c:70:3a:2f:2f:31:38:31:2e:32:30:2e:31:33:2e:31:31:31:3a:31:38:34:34:33;
+     log (info, "*****_____ SIEMENS IP-Phone Test H8K Netz 10.144.150.0/255.255.255.0 _____*****");
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# HBG62 
+subnet 132.20.2.0 netmask 255.255.255.0 {
+     option broadcast-address 132.20.2.255;
+     option subnet-mask 255.255.255.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 132.20.2.201 132.20.2.254;
+        }
+     option domain-name "voip.commerzbank.com";
+     option routers 132.20.2.6;
+     option ntp-servers 132.20.2.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# DOR19 
+subnet 135.70.192.0 netmask 255.255.255.0 {
+     option broadcast-address 135.70.192.255;
+     option subnet-mask 255.255.255.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 135.70.192.201 135.70.192.254;
+        }
+     option domain-name "voip.commerzbank.com";
+     option routers 135.70.192.6;
+     option ntp-servers 135.70.192.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# DOR01 
+subnet 135.70.222.0 netmask 255.255.255.0 {
+     option broadcast-address 135.70.222.255;
+     option subnet-mask 255.255.255.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 135.70.222.64 135.70.222.127;
+             range 135.70.222.128 135.70.222.191;
+        }
+     option domain-name "voip.commerzbank.com";
+     option routers 135.70.222.6;
+     option ntp-servers 135.70.222.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# DDF42 
+subnet 136.0.96.0 netmask 255.255.255.0 {
+     option broadcast-address 136.0.96.255;
+     option subnet-mask 255.255.255.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 136.0.96.201 136.0.96.254;
+        }
+     option domain-name "voip.commerzbank.com";
+     option routers 136.0.96.6;
+     option ntp-servers 136.0.96.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM80 
+subnet 140.13.22.0 netmask 255.255.255.0 {
+     option broadcast-address 140.13.22.255;
+     option subnet-mask 255.255.255.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.13.22.201 140.13.22.254;
+        }
+     option domain-name "voip.commerzbank.com";
+     option routers 140.13.22.6;
+     option ntp-servers 140.13.22.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM05 
+subnet 140.70.6.0 netmask 255.255.255.0 {
+     option broadcast-address 140.70.6.255;
+     option subnet-mask 255.255.255.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.70.6.201 140.70.6.254;
+        }
+     option domain-name "voip.commerzbank.com";
+     option routers 140.70.6.6;
+     option ntp-servers 140.70.6.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# RUS02 
+subnet 141.60.138.0 netmask 255.255.255.0 {
+     option broadcast-address 141.60.138.255;
+     option subnet-mask 255.255.255.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 141.60.138.201 141.60.138.254;
+        }
+     option domain-name "voip.commerzbank.com";
+     option routers 141.60.138.6;
+     option ntp-servers 141.60.138.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# KLB01 
+subnet 142.20.122.0 netmask 255.255.255.0 {
+     option broadcast-address 142.20.122.255;
+     option subnet-mask 255.255.255.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 142.20.122.201 142.20.122.254;
+        }
+     option domain-name "voip.commerzbank.com";
+     option routers 142.20.122.6;
+     option ntp-servers 142.20.122.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# LEI01 
+subnet 145.100.84.0 netmask 255.255.255.0 {
+     option broadcast-address 145.100.84.255;
+     option subnet-mask 255.255.255.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 145.100.84.201 145.100.84.254;
+        }
+     option domain-name "voip.commerzbank.com";
+     option routers 145.100.84.6;
+     option ntp-servers 145.100.84.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+}
+#

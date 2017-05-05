@@ -22,6 +22,6 @@ group foobar {
         }
 	interface "bar";
         default-lease-time 1800;	
-	option dhcp6.lq-relay-data 2001::1, "foobar";
+	option dhcp6.lq-relay-data 2001::1 "foobar";
     }
 }

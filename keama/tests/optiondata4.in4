@@ -46,6 +46,6 @@ option foobar.fmt-Ba code 50 = array of unsigned integer 8;
 option dhcp-parameter-request-list 1, 2, 3;
 
 option foobar.fmt-fB code 100 = { boolean, unsigned integer 8 };
-option foobar.fmt-fB off, 66;
+option foobar.fmt-fB off 66;
 
 option routers 10.5.5.1, 10.5.5.2, 10.5.5.3;

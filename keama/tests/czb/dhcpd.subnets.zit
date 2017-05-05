@@ -1,0 +1,2558 @@
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM89 
+subnet 10.151.18.0 netmask 255.255.255.0 {
+     option broadcast-address 10.151.18.255;
+     option subnet-mask 255.255.255.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 10.151.18.64 10.151.18.127;
+             range 10.151.18.128 10.151.18.191;
+        }
+     option domain-name "zit.commerzbank.com";
+     option routers 10.151.18.1;
+     option ntp-servers 10.151.18.1;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+     option SunRay.FWSrvr 140.13.236.186;
+     option SunRay.AuthSrvr 140.13.236.186;
+     option SunRay.AltAuth 140.13.236.186, 140.13.236.202;
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# PRA05 
+subnet 10.186.69.0 netmask 255.255.255.0 {
+     option broadcast-address 10.186.69.255;
+     option subnet-mask 255.255.255.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 10.186.69.64 10.186.69.127;
+             range 10.186.69.128 10.186.69.191;
+        }
+     option domain-name "zit.commerzbank.com";
+     option routers 10.186.69.1;
+     option ntp-servers 10.186.69.1;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+     option SunRay.FWSrvr 142.20.24.242;
+     option SunRay.AuthSrvr 142.20.24.242;
+     option SunRay.AltAuth 142.20.24.242, 140.13.236.210;
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# HBG01 
+subnet 132.0.48.0 netmask 255.255.252.0 {
+     option broadcast-address 132.0.51.255;
+     option subnet-mask 255.255.252.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 132.0.49.1 132.0.49.254;
+             range 132.0.50.1 132.0.50.254;
+        }
+     option domain-name "zit.commerzbank.com";
+     option routers 132.0.48.6;
+     option ntp-servers 132.0.48.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+     option netbios-name-servers 140.15.241.27, 140.15.248.27;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.15.248.57;
+     option tftp-server-name "140.15.248.57";
+     next-server 140.15.248.57;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8c:0f:f8:39:09:18:ff:f0:15:4e:65:74:53:75:70:70:6f:72:74:42:6f:6f:74:43:6f:6e:74:72:6f:6c:0a:04:00:41:41:41:47:03:00:00:00:ff;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8c:0f:f8:39:07:d0;
+     log (info, "*****_____ Matched PXE zit Netz 132.0.48.0/255.255.252.0 _____*****");
+     default-lease-time 1800;
+     max-lease-time 1801;
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# HAN01 
+subnet 134.0.44.0 netmask 255.255.252.0 {
+     option broadcast-address 134.0.47.255;
+     option subnet-mask 255.255.252.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 134.0.45.1 134.0.45.254;
+             range 134.0.46.1 134.0.46.254;
+        }
+     option domain-name "zit.commerzbank.com";
+     option routers 134.0.44.6;
+     option ntp-servers 134.0.44.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+     option netbios-name-servers 140.15.241.27, 140.15.248.27;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.15.248.57;
+     option tftp-server-name "140.15.248.57";
+     next-server 140.15.248.57;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8c:0f:f8:39:09:18:ff:f0:15:4e:65:74:53:75:70:70:6f:72:74:42:6f:6f:74:43:6f:6e:74:72:6f:6c:0a:04:00:41:41:41:47:03:00:00:00:ff;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8c:0f:f8:39:07:d0;
+     log (info, "*****_____ Matched PXE zit Netz 134.0.44.0/255.255.252.0 _____*****");
+     default-lease-time 1800;
+     max-lease-time 1801;
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# DDF01 
+subnet 137.0.80.0 netmask 255.255.252.0 {
+     option broadcast-address 137.0.83.255;
+     option subnet-mask 255.255.252.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 137.0.81.1 137.0.81.254;
+             range 137.0.82.1 137.0.82.254;
+        }
+     option domain-name "zit.commerzbank.com";
+     option routers 137.0.80.6;
+     option ntp-servers 137.0.80.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+     option netbios-name-servers 140.15.241.27, 140.15.248.27;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.15.248.57;
+     option tftp-server-name "140.15.248.57";
+     next-server 140.15.248.57;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8c:0f:f8:39:09:18:ff:f0:15:4e:65:74:53:75:70:70:6f:72:74:42:6f:6f:74:43:6f:6e:74:72:6f:6c:0a:04:00:41:41:41:47:03:00:00:00:ff;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8c:0f:f8:39:07:d0;
+     log (info, "*****_____ Matched PXE zit Netz 137.0.80.0/255.255.252.0 _____*****");
+     default-lease-time 1800;
+     max-lease-time 1801;
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM48 
+subnet 140.101.91.0 netmask 255.255.255.0 {
+     option broadcast-address 140.101.91.255;
+     option subnet-mask 255.255.255.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.101.91.64 140.101.91.127;
+             range 140.101.91.128 140.101.91.191;
+        }
+     option domain-name "zit.commerzbank.com";
+     option routers 140.101.91.6;
+     option ntp-servers 140.101.91.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+     option netbios-name-servers 140.15.241.27, 140.15.248.27;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.15.248.57;
+     option tftp-server-name "140.15.248.57";
+     next-server 140.15.248.57;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8c:0f:f8:39:09:18:ff:f0:15:4e:65:74:53:75:70:70:6f:72:74:42:6f:6f:74:43:6f:6e:74:72:6f:6c:0a:04:00:41:41:41:47:03:00:00:00:ff;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8c:0f:f8:39:07:d0;
+     log (info, "*****_____ Matched PXE zit Netz 140.101.91.0/255.255.255.0 _____*****");
+     default-lease-time 1800;
+     max-lease-time 1801;
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM80 
+subnet 140.13.12.0 netmask 255.255.252.0 {
+     option broadcast-address 140.13.15.255;
+     option subnet-mask 255.255.252.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.13.13.1 140.13.13.254;
+             range 140.13.14.1 140.13.14.254;
+        }
+     option domain-name "zit.commerzbank.com";
+     option routers 140.13.12.6;
+     option ntp-servers 140.13.12.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+     option netbios-name-servers 140.15.241.27, 140.15.248.27;
+     option SunRay.FWSrvr 142.20.24.249;
+     option SunRay.AuthSrvr 142.20.24.249;
+     option SunRay.AltAuth 142.20.24.249, 140.13.227.237;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.15.248.57;
+     option tftp-server-name "140.15.248.57";
+     next-server 140.15.248.57;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8c:0f:f8:39:09:18:ff:f0:15:4e:65:74:53:75:70:70:6f:72:74:42:6f:6f:74:43:6f:6e:74:72:6f:6c:0a:04:00:41:41:41:47:03:00:00:00:ff;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8c:0f:f8:39:07:d0;
+     log (info, "*****_____ Matched PXE zit Netz 140.13.12.0/255.255.252.0 _____*****");
+     default-lease-time 1800;
+     max-lease-time 1801;
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM02 
+subnet 140.130.184.0 netmask 255.255.252.0 {
+     option broadcast-address 140.130.187.255;
+     option subnet-mask 255.255.252.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.130.185.1 140.130.185.254;
+             range 140.130.186.1 140.130.186.254;
+        }
+     option domain-name "zit.commerzbank.com";
+     option routers 140.130.184.6;
+     option ntp-servers 140.130.184.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+     option netbios-name-servers 140.131.11.3, 140.131.11.4;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.15.248.57;
+     option tftp-server-name "140.15.248.57";
+     next-server 140.15.248.57;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8c:0f:f8:39:09:18:ff:f0:15:4e:65:74:53:75:70:70:6f:72:74:42:6f:6f:74:43:6f:6e:74:72:6f:6c:0a:04:00:41:41:41:47:03:00:00:00:ff;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8c:0f:f8:39:07:d0;
+     log (info, "*****_____ Matched PXE zit Netz 140.130.184.0/255.255.252.0 _____*****");
+     default-lease-time 1800;
+     max-lease-time 1801;
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM02 
+subnet 140.131.8.0 netmask 255.255.252.0 {
+     option broadcast-address 140.131.11.255;
+     option subnet-mask 255.255.252.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.131.9.1 140.131.9.254;
+        }
+     option domain-name "zit.commerzbank.com";
+     option routers 140.131.8.6;
+     option ntp-servers 140.131.8.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+     option netbios-name-servers 140.131.11.3, 140.131.11.4;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.15.248.57;
+     option tftp-server-name "140.15.248.57";
+     next-server 140.15.248.57;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8c:0f:f8:39:09:18:ff:f0:15:4e:65:74:53:75:70:70:6f:72:74:42:6f:6f:74:43:6f:6e:74:72:6f:6c:0a:04:00:41:41:41:47:03:00:00:00:ff;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8c:0f:f8:39:07:d0;
+     log (info, "*****_____ Matched PXE zit Netz 140.131.8.0/255.255.252.0 _____*****");
+     default-lease-time 1800;
+     max-lease-time 1801;
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM80 
+subnet 140.14.100.0 netmask 255.255.252.0 {
+     option broadcast-address 140.14.103.255;
+     option subnet-mask 255.255.252.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.14.101.1 140.14.101.254;
+             range 140.14.102.1 140.14.102.254;
+        }
+     option domain-name "zit.commerzbank.com";
+     option routers 140.14.100.6;
+     option ntp-servers 140.14.100.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+     option netbios-name-servers 140.15.241.27, 140.15.248.27;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.15.248.57;
+     option tftp-server-name "140.15.248.57";
+     next-server 140.15.248.57;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8c:0f:f8:39:09:18:ff:f0:15:4e:65:74:53:75:70:70:6f:72:74:42:6f:6f:74:43:6f:6e:74:72:6f:6c:0a:04:00:41:41:41:47:03:00:00:00:ff;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8c:0f:f8:39:07:d0;
+     log (info, "*****_____ Matched PXE zit Netz 140.14.100.0/255.255.252.0 _____*****");
+     default-lease-time 1800;
+     max-lease-time 1801;
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM80 
+subnet 140.14.104.0 netmask 255.255.252.0 {
+     option broadcast-address 140.14.107.255;
+     option subnet-mask 255.255.252.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.14.105.1 140.14.105.254;
+             range 140.14.106.1 140.14.106.254;
+        }
+     option domain-name "zit.commerzbank.com";
+     option routers 140.14.104.6;
+     option ntp-servers 140.14.104.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+     option netbios-name-servers 140.15.241.27, 140.15.248.27;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.15.248.57;
+     option tftp-server-name "140.15.248.57";
+     next-server 140.15.248.57;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8c:0f:f8:39:09:18:ff:f0:15:4e:65:74:53:75:70:70:6f:72:74:42:6f:6f:74:43:6f:6e:74:72:6f:6c:0a:04:00:41:41:41:47:03:00:00:00:ff;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8c:0f:f8:39:07:d0;
+     log (info, "*****_____ Matched PXE zit Netz 140.14.104.0/255.255.252.0 _____*****");
+     default-lease-time 1800;
+     max-lease-time 1801;
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM80 
+subnet 140.14.108.0 netmask 255.255.252.0 {
+     option broadcast-address 140.14.111.255;
+     option subnet-mask 255.255.252.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.14.109.1 140.14.109.254;
+             range 140.14.110.1 140.14.110.254;
+        }
+     option domain-name "zit.commerzbank.com";
+     option routers 140.14.108.6;
+     option ntp-servers 140.14.108.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+     option netbios-name-servers 140.15.241.27, 140.15.248.27;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.15.248.57;
+     option tftp-server-name "140.15.248.57";
+     next-server 140.15.248.57;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8c:0f:f8:39:09:18:ff:f0:15:4e:65:74:53:75:70:70:6f:72:74:42:6f:6f:74:43:6f:6e:74:72:6f:6c:0a:04:00:41:41:41:47:03:00:00:00:ff;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8c:0f:f8:39:07:d0;
+     log (info, "*****_____ Matched PXE zit Netz 140.14.108.0/255.255.252.0 _____*****");
+     default-lease-time 1800;
+     max-lease-time 1801;
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM80 
+subnet 140.14.112.0 netmask 255.255.252.0 {
+     option broadcast-address 140.14.115.255;
+     option subnet-mask 255.255.252.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.14.113.1 140.14.113.254;
+             range 140.14.114.1 140.14.114.254;
+        }
+     option domain-name "zit.commerzbank.com";
+     option routers 140.14.112.6;
+     option ntp-servers 140.14.112.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+     option netbios-name-servers 140.15.241.27, 140.15.248.27;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.15.248.57;
+     option tftp-server-name "140.15.248.57";
+     next-server 140.15.248.57;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8c:0f:f8:39:09:18:ff:f0:15:4e:65:74:53:75:70:70:6f:72:74:42:6f:6f:74:43:6f:6e:74:72:6f:6c:0a:04:00:41:41:41:47:03:00:00:00:ff;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8c:0f:f8:39:07:d0;
+     log (info, "*****_____ Matched PXE zit Netz 140.14.112.0/255.255.252.0 _____*****");
+     default-lease-time 1800;
+     max-lease-time 1801;
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM80 
+subnet 140.14.116.0 netmask 255.255.252.0 {
+     option broadcast-address 140.14.119.255;
+     option subnet-mask 255.255.252.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.14.117.1 140.14.117.254;
+             range 140.14.118.1 140.14.118.254;
+        }
+     option domain-name "zit.commerzbank.com";
+     option routers 140.14.116.6;
+     option ntp-servers 140.14.116.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+     option netbios-name-servers 140.15.241.27, 140.15.248.27;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.15.248.57;
+     option tftp-server-name "140.15.248.57";
+     next-server 140.15.248.57;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8c:0f:f8:39:09:18:ff:f0:15:4e:65:74:53:75:70:70:6f:72:74:42:6f:6f:74:43:6f:6e:74:72:6f:6c:0a:04:00:41:41:41:47:03:00:00:00:ff;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8c:0f:f8:39:07:d0;
+     log (info, "*****_____ Matched PXE zit Netz 140.14.116.0/255.255.252.0 _____*****");
+     default-lease-time 1800;
+     max-lease-time 1801;
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM80 
+subnet 140.14.12.0 netmask 255.255.252.0 {
+     option broadcast-address 140.14.15.255;
+     option subnet-mask 255.255.252.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.14.13.1 140.14.13.254;
+             range 140.14.14.1 140.14.14.254;
+        }
+     option domain-name "zit.commerzbank.com";
+     option routers 140.14.12.6;
+     option ntp-servers 140.14.12.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+     option netbios-name-servers 140.15.241.27, 140.15.248.27;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.15.248.57;
+     option tftp-server-name "140.15.248.57";
+     next-server 140.15.248.57;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8c:0f:f8:39:09:18:ff:f0:15:4e:65:74:53:75:70:70:6f:72:74:42:6f:6f:74:43:6f:6e:74:72:6f:6c:0a:04:00:41:41:41:47:03:00:00:00:ff;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8c:0f:f8:39:07:d0;
+     log (info, "*****_____ Matched PXE zit Netz 140.14.12.0/255.255.252.0 _____*****");
+     default-lease-time 1800;
+     max-lease-time 1801;
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM80 
+subnet 140.14.120.0 netmask 255.255.252.0 {
+     option broadcast-address 140.14.123.255;
+     option subnet-mask 255.255.252.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.14.121.1 140.14.121.254;
+             range 140.14.122.1 140.14.122.254;
+        }
+     option domain-name "zit.commerzbank.com";
+     option routers 140.14.120.6;
+     option ntp-servers 140.14.120.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+     option netbios-name-servers 140.15.241.27, 140.15.248.27;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.15.248.57;
+     option tftp-server-name "140.15.248.57";
+     next-server 140.15.248.57;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8c:0f:f8:39:09:18:ff:f0:15:4e:65:74:53:75:70:70:6f:72:74:42:6f:6f:74:43:6f:6e:74:72:6f:6c:0a:04:00:41:41:41:47:03:00:00:00:ff;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8c:0f:f8:39:07:d0;
+     log (info, "*****_____ Matched PXE zit Netz 140.14.120.0/255.255.252.0 _____*****");
+     default-lease-time 1800;
+     max-lease-time 1801;
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM80 
+subnet 140.14.124.0 netmask 255.255.252.0 {
+     option broadcast-address 140.14.127.255;
+     option subnet-mask 255.255.252.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.14.125.1 140.14.125.254;
+             range 140.14.126.1 140.14.126.254;
+        }
+     option domain-name "zit.commerzbank.com";
+     option routers 140.14.124.6;
+     option ntp-servers 140.14.124.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+     option netbios-name-servers 140.15.241.27, 140.15.248.27;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.15.248.57;
+     option tftp-server-name "140.15.248.57";
+     next-server 140.15.248.57;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8c:0f:f8:39:09:18:ff:f0:15:4e:65:74:53:75:70:70:6f:72:74:42:6f:6f:74:43:6f:6e:74:72:6f:6c:0a:04:00:41:41:41:47:03:00:00:00:ff;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8c:0f:f8:39:07:d0;
+     log (info, "*****_____ Matched PXE zit Netz 140.14.124.0/255.255.252.0 _____*****");
+     default-lease-time 1800;
+     max-lease-time 1801;
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM80 
+subnet 140.14.16.0 netmask 255.255.252.0 {
+     option broadcast-address 140.14.19.255;
+     option subnet-mask 255.255.252.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.14.17.1 140.14.17.254;
+             range 140.14.18.1 140.14.18.254;
+        }
+     option domain-name "zit.commerzbank.com";
+     option routers 140.14.16.6;
+     option ntp-servers 140.14.16.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+     option netbios-name-servers 140.15.241.27, 140.15.248.27;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.15.248.57;
+     option tftp-server-name "140.15.248.57";
+     next-server 140.15.248.57;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8c:0f:f8:39:09:18:ff:f0:15:4e:65:74:53:75:70:70:6f:72:74:42:6f:6f:74:43:6f:6e:74:72:6f:6c:0a:04:00:41:41:41:47:03:00:00:00:ff;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8c:0f:f8:39:07:d0;
+     log (info, "*****_____ Matched PXE zit Netz 140.14.16.0/255.255.252.0 _____*****");
+     default-lease-time 1800;
+     max-lease-time 1801;
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM80 
+subnet 140.14.164.0 netmask 255.255.252.0 {
+     option broadcast-address 140.14.167.255;
+     option subnet-mask 255.255.252.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.14.165.1 140.14.165.254;
+             range 140.14.166.1 140.14.166.254;
+        }
+     option domain-name "zit.commerzbank.com";
+     option routers 140.14.164.6;
+     option ntp-servers 140.14.164.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+     option netbios-name-servers 140.15.241.27, 140.15.248.27;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.15.248.57;
+     option tftp-server-name "140.15.248.57";
+     next-server 140.15.248.57;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8c:0f:f8:39:09:18:ff:f0:15:4e:65:74:53:75:70:70:6f:72:74:42:6f:6f:74:43:6f:6e:74:72:6f:6c:0a:04:00:41:41:41:47:03:00:00:00:ff;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8c:0f:f8:39:07:d0;
+     log (info, "*****_____ Matched PXE zit Netz 140.14.164.0/255.255.252.0 _____*****");
+     default-lease-time 1800;
+     max-lease-time 1801;
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM80 
+subnet 140.14.20.0 netmask 255.255.252.0 {
+     option broadcast-address 140.14.23.255;
+     option subnet-mask 255.255.252.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.14.21.1 140.14.21.254;
+             range 140.14.22.1 140.14.22.254;
+        }
+     option domain-name "zit.commerzbank.com";
+     option routers 140.14.20.6;
+     option ntp-servers 140.14.20.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+     option netbios-name-servers 140.15.241.27, 140.15.248.27;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.15.248.57;
+     option tftp-server-name "140.15.248.57";
+     next-server 140.15.248.57;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8c:0f:f8:39:09:18:ff:f0:15:4e:65:74:53:75:70:70:6f:72:74:42:6f:6f:74:43:6f:6e:74:72:6f:6c:0a:04:00:41:41:41:47:03:00:00:00:ff;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8c:0f:f8:39:07:d0;
+     log (info, "*****_____ Matched PXE zit Netz 140.14.20.0/255.255.252.0 _____*****");
+     default-lease-time 1800;
+     max-lease-time 1801;
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM80 
+subnet 140.14.212.0 netmask 255.255.252.0 {
+     option broadcast-address 140.14.215.255;
+     option subnet-mask 255.255.252.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.14.213.1 140.14.213.254;
+             range 140.14.214.1 140.14.214.254;
+        }
+     option domain-name "zit.commerzbank.com";
+     option routers 140.14.212.6;
+     option ntp-servers 140.14.212.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+     option netbios-name-servers 140.131.11.3, 140.131.11.4;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.15.248.57;
+     option tftp-server-name "140.15.248.57";
+     next-server 140.15.248.57;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8c:0f:f8:39:09:18:ff:f0:15:4e:65:74:53:75:70:70:6f:72:74:42:6f:6f:74:43:6f:6e:74:72:6f:6c:0a:04:00:41:41:41:47:03:00:00:00:ff;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8c:0f:f8:39:07:d0;
+     log (info, "*****_____ Matched PXE zit Netz 140.14.212.0/255.255.252.0 _____*****");
+     default-lease-time 1800;
+     max-lease-time 1801;
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM80 
+subnet 140.14.24.0 netmask 255.255.252.0 {
+     option broadcast-address 140.14.27.255;
+     option subnet-mask 255.255.252.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.14.25.1 140.14.25.254;
+             range 140.14.26.1 140.14.26.254;
+        }
+     option domain-name "zit.commerzbank.com";
+     option routers 140.14.24.6;
+     option ntp-servers 140.14.24.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+     option netbios-name-servers 140.15.241.27, 140.15.248.27;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.15.248.57;
+     option tftp-server-name "140.15.248.57";
+     next-server 140.15.248.57;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8c:0f:f8:39:09:18:ff:f0:15:4e:65:74:53:75:70:70:6f:72:74:42:6f:6f:74:43:6f:6e:74:72:6f:6c:0a:04:00:41:41:41:47:03:00:00:00:ff;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8c:0f:f8:39:07:d0;
+     log (info, "*****_____ Matched PXE zit Netz 140.14.24.0/255.255.252.0 _____*****");
+     default-lease-time 1800;
+     max-lease-time 1801;
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM80 
+subnet 140.14.244.0 netmask 255.255.255.0 {
+     option broadcast-address 140.14.244.255;
+     option subnet-mask 255.255.255.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.14.244.64 140.14.244.127;
+             range 140.14.244.128 140.14.244.191;
+        }
+     option domain-name "zit.commerzbank.com";
+     option routers 140.14.244.6;
+     option ntp-servers 140.14.244.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+     option netbios-name-servers 140.104.46.30, 140.104.47.30;
+     option SunRay.FWSrvr 142.20.24.249;
+     option SunRay.AuthSrvr 142.20.24.249;
+     option SunRay.AltAuth 142.20.24.249, 140.13.227.237;
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM80 
+subnet 140.14.247.0 netmask 255.255.255.0 {
+     option broadcast-address 140.14.247.255;
+     option subnet-mask 255.255.255.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.14.247.64 140.14.247.127;
+             range 140.14.247.128 140.14.247.191;
+        }
+     option domain-name "zit.commerzbank.com";
+     option routers 140.14.247.6;
+     option ntp-servers 140.14.247.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+     option netbios-name-servers 140.104.46.30, 140.104.47.30;
+     option SunRay.FWSrvr 142.20.24.249;
+     option SunRay.AuthSrvr 142.20.24.249;
+     option SunRay.AltAuth 142.20.24.249, 140.13.227.237;
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM80 
+subnet 140.14.28.0 netmask 255.255.252.0 {
+     option broadcast-address 140.14.31.255;
+     option subnet-mask 255.255.252.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.14.29.1 140.14.29.254;
+             range 140.14.30.1 140.14.30.254;
+        }
+     option domain-name "zit.commerzbank.com";
+     option routers 140.14.28.6;
+     option ntp-servers 140.14.28.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+     option netbios-name-servers 140.15.241.27, 140.15.248.27;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.15.248.57;
+     option tftp-server-name "140.15.248.57";
+     next-server 140.15.248.57;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8c:0f:f8:39:09:18:ff:f0:15:4e:65:74:53:75:70:70:6f:72:74:42:6f:6f:74:43:6f:6e:74:72:6f:6c:0a:04:00:41:41:41:47:03:00:00:00:ff;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8c:0f:f8:39:07:d0;
+     log (info, "*****_____ Matched PXE zit Netz 140.14.28.0/255.255.252.0 _____*****");
+     default-lease-time 1800;
+     max-lease-time 1801;
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM80 
+subnet 140.14.32.0 netmask 255.255.252.0 {
+     option broadcast-address 140.14.35.255;
+     option subnet-mask 255.255.252.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.14.33.1 140.14.33.254;
+             range 140.14.34.1 140.14.34.254;
+        }
+     option domain-name "zit.commerzbank.com";
+     option routers 140.14.32.6;
+     option ntp-servers 140.14.32.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+     option netbios-name-servers 140.15.241.27, 140.15.248.27;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.15.248.57;
+     option tftp-server-name "140.15.248.57";
+     next-server 140.15.248.57;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8c:0f:f8:39:09:18:ff:f0:15:4e:65:74:53:75:70:70:6f:72:74:42:6f:6f:74:43:6f:6e:74:72:6f:6c:0a:04:00:41:41:41:47:03:00:00:00:ff;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8c:0f:f8:39:07:d0;
+     log (info, "*****_____ Matched PXE zit Netz 140.14.32.0/255.255.252.0 _____*****");
+     default-lease-time 1800;
+     max-lease-time 1801;
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM80 
+subnet 140.14.36.0 netmask 255.255.252.0 {
+     option broadcast-address 140.14.39.255;
+     option subnet-mask 255.255.252.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.14.37.1 140.14.37.254;
+             range 140.14.38.1 140.14.38.254;
+        }
+     option domain-name "zit.commerzbank.com";
+     option routers 140.14.36.6;
+     option ntp-servers 140.14.36.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+     option netbios-name-servers 140.15.241.27, 140.15.248.27;
+     option SunRay.FWSrvr 142.20.24.249;
+     option SunRay.AuthSrvr 142.20.24.249;
+     option SunRay.AltAuth 142.20.24.249, 140.13.227.237;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.15.248.57;
+     option tftp-server-name "140.15.248.57";
+     next-server 140.15.248.57;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8c:0f:f8:39:09:18:ff:f0:15:4e:65:74:53:75:70:70:6f:72:74:42:6f:6f:74:43:6f:6e:74:72:6f:6c:0a:04:00:41:41:41:47:03:00:00:00:ff;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8c:0f:f8:39:07:d0;
+     log (info, "*****_____ Matched PXE zit Netz 140.14.36.0/255.255.252.0 _____*****");
+     default-lease-time 1800;
+     max-lease-time 1801;
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM80 
+subnet 140.14.4.0 netmask 255.255.252.0 {
+     option broadcast-address 140.14.7.255;
+     option subnet-mask 255.255.252.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.14.5.1 140.14.5.254;
+             range 140.14.6.1 140.14.6.254;
+        }
+     option domain-name "zit.commerzbank.com";
+     option routers 140.14.4.6;
+     option ntp-servers 140.14.4.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+     option netbios-name-servers 140.15.241.27, 140.15.248.27;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.15.248.57;
+     option tftp-server-name "140.15.248.57";
+     next-server 140.15.248.57;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8c:0f:f8:39:09:18:ff:f0:15:4e:65:74:53:75:70:70:6f:72:74:42:6f:6f:74:43:6f:6e:74:72:6f:6c:0a:04:00:41:41:41:47:03:00:00:00:ff;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8c:0f:f8:39:07:d0;
+     log (info, "*****_____ Matched PXE zit Netz 140.14.4.0/255.255.252.0 _____*****");
+     default-lease-time 1800;
+     max-lease-time 1801;
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM80 
+subnet 140.14.40.0 netmask 255.255.252.0 {
+     option broadcast-address 140.14.43.255;
+     option subnet-mask 255.255.252.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.14.41.1 140.14.41.254;
+             range 140.14.42.1 140.14.42.254;
+        }
+     option domain-name "zit.commerzbank.com";
+     option routers 140.14.40.6;
+     option ntp-servers 140.14.40.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+     option netbios-name-servers 140.15.241.27, 140.15.248.27;
+     option SunRay.FWSrvr 142.20.24.249;
+     option SunRay.AuthSrvr 142.20.24.249;
+     option SunRay.AltAuth 142.20.24.249, 140.13.227.237;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.15.248.57;
+     option tftp-server-name "140.15.248.57";
+     next-server 140.15.248.57;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8c:0f:f8:39:09:18:ff:f0:15:4e:65:74:53:75:70:70:6f:72:74:42:6f:6f:74:43:6f:6e:74:72:6f:6c:0a:04:00:41:41:41:47:03:00:00:00:ff;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8c:0f:f8:39:07:d0;
+     log (info, "*****_____ Matched PXE zit Netz 140.14.40.0/255.255.252.0 _____*****");
+     default-lease-time 1800;
+     max-lease-time 1801;
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM80 
+subnet 140.14.44.0 netmask 255.255.252.0 {
+     option broadcast-address 140.14.47.255;
+     option subnet-mask 255.255.252.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.14.45.1 140.14.45.254;
+             range 140.14.46.1 140.14.46.254;
+        }
+     option domain-name "zit.commerzbank.com";
+     option routers 140.14.44.6;
+     option ntp-servers 140.14.44.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+     option netbios-name-servers 140.15.241.27, 140.15.248.27;
+     min-lease-time 431990;
+     default-lease-time 432000;
+     max-lease-time 432010;
+     option SunRay.FWSrvr 140.13.236.210;
+     option SunRay.AuthSrvr 140.13.236.210;
+     option SunRay.AltAuth 140.13.236.210, 142.20.24.242;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.15.248.57;
+     option tftp-server-name "140.15.248.57";
+     next-server 140.15.248.57;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8c:0f:f8:39:09:18:ff:f0:15:4e:65:74:53:75:70:70:6f:72:74:42:6f:6f:74:43:6f:6e:74:72:6f:6c:0a:04:00:41:41:41:47:03:00:00:00:ff;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8c:0f:f8:39:07:d0;
+     log (info, "*****_____ Matched PXE zit Netz 140.14.44.0/255.255.252.0 _____*****");
+     default-lease-time 1800;
+     max-lease-time 1801;
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM80 
+subnet 140.14.48.0 netmask 255.255.252.0 {
+     option broadcast-address 140.14.51.255;
+     option subnet-mask 255.255.252.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.14.49.1 140.14.49.254;
+             range 140.14.50.1 140.14.50.254;
+        }
+     option domain-name "zit.commerzbank.com";
+     option routers 140.14.48.6;
+     option ntp-servers 140.14.48.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+     option netbios-name-servers 140.15.241.27, 140.15.248.27;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.15.248.57;
+     option tftp-server-name "140.15.248.57";
+     next-server 140.15.248.57;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8c:0f:f8:39:09:18:ff:f0:15:4e:65:74:53:75:70:70:6f:72:74:42:6f:6f:74:43:6f:6e:74:72:6f:6c:0a:04:00:41:41:41:47:03:00:00:00:ff;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8c:0f:f8:39:07:d0;
+     log (info, "*****_____ Matched PXE zit Netz 140.14.48.0/255.255.252.0 _____*****");
+     default-lease-time 1800;
+     max-lease-time 1801;
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM80 
+subnet 140.14.52.0 netmask 255.255.252.0 {
+     option broadcast-address 140.14.55.255;
+     option subnet-mask 255.255.252.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.14.53.1 140.14.53.254;
+             range 140.14.54.1 140.14.54.254;
+        }
+     option domain-name "zit.commerzbank.com";
+     option routers 140.14.52.6;
+     option ntp-servers 140.14.52.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+     option netbios-name-servers 140.15.241.27, 140.15.248.27;
+     min-lease-time 431990;
+     default-lease-time 432000;
+     max-lease-time 432010;
+     option SunRay.FWSrvr 142.20.24.249;
+     option SunRay.AuthSrvr 142.20.24.249;
+     option SunRay.AltAuth 142.20.24.249, 140.13.227.237;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.15.248.57;
+     option tftp-server-name "140.15.248.57";
+     next-server 140.15.248.57;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8c:0f:f8:39:09:18:ff:f0:15:4e:65:74:53:75:70:70:6f:72:74:42:6f:6f:74:43:6f:6e:74:72:6f:6c:0a:04:00:41:41:41:47:03:00:00:00:ff;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8c:0f:f8:39:07:d0;
+     log (info, "*****_____ Matched PXE zit Netz 140.14.52.0/255.255.252.0 _____*****");
+     default-lease-time 1800;
+     max-lease-time 1801;
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM80 
+subnet 140.14.56.0 netmask 255.255.252.0 {
+     option broadcast-address 140.14.59.255;
+     option subnet-mask 255.255.252.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.14.57.1 140.14.57.254;
+             range 140.14.58.1 140.14.58.254;
+        }
+     option domain-name "zit.commerzbank.com";
+     option routers 140.14.56.6;
+     option ntp-servers 140.14.56.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+     option netbios-name-servers 140.15.241.27, 140.15.248.27;
+     min-lease-time 431990;
+     default-lease-time 432000;
+     max-lease-time 432010;
+     option SunRay.FWSrvr 142.20.24.249;
+     option SunRay.AuthSrvr 142.20.24.249;
+     option SunRay.AltAuth 142.20.24.249, 140.13.227.237;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.15.248.57;
+     option tftp-server-name "140.15.248.57";
+     next-server 140.15.248.57;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8c:0f:f8:39:09:18:ff:f0:15:4e:65:74:53:75:70:70:6f:72:74:42:6f:6f:74:43:6f:6e:74:72:6f:6c:0a:04:00:41:41:41:47:03:00:00:00:ff;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8c:0f:f8:39:07:d0;
+     log (info, "*****_____ Matched PXE zit Netz 140.14.56.0/255.255.252.0 _____*****");
+     default-lease-time 1800;
+     max-lease-time 1801;
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM80 
+subnet 140.14.60.0 netmask 255.255.252.0 {
+     option broadcast-address 140.14.63.255;
+     option subnet-mask 255.255.252.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.14.61.1 140.14.61.254;
+             range 140.14.62.1 140.14.62.254;
+        }
+     option domain-name "zit.commerzbank.com";
+     option routers 140.14.60.6;
+     option ntp-servers 140.14.60.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+     option netbios-name-servers 140.15.241.27, 140.15.248.27;
+     option SunRay.FWSrvr 140.13.172.32;
+     option SunRay.AuthSrvr 140.13.172.32;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.15.248.57;
+     option tftp-server-name "140.15.248.57";
+     next-server 140.15.248.57;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8c:0f:f8:39:09:18:ff:f0:15:4e:65:74:53:75:70:70:6f:72:74:42:6f:6f:74:43:6f:6e:74:72:6f:6c:0a:04:00:41:41:41:47:03:00:00:00:ff;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8c:0f:f8:39:07:d0;
+     log (info, "*****_____ Matched PXE zit Netz 140.14.60.0/255.255.252.0 _____*****");
+     default-lease-time 1800;
+     max-lease-time 1801;
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM80 
+subnet 140.14.64.0 netmask 255.255.252.0 {
+     option broadcast-address 140.14.67.255;
+     option subnet-mask 255.255.252.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.14.65.1 140.14.65.254;
+             range 140.14.66.1 140.14.66.254;
+        }
+     option domain-name "zit.commerzbank.com";
+     option routers 140.14.64.6;
+     option ntp-servers 140.14.64.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+     option netbios-name-servers 140.15.241.27, 140.15.248.27;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.15.248.57;
+     option tftp-server-name "140.15.248.57";
+     next-server 140.15.248.57;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8c:0f:f8:39:09:18:ff:f0:15:4e:65:74:53:75:70:70:6f:72:74:42:6f:6f:74:43:6f:6e:74:72:6f:6c:0a:04:00:41:41:41:47:03:00:00:00:ff;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8c:0f:f8:39:07:d0;
+     log (info, "*****_____ Matched PXE zit Netz 140.14.64.0/255.255.252.0 _____*****");
+     default-lease-time 1800;
+     max-lease-time 1801;
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM80 
+subnet 140.14.68.0 netmask 255.255.252.0 {
+     option broadcast-address 140.14.71.255;
+     option subnet-mask 255.255.252.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.14.69.1 140.14.69.254;
+             range 140.14.70.1 140.14.70.254;
+        }
+     option domain-name "zit.commerzbank.com";
+     option routers 140.14.68.6;
+     option ntp-servers 140.14.68.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+     option netbios-name-servers 140.15.241.27, 140.15.248.27;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.15.248.57;
+     option tftp-server-name "140.15.248.57";
+     next-server 140.15.248.57;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8c:0f:f8:39:09:18:ff:f0:15:4e:65:74:53:75:70:70:6f:72:74:42:6f:6f:74:43:6f:6e:74:72:6f:6c:0a:04:00:41:41:41:47:03:00:00:00:ff;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8c:0f:f8:39:07:d0;
+     log (info, "*****_____ Matched PXE zit Netz 140.14.68.0/255.255.252.0 _____*****");
+     default-lease-time 1800;
+     max-lease-time 1801;
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM80 
+subnet 140.14.72.0 netmask 255.255.252.0 {
+     option broadcast-address 140.14.75.255;
+     option subnet-mask 255.255.252.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.14.73.1 140.14.73.254;
+             range 140.14.74.1 140.14.74.254;
+        }
+     option domain-name "zit.commerzbank.com";
+     option routers 140.14.72.6;
+     option ntp-servers 140.14.72.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+     option netbios-name-servers 140.15.241.27, 140.15.248.27;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.15.248.57;
+     option tftp-server-name "140.15.248.57";
+     next-server 140.15.248.57;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8c:0f:f8:39:09:18:ff:f0:15:4e:65:74:53:75:70:70:6f:72:74:42:6f:6f:74:43:6f:6e:74:72:6f:6c:0a:04:00:41:41:41:47:03:00:00:00:ff;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8c:0f:f8:39:07:d0;
+     log (info, "*****_____ Matched PXE zit Netz 140.14.72.0/255.255.252.0 _____*****");
+     default-lease-time 1800;
+     max-lease-time 1801;
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM80 
+subnet 140.14.76.0 netmask 255.255.252.0 {
+     option broadcast-address 140.14.79.255;
+     option subnet-mask 255.255.252.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.14.77.1 140.14.77.254;
+             range 140.14.78.1 140.14.78.254;
+        }
+     option domain-name "zit.commerzbank.com";
+     option routers 140.14.76.6;
+     option ntp-servers 140.13.153.12, 140.13.153.14;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+     option netbios-name-servers 140.15.241.27, 140.15.248.27;
+     option SunRay.FWSrvr 140.13.236.210;
+     option SunRay.AuthSrvr 140.13.236.210;
+     option SunRay.AltAuth 140.13.236.210, 142.20.24.242;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.15.248.57;
+     option tftp-server-name "140.15.248.57";
+     next-server 140.15.248.57;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8c:0f:f8:39:09:18:ff:f0:15:4e:65:74:53:75:70:70:6f:72:74:42:6f:6f:74:43:6f:6e:74:72:6f:6c:0a:04:00:41:41:41:47:03:00:00:00:ff;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8c:0f:f8:39:07:d0;
+     log (info, "*****_____ Matched PXE zit Netz 140.14.76.0/255.255.252.0 _____*****");
+     default-lease-time 1800;
+     max-lease-time 1801;
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM80 
+subnet 140.14.8.0 netmask 255.255.252.0 {
+     option broadcast-address 140.14.11.255;
+     option subnet-mask 255.255.252.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.14.9.1 140.14.9.254;
+             range 140.14.10.1 140.14.10.254;
+        }
+     option domain-name "zit.commerzbank.com";
+     option routers 140.14.8.6;
+     option ntp-servers 140.14.8.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+     option netbios-name-servers 140.15.241.27, 140.15.248.27;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.15.248.57;
+     option tftp-server-name "140.15.248.57";
+     next-server 140.15.248.57;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8c:0f:f8:39:09:18:ff:f0:15:4e:65:74:53:75:70:70:6f:72:74:42:6f:6f:74:43:6f:6e:74:72:6f:6c:0a:04:00:41:41:41:47:03:00:00:00:ff;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8c:0f:f8:39:07:d0;
+     log (info, "*****_____ Matched PXE zit Netz 140.14.8.0/255.255.252.0 _____*****");
+     default-lease-time 1800;
+     max-lease-time 1801;
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM80 
+subnet 140.14.80.0 netmask 255.255.252.0 {
+     option broadcast-address 140.14.83.255;
+     option subnet-mask 255.255.252.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.14.81.1 140.14.81.254;
+             range 140.14.82.1 140.14.82.254;
+        }
+     option domain-name "zit.commerzbank.com";
+     option routers 140.14.80.6;
+     option ntp-servers 140.14.80.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+     option netbios-name-servers 140.15.241.27, 140.15.248.27;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.15.248.57;
+     option tftp-server-name "140.15.248.57";
+     next-server 140.15.248.57;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8c:0f:f8:39:09:18:ff:f0:15:4e:65:74:53:75:70:70:6f:72:74:42:6f:6f:74:43:6f:6e:74:72:6f:6c:0a:04:00:41:41:41:47:03:00:00:00:ff;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8c:0f:f8:39:07:d0;
+     log (info, "*****_____ Matched PXE zit Netz 140.14.80.0/255.255.252.0 _____*****");
+     default-lease-time 1800;
+     max-lease-time 1801;
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM80 
+subnet 140.14.84.0 netmask 255.255.252.0 {
+     option broadcast-address 140.14.87.255;
+     option subnet-mask 255.255.252.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.14.85.1 140.14.85.254;
+             range 140.14.86.1 140.14.86.254;
+        }
+     option domain-name "zit.commerzbank.com";
+     option routers 140.14.84.6;
+     option ntp-servers 140.14.84.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+     option netbios-name-servers 140.15.241.27, 140.15.248.27;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.15.248.57;
+     option tftp-server-name "140.15.248.57";
+     next-server 140.15.248.57;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8c:0f:f8:39:09:18:ff:f0:15:4e:65:74:53:75:70:70:6f:72:74:42:6f:6f:74:43:6f:6e:74:72:6f:6c:0a:04:00:41:41:41:47:03:00:00:00:ff;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8c:0f:f8:39:07:d0;
+     log (info, "*****_____ Matched PXE zit Netz 140.14.84.0/255.255.252.0 _____*****");
+     default-lease-time 1800;
+     max-lease-time 1801;
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM80 
+subnet 140.14.88.0 netmask 255.255.252.0 {
+     option broadcast-address 140.14.91.255;
+     option subnet-mask 255.255.252.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.14.89.1 140.14.89.254;
+             range 140.14.90.1 140.14.90.254;
+        }
+     option domain-name "zit.commerzbank.com";
+     option routers 140.14.88.6;
+     option ntp-servers 140.14.88.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+     option netbios-name-servers 140.15.241.27, 140.15.248.27;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.15.248.57;
+     option tftp-server-name "140.15.248.57";
+     next-server 140.15.248.57;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8c:0f:f8:39:09:18:ff:f0:15:4e:65:74:53:75:70:70:6f:72:74:42:6f:6f:74:43:6f:6e:74:72:6f:6c:0a:04:00:41:41:41:47:03:00:00:00:ff;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8c:0f:f8:39:07:d0;
+     log (info, "*****_____ Matched PXE zit Netz 140.14.88.0/255.255.252.0 _____*****");
+     default-lease-time 1800;
+     max-lease-time 1801;
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM80 
+subnet 140.14.92.0 netmask 255.255.252.0 {
+     option broadcast-address 140.14.95.255;
+     option subnet-mask 255.255.252.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.14.93.1 140.14.93.254;
+             range 140.14.94.1 140.14.94.254;
+        }
+     option domain-name "zit.commerzbank.com";
+     option routers 140.14.92.6;
+     option ntp-servers 140.14.92.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+     option netbios-name-servers 140.15.241.27, 140.15.248.27;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.15.248.57;
+     option tftp-server-name "140.15.248.57";
+     next-server 140.15.248.57;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8c:0f:f8:39:09:18:ff:f0:15:4e:65:74:53:75:70:70:6f:72:74:42:6f:6f:74:43:6f:6e:74:72:6f:6c:0a:04:00:41:41:41:47:03:00:00:00:ff;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8c:0f:f8:39:07:d0;
+     log (info, "*****_____ Matched PXE zit Netz 140.14.92.0/255.255.252.0 _____*****");
+     default-lease-time 1800;
+     max-lease-time 1801;
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM80 
+subnet 140.14.96.0 netmask 255.255.252.0 {
+     option broadcast-address 140.14.99.255;
+     option subnet-mask 255.255.252.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.14.97.1 140.14.97.254;
+             range 140.14.98.1 140.14.98.254;
+        }
+     option domain-name "zit.commerzbank.com";
+     option routers 140.14.96.6;
+     option ntp-servers 140.14.96.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+     option netbios-name-servers 140.15.241.27, 140.15.248.27;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.15.248.57;
+     option tftp-server-name "140.15.248.57";
+     next-server 140.15.248.57;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8c:0f:f8:39:09:18:ff:f0:15:4e:65:74:53:75:70:70:6f:72:74:42:6f:6f:74:43:6f:6e:74:72:6f:6c:0a:04:00:41:41:41:47:03:00:00:00:ff;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8c:0f:f8:39:07:d0;
+     log (info, "*****_____ Matched PXE zit Netz 140.14.96.0/255.255.252.0 _____*****");
+     default-lease-time 1800;
+     max-lease-time 1801;
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM80 
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM80 
+subnet 140.15.84.0 netmask 255.255.255.0 {
+     option broadcast-address 140.15.84.255;
+     option subnet-mask 255.255.255.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.15.84.64 140.15.84.127;
+             range 140.15.84.128 140.15.84.191;
+        }
+     option domain-name "zit.commerzbank.com";
+     option routers 140.15.84.6;
+     option ntp-servers 140.15.84.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+     option netbios-name-servers 140.104.46.30, 140.104.47.30;
+     option SunRay.FWSrvr 140.13.172.32;
+     option SunRay.AuthSrvr 140.13.172.32;
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM80 
+subnet 140.15.86.0 netmask 255.255.255.0 {
+     option broadcast-address 140.15.86.255;
+     option subnet-mask 255.255.255.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.15.86.64 140.15.86.127;
+             range 140.15.86.128 140.15.86.191;
+        }
+     option domain-name "zit.commerzbank.com";
+     option routers 140.15.86.6;
+     option ntp-servers 140.15.86.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+     option netbios-name-servers 140.15.241.27, 140.15.248.27;
+     min-lease-time 431990;
+     default-lease-time 432000;
+     max-lease-time 432010;
+     option SunRay.FWSrvr 140.13.236.210;
+     option SunRay.AuthSrvr 140.13.236.210;
+     option SunRay.AltAuth 140.13.236.210, 142.20.24.242;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.15.248.57;
+     option tftp-server-name "140.15.248.57";
+     next-server 140.15.248.57;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8c:0f:f8:39:09:18:ff:f0:15:4e:65:74:53:75:70:70:6f:72:74:42:6f:6f:74:43:6f:6e:74:72:6f:6c:0a:04:00:41:41:41:47:03:00:00:00:ff;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8c:0f:f8:39:07:d0;
+     log (info, "*****_____ Matched PXE zit Netz 140.15.86.0/255.255.255.0 _____*****");
+     default-lease-time 1800;
+     max-lease-time 1801;
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM80 
+subnet 140.15.87.0 netmask 255.255.255.0 {
+     option broadcast-address 140.15.87.255;
+     option subnet-mask 255.255.255.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.15.87.64 140.15.87.127;
+             range 140.15.87.128 140.15.87.191;
+        }
+     option domain-name "zit.commerzbank.com";
+     option routers 140.15.87.6;
+     option ntp-servers 140.15.87.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+     option netbios-name-servers 140.15.241.27, 140.15.248.27;
+     min-lease-time 431990;
+     default-lease-time 432000;
+     max-lease-time 432010;
+     option SunRay.FWSrvr 140.13.236.210;
+     option SunRay.AuthSrvr 140.13.236.210;
+     option SunRay.AltAuth 140.13.236.210, 142.20.24.242;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.15.248.57;
+     option tftp-server-name "140.15.248.57";
+     next-server 140.15.248.57;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8c:0f:f8:39:09:18:ff:f0:15:4e:65:74:53:75:70:70:6f:72:74:42:6f:6f:74:43:6f:6e:74:72:6f:6c:0a:04:00:41:41:41:47:03:00:00:00:ff;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8c:0f:f8:39:07:d0;
+     log (info, "*****_____ Matched PXE zit Netz 140.15.87.0/255.255.255.0 _____*****");
+     default-lease-time 1800;
+     max-lease-time 1801;
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM56 
+subnet 140.150.48.0 netmask 255.255.252.0 {
+     option broadcast-address 140.150.51.255;
+     option subnet-mask 255.255.252.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.150.49.51 140.150.49.200;
+        }
+     option domain-name "zit.commerzbank.com";
+     option routers 140.150.48.6;
+     option ntp-servers 140.150.48.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+     option netbios-name-servers 140.150.131.3, 140.150.131.4;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.15.248.57;
+     option tftp-server-name "140.15.248.57";
+     next-server 140.15.248.57;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8c:0f:f8:39:09:18:ff:f0:15:4e:65:74:53:75:70:70:6f:72:74:42:6f:6f:74:43:6f:6e:74:72:6f:6c:0a:04:00:41:41:41:47:03:00:00:00:ff;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8c:0f:f8:39:07:d0;
+     log (info, "*****_____ Matched PXE zit Netz 140.150.48.0/255.255.252.0 _____*****");
+     default-lease-time 1800;
+     max-lease-time 1801;
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM48 
+subnet 140.152.32.0 netmask 255.255.252.0 {
+     option broadcast-address 140.152.35.255;
+     option subnet-mask 255.255.252.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.152.33.1 140.152.33.254;
+             range 140.152.34.1 140.152.34.254;
+        }
+     option domain-name "zit.commerzbank.com";
+     option routers 140.152.32.6;
+     option ntp-servers 140.152.32.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+     option netbios-name-servers 140.15.241.27, 140.15.248.27;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.15.248.57;
+     option tftp-server-name "140.15.248.57";
+     next-server 140.15.248.57;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8c:0f:f8:39:09:18:ff:f0:15:4e:65:74:53:75:70:70:6f:72:74:42:6f:6f:74:43:6f:6e:74:72:6f:6c:0a:04:00:41:41:41:47:03:00:00:00:ff;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8c:0f:f8:39:07:d0;
+     log (info, "*****_____ Matched PXE zit Netz 140.152.32.0/255.255.252.0 _____*****");
+     default-lease-time 1800;
+     max-lease-time 1801;
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM56 
+subnet 140.154.32.0 netmask 255.255.252.0 {
+     option broadcast-address 140.154.35.255;
+     option subnet-mask 255.255.252.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.154.33.1 140.154.33.254;
+             range 140.154.34.1 140.154.34.254;
+        }
+     option domain-name "zit.commerzbank.com";
+     option routers 140.154.32.6;
+     option ntp-servers 140.154.32.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+     option netbios-name-servers 140.150.131.3, 140.150.131.4;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.15.248.57;
+     option tftp-server-name "140.15.248.57";
+     next-server 140.15.248.57;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8c:0f:f8:39:09:18:ff:f0:15:4e:65:74:53:75:70:70:6f:72:74:42:6f:6f:74:43:6f:6e:74:72:6f:6c:0a:04:00:41:41:41:47:03:00:00:00:ff;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8c:0f:f8:39:07:d0;
+     log (info, "*****_____ Matched PXE zit Netz 140.154.32.0/255.255.252.0 _____*****");
+     default-lease-time 1800;
+     max-lease-time 1801;
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM24 
+subnet 140.156.112.0 netmask 255.255.252.0 {
+     option broadcast-address 140.156.115.255;
+     option subnet-mask 255.255.252.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.156.113.1 140.156.113.255;
+             range 140.156.114.1 140.156.114.255;
+        }
+     option domain-name "zit.commerzbank.com";
+     option routers 140.156.112.6;
+     option ntp-servers 140.156.112.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+     option netbios-name-servers 140.15.241.27, 140.15.248.27;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.15.248.57;
+     option tftp-server-name "140.15.248.57";
+     next-server 140.15.248.57;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8c:0f:f8:39:09:18:ff:f0:15:4e:65:74:53:75:70:70:6f:72:74:42:6f:6f:74:43:6f:6e:74:72:6f:6c:0a:04:00:41:41:41:47:03:00:00:00:ff;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8c:0f:f8:39:07:d0;
+     log (info, "*****_____ Matched PXE zit Netz 140.156.112.0/255.255.252.0 _____*****");
+     default-lease-time 1800;
+     max-lease-time 1801;
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM80 
+subnet 140.16.168.0 netmask 255.255.255.0 {
+     option broadcast-address 140.16.168.255;
+     option subnet-mask 255.255.255.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.16.168.64 140.16.168.191;
+        }
+     option domain-name "zit.commerzbank.com";
+     option routers 140.16.168.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM80 
+subnet 140.16.169.0 netmask 255.255.255.0 {
+     option broadcast-address 140.16.169.255;
+     option subnet-mask 255.255.255.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.16.169.64 140.16.169.127;
+             range 140.16.169.128 140.16.169.191;
+        }
+     option domain-name "zit.commerzbank.com";
+     option routers 140.16.169.6;
+     option ntp-servers 140.16.169.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+     option SunRay.FWSrvr 140.13.236.186;
+     option SunRay.AuthSrvr 140.13.236.186;
+     option SunRay.AltAuth 140.13.236.186, 140.13.236.202;
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM80 
+subnet 140.16.84.0 netmask 255.255.252.0 {
+     option option-128 "42:63:52:65:50:32:00";
+     option broadcast-address 140.16.87.255;
+     option subnet-mask 255.255.252.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.16.85.1 140.16.85.254;
+             range 140.16.86.1 140.16.86.254;
+        }
+     option domain-name "zit.commerzbank.com";
+     option routers 140.16.84.6;
+     option ntp-servers 140.16.84.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+     option netbios-name-servers 140.15.241.27, 140.15.248.27;
+     default-lease-time 1800;
+     max-lease-time 1801;
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# LNG03 
+subnet 140.199.230.0 netmask 255.255.255.0 {
+     option broadcast-address 140.199.230.255;
+     option subnet-mask 255.255.255.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.199.230.64 140.199.230.127;
+             range 140.199.230.128 140.199.230.191;
+        }
+     option domain-name "zit.commerzbank.com";
+     option routers 140.199.230.6;
+     option ntp-servers 140.199.230.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+     option netbios-name-servers 140.15.241.27, 140.15.248.27;
+     option SunRay.FWSrvr 142.20.24.242;
+     option SunRay.AuthSrvr 142.20.24.242;
+     option SunRay.AltAuth 142.20.24.242, 140.13.236.210;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.15.248.57;
+     option tftp-server-name "140.15.248.57";
+     next-server 140.15.248.57;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8c:0f:f8:39:09:18:ff:f0:15:4e:65:74:53:75:70:70:6f:72:74:42:6f:6f:74:43:6f:6e:74:72:6f:6c:0a:04:00:41:41:41:47:03:00:00:00:ff;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8c:0f:f8:39:07:d0;
+     log (info, "*****_____ Matched PXE zit Netz 140.199.230.0/255.255.255.0 _____*****");
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM02 
+subnet 140.202.60.0 netmask 255.255.252.0 {
+     option broadcast-address 140.202.63.255;
+     option subnet-mask 255.255.252.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.202.61.1 140.202.61.254;
+             range 140.202.62.1 140.202.62.254;
+        }
+     option domain-name "zit.commerzbank.com";
+     option routers 140.202.60.6;
+     option ntp-servers 140.202.60.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+     option netbios-name-servers 140.131.11.3, 140.131.11.4;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.15.248.57;
+     option tftp-server-name "140.15.248.57";
+     next-server 140.15.248.57;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8c:0f:f8:39:09:18:ff:f0:15:4e:65:74:53:75:70:70:6f:72:74:42:6f:6f:74:43:6f:6e:74:72:6f:6c:0a:04:00:41:41:41:47:03:00:00:00:ff;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8c:0f:f8:39:07:d0;
+     log (info, "*****_____ Matched PXE zit Netz 140.202.60.0/255.255.252.0 _____*****");
+     default-lease-time 1800;
+     max-lease-time 1801;
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM02 
+subnet 140.203.60.0 netmask 255.255.252.0 {
+     option broadcast-address 140.203.63.255;
+     option subnet-mask 255.255.252.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.203.61.1 140.203.61.254;
+             range 140.203.62.1 140.203.62.254;
+        }
+     option domain-name "zit.commerzbank.com";
+     option routers 140.203.60.6;
+     option ntp-servers 140.203.60.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+     option netbios-name-servers 140.131.11.3, 140.131.11.4;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.15.248.57;
+     option tftp-server-name "140.15.248.57";
+     next-server 140.15.248.57;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8c:0f:f8:39:09:18:ff:f0:15:4e:65:74:53:75:70:70:6f:72:74:42:6f:6f:74:43:6f:6e:74:72:6f:6c:0a:04:00:41:41:41:47:03:00:00:00:ff;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8c:0f:f8:39:07:d0;
+     log (info, "*****_____ Matched PXE zit Netz 140.203.60.0/255.255.252.0 _____*****");
+     default-lease-time 1800;
+     max-lease-time 1801;
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM02 
+subnet 140.204.60.0 netmask 255.255.252.0 {
+     option broadcast-address 140.204.63.255;
+     option subnet-mask 255.255.252.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.204.61.1 140.204.61.254;
+             range 140.204.62.1 140.204.62.254;
+        }
+     option domain-name "zit.commerzbank.com";
+     option routers 140.204.60.6;
+     option ntp-servers 140.204.60.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+     option netbios-name-servers 140.131.11.3, 140.131.11.4;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.15.248.57;
+     option tftp-server-name "140.15.248.57";
+     next-server 140.15.248.57;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8c:0f:f8:39:09:18:ff:f0:15:4e:65:74:53:75:70:70:6f:72:74:42:6f:6f:74:43:6f:6e:74:72:6f:6c:0a:04:00:41:41:41:47:03:00:00:00:ff;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8c:0f:f8:39:07:d0;
+     log (info, "*****_____ Matched PXE zit Netz 140.204.60.0/255.255.252.0 _____*****");
+     default-lease-time 1800;
+     max-lease-time 1801;
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM02 
+subnet 140.205.60.0 netmask 255.255.252.0 {
+     option broadcast-address 140.205.63.255;
+     option subnet-mask 255.255.252.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.205.61.1 140.205.61.254;
+             range 140.205.62.1 140.205.62.254;
+        }
+     option domain-name "zit.commerzbank.com";
+     option routers 140.205.60.6;
+     option ntp-servers 140.205.60.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+     option netbios-name-servers 140.131.11.3, 140.131.11.4;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.15.248.57;
+     option tftp-server-name "140.15.248.57";
+     next-server 140.15.248.57;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8c:0f:f8:39:09:18:ff:f0:15:4e:65:74:53:75:70:70:6f:72:74:42:6f:6f:74:43:6f:6e:74:72:6f:6c:0a:04:00:41:41:41:47:03:00:00:00:ff;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8c:0f:f8:39:07:d0;
+     log (info, "*****_____ Matched PXE zit Netz 140.205.60.0/255.255.252.0 _____*****");
+     default-lease-time 1800;
+     max-lease-time 1801;
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM02 
+subnet 140.206.60.0 netmask 255.255.252.0 {
+     option broadcast-address 140.206.63.255;
+     option subnet-mask 255.255.252.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.206.61.1 140.206.61.254;
+             range 140.206.62.1 140.206.62.254;
+        }
+     option domain-name "zit.commerzbank.com";
+     option routers 140.206.60.6;
+     option ntp-servers 140.206.60.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+     option netbios-name-servers 140.131.11.3, 140.131.11.4;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.15.248.57;
+     option tftp-server-name "140.15.248.57";
+     next-server 140.15.248.57;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8c:0f:f8:39:09:18:ff:f0:15:4e:65:74:53:75:70:70:6f:72:74:42:6f:6f:74:43:6f:6e:74:72:6f:6c:0a:04:00:41:41:41:47:03:00:00:00:ff;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8c:0f:f8:39:07:d0;
+     log (info, "*****_____ Matched PXE zit Netz 140.206.60.0/255.255.252.0 _____*****");
+     default-lease-time 1800;
+     max-lease-time 1801;
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM02 
+subnet 140.207.60.0 netmask 255.255.252.0 {
+     option broadcast-address 140.207.63.255;
+     option subnet-mask 255.255.252.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.207.61.1 140.207.61.254;
+             range 140.207.62.1 140.207.62.254;
+        }
+     option domain-name "zit.commerzbank.com";
+     option routers 140.207.60.6;
+     option ntp-servers 140.207.60.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+     option netbios-name-servers 140.131.11.3, 140.131.11.4;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.15.248.57;
+     option tftp-server-name "140.15.248.57";
+     next-server 140.15.248.57;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8c:0f:f8:39:09:18:ff:f0:15:4e:65:74:53:75:70:70:6f:72:74:42:6f:6f:74:43:6f:6e:74:72:6f:6c:0a:04:00:41:41:41:47:03:00:00:00:ff;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8c:0f:f8:39:07:d0;
+     log (info, "*****_____ Matched PXE zit Netz 140.207.60.0/255.255.252.0 _____*****");
+     default-lease-time 1800;
+     max-lease-time 1801;
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM02 
+subnet 140.208.60.0 netmask 255.255.252.0 {
+     option broadcast-address 140.208.63.255;
+     option subnet-mask 255.255.252.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.208.61.1 140.208.61.254;
+             range 140.208.62.1 140.208.62.254;
+        }
+     option domain-name "zit.commerzbank.com";
+     option routers 140.208.60.6;
+     option ntp-servers 140.208.60.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+     option netbios-name-servers 140.131.11.3, 140.131.11.4;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.15.248.57;
+     option tftp-server-name "140.15.248.57";
+     next-server 140.15.248.57;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8c:0f:f8:39:09:18:ff:f0:15:4e:65:74:53:75:70:70:6f:72:74:42:6f:6f:74:43:6f:6e:74:72:6f:6c:0a:04:00:41:41:41:47:03:00:00:00:ff;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8c:0f:f8:39:07:d0;
+     log (info, "*****_____ Matched PXE zit Netz 140.208.60.0/255.255.252.0 _____*****");
+     default-lease-time 1800;
+     max-lease-time 1801;
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM02 
+subnet 140.209.60.0 netmask 255.255.252.0 {
+     option broadcast-address 140.209.63.255;
+     option subnet-mask 255.255.252.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.209.61.1 140.209.61.254;
+             range 140.209.62.1 140.209.62.254;
+        }
+     option domain-name "zit.commerzbank.com";
+     option routers 140.209.60.6;
+     option ntp-servers 140.209.60.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+     option netbios-name-servers 140.131.11.3, 140.131.11.4;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.15.248.57;
+     option tftp-server-name "140.15.248.57";
+     next-server 140.15.248.57;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8c:0f:f8:39:09:18:ff:f0:15:4e:65:74:53:75:70:70:6f:72:74:42:6f:6f:74:43:6f:6e:74:72:6f:6c:0a:04:00:41:41:41:47:03:00:00:00:ff;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8c:0f:f8:39:07:d0;
+     log (info, "*****_____ Matched PXE zit Netz 140.209.60.0/255.255.252.0 _____*****");
+     default-lease-time 1800;
+     max-lease-time 1801;
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM02 
+subnet 140.210.60.0 netmask 255.255.252.0 {
+     option broadcast-address 140.210.63.255;
+     option subnet-mask 255.255.252.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.210.61.1 140.210.61.254;
+             range 140.210.62.1 140.210.62.254;
+        }
+     option domain-name "zit.commerzbank.com";
+     option routers 140.210.60.6;
+     option ntp-servers 140.210.60.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+     option netbios-name-servers 140.131.11.3, 140.131.11.4;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.15.248.57;
+     option tftp-server-name "140.15.248.57";
+     next-server 140.15.248.57;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8c:0f:f8:39:09:18:ff:f0:15:4e:65:74:53:75:70:70:6f:72:74:42:6f:6f:74:43:6f:6e:74:72:6f:6c:0a:04:00:41:41:41:47:03:00:00:00:ff;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8c:0f:f8:39:07:d0;
+     log (info, "*****_____ Matched PXE zit Netz 140.210.60.0/255.255.252.0 _____*****");
+     default-lease-time 1800;
+     max-lease-time 1801;
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM02 
+subnet 140.211.60.0 netmask 255.255.252.0 {
+     option broadcast-address 140.211.63.255;
+     option subnet-mask 255.255.252.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.211.61.1 140.211.61.254;
+             range 140.211.62.1 140.211.62.254;
+        }
+     option domain-name "zit.commerzbank.com";
+     option routers 140.211.60.6;
+     option ntp-servers 140.211.60.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+     option netbios-name-servers 140.131.11.3, 140.131.11.4;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.15.248.57;
+     option tftp-server-name "140.15.248.57";
+     next-server 140.15.248.57;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8c:0f:f8:39:09:18:ff:f0:15:4e:65:74:53:75:70:70:6f:72:74:42:6f:6f:74:43:6f:6e:74:72:6f:6c:0a:04:00:41:41:41:47:03:00:00:00:ff;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8c:0f:f8:39:07:d0;
+     log (info, "*****_____ Matched PXE zit Netz 140.211.60.0/255.255.252.0 _____*****");
+     default-lease-time 1800;
+     max-lease-time 1801;
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM02 
+subnet 140.212.60.0 netmask 255.255.252.0 {
+     option broadcast-address 140.212.63.255;
+     option subnet-mask 255.255.252.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.212.61.1 140.212.61.254;
+             range 140.212.62.1 140.212.62.254;
+        }
+     option domain-name "zit.commerzbank.com";
+     option routers 140.212.60.6;
+     option ntp-servers 140.212.60.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+     option netbios-name-servers 140.131.11.3, 140.131.11.4;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.15.248.57;
+     option tftp-server-name "140.15.248.57";
+     next-server 140.15.248.57;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8c:0f:f8:39:09:18:ff:f0:15:4e:65:74:53:75:70:70:6f:72:74:42:6f:6f:74:43:6f:6e:74:72:6f:6c:0a:04:00:41:41:41:47:03:00:00:00:ff;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8c:0f:f8:39:07:d0;
+     log (info, "*****_____ Matched PXE zit Netz 140.212.60.0/255.255.252.0 _____*****");
+     default-lease-time 1800;
+     max-lease-time 1801;
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM02 
+subnet 140.213.60.0 netmask 255.255.252.0 {
+     option broadcast-address 140.213.63.255;
+     option subnet-mask 255.255.252.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.213.61.1 140.213.61.254;
+             range 140.213.62.1 140.213.62.254;
+        }
+     option domain-name "zit.commerzbank.com";
+     option routers 140.213.60.6;
+     option ntp-servers 140.213.60.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+     option netbios-name-servers 140.131.11.3, 140.131.11.4;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.15.248.57;
+     option tftp-server-name "140.15.248.57";
+     next-server 140.15.248.57;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8c:0f:f8:39:09:18:ff:f0:15:4e:65:74:53:75:70:70:6f:72:74:42:6f:6f:74:43:6f:6e:74:72:6f:6c:0a:04:00:41:41:41:47:03:00:00:00:ff;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8c:0f:f8:39:07:d0;
+     log (info, "*****_____ Matched PXE zit Netz 140.213.60.0/255.255.252.0 _____*****");
+     default-lease-time 1800;
+     max-lease-time 1801;
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM62 
+subnet 140.60.64.0 netmask 255.255.252.0 {
+     option broadcast-address 140.60.67.255;
+     option subnet-mask 255.255.252.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.60.65.1 140.60.65.254;
+             range 140.60.66.1 140.60.66.254;
+        }
+     option domain-name "zit.commerzbank.com";
+     option routers 140.60.64.6;
+     option ntp-servers 140.60.64.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+     option netbios-name-servers 140.15.241.27, 140.15.248.27;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.15.248.57;
+     option tftp-server-name "140.15.248.57";
+     next-server 140.15.248.57;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8c:0f:f8:39:09:18:ff:f0:15:4e:65:74:53:75:70:70:6f:72:74:42:6f:6f:74:43:6f:6e:74:72:6f:6c:0a:04:00:41:41:41:47:03:00:00:00:ff;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8c:0f:f8:39:07:d0;
+     log (info, "*****_____ Matched PXE zit Netz 140.60.64.0/255.255.252.0 _____*****");
+     default-lease-time 1800;
+     max-lease-time 1801;
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM19 
+subnet 140.90.72.0 netmask 255.255.252.0 {
+     option broadcast-address 140.90.75.255;
+     option subnet-mask 255.255.252.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.90.73.1 140.90.73.254;
+             range 140.90.74.1 140.90.74.254;
+        }
+     option domain-name "zit.commerzbank.com";
+     option routers 140.90.72.6;
+     option ntp-servers 140.90.72.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+     option netbios-name-servers 140.15.241.27, 140.15.248.27;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.15.248.57;
+     option tftp-server-name "140.15.248.57";
+     next-server 140.15.248.57;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8c:0f:f8:39:09:18:ff:f0:15:4e:65:74:53:75:70:70:6f:72:74:42:6f:6f:74:43:6f:6e:74:72:6f:6c:0a:04:00:41:41:41:47:03:00:00:00:ff;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8c:0f:f8:39:07:d0;
+     log (info, "*****_____ Matched PXE zit Netz 140.90.72.0/255.255.252.0 _____*****");
+     default-lease-time 1800;
+     max-lease-time 1801;
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# KAS01 
+subnet 141.50.40.0 netmask 255.255.252.0 {
+     option broadcast-address 141.50.43.255;
+     option subnet-mask 255.255.252.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 141.50.41.1 141.50.41.254;
+             range 141.50.42.1 141.50.42.254;
+        }
+     option domain-name "zit.commerzbank.com";
+     option routers 141.50.40.6;
+     option ntp-servers 141.50.40.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+     option netbios-name-servers 140.15.241.27, 140.15.248.27;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.15.248.57;
+     option tftp-server-name "140.15.248.57";
+     next-server 140.15.248.57;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8c:0f:f8:39:09:18:ff:f0:15:4e:65:74:53:75:70:70:6f:72:74:42:6f:6f:74:43:6f:6e:74:72:6f:6c:0a:04:00:41:41:41:47:03:00:00:00:ff;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8c:0f:f8:39:07:d0;
+     log (info, "*****_____ Matched PXE zit Netz 141.50.40.0/255.255.252.0 _____*****");
+     default-lease-time 1800;
+     max-lease-time 1801;
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM42 
+subnet 142.10.56.0 netmask 255.255.252.0 {
+     option broadcast-address 142.10.59.255;
+     option subnet-mask 255.255.252.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 142.10.57.1 142.10.57.254;
+             range 142.10.58.1 142.10.58.254;
+        }
+     option domain-name "zit.commerzbank.com";
+     option routers 142.10.56.6;
+     option ntp-servers 142.10.56.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+     option netbios-name-servers 140.15.241.27, 140.15.248.27;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.15.248.57;
+     option tftp-server-name "140.15.248.57";
+     next-server 140.15.248.57;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8c:0f:f8:39:09:18:ff:f0:15:4e:65:74:53:75:70:70:6f:72:74:42:6f:6f:74:43:6f:6e:74:72:6f:6c:0a:04:00:41:41:41:47:03:00:00:00:ff;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8c:0f:f8:39:07:d0;
+     log (info, "*****_____ Matched PXE zit Netz 142.10.56.0/255.255.252.0 _____*****");
+     default-lease-time 1800;
+     max-lease-time 1801;
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# KLB01 
+subnet 142.20.72.0 netmask 255.255.252.0 {
+     option broadcast-address 142.20.75.255;
+     option subnet-mask 255.255.252.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 142.20.73.1 142.20.73.254;
+             range 142.20.74.1 142.20.74.254;
+        }
+     option domain-name "zit.commerzbank.com";
+     option routers 142.20.72.6;
+     option ntp-servers 142.20.72.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+     option netbios-name-servers 140.131.11.4, 140.131.11.3;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.15.248.57;
+     option tftp-server-name "140.15.248.57";
+     next-server 140.15.248.57;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8c:0f:f8:39:09:18:ff:f0:15:4e:65:74:53:75:70:70:6f:72:74:42:6f:6f:74:43:6f:6e:74:72:6f:6c:0a:04:00:41:41:41:47:03:00:00:00:ff;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8c:0f:f8:39:07:d0;
+     log (info, "*****_____ Matched PXE zit Netz 142.20.72.0/255.255.252.0 _____*****");
+     default-lease-time 1800;
+     max-lease-time 1801;
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# STU01 
+subnet 143.0.40.0 netmask 255.255.252.0 {
+     option broadcast-address 143.0.43.255;
+     option subnet-mask 255.255.252.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 143.0.41.1 143.0.41.254;
+             range 143.0.42.1 143.0.42.254;
+        }
+     option domain-name "zit.commerzbank.com";
+     option routers 143.0.40.6;
+     option ntp-servers 143.0.40.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+     option netbios-name-servers 140.15.241.27, 140.15.248.27;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.15.248.57;
+     option tftp-server-name "140.15.248.57";
+     next-server 140.15.248.57;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8c:0f:f8:39:09:18:ff:f0:15:4e:65:74:53:75:70:70:6f:72:74:42:6f:6f:74:43:6f:6e:74:72:6f:6c:0a:04:00:41:41:41:47:03:00:00:00:ff;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8c:0f:f8:39:07:d0;
+     log (info, "*****_____ Matched PXE zit Netz 143.0.40.0/255.255.252.0 _____*****");
+     default-lease-time 1800;
+     max-lease-time 1801;
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# NRB01 
+subnet 144.70.120.0 netmask 255.255.252.0 {
+     option broadcast-address 144.70.123.255;
+     option subnet-mask 255.255.252.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 144.70.121.1 144.70.121.254;
+             range 144.70.122.1 144.70.122.254;
+        }
+     option domain-name "zit.commerzbank.com";
+     option routers 144.70.120.6;
+     option ntp-servers 144.70.120.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+     option netbios-name-servers 140.15.241.27, 140.15.248.27;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.15.248.57;
+     option tftp-server-name "140.15.248.57";
+     next-server 140.15.248.57;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8c:0f:f8:39:09:18:ff:f0:15:4e:65:74:53:75:70:70:6f:72:74:42:6f:6f:74:43:6f:6e:74:72:6f:6c:0a:04:00:41:41:41:47:03:00:00:00:ff;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8c:0f:f8:39:07:d0;
+     log (info, "*****_____ Matched PXE zit Netz 144.70.120.0/255.255.252.0 _____*****");
+     default-lease-time 1800;
+     max-lease-time 1801;
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# BER01 
+subnet 145.0.60.0 netmask 255.255.252.0 {
+     option broadcast-address 145.0.63.255;
+     option subnet-mask 255.255.252.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 145.0.61.1 145.0.61.254;
+             range 145.0.62.1 145.0.62.254;
+        }
+     option domain-name "zit.commerzbank.com";
+     option routers 145.0.60.6;
+     option ntp-servers 145.0.60.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+     option netbios-name-servers 140.15.241.27, 140.15.248.27;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.15.248.57;
+     option tftp-server-name "140.15.248.57";
+     next-server 140.15.248.57;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8c:0f:f8:39:09:18:ff:f0:15:4e:65:74:53:75:70:70:6f:72:74:42:6f:6f:74:43:6f:6e:74:72:6f:6c:0a:04:00:41:41:41:47:03:00:00:00:ff;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8c:0f:f8:39:07:d0;
+     log (info, "*****_____ Matched PXE zit Netz 145.0.60.0/255.255.252.0 _____*****");
+     default-lease-time 1800;
+     max-lease-time 1801;
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# LEI01 
+subnet 145.100.64.0 netmask 255.255.252.0 {
+     option broadcast-address 145.100.67.255;
+     option subnet-mask 255.255.252.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 145.100.65.1 145.100.65.254;
+             range 145.100.66.1 145.100.66.254;
+        }
+     option domain-name "zit.commerzbank.com";
+     option routers 145.100.64.6;
+     option ntp-servers 145.100.64.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+     option netbios-name-servers 140.15.241.27, 140.15.248.27;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.15.248.57;
+     option tftp-server-name "140.15.248.57";
+     next-server 140.15.248.57;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8c:0f:f8:39:09:18:ff:f0:15:4e:65:74:53:75:70:70:6f:72:74:42:6f:6f:74:43:6f:6e:74:72:6f:6c:0a:04:00:41:41:41:47:03:00:00:00:ff;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8c:0f:f8:39:07:d0;
+     log (info, "*****_____ Matched PXE zit Netz 145.100.64.0/255.255.252.0 _____*****");
+     default-lease-time 1800;
+     max-lease-time 1801;
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# MBG02 
+subnet 145.110.12.0 netmask 255.255.252.0 {
+     option broadcast-address 145.110.15.255;
+     option subnet-mask 255.255.252.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 145.110.13.1 145.110.13.254;
+             range 145.110.14.1 145.110.14.254;
+        }
+     option domain-name "zit.commerzbank.com";
+     option routers 145.110.12.6;
+     option ntp-servers 145.110.12.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+     option netbios-name-servers 140.15.241.27, 140.15.248.27;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.15.248.57;
+     option tftp-server-name "140.15.248.57";
+     next-server 140.15.248.57;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8c:0f:f8:39:09:18:ff:f0:15:4e:65:74:53:75:70:70:6f:72:74:42:6f:6f:74:43:6f:6e:74:72:6f:6c:0a:04:00:41:41:41:47:03:00:00:00:ff;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8c:0f:f8:39:07:d0;
+     log (info, "*****_____ Matched PXE zit Netz 145.110.12.0/255.255.252.0 _____*****");
+     default-lease-time 1800;
+     max-lease-time 1801;
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# DRE01 
+subnet 145.60.108.0 netmask 255.255.252.0 {
+     option broadcast-address 145.60.111.255;
+     option subnet-mask 255.255.252.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 145.60.109.1 145.60.109.254;
+             range 145.60.110.1 145.60.110.254;
+        }
+     option domain-name "zit.commerzbank.com";
+     option routers 145.60.108.6;
+     option ntp-servers 145.60.108.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+     option netbios-name-servers 140.15.241.27, 140.15.248.27;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.15.248.57;
+     option tftp-server-name "140.15.248.57";
+     next-server 140.15.248.57;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8c:0f:f8:39:09:18:ff:f0:15:4e:65:74:53:75:70:70:6f:72:74:42:6f:6f:74:43:6f:6e:74:72:6f:6c:0a:04:00:41:41:41:47:03:00:00:00:ff;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8c:0f:f8:39:07:d0;
+     log (info, "*****_____ Matched PXE zit Netz 145.60.108.0/255.255.252.0 _____*****");
+     default-lease-time 1800;
+     max-lease-time 1801;
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# ERF09 
+subnet 145.74.28.0 netmask 255.255.252.0 {
+     option broadcast-address 145.74.31.255;
+     option subnet-mask 255.255.252.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 145.74.29.1 145.74.29.254;
+             range 145.74.30.1 145.74.30.254;
+        }
+     option domain-name "zit.commerzbank.com";
+     option routers 145.74.28.6;
+     option ntp-servers 145.74.28.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+     option netbios-name-servers 140.15.241.27, 140.15.248.27;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.15.248.57;
+     option tftp-server-name "140.15.248.57";
+     next-server 140.15.248.57;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8c:0f:f8:39:09:18:ff:f0:15:4e:65:74:53:75:70:70:6f:72:74:42:6f:6f:74:43:6f:6e:74:72:6f:6c:0a:04:00:41:41:41:47:03:00:00:00:ff;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8c:0f:f8:39:07:d0;
+     log (info, "*****_____ Matched PXE zit Netz 145.74.28.0/255.255.252.0 _____*****");
+     default-lease-time 1800;
+     max-lease-time 1801;
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM80 
+subnet 180.0.50.0 netmask 255.255.255.0 {
+     option broadcast-address 180.0.50.255;
+     option subnet-mask 255.255.255.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 180.0.50.64 180.0.50.127;
+             range 180.0.50.128 180.0.50.191;
+        }
+     option domain-name "zit.commerzbank.com";
+     option routers 180.0.50.6;
+     option ntp-servers 180.0.50.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+     option netbios-name-servers 140.15.241.27, 140.15.248.27;
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1239892223
+# FFM80 
+subnet 140.15.221.0 netmask 255.255.255.0 {
+     option broadcast-address 140.15.221.255;
+     option subnet-mask 255.255.255.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.15.221.64 140.15.221.127;
+             range 140.15.221.128 140.15.221.191;
+        }
+     option domain-name "zit.commerzbank.com";
+     option routers 140.15.221.6;
+     option ntp-servers 140.15.221.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+     option netbios-name-servers 140.104.46.30, 140.104.47.30;
+     option SunRay.FWSrvr 140.13.64.38;
+     option SunRay.AuthSrvr 140.13.64.38;
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1245141704
+# FFM89 
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1245145012
+# FFM89 
+subnet 10.151.224.0 netmask 255.255.255.0 {
+     option broadcast-address 10.151.224.255;
+     option subnet-mask 255.255.255.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 10.151.224.64 10.151.224.127;
+             range 10.151.224.128 10.151.224.191;
+        }
+     option domain-name "zit.commerzbank.com";
+     option routers 10.151.224.1;
+     option ntp-servers 10.151.224.1;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+}
+#
