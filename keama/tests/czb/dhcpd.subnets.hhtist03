@@ -1,0 +1,71 @@
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM62 
+subnet 140.135.40.0 netmask 255.255.252.0 {
+     option broadcast-address 140.135.43.255;
+     option subnet-mask 255.255.252.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.135.42.1 140.135.42.254;
+        }
+     option domain-name "hhtist03.commerzbank.com";
+     option routers 140.135.40.6;
+     option ntp-servers 140.135.40.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+     option netbios-name-servers 140.135.11.244, 140.135.11.245;
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM80 
+subnet 140.14.136.0 netmask 255.255.252.0 {
+     option broadcast-address 140.14.139.255;
+     option subnet-mask 255.255.252.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.14.137.1 140.14.137.254;
+             range 140.14.138.1 140.14.138.254;
+        }
+     option domain-name "hhtist03.commerzbank.com";
+     option routers 140.14.136.6;
+     option ntp-servers 140.14.136.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+     option netbios-name-servers 140.135.11.244, 140.135.11.245;
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM80 
+subnet 140.14.140.0 netmask 255.255.252.0 {
+     option broadcast-address 140.14.143.255;
+     option subnet-mask 255.255.252.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.14.141.1 140.14.141.254;
+             range 140.14.142.1 140.14.142.254;
+        }
+     option domain-name "hhtist03.commerzbank.com";
+     option routers 140.14.140.6;
+     option ntp-servers 140.14.140.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+     option netbios-name-servers 140.135.11.244, 140.135.11.245;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.15.248.57;
+     option tftp-server-name "140.15.248.57";
+     next-server 140.15.248.57;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8c:0f:f8:39:09:18:ff:f0:15:4e:65:74:53:75:70:70:6f:72:74:42:6f:6f:74:43:6f:6e:74:72:6f:6c:0a:04:00:41:41:41:47:03:00:00:00:ff;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8c:0f:f8:39:07:d0;
+     log (info, "***** Matched PXE hhtist03 Netz 140.14.140.0/22 *****");
+     default-lease-time 1800;
+     max-lease-time 1801;
+   }
+}
+#

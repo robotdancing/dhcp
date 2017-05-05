@@ -25,14 +25,15 @@
             "space": "dhcp6",
             "name": "lq-relay-data",
             "code": 47,
-//          "original-data": "2001::1, \"foobar\"",
-            "data": "2001::1, foobar"
+//          "original-data": "2001::1 \"foobar\"",
+            "data": "2001::1, 666f6f626172"
           },
           # option
           {
             "space": "dhcp6",
             "name": "domain-search",
             "code": 24,
+//          "original-data": "\"example.com\", \"example.org\"",
             "data": "example.com, example.org"
           }
         ]

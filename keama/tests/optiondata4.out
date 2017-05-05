@@ -71,12 +71,14 @@
 //      "space": "dhcp4",
 //      "name": "bcms-controller-names",
 //      "code": 88,
+//      "original-data": "\"foo.bar\", \"www.no-where.biz\"",
 //      "data": "foo.bar, www.no-where.biz"
 //    },
       {
         "space": "dhcp4",
         "name": "domain-search",
         "code": 119,
+//      "original-data": "\"example.com\", \"example.org\"",
         "data": "example.com, example.org"
       },
       {
@@ -89,8 +91,8 @@
         "space": "dhcp4",
         "name": "dhcp-client-identifier",
         "code": 61,
-        "csv-format": false,
 //      "original-data": "01:02:aa:bb",
+        "csv-format": false,
         "data": "0102aabb"
       },
       {
@@ -109,7 +111,7 @@
         "space": "foobar",
         "name": "fmt-fB",
         "code": 100,
-//      "original-data": "off, 66",
+//      "original-data": "off 66",
         /// canonized booleans to lowercase true or false
         "data": "false, 66"
       },

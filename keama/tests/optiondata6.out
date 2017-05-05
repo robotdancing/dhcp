@@ -1,5 +1,5 @@
 {
-  # option definition config
+  # option data config
   # authoritative is mandatory
   "Dhcp6": {
     "option-def": [
@@ -133,6 +133,7 @@
         "space": "dhcp6",
         "name": "domain-search",
         "code": 24,
+//      "original-data": "\"example.com\", \"example.org\"",
         "data": "example.com, example.org"
       },
       {
@@ -145,8 +146,8 @@
         "space": "dhcp6",
         "name": "geoconf-civic",
         "code": 36,
-        "csv-format": false,
 //      "original-data": "de:ad:be:ef",
+        "csv-format": false,
         "data": "deadbeef"
       },
       {

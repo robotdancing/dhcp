@@ -16,6 +16,7 @@
         "space": "dhcp4",
         "name": "a-string",
         "code": 250,
+//      "original-data": "\"foo, bar\"",
         "data": "foo\\, bar"
       }
     ]

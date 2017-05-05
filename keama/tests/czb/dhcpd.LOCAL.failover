@@ -1,0 +1,19 @@
+
+failover peer "cobafailover" {
+	primary;
+	address 140.13.216.200;
+	port 519;
+	peer address 142.20.10.101;
+	peer port 519;
+	max-response-delay 180;
+	max-unacked-updates 100;
+	mclt 600;
+	split 128;
+	load balance max seconds 3;
+        max-lease-misbalance 7; #Prozent
+        max-lease-ownership 3; #Prozent
+  	min-balance 3100;
+  	max-balance 3600;
+}
+
+

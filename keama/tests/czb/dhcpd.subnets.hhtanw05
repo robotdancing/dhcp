@@ -1,0 +1,64 @@
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM62 
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM80 
+subnet 140.14.132.0 netmask 255.255.252.0 {
+     option broadcast-address 140.14.135.255;
+     option subnet-mask 255.255.252.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.14.133.1 140.14.133.254;
+             range 140.14.134.1 140.14.134.254;
+        }
+     option domain-name "hhtanw05.commerzbank.com";
+     option routers 140.14.132.6;
+     option ntp-servers 140.14.132.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+     option netbios-name-servers 140.137.11.237, 140.137.11.235;
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM80 
+subnet 140.15.132.0 netmask 255.255.255.0 {
+     option broadcast-address 140.15.132.255;
+     option subnet-mask 255.255.255.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.15.132.64 140.15.132.127;
+             range 140.15.132.128 140.15.132.191;
+        }
+     option domain-name "hhtanw05.commerzbank.com";
+     option routers 140.15.132.6;
+     option ntp-servers 140.15.132.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+     option netbios-name-servers 140.137.11.237, 140.137.11.235;
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM80 
+subnet 140.15.80.0 netmask 255.255.252.0 {
+     option broadcast-address 140.15.83.255;
+     option subnet-mask 255.255.252.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.15.81.1 140.15.81.254;
+             range 140.15.82.1 140.15.82.254;
+        }
+     option domain-name "hhtanw05.commerzbank.com";
+     option routers 140.15.80.6;
+     option ntp-servers 140.15.80.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+     option netbios-name-servers 140.137.11.237, 140.137.11.235;
+}
+#

@@ -1,0 +1,23 @@
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# SGP04 
+subnet 10.200.7.0 netmask 255.255.255.0 {
+     option broadcast-address 10.200.7.255;
+     option subnet-mask 255.255.255.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 10.200.7.34 10.200.7.127;
+             range 10.200.7.128 10.200.7.254;
+        }
+     option domain-name "sgp04.voip.commerzbank.com";
+     option routers 10.200.7.1;
+     option ntp-servers 11.0.1.5;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+   if substring (option vendor-class-identifier, 0, 11) = "OptiIpPhone" {
+     option vendor-encapsulated-options 01:07:53:69:65:6D:65:6E:73:03:18:73:64:6c:70:3a:2f:2f:31:30:2e:32:30:30:2e:36:2e:37:35:3a:31:38:34:34:33;
+     log (info, "*****_____ SIEMENS IP-Phone sgp04.voip DLSinSGP Netz 10.200.7.0/255.255.255.0 _____*****");
+   }
+}
+#

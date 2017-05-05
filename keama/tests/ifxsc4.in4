@@ -16,5 +16,5 @@ if true {
 if ( option user-class = "accounting" ) {
     option boot-size 100000;
 } elsif option user-class = "engineering" {
-    option domain-name example.con;
+    option domain-name "example.com";
 }

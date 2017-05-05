@@ -12,6 +12,7 @@
             "space": "dhcp6",
             "name": "domain-search",
             "code": 24,
+//          "original-data": "\"example.com\", \"example.org\"",
             "data": "example.com, example.org"
           }
         ],

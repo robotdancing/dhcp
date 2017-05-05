@@ -1,0 +1,135 @@
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1240824822
+# FFM19 
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1240824822
+# FFM19 
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1240824822
+# FFM19 
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1240824822
+# FFM19 
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1240824822
+# FFM19 
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1241875832
+# FFM19 
+subnet 140.90.120.0 netmask 255.255.252.0 {
+     option broadcast-address 140.90.123.255;
+     option subnet-mask 255.255.252.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.90.121.1 140.90.121.255;
+             range 140.90.122.1 140.90.122.255;
+        }
+     option domain-name "ffm19.voip.commerzbank.com";
+     option routers 140.90.120.6;
+     option ntp-servers 140.90.120.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+   if substring (option vendor-class-identifier, 0, 11) = "OptiIpPhone" {
+     option vendor-encapsulated-options 01:07:53:69:65:6D:65:6E:73:03:19:73:64:6c:70:3a:2f:2f:31:34:30:2e:31:37:2e:31:35:2e:31:30:3a:31:38:34:34:33;
+     log (info, "_____ SIEMENS IP-Phone TheodorHeussAllee80 ffm19.voip DLS2 Netz 140.90.120.0/255.255.252.0 _____");
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1241875832
+# FFM19 
+subnet 140.90.124.0 netmask 255.255.252.0 {
+     option broadcast-address 140.90.127.255;
+     option subnet-mask 255.255.252.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.90.125.1 140.90.125.255;
+             range 140.90.126.1 140.90.126.255;
+        }
+     option domain-name "ffm19.voip.commerzbank.com";
+     option routers 140.90.124.6;
+     option ntp-servers 140.90.124.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+   if substring (option vendor-class-identifier, 0, 11) = "OptiIpPhone" {
+     option vendor-encapsulated-options 01:07:53:69:65:6D:65:6E:73:03:19:73:64:6c:70:3a:2f:2f:31:34:30:2e:31:37:2e:31:35:2e:31:30:3a:31:38:34:34:33;
+     log (info, "_____ SIEMENS IP-Phone TheodorHeussAllee80 ffm19.voip DLS2 Netz 140.90.124.0/255.255.252.0 _____");
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1241875832
+# FFM19 
+subnet 140.90.128.0 netmask 255.255.252.0 {
+     option broadcast-address 140.90.131.255;
+     option subnet-mask 255.255.252.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.90.129.1 140.90.129.255;
+             range 140.90.130.1 140.90.130.255;
+        }
+     option domain-name "ffm19.voip.commerzbank.com";
+     option routers 140.90.128.6;
+     option ntp-servers 140.90.128.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+   if substring (option vendor-class-identifier, 0, 11) = "OptiIpPhone" {
+     option vendor-encapsulated-options 01:07:53:69:65:6D:65:6E:73:03:19:73:64:6c:70:3a:2f:2f:31:34:30:2e:31:37:2e:31:35:2e:31:30:3a:31:38:34:34:33;
+     log (info, "_____ SIEMENS IP-Phone TheodorHeussAllee80 ffm19.voip DLS2 Netz 140.90.128.0/255.255.252.0 _____");
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1241875832
+# FFM19 
+subnet 140.90.136.0 netmask 255.255.252.0 {
+     option broadcast-address 140.90.139.255;
+     option subnet-mask 255.255.252.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.90.137.1 140.90.137.255;
+             range 140.90.138.1 140.90.138.255;
+        }
+     option domain-name "ffm19.voip.commerzbank.com";
+     option routers 140.90.136.6;
+     option ntp-servers 140.90.136.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+   if substring (option vendor-class-identifier, 0, 11) = "OptiIpPhone" {
+     option vendor-encapsulated-options 01:07:53:69:65:6D:65:6E:73:03:19:73:64:6c:70:3a:2f:2f:31:34:30:2e:31:37:2e:31:35:2e:31:30:3a:31:38:34:34:33;
+     log (info, "_____ SIEMENS IP-Phone TheodorHeussAllee80 ffm19.voip DLS2 Netz 140.90.136.0/255.255.252.0 _____");
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1241878557
+# FFM19 
+subnet 140.90.132.0 netmask 255.255.252.0 {
+     option broadcast-address 140.90.135.255;
+     option subnet-mask 255.255.252.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.90.133.1 140.90.133.255;
+             range 140.90.134.1 140.90.134.255;
+        }
+     option domain-name "ffm19.voip.commerzbank.com";
+     option routers 140.90.132.6;
+     option ntp-servers 140.90.132.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+   if substring (option vendor-class-identifier, 0, 11) = "OptiIpPhone" {
+     option vendor-encapsulated-options 01:07:53:69:65:6D:65:6E:73:03:19:73:64:6c:70:3a:2f:2f:31:34:30:2e:31:37:2e:31:35:2e:31:30:3a:31:38:34:34:33;
+     log (info, "_____ SIEMENS IP-Phone TheodorHeussAllee80 ffm19.voip DLS2 Netz 140.90.132.0/255.255.252.0 _____");
+   }
+}
+#

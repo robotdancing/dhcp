@@ -58,6 +58,8 @@ extern int local_family;
 
 /* A parsing context. */
 
+TAILQ_HEAD(parses, parse) parses;
+
 struct parse {
 	int lexline;
 	int lexchar;
@@ -102,16 +104,20 @@ struct parse {
 	size_t bufix, buflen;
 	size_t bufsiz;
 
-	struct parse *saved_state;
-
 	/*
 	 * Additions for the Kea Migration Assistant.
 	 */
-	struct comments comments;
 	struct element **stack;
 	size_t stack_size;
 	size_t stack_top;
 	size_t issue_counter;
+
+	/* don't save below this */
+	struct comments comments;
+
+	/* TAILQ_NEXT(self) is the saved state */
+	TAILQ_ENTRY(parse) next;
+
 };
 
 #define PARAMETER	0
@@ -303,10 +309,8 @@ void save_parse_state(struct parse *);
 void restore_parse_state(struct parse *);
 enum dhcp_token next_token(const char **, unsigned *, struct parse *);
 enum dhcp_token peek_token(const char **, unsigned *, struct parse *);
-enum dhcp_token next_raw_token(const char **rval, unsigned *rlen,
-			       struct parse *);
-enum dhcp_token peek_raw_token(const char **rval, unsigned *rlen,
-			       struct parse *);
+enum dhcp_token next_raw_token(const char **, unsigned *, struct parse *);
+enum dhcp_token peek_raw_token(const char **, unsigned *, struct parse *);
 /*
  * Use skip_token when we are skipping a token we have previously
  * used peek_token on as we know what the result will be in this case.
@@ -335,7 +339,13 @@ void parse_prefix6(struct parse *, int, size_t);
 void parse_fixed_prefix6(struct parse *, size_t);
 void parse_pool6_statement(struct parse *, int);
 struct element *parse_allow_deny(struct parse *, int);
-void parse_server_duid_conf(struct parse *cfile);
+void parse_server_duid_conf(struct parse *);
+void parse_directive(struct parse *);
+void parse_option_space_dir(struct parse *);
+void parse_option_code_dir(struct parse *, struct option *);
+void parse_option_status_dir(struct parse *, struct option *, enum dhcp_token);
+void parse_option_local_dir(struct parse *, struct option *);
+void parse_option_define_dir(struct parse *, struct option *);
 
 /* parse.c */
 void skip_to_semi(struct parse *);
@@ -359,6 +369,7 @@ struct option *parse_option_name(struct parse *, isc_boolean_t,
 void parse_option_space_decl(struct parse *);
 void parse_option_code_definition(struct parse *, struct option *);
 void parse_vendor_code_definition(struct parse *, struct option *);
+struct string *convert_format(const char *, isc_boolean_t *, isc_boolean_t *);
 struct string *parse_base64(struct parse *);
 struct string *parse_cshl(struct parse *);
 struct string *parse_hexa(struct parse *);
@@ -392,15 +403,23 @@ isc_boolean_t parse_non_binary(struct element *, struct parse *,
 isc_boolean_t parse_expression(struct element *, struct parse *,
 			       isc_boolean_t *, enum expression_context,
 			       struct element *, enum expr_op);
-struct string *escape_option_string(unsigned, const char *);
+struct string *escape_option_string(unsigned, const char *,
+				   isc_boolean_t *, isc_boolean_t *);
 isc_boolean_t parse_option_data(struct element *, struct parse *,
 				struct option *);
+isc_boolean_t parse_option_binary(struct element *, struct parse *,
+				  struct option *, isc_boolean_t);
 isc_boolean_t parse_option_statement(struct element *, struct parse *,
 				     struct option *, enum statement_op);
 isc_boolean_t parse_config_data(struct element *, struct parse *,
 				struct option *);
 isc_boolean_t parse_config_statement(struct element *, struct parse *,
 				     struct option *, enum statement_op);
+struct string *parse_option_token(struct parse *, const char *,
+				  isc_boolean_t *, isc_boolean_t *,
+				  isc_boolean_t *);
+struct string *parse_option_token_binary(struct parse *, const char *);
+struct string *parse_domain_list(struct parse *, isc_boolean_t);
 isc_boolean_t is_boolean_expression(struct element *);
 isc_boolean_t is_data_expression(struct element *);
 isc_boolean_t is_numeric_expression(struct element *);
@@ -418,6 +437,7 @@ void push_option(struct option *);
 void add_option_data(struct element *, struct element *);
 void merge_option_data(struct element *, struct element *);
 struct comments *get_config_comments(unsigned);
+const char *display_status(enum option_status);
 
 /* json.c */
 struct element *json_parse(struct parse *);

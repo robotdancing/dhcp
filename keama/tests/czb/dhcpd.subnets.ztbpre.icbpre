@@ -1,0 +1,2212 @@
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM89 
+subnet 10.144.198.0 netmask 255.255.255.0 {
+     option broadcast-address 10.144.198.255;
+     option subnet-mask 255.255.255.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 10.144.198.64 10.144.198.127;
+             range 10.144.198.128 10.144.198.191;
+        }
+     option domain-name "ztbpre.icbpre.commerzbank.com";
+     option routers 10.144.198.1;
+     option ntp-servers 10.144.198.1;
+     option domain-name-servers 11.2.2.26, 142.20.10.156;
+     option netbios-name-servers 140.104.47.30, 140.104.46.30;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 10.144.199.7;
+     option tftp-server-name "10.144.199.7";
+     next-server 10.144.199.7;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:0A:90:C7:07:09:18:ff:f0:15:50:72:6f:64:61:63:74:61:20:42:6f:6f:74:20:43:6f:6e:74:72:6f:6f:0a:04:00:41:41:41:47;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:0A:90:C7:07:07:d0;
+     log (info, "*****_____ Matched PXE ztb.icb Netz 10.144.198.0/255.255.255.0 _____*****");
+     default-lease-time 1800;
+     max-lease-time 1801;
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM89 
+subnet 10.144.199.0 netmask 255.255.255.0 {
+     option broadcast-address 10.144.199.255;
+     option subnet-mask 255.255.255.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 10.144.199.64 10.144.199.127;
+             range 10.144.199.128 10.144.199.191;
+        }
+     option domain-name "ztbpre.icbpre.commerzbank.com";
+     option routers 10.144.199.1;
+     option ntp-servers 10.144.199.1;
+     option domain-name-servers 11.2.2.26, 142.20.10.156;
+     option netbios-name-servers 140.11.6.107, 140.11.6.108;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 10.144.199.7;
+     option tftp-server-name "10.144.199.7";
+     next-server 10.144.199.7;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:0A:90:C7:07:09:18:ff:f0:15:50:72:6f:64:61:63:74:61:20:42:6f:6f:74:20:43:6f:6e:74:72:6f:6f:0a:04:00:41:41:41:47;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:0A:90:C7:07:07:d0;
+     log (info, "*****_____ Matched PXE ztb.icb Netz 10.144.199.0/255.255.255.0 _____*****");
+     default-lease-time 1800;
+     max-lease-time 1801;
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# ESC03 
+subnet 10.205.98.0 netmask 255.255.255.0 {
+     option broadcast-address 10.205.98.255;
+     option subnet-mask 255.255.255.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 10.205.98.64 10.205.98.127;
+             range 10.205.98.128 10.205.98.191;
+        }
+     option domain-name "ztbpre.icbpre.commerzbank.com";
+     option routers 10.205.98.6;
+     option ntp-servers 10.205.98.6;
+     option domain-name-servers 11.2.2.26, 142.20.10.156;
+     option netbios-name-servers 140.11.6.107, 140.11.6.108;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.11.6.189;
+     option tftp-server-name "140.11.6.189";
+     next-server 140.11.6.189;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8C:0B:06:BD:09:18:ff:f0:15:50:72:6f:64:61:63:74:61:20:42:6f:6f:74:20:43:6f:6e:74:72:6f:6f:0a:04:00:41:41:41:47;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8C:0B:06:BD:07:d0;
+     log (info, "*****_____ Matched PXE ztb.icb Netz 10.205.98.0/255.255.255.0 _____*****");
+     default-lease-time 1800;
+     max-lease-time 1801;
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# DDF01 
+subnet 136.0.112.0 netmask 255.255.255.0 {
+     option tftp-server-name "140.26.20.27";
+     filename "X86PC/UNDI/boot/rombl.0";
+     next-server 140.26.20.27;
+     option broadcast-address 136.0.112.255;
+     option subnet-mask 255.255.255.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 136.0.112.64 136.0.112.127;
+             range 136.0.112.128 136.0.112.191;
+        }
+     option domain-name "ztbpre.icbpre.commerzbank.com";
+     option routers 136.0.112.6;
+     option ntp-servers 136.0.112.6;
+     option domain-name-servers 11.2.2.26, 142.20.10.156;
+     log (info, "*****_____ Matched HP Netz 136.0.112.0/255.255.255.0 _____*****");
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM19 
+subnet 140.101.122.0 netmask 255.255.255.0 {
+     option broadcast-address 140.101.122.255;
+     option subnet-mask 255.255.255.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.101.122.64 140.101.122.127;
+             range 140.101.122.128 140.101.122.223;
+        }
+     option domain-name "ztbpre.icbpre.commerzbank.com";
+     option routers 140.101.122.6;
+     option ntp-servers 140.101.122.6;
+     option domain-name-servers 11.2.2.26, 142.20.10.156;
+     option netbios-name-servers 140.11.6.107, 140.11.6.108;
+     min-lease-time 18001;
+     default-lease-time 18002;
+     max-lease-time 18003;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.101.122.8;
+     option tftp-server-name "140.101.122.8";
+     next-server 140.101.122.8;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8c:65:7a:08:09:18:ff:f0:15:50:72:6f:64:61:63:74:61:20:42:6f:6f:74:20:43:6f:6e:74:72:6f:6f:0a:04:00:41:41:41:47;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8c:65:7a:08:07:d0;
+     log (info, "*****_____ Matched PXE ztbpre.icbpre Netz 140.101.122.0/255.255.255.0 _____*****");
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM80 
+subnet 140.101.20.0 netmask 255.255.255.0 {
+     option broadcast-address 140.101.20.255;
+     option subnet-mask 255.255.255.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.101.20.64 140.101.20.127;
+             range 140.101.20.128 140.101.20.191;
+        }
+     option domain-name "ztbpre.icbpre.commerzbank.com";
+     option routers 140.101.20.6;
+     option ntp-servers 140.101.20.6;
+     option domain-name-servers 11.2.2.26, 142.20.10.156;
+     option netbios-name-servers 140.11.6.107, 140.11.6.108;
+     option netbios-node-type 8;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 10.151.21.11;
+     option tftp-server-name "10.151.21.11";
+     next-server 10.151.21.11;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     log (info, "*****_____ Matched PXE ztbpre.icbpre Netz 140.101.20.0/255.255.255.0 _____*****");
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM80 
+subnet 140.101.212.0 netmask 255.255.255.0 {
+     option broadcast-address 140.101.212.255;
+     option subnet-mask 255.255.255.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.101.212.64 140.101.212.127;
+             range 140.101.212.128 140.101.212.191;
+        }
+     option domain-name "ztbpre.icbpre.commerzbank.com";
+     option routers 140.101.212.6;
+     option ntp-servers 140.101.212.6;
+     option domain-name-servers 11.2.2.26, 142.20.10.156;
+     option netbios-name-servers 140.11.6.107, 140.11.6.108;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.11.6.189;
+     option tftp-server-name "140.11.6.189";
+     next-server 140.11.6.189;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8C:0B:06:BD:09:18:ff:f0:15:50:72:6f:64:61:63:74:61:20:42:6f:6f:74:20:43:6f:6e:74:72:6f:6f:0a:04:00:41:41:41:47;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8C:0B:06:BD:07:d0;
+     log (info, "*****_____ Matched PXE ztb.icb Netz 140.101.212.0/255.255.255.0 _____*****");
+     default-lease-time 1800;
+     max-lease-time 1801;
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM80 
+subnet 140.101.219.0 netmask 255.255.255.0 {
+     option broadcast-address 140.101.219.255;
+     option subnet-mask 255.255.255.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.101.219.91 140.101.219.107;
+             range 140.101.219.109 140.101.219.118;
+             range 140.101.219.198 140.101.219.234;
+        }
+     option domain-name "ztbpre.icbpre.commerzbank.com";
+     option routers 140.101.219.6;
+     option ntp-servers 140.101.219.6;
+     option domain-name-servers 11.2.2.26, 142.20.10.156;
+     option netbios-name-servers 140.11.6.107, 140.11.6.108;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.11.6.189;
+     option tftp-server-name "140.11.6.189";
+     next-server 140.11.6.189;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8C:0B:06:BD:09:18:ff:f0:15:50:72:6f:64:61:63:74:61:20:42:6f:6f:74:20:43:6f:6e:74:72:6f:6f:0a:04:00:41:41:41:47;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8C:0B:06:BD:07:d0;
+     log (info, "*****_____ Matched PXE ztb.icb Netz 140.101.219.0/255.255.255.0 _____*****");
+     default-lease-time 1800;
+     max-lease-time 1801;
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM19 
+subnet 140.101.6.0 netmask 255.255.255.0 {
+     option broadcast-address 140.101.6.255;
+     option subnet-mask 255.255.255.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.101.6.64 140.101.6.127;
+             range 140.101.6.128 140.101.6.191;
+        }
+     option domain-name "ztbpre.icbpre.commerzbank.com";
+     option routers 140.101.6.6;
+     option ntp-servers 140.101.6.6;
+     option domain-name-servers 11.2.2.26, 142.20.10.156;
+     option netbios-name-servers 140.11.6.107, 140.11.6.108;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.101.122.8;
+     option tftp-server-name "140.101.122.8";
+     next-server 140.101.122.8;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8C:65:7A:08:09:18:ff:f0:15:50:72:6f:64:61:63:74:61:20:42:6f:6f:74:20:43:6f:6e:74:72:6f:6f:0a:04:00:41:41:41:47;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8C:65:7A:08:07:d0;
+     log (info, "*****_____ Matched PXE ztb.icb Netz 140.101.6.0/255.255.255.0 _____*****");
+     default-lease-time 1800;
+     max-lease-time 1801;
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM48 
+subnet 140.101.93.0 netmask 255.255.255.0 {
+     option broadcast-address 140.101.93.255;
+     option subnet-mask 255.255.255.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.101.93.64 140.101.93.127;
+             range 140.101.93.128 140.101.93.191;
+        }
+     option domain-name "ztbpre.icbpre.commerzbank.com";
+     option routers 140.101.93.6;
+     option ntp-servers 140.101.93.6;
+     option domain-name-servers 11.2.2.26, 142.20.10.156;
+     option netbios-name-servers 140.11.6.107, 140.11.6.108;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.11.6.189;
+     option tftp-server-name "140.11.6.189";
+     next-server 140.11.6.189;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8c:0b:06:bd:09:18:ff:f0:15:50:72:6f:64:61:63:74:61:20:42:6f:6f:74:20:43:6f:6e:74:72:6f:6f:0a:04:00:41:41:41:47;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8c:0b:06:bd:07:d0;
+     log (info, "*****_____ Matched PXE ztbpre.icbpre Netz 140.101.93.0/255.255.255.0 _____*****");
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM80 
+subnet 140.11.10.0 netmask 255.255.255.0 {
+     option broadcast-address 140.11.10.255;
+     option subnet-mask 255.255.255.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.11.10.64 140.11.10.127;
+             range 140.11.10.128 140.11.10.191;
+        }
+     option domain-name "ztbpre.icbpre.commerzbank.com";
+     option routers 140.11.10.6;
+     option ntp-servers 140.11.10.6;
+     option domain-name-servers 11.2.2.26, 142.20.10.156;
+     option netbios-name-servers 140.11.6.107, 140.11.6.108;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.11.6.189;
+     option tftp-server-name "140.11.6.189";
+     next-server 140.11.6.189;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8C:0B:06:BD:09:18:ff:f0:15:50:72:6f:64:61:63:74:61:20:42:6f:6f:74:20:43:6f:6e:74:72:6f:6f:0a:04:00:41:41:41:47;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8C:0B:06:BD:07:d0;
+     log (info, "*****_____ Matched PXE ztb.icb Netz 140.11.10.0/255.255.255.0 _____*****");
+     default-lease-time 1800;
+     max-lease-time 1801;
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM80 
+subnet 140.11.101.0 netmask 255.255.255.0 {
+     option broadcast-address 140.11.101.255;
+     option subnet-mask 255.255.255.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.11.101.64 140.11.101.127;
+             range 140.11.101.128 140.11.101.191;
+        }
+     option domain-name "ztbpre.icbpre.commerzbank.com";
+     option routers 140.11.101.6;
+     option ntp-servers 140.11.101.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+     option netbios-name-servers 140.11.6.107, 140.11.6.108;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.11.101.10;
+     option tftp-server-name "140.11.101.10";
+     next-server 140.11.101.10;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8C:0B:65:0A:09:18:ff:f0:15:50:72:6f:64:61:63:74:61:20:42:6f:6f:74:20:43:6f:6e:74:72:6f:6f:0a:04:00:41:41:41:47;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8C:0B:65:0A:07:d0;
+     log (info, "*****_____ Matched PXE ztb.icb Netz 140.11.101.0/255.255.255.0 _____*****");
+     default-lease-time 1800;
+     max-lease-time 1801;
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM80 
+subnet 140.11.102.0 netmask 255.255.255.0 {
+     option tftp-server-name "140.11.101.105";
+     filename "X86PC/UNDI/boot/rombl.0";
+     next-server 140.11.101.105;
+     option broadcast-address 140.11.102.255;
+     option subnet-mask 255.255.255.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.11.102.64 140.11.102.127;
+             range 140.11.102.128 140.11.102.191;
+        }
+     option domain-name "ztbpre.icbpre.commerzbank.com";
+     option routers 140.11.102.6;
+     option ntp-servers 140.11.102.6;
+     option domain-name-servers 11.2.2.26, 142.20.10.156;
+     log (info, "*****_____ Matched HP Netz 140.11.102.0/255.255.255.0 _____*****");
+     default-lease-time 300;
+     max-lease-time 301;
+     option dhcp-parameter-request-list 1,2,3,4,5,6,11,12,13,15,16,17,18,42,43,44,46,51,54,58,59,60,61,66,67,119,128,129;
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM80 
+subnet 140.11.103.0 netmask 255.255.255.0 {
+     option broadcast-address 140.11.103.255;
+     option subnet-mask 255.255.255.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.11.103.64 140.11.103.127;
+             range 140.11.103.128 140.11.103.191;
+        }
+     option domain-name "ztbpre.icbpre.commerzbank.com";
+     option routers 140.11.103.6;
+     option ntp-servers 140.11.103.6;
+     option domain-name-servers 11.2.2.26, 142.20.10.156;
+     option netbios-name-servers 140.11.6.107, 140.11.6.108;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.11.103.11;
+     option tftp-server-name "140.11.103.11";
+     next-server 140.11.103.11;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8c:0b:67:0b:09:18:ff:f0:15:50:72:6f:64:61:63:74:61:20:42:6f:6f:74:20:43:6f:6e:74:72:6f:6f:0a:04:00:41:41:41:47;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8c:0b:67:0b:07:d0;
+     log (info, "*****_____ Matched PXE ztbpre.icbpre Netz 140.11.103.0/255.255.255.0 _____*****");
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM80 
+subnet 140.11.200.128 netmask 255.255.255.224 {
+     option broadcast-address 140.11.200.159;
+     option subnet-mask 255.255.255.224;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.11.200.134 140.11.200.146;
+             range 140.11.200.147 140.11.200.158;
+        }
+     option domain-name "ztbpre.icbpre.commerzbank.com";
+     option routers 140.11.200.133;
+     option ntp-servers 140.11.200.133;
+     option domain-name-servers 11.2.2.26, 142.20.10.156;
+     option netbios-name-servers 140.11.6.107, 140.11.6.108;
+     option netbios-node-type 8;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.11.6.21;
+     option tftp-server-name "140.11.6.21";
+     next-server 140.11.6.21;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     log (info, "*****_____ Matched PXE ztbpre.icbpre Netz 140.11.200.128/255.255.255.224 _____*****");
+     default-lease-time 1800;
+     max-lease-time 1801;
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM80 
+subnet 140.11.200.32 netmask 255.255.255.224 {
+     option broadcast-address 140.11.200.63;
+     option subnet-mask 255.255.255.224;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.11.200.42 140.11.200.50;
+             range 140.11.200.51 140.11.200.62;
+        }
+     option domain-name "ztbpre.icbpre.commerzbank.com";
+     option routers 140.11.200.37;
+     option ntp-servers 140.11.200.37;
+     option domain-name-servers 142.20.10.156, 11.2.2.26;
+     option netbios-name-servers 140.11.6.107, 140.11.6.108;
+     option netbios-node-type 8;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.11.6.189;
+     option tftp-server-name "140.11.6.189";
+     next-server 140.11.6.189;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8C:0B:06:BD:09:18:ff:f0:15:50:72:6f:64:61:63:74:61:20:42:6f:6f:74:20:43:6f:6e:74:72:6f:6f:0a:04:00:41:41:41:47;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8C:0B:06:BD:07:d0;
+     log (info, "*****_____ Matched PXE ztbpre.icbpre Netz 140.11.200.32/255.255.255.224 _____*****");
+     default-lease-time 1800;
+     max-lease-time 1801;
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM80 
+subnet 140.11.200.64 netmask 255.255.255.192 {
+     option broadcast-address 140.11.200.127;
+     option subnet-mask 255.255.255.192;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.11.200.80 140.11.200.112;
+        }
+     option domain-name "ztbpre.icbpre.commerzbank.com";
+     option routers 140.11.200.69;
+     option ntp-servers 140.11.200.69;
+     option domain-name-servers 11.2.2.26, 142.20.10.156;
+     option netbios-name-servers 140.11.6.107, 140.11.6.108;
+     option netbios-node-type 8;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.11.6.189;
+     option tftp-server-name "140.11.6.189";
+     next-server 140.11.6.189;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8c:0b:06:bd:09:18:ff:f0:15:50:72:6f:64:61:63:74:61:20:42:6f:6f:74:20:43:6f:6e:74:72:6f:6f:0a:04:00:41:41:41:47;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8c:0b:06:bd:07:d0;
+     log (info, "*****_____ Matched PXE ztbpre.icbpre Netz 140.11.200.64/255.255.255.192 _____*****");
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM80 
+subnet 140.11.24.0 netmask 255.255.255.0 {
+     option broadcast-address 140.11.24.255;
+     option subnet-mask 255.255.255.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.11.24.40 140.11.24.47;
+             range 140.11.24.106 140.11.24.123;
+        }
+     option domain-name "ztbpre.icbpre.commerzbank.com";
+     option routers 140.11.24.6;
+     option ntp-servers 140.11.24.6;
+     option domain-name-servers 11.2.2.26, 142.20.10.156;
+     option netbios-name-servers 140.11.6.107, 140.11.6.108;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.11.6.189;
+     option tftp-server-name "140.11.6.189";
+     next-server 140.11.6.189;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8C:0B:06:BD:09:18:ff:f0:15:50:72:6f:64:61:63:74:61:20:42:6f:6f:74:20:43:6f:6e:74:72:6f:6f:0a:04:00:41:41:41:47;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8C:0B:06:BD:07:d0;
+     log (info, "*****_____ Matched PXE ztb.icb Netz 140.11.24.0/255.255.255.0 _____*****");
+     default-lease-time 1800;
+     max-lease-time 1801;
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM80 
+subnet 140.11.27.0 netmask 255.255.255.0 {
+     option broadcast-address 140.11.27.255;
+     option subnet-mask 255.255.255.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.11.27.64 140.11.27.127;
+             range 140.11.27.128 140.11.27.191;
+        }
+     option domain-name "ztbpre.icbpre.commerzbank.com";
+     option routers 140.11.27.6;
+     option ntp-servers 140.11.27.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+     option netbios-name-servers 140.11.6.107, 140.11.6.108;
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM80 
+subnet 140.11.59.0 netmask 255.255.255.0 {
+     option broadcast-address 140.11.59.255;
+     option subnet-mask 255.255.255.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.11.59.64 140.11.59.127;
+             range 140.11.59.128 140.11.59.191;
+        }
+     option domain-name "ztbpre.icbpre.commerzbank.com";
+     option routers 140.11.59.6;
+     option ntp-servers 140.11.59.6;
+     option domain-name-servers 11.2.2.26, 142.20.10.156;
+     option netbios-name-servers 140.11.6.107, 140.11.6.108;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.11.6.189;
+     option tftp-server-name "140.11.6.189";
+     next-server 140.11.6.189;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8C:0B:06:BD:09:18:ff:f0:15:50:72:6f:64:61:63:74:61:20:42:6f:6f:74:20:43:6f:6e:74:72:6f:6f:0a:04:00:41:41:41:47;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8C:0B:06:BD:07:d0;
+     log (info, "*****_____ Matched PXE ztb.icb Netz 140.11.59.0/255.255.255.0 _____*****");
+     default-lease-time 1800;
+     max-lease-time 1801;
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM80 
+subnet 140.11.6.0 netmask 255.255.255.0 {
+     option broadcast-address 140.11.6.255;
+     option subnet-mask 255.255.255.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.11.6.64 140.11.6.127;
+             range 140.11.6.128 140.11.6.191;
+        }
+     option domain-name "ztbpre.icbpre.commerzbank.com";
+     option routers 140.11.6.6;
+     option ntp-servers 140.11.6.6;
+     option domain-name-servers 11.2.2.26, 142.20.10.156;
+     option netbios-name-servers 140.11.6.107, 140.11.6.108;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.11.6.189;
+     option tftp-server-name "140.11.6.189";
+     next-server 140.11.6.189;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8C:0B:06:BD:09:18:ff:f0:15:50:72:6f:64:61:63:74:61:20:42:6f:6f:74:20:43:6f:6e:74:72:6f:6f:0a:04:00:41:41:41:47;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8C:0B:06:BD:07:d0;
+     log (info, "*****_____ Matched PXE ztb.icb Netz 140.11.6.0/255.255.255.0 _____*****");
+     default-lease-time 1800;
+     max-lease-time 1801;
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM80 
+subnet 140.11.60.0 netmask 255.255.255.0 {
+     option broadcast-address 140.11.60.255;
+     option subnet-mask 255.255.255.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.11.60.64 140.11.60.127;
+             range 140.11.60.128 140.11.60.191;
+        }
+     option domain-name "ztbpre.icbpre.commerzbank.com";
+     option routers 140.11.60.6;
+     option ntp-servers 140.11.60.6;
+     option domain-name-servers 11.2.2.26, 142.20.10.156;
+     option netbios-name-servers 140.11.6.107, 140.11.6.108;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.11.6.21;
+     option tftp-server-name "140.11.6.21";
+     next-server 140.11.6.21;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8C:0B:06:15:09:18:ff:f0:15:50:72:6f:64:61:63:74:61:20:42:6f:6f:74:20:43:6f:6e:74:72:6f:6f:0a:04:00:41:41:41:47;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8C:0B:06:15:07:d0;
+     log (info, "*****_____ Matched PXE ztb.icb Netz 140.11.60.0/255.255.255.0 _____*****");
+     default-lease-time 1800;
+     max-lease-time 1801;
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM80 
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM80 
+subnet 140.11.69.0 netmask 255.255.255.0 {
+     option tftp-server-name "140.26.20.27";
+     filename "X86PC/UNDI/boot/rombl.0";
+     next-server 140.26.20.27;
+     option broadcast-address 140.11.69.255;
+     option subnet-mask 255.255.255.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.11.69.64 140.11.69.127;
+             range 140.11.69.128 140.11.69.191;
+        }
+     option domain-name "ztbpre.icbpre.commerzbank.com";
+     option routers 140.11.69.6;
+     option ntp-servers 140.11.69.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+     option netbios-name-servers 140.11.6.107, 140.11.6.108;
+     log (info, "*****_____ Matched HP Netz 140.11.69.0/255.255.255.0 _____*****");
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM80 
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM80 
+subnet 140.11.70.0 netmask 255.255.255.0 {
+     option broadcast-address 140.11.70.255;
+     option subnet-mask 255.255.255.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.11.70.64 140.11.70.127;
+             range 140.11.70.128 140.11.70.191;
+        }
+     option domain-name "ztbpre.icbpre.commerzbank.com";
+     option routers 140.11.70.6;
+     option ntp-servers 140.11.70.6;
+     option domain-name-servers 11.2.2.26, 142.20.10.156;
+     option netbios-name-servers 140.11.6.107, 140.11.6.108;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.11.6.189;
+     option tftp-server-name "140.11.6.189";
+     next-server 140.11.6.189;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8C:0B:06:BD:09:18:ff:f0:15:50:72:6f:64:61:63:74:61:20:42:6f:6f:74:20:43:6f:6e:74:72:6f:6f:0a:04:00:41:41:41:47;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8C:0B:06:BD:07:d0;
+     log (info, "*****_____ Matched PXE ztb.icb Netz 140.11.70.0/255.255.255.0 _____*****");
+     default-lease-time 1800;
+     max-lease-time 1801;
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM80 
+subnet 140.11.77.0 netmask 255.255.255.0 {
+     option broadcast-address 140.11.77.255;
+     option subnet-mask 255.255.255.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.11.77.64 140.11.77.127;
+             range 140.11.77.128 140.11.77.191;
+        }
+     option domain-name "ztbpre.icbpre.commerzbank.com";
+     option routers 140.11.77.6;
+     option ntp-servers 140.11.77.6;
+     option domain-name-servers 11.2.2.26, 142.20.10.156;
+     option netbios-name-servers 140.11.6.107, 140.11.6.108;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.11.6.189;
+     option tftp-server-name "140.11.6.189";
+     next-server 140.11.6.189;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8c:0b:06:bd:09:18:ff:f0:15:50:72:6f:64:61:63:74:61:20:42:6f:6f:74:20:43:6f:6e:74:72:6f:6f:0a:04:00:41:41:41:47;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8c:0b:06:bd:07:d0;
+     log (info, "*****_____ Matched PXE ztbpre.icbpre Netz 140.11.77.0/255.255.255.0 _____*****");
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM80 
+subnet 140.11.78.0 netmask 255.255.255.0 {
+     option broadcast-address 140.11.78.255;
+     option subnet-mask 255.255.255.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.11.78.64 140.11.78.127;
+             range 140.11.78.128 140.11.78.191;
+        }
+     option domain-name "ztbpre.icbpre.commerzbank.com";
+     option routers 140.11.78.6;
+     option ntp-servers 140.11.78.6;
+     option domain-name-servers 11.2.2.26, 142.20.10.156;
+     option netbios-name-servers 140.11.6.107, 140.11.6.108;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.11.6.189;
+     option tftp-server-name "140.11.6.189";
+     next-server 140.11.6.189;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8c:0b:06:bd:09:18:ff:f0:15:50:72:6f:64:61:63:74:61:20:42:6f:6f:74:20:43:6f:6e:74:72:6f:6f:0a:04:00:41:41:41:47;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8c:0b:06:bd:07:d0;
+     log (info, "*****_____ Matched PXE ztbpre.icbpre Netz 140.11.78.0/255.255.255.0 _____*****");
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM80 
+subnet 140.11.8.0 netmask 255.255.255.0 {
+     option broadcast-address 140.11.8.255;
+     option subnet-mask 255.255.255.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.11.8.72 140.11.8.132;
+             range 140.11.8.155 140.11.8.169;
+             range 140.11.8.206 140.11.8.242;
+        }
+     option domain-name "ztbpre.icbpre.commerzbank.com";
+     option routers 140.11.8.6;
+     option ntp-servers 140.11.8.6;
+     option domain-name-servers 11.2.2.26, 142.20.10.156;
+     option netbios-name-servers 140.11.6.107, 140.11.6.108;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.11.6.189;
+     option tftp-server-name "140.11.6.189";
+     next-server 140.11.6.189;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8C:0B:06:BD:09:18:ff:f0:15:50:72:6f:64:61:63:74:61:20:42:6f:6f:74:20:43:6f:6e:74:72:6f:6f:0a:04:00:41:41:41:47;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8C:0B:06:BD:07:d0;
+     log (info, "*****_____ Matched PXE ztb.icb Netz 140.11.8.0/255.255.255.0 _____*****");
+     default-lease-time 1800;
+     max-lease-time 1801;
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM80 
+subnet 140.11.81.0 netmask 255.255.255.0 {
+     option broadcast-address 140.11.81.255;
+     option subnet-mask 255.255.255.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.11.81.64 140.11.81.127;
+             range 140.11.81.128 140.11.81.191;
+        }
+     option domain-name "ztbpre.icbpre.commerzbank.com";
+     option routers 140.11.81.6;
+     option ntp-servers 140.11.81.6;
+     option domain-name-servers 11.2.2.26, 142.20.10.156;
+     option netbios-name-servers 140.11.6.107, 140.11.6.108;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.11.6.189;
+     option tftp-server-name "140.11.6.189";
+     next-server 140.11.6.189;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8C:0B:06:BD:09:18:ff:f0:15:50:72:6f:64:61:63:74:61:20:42:6f:6f:74:20:43:6f:6e:74:72:6f:6f:0a:04:00:41:41:41:47;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8C:0B:06:BD:07:d0;
+     log (info, "*****_____ Matched PXE ztb.icb Netz 140.11.81.0/255.255.255.0 _____*****");
+     default-lease-time 1800;
+     max-lease-time 1801;
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM80 
+subnet 140.11.82.0 netmask 255.255.255.0 {
+     option broadcast-address 140.11.82.255;
+     option subnet-mask 255.255.255.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.11.82.64 140.11.82.127;
+             range 140.11.82.128 140.11.82.146;
+        }
+     option domain-name "ztbpre.icbpre.commerzbank.com";
+     option routers 140.11.82.6;
+     option ntp-servers 140.11.82.6;
+     option domain-name-servers 11.2.2.26, 142.20.10.156;
+     option netbios-name-servers 140.11.6.107, 140.11.6.108;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.11.6.189;
+     option tftp-server-name "140.11.6.189";
+     next-server 140.11.6.189;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8C:0B:06:BD:09:18:ff:f0:15:50:72:6f:64:61:63:74:61:20:42:6f:6f:74:20:43:6f:6e:74:72:6f:6f:0a:04:00:41:41:41:47;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8C:0B:06:BD:07:d0;
+     log (info, "*****_____ Matched PXE ztb.icb Netz 140.11.82.0/255.255.255.0 _____*****");
+     default-lease-time 1800;
+     max-lease-time 1801;
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM80 
+subnet 140.11.83.0 netmask 255.255.255.0 {
+     option broadcast-address 140.11.83.255;
+     option subnet-mask 255.255.255.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.11.83.64 140.11.83.127;
+             range 140.11.83.128 140.11.83.150;
+        }
+     option domain-name "ztbpre.icbpre.commerzbank.com";
+     option routers 140.11.83.6;
+     option ntp-servers 140.11.83.6;
+     option domain-name-servers 11.2.2.26, 142.20.10.156;
+     option netbios-name-servers 140.11.6.107, 140.11.6.108;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.11.6.189;
+     option tftp-server-name "140.11.6.189";
+     next-server 140.11.6.189;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8C:0B:06:BD:09:18:ff:f0:15:50:72:6f:64:61:63:74:61:20:42:6f:6f:74:20:43:6f:6e:74:72:6f:6f:0a:04:00:41:41:41:47;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8C:0B:06:BD:07:d0;
+     log (info, "*****_____ Matched PXE ztb.icb Netz 140.11.83.0/255.255.255.0 _____*****");
+     default-lease-time 1800;
+     max-lease-time 1801;
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM80 
+subnet 140.11.84.0 netmask 255.255.255.0 {
+     option broadcast-address 140.11.84.255;
+     option subnet-mask 255.255.255.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.11.84.64 140.11.84.127;
+             range 140.11.84.128 140.11.84.191;
+        }
+     option domain-name "ztbpre.icbpre.commerzbank.com";
+     option routers 140.11.84.6;
+     option ntp-servers 140.11.84.6;
+     option domain-name-servers 11.2.2.26, 142.20.10.156;
+     option netbios-name-servers 140.11.6.107, 140.11.6.108;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.11.84.11;
+     option tftp-server-name "140.11.84.11";
+     next-server 140.11.84.11;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8C:0B:54:0B:09:18:ff:f0:15:50:72:6f:64:61:63:74:61:20:42:6f:6f:74:20:43:6f:6e:74:72:6f:6f:0a:04:00:41:41:41:47;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8C:0B:54:0B:07:d0;
+     log (info, "*****_____ Matched PXE ztb.icb Netz 140.11.84.0/255.255.255.0 _____*****");
+     default-lease-time 1800;
+     max-lease-time 1801;
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM80 
+subnet 140.11.85.0 netmask 255.255.255.0 {
+     option broadcast-address 140.11.85.255;
+     option subnet-mask 255.255.255.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.11.85.64 140.11.85.127;
+             range 140.11.85.128 140.11.85.191;
+        }
+     option domain-name "ztbpre.icbpre.commerzbank.com";
+     option routers 140.11.85.6;
+     option ntp-servers 140.11.85.6;
+     option domain-name-servers 11.2.2.26, 142.20.10.156;
+     option netbios-name-servers 140.11.6.107, 140.11.6.108;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.11.85.10;
+     option tftp-server-name "140.11.85.10";
+     next-server 140.11.85.10;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8C:0B:55:0A:09:18:ff:f0:15:50:72:6f:64:61:63:74:61:20:42:6f:6f:74:20:43:6f:6e:74:72:6f:6f:0a:04:00:41:41:41:47;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8C:0B:55:0A:07:d0;
+     log (info, "*****_____ Matched PXE ztb.icb Netz 140.11.85.0/255.255.255.0 _____*****");
+     default-lease-time 1800;
+     max-lease-time 1801;
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM80 
+subnet 140.11.86.0 netmask 255.255.255.0 {
+     option broadcast-address 140.11.86.255;
+     option subnet-mask 255.255.255.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.11.86.64 140.11.86.127;
+             range 140.11.86.128 140.11.86.191;
+        }
+     option domain-name "ztbpre.icbpre.commerzbank.com";
+     option routers 140.11.86.6;
+     option ntp-servers 140.11.86.6;
+     option domain-name-servers 11.2.2.26, 142.20.10.156;
+     option netbios-name-servers 140.11.6.107, 140.11.6.108;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.11.6.189;
+     option tftp-server-name "140.11.6.189";
+     next-server 140.11.6.189;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8C:0B:06:BD:09:18:ff:f0:15:50:72:6f:64:61:63:74:61:20:42:6f:6f:74:20:43:6f:6e:74:72:6f:6f:0a:04:00:41:41:41:47;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8C:0B:06:BD:07:d0;
+     log (info, "*****_____ Matched PXE ztb.icb Netz 140.11.86.0/255.255.255.0 _____*****");
+     default-lease-time 1800;
+     max-lease-time 1801;
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM80 
+subnet 140.11.87.0 netmask 255.255.255.0 {
+     option broadcast-address 140.11.87.255;
+     option subnet-mask 255.255.255.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.11.87.64 140.11.87.127;
+             range 140.11.87.128 140.11.87.191;
+        }
+     option domain-name "ztbpre.icbpre.commerzbank.com";
+     option routers 140.11.87.6;
+     option ntp-servers 140.11.87.6;
+     option domain-name-servers 11.2.2.26, 142.20.10.156;
+     option netbios-name-servers 140.11.6.107, 140.11.6.108;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.11.6.189;
+     option tftp-server-name "140.11.6.189";
+     next-server 140.11.6.189;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8C:0B:06:BD:09:18:ff:f0:15:50:72:6f:64:61:63:74:61:20:42:6f:6f:74:20:43:6f:6e:74:72:6f:6f:0a:04:00:41:41:41:47;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8C:0B:06:BD:07:d0;
+     log (info, "*****_____ Matched PXE ztb.icb Netz 140.11.87.0/255.255.255.0 _____*****");
+     default-lease-time 1800;
+     max-lease-time 1801;
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM80 
+subnet 140.11.88.0 netmask 255.255.254.0 {
+     option broadcast-address 140.11.89.255;
+     option subnet-mask 255.255.254.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.11.88.120 140.11.88.145;
+        }
+     option domain-name "ztbpre.icbpre.commerzbank.com";
+     option routers 140.11.88.6;
+     option ntp-servers 140.11.88.6;
+     option domain-name-servers 11.2.2.26, 142.20.10.156;
+     option netbios-name-servers 140.11.6.107, 140.11.6.108;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.11.6.189;
+     option tftp-server-name "140.11.6.189";
+     next-server 140.11.6.189;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8C:0B:06:BD:09:18:ff:f0:15:50:72:6f:64:61:63:74:61:20:42:6f:6f:74:20:43:6f:6e:74:72:6f:6f:0a:04:00:41:41:41:47;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8C:0B:06:BD:07:d0;
+     log (info, "*****_____ Matched PXE ztb.icb Netz 140.11.88.0/255.255.254.0 _____*****");
+     default-lease-time 1800;
+     max-lease-time 1801;
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM80 
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM80 
+subnet 140.11.90.0 netmask 255.255.255.0 {
+     option broadcast-address 140.11.90.255;
+     option subnet-mask 255.255.255.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.11.90.64 140.11.90.127;
+             range 140.11.90.128 140.11.90.191;
+        }
+     option domain-name "ztbpre.icbpre.commerzbank.com";
+     option routers 140.11.90.4;
+     option ntp-servers 140.11.90.4;
+     option domain-name-servers 11.2.2.26, 142.20.10.156;
+     option netbios-name-servers 140.11.6.107, 140.11.6.108;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.11.6.21;
+     option tftp-server-name "140.11.6.21";
+     next-server 140.11.6.21;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8C:0B:06:15:09:18:ff:f0:15:50:72:6f:64:61:63:74:61:20:42:6f:6f:74:20:43:6f:6e:74:72:6f:6f:0a:04:00:41:41:41:47;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8C:0B:06:15:07:d0;
+     log (info, "*****_____ Matched PXE ztb.icb Netz 140.11.90.0/255.255.255.0 _____*****");
+     default-lease-time 1800;
+     max-lease-time 1801;
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM80 
+subnet 140.11.91.0 netmask 255.255.255.0 {
+     option broadcast-address 140.11.91.255;
+     option subnet-mask 255.255.255.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.11.91.64 140.11.91.127;
+             range 140.11.91.128 140.11.91.191;
+        }
+     option domain-name "ztbpre.icbpre.commerzbank.com";
+     option routers 140.11.91.6;
+     option ntp-servers 140.11.91.6;
+     option domain-name-servers 11.2.2.26, 142.20.10.156;
+     option netbios-name-servers 140.11.6.107, 140.11.6.108;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.11.91.11;
+     option tftp-server-name "140.11.91.11";
+     next-server 140.11.91.11;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8C:0B:5B:0B:09:18:ff:f0:15:50:72:6f:64:61:63:74:61:20:42:6f:6f:74:20:43:6f:6e:74:72:6f:6f:0a:04:00:41:41:41:47;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8C:0B:5B:0B:07:d0;
+     log (info, "*****_____ Matched PXE ztb.icb Netz 140.11.91.0/255.255.255.0 _____*****");
+     default-lease-time 1800;
+     max-lease-time 1801;
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM80 
+subnet 140.11.95.0 netmask 255.255.255.0 {
+     option broadcast-address 140.11.95.255;
+     option subnet-mask 255.255.255.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.11.95.64 140.11.95.127;
+             range 140.11.95.128 140.11.95.191;
+        }
+     option domain-name "ztbpre.icbpre.commerzbank.com";
+     option routers 140.11.95.6;
+     option ntp-servers 140.11.95.6;
+     option domain-name-servers 11.2.2.26, 142.20.10.156;
+     option netbios-name-servers 140.11.6.107, 140.11.6.108;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.11.6.189;
+     option tftp-server-name "140.11.6.189";
+     next-server 140.11.6.189;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8C:0B:06:BD:09:18:ff:f0:15:50:72:6f:64:61:63:74:61:20:42:6f:6f:74:20:43:6f:6e:74:72:6f:6f:0a:04:00:41:41:41:47;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8C:0B:06:BD:07:d0;
+     log (info, "*****_____ Matched PXE ztb.icb Netz 140.11.95.0/255.255.255.0 _____*****");
+     default-lease-time 1800;
+     max-lease-time 1801;
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM80 
+subnet 140.11.96.0 netmask 255.255.255.0 {
+     option broadcast-address 140.11.96.255;
+     option subnet-mask 255.255.255.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.11.96.64 140.11.96.127;
+             range 140.11.96.128 140.11.96.191;
+        }
+     option domain-name "ztbpre.icbpre.commerzbank.com";
+     option routers 140.11.96.6;
+     option ntp-servers 140.11.96.6;
+     option domain-name-servers 11.2.2.26, 142.20.10.156;
+     option netbios-name-servers 140.11.6.107, 140.11.6.108;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.11.6.189;
+     option tftp-server-name "140.11.6.189";
+     next-server 140.11.6.189;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8C:0B:06:BD:09:18:ff:f0:15:50:72:6f:64:61:63:74:61:20:42:6f:6f:74:20:43:6f:6e:74:72:6f:6f:0a:04:00:41:41:41:47;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8C:0B:06:BD:07:d0;
+     log (info, "*****_____ Matched PXE ztb.icb Netz 140.11.96.0/255.255.255.0 _____*****");
+     default-lease-time 1800;
+     max-lease-time 1801;
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM80 
+subnet 140.11.97.0 netmask 255.255.255.0 {
+     option broadcast-address 140.11.97.255;
+     option subnet-mask 255.255.255.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.11.97.64 140.11.97.127;
+             range 140.11.97.128 140.11.97.191;
+        }
+     option domain-name "ztbpre.icbpre.commerzbank.com";
+     option routers 140.11.97.6;
+     option ntp-servers 140.11.97.6;
+     option domain-name-servers 11.2.2.26, 142.20.10.156;
+     option netbios-name-servers 140.11.6.107, 140.11.6.108;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.11.6.189;
+     option tftp-server-name "140.11.6.189";
+     next-server 140.11.6.189;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8C:0B:06:BD:09:18:ff:f0:15:50:72:6f:64:61:63:74:61:20:42:6f:6f:74:20:43:6f:6e:74:72:6f:6f:0a:04:00:41:41:41:47;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8C:0B:06:BD:07:d0;
+     log (info, "*****_____ Matched PXE ztb.icb Netz 140.11.97.0/255.255.255.0 _____*****");
+     default-lease-time 1800;
+     max-lease-time 1801;
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM80 
+subnet 140.11.98.0 netmask 255.255.255.0 {
+     option broadcast-address 140.11.98.255;
+     option subnet-mask 255.255.255.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.11.98.64 140.11.98.127;
+             range 140.11.98.128 140.11.98.191;
+        }
+     option domain-name "ztbpre.icbpre.commerzbank.com";
+     option routers 140.11.98.6;
+     option ntp-servers 140.11.98.6;
+     option domain-name-servers 11.2.2.26, 142.20.10.156;
+     option netbios-name-servers 140.11.6.107, 140.11.6.108;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.11.6.189;
+     option tftp-server-name "140.11.6.189";
+     next-server 140.11.6.189;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8C:0B:06:BD:09:18:ff:f0:15:50:72:6f:64:61:63:74:61:20:42:6f:6f:74:20:43:6f:6e:74:72:6f:6f:0a:04:00:41:41:41:47;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8C:0B:06:BD:07:d0;
+     log (info, "*****_____ Matched PXE ztb.icb Netz 140.11.98.0/255.255.255.0 _____*****");
+     default-lease-time 1800;
+     max-lease-time 1801;
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM80 
+subnet 140.14.1.0 netmask 255.255.255.0 {
+     option broadcast-address 140.14.1.255;
+     option subnet-mask 255.255.255.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.14.1.64 140.14.1.127;
+             range 140.14.1.128 140.14.1.191;
+        }
+     option domain-name "ztbpre.icbpre.commerzbank.com";
+     option routers 140.14.1.6;
+     option ntp-servers 140.14.1.6;
+     option domain-name-servers 11.2.2.26, 142.20.10.156;
+     option netbios-name-servers 140.11.6.107, 140.11.6.108;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.11.6.189;
+     option tftp-server-name "140.11.6.189";
+     next-server 140.11.6.189;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8C:0B:06:BD:09:18:ff:f0:15:50:72:6f:64:61:63:74:61:20:42:6f:6f:74:20:43:6f:6e:74:72:6f:6f:0a:04:00:41:41:41:47;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8C:0B:06:BD:07:d0;
+     log (info, "*****_____ Matched PXE ztb.icb Netz 140.14.1.0/255.255.255.0 _____*****");
+     default-lease-time 1800;
+     max-lease-time 1801;
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM80 
+subnet 140.14.163.0 netmask 255.255.255.0 {
+     option broadcast-address 140.14.163.255;
+     option subnet-mask 255.255.255.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.14.163.64 140.14.163.127;
+             range 140.14.163.128 140.14.163.191;
+        }
+     option domain-name "ztbpre.icbpre.commerzbank.com";
+     option routers 140.14.163.6;
+     option ntp-servers 140.14.163.6;
+     option domain-name-servers 11.2.2.26, 142.20.10.156;
+     option netbios-name-servers 140.11.6.107, 140.11.6.108;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.11.6.189;
+     option tftp-server-name "140.11.6.189";
+     next-server 140.11.6.189;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8C:0B:06:BD:09:18:ff:f0:15:50:72:6f:64:61:63:74:61:20:42:6f:6f:74:20:43:6f:6e:74:72:6f:6f:0a:04:00:41:41:41:47;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8C:0B:06:BD:07:d0;
+     log (info, "*****_____ Matched PXE ztb.icb Netz 140.14.163.0/255.255.255.0 _____*****");
+     default-lease-time 1800;
+     max-lease-time 1801;
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM80 
+subnet 140.14.187.0 netmask 255.255.255.0 {
+     option broadcast-address 140.14.187.255;
+     option subnet-mask 255.255.255.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.14.187.64 140.14.187.127;
+             range 140.14.187.128 140.14.187.191;
+        }
+     option domain-name "ztbpre.icbpre.commerzbank.com";
+     option routers 140.14.187.6;
+     option ntp-servers 140.14.187.6;
+     option domain-name-servers 11.2.2.26, 142.20.10.156;
+     option netbios-name-servers 140.11.6.107, 140.11.6.108;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.11.6.189;
+     option tftp-server-name "140.11.6.189";
+     next-server 140.11.6.189;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8C:0B:06:BD:09:18:ff:f0:15:50:72:6f:64:61:63:74:61:20:42:6f:6f:74:20:43:6f:6e:74:72:6f:6f:0a:04:00:41:41:41:47;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8C:0B:06:BD:07:d0;
+     log (info, "*****_____ Matched PXE ztb.icb Netz 140.14.187.0/255.255.255.0 _____*****");
+     default-lease-time 1800;
+     max-lease-time 1801;
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM80 
+subnet 140.14.2.0 netmask 255.255.255.0 {
+     option broadcast-address 140.14.2.255;
+     option subnet-mask 255.255.255.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.14.2.64 140.14.2.127;
+             range 140.14.2.128 140.14.2.191;
+        }
+     option domain-name "ztbpre.icbpre.commerzbank.com";
+     option routers 140.14.2.6;
+     option ntp-servers 140.14.2.6;
+     option domain-name-servers 11.2.2.26, 142.20.10.156;
+     option netbios-name-servers 140.11.6.107, 140.11.6.108;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.11.6.189;
+     option tftp-server-name "140.11.6.189";
+     next-server 140.11.6.189;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8C:0B:06:BD:09:18:ff:f0:15:50:72:6f:64:61:63:74:61:20:42:6f:6f:74:20:43:6f:6e:74:72:6f:6f:0a:04:00:41:41:41:47;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8C:0B:06:BD:07:d0;
+     log (info, "*****_____ Matched PXE ztb.icb Netz 140.14.2.0/255.255.255.0 _____*****");
+     default-lease-time 1800;
+     max-lease-time 1801;
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM80 
+subnet 140.14.248.0 netmask 255.255.255.0 {
+     option broadcast-address 140.14.248.255;
+     option subnet-mask 255.255.255.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.14.248.64 140.14.248.127;
+             range 140.14.248.128 140.14.248.191;
+        }
+     option domain-name "ztbpre.icbpre.commerzbank.com";
+     option routers 140.14.248.6;
+     option ntp-servers 140.14.248.6;
+     option domain-name-servers 11.2.2.26, 142.20.10.156;
+     option netbios-name-servers 140.11.6.107, 140.11.6.108;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.11.6.189;
+     option tftp-server-name "140.11.6.189";
+     next-server 140.11.6.189;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8C:0B:06:BD:09:18:ff:f0:15:50:72:6f:64:61:63:74:61:20:42:6f:6f:74:20:43:6f:6e:74:72:6f:6f:0a:04:00:41:41:41:47;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8C:0B:06:BD:07:d0;
+     log (info, "*****_____ Matched PXE ztb.icb Netz 140.14.248.0/255.255.255.0 _____*****");
+     default-lease-time 1800;
+     max-lease-time 1801;
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM80 
+subnet 140.14.249.0 netmask 255.255.255.0 {
+     option broadcast-address 140.14.249.255;
+     option subnet-mask 255.255.255.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.14.249.64 140.14.249.127;
+             range 140.14.249.128 140.14.249.191;
+        }
+     option domain-name "ztbpre.icbpre.commerzbank.com";
+     option routers 140.14.249.6;
+     option ntp-servers 140.14.249.6;
+     option domain-name-servers 11.2.2.26, 142.20.10.156;
+     option netbios-name-servers 140.11.6.107, 140.11.6.108;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.11.6.189;
+     option tftp-server-name "140.11.6.189";
+     next-server 140.11.6.189;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8C:0B:06:BD:09:18:ff:f0:15:50:72:6f:64:61:63:74:61:20:42:6f:6f:74:20:43:6f:6e:74:72:6f:6f:0a:04:00:41:41:41:47;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8C:0B:06:BD:07:d0;
+     log (info, "*****_____ Matched PXE ztb.icb Netz 140.14.249.0/255.255.255.0 _____*****");
+     default-lease-time 1800;
+     max-lease-time 1801;
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM80 
+subnet 140.14.250.0 netmask 255.255.255.0 {
+     option broadcast-address 140.14.250.255;
+     option subnet-mask 255.255.255.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.14.250.64 140.14.250.127;
+             range 140.14.250.128 140.14.250.191;
+        }
+     option domain-name "ztbpre.icbpre.commerzbank.com";
+     option routers 140.14.250.6;
+     option ntp-servers 140.14.250.6;
+     option domain-name-servers 11.2.2.26, 142.20.10.156;
+     option netbios-name-servers 140.11.6.107, 140.11.6.108;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.11.6.189;
+     option tftp-server-name "140.11.6.189";
+     next-server 140.11.6.189;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8C:0B:06:BD:09:18:ff:f0:15:50:72:6f:64:61:63:74:61:20:42:6f:6f:74:20:43:6f:6e:74:72:6f:6f:0a:04:00:41:41:41:47;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8C:0B:06:BD:07:d0;
+     log (info, "*****_____ Matched PXE ztb.icb Netz 140.14.250.0/255.255.255.0 _____*****");
+     default-lease-time 1800;
+     max-lease-time 1801;
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM80 
+subnet 140.14.251.0 netmask 255.255.255.0 {
+     option broadcast-address 140.14.251.255;
+     option subnet-mask 255.255.255.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.14.251.64 140.14.251.127;
+             range 140.14.251.128 140.14.251.191;
+        }
+     option domain-name "ztbpre.icbpre.commerzbank.com";
+     option routers 140.14.251.6;
+     option ntp-servers 140.14.251.6;
+     option domain-name-servers 11.2.2.26, 142.20.10.156;
+     option netbios-name-servers 140.11.6.107, 140.11.6.108;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.11.6.189;
+     option tftp-server-name "140.11.6.189";
+     next-server 140.11.6.189;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8C:0B:06:BD:09:18:ff:f0:15:50:72:6f:64:61:63:74:61:20:42:6f:6f:74:20:43:6f:6e:74:72:6f:6f:0a:04:00:41:41:41:47;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8C:0B:06:BD:07:d0;
+     log (info, "*****_____ Matched PXE ztb.icb Netz 140.14.251.0/255.255.255.0 _____*****");
+     default-lease-time 1800;
+     max-lease-time 1801;
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM80 
+subnet 140.14.252.0 netmask 255.255.255.0 {
+     option broadcast-address 140.14.252.255;
+     option subnet-mask 255.255.255.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.14.252.64 140.14.252.127;
+             range 140.14.252.128 140.14.252.191;
+        }
+     option domain-name "ztbpre.icbpre.commerzbank.com";
+     option routers 140.14.252.6;
+     option ntp-servers 140.14.252.6;
+     option domain-name-servers 11.2.2.26, 142.20.10.156;
+     option netbios-name-servers 140.11.6.107, 140.11.6.108;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.11.6.189;
+     option tftp-server-name "140.11.6.189";
+     next-server 140.11.6.189;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8C:0B:06:BD:09:18:ff:f0:15:50:72:6f:64:61:63:74:61:20:42:6f:6f:74:20:43:6f:6e:74:72:6f:6f:0a:04:00:41:41:41:47;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8C:0B:06:BD:07:d0;
+     log (info, "*****_____ Matched PXE ztb.icb Netz 140.14.252.0/255.255.255.0 _____*****");
+     default-lease-time 1800;
+     max-lease-time 1801;
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM80 
+subnet 140.14.253.0 netmask 255.255.255.0 {
+     option broadcast-address 140.14.253.255;
+     option subnet-mask 255.255.255.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.14.253.64 140.14.253.127;
+             range 140.14.253.128 140.14.253.191;
+        }
+     option domain-name "ztbpre.icbpre.commerzbank.com";
+     option routers 140.14.253.6;
+     option ntp-servers 140.14.253.6;
+     option domain-name-servers 11.2.2.26, 142.20.10.156;
+     option netbios-name-servers 140.11.6.107, 140.11.6.108;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.11.6.189;
+     option tftp-server-name "140.11.6.189";
+     next-server 140.11.6.189;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8C:0B:06:BD:09:18:ff:f0:15:50:72:6f:64:61:63:74:61:20:42:6f:6f:74:20:43:6f:6e:74:72:6f:6f:0a:04:00:41:41:41:47;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8C:0B:06:BD:07:d0;
+     log (info, "*****_____ Matched PXE ztb.icb Netz 140.14.253.0/255.255.255.0 _____*****");
+     default-lease-time 1800;
+     max-lease-time 1801;
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM80 
+subnet 140.14.3.0 netmask 255.255.255.0 {
+     option broadcast-address 140.14.3.255;
+     option subnet-mask 255.255.255.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.14.3.64 140.14.3.127;
+             range 140.14.3.128 140.14.3.191;
+        }
+     option domain-name "ztbpre.icbpre.commerzbank.com";
+     option routers 140.14.3.6;
+     option ntp-servers 140.14.3.6;
+     option domain-name-servers 11.2.2.26, 142.20.10.156;
+     option netbios-name-servers 140.11.6.107, 140.11.6.108;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.11.6.189;
+     option tftp-server-name "140.11.6.189";
+     next-server 140.11.6.189;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8C:0B:06:BD:09:18:ff:f0:15:50:72:6f:64:61:63:74:61:20:42:6f:6f:74:20:43:6f:6e:74:72:6f:6f:0a:04:00:41:41:41:47;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8C:0B:06:BD:07:d0;
+     log (info, "*****_____ Matched PXE ztb.icb Netz 140.14.3.0/255.255.255.0 _____*****");
+     default-lease-time 1800;
+     max-lease-time 1801;
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM80 
+subnet 140.15.124.0 netmask 255.255.252.0 {
+     option broadcast-address 140.15.127.255;
+     option subnet-mask 255.255.252.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.15.125.1 140.15.125.255;
+             range 140.15.126.1 140.15.126.255;
+        }
+     option domain-name "ztbpre.icbpre.commerzbank.com";
+     option routers 140.15.124.6;
+     option ntp-servers 140.15.124.6;
+     option domain-name-servers 11.2.2.26, 142.20.10.156;
+     option netbios-name-servers 140.11.6.107, 140.11.6.108;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.11.6.189;
+     option tftp-server-name "140.11.6.189";
+     next-server 140.11.6.189;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8c:0b:06:bd:09:18:ff:f0:15:50:72:6f:64:61:63:74:61:20:42:6f:6f:74:20:43:6f:6e:74:72:6f:6f:0a:04:00:41:41:41:47;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8c:0b:06:bd:07:d0;
+     log (info, "*****_____ Matched PXE ztbpre.icbpre Netz 140.15.124.0/255.255.252.0 _____*****");
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM80 
+subnet 140.15.128.0 netmask 255.255.252.0 {
+     option broadcast-address 140.15.131.255;
+     option subnet-mask 255.255.252.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.15.129.1 140.15.129.255;
+             range 140.15.130.1 140.15.130.255;
+        }
+     option domain-name "ztbpre.icbpre.commerzbank.com";
+     option routers 140.15.128.6;
+     option ntp-servers 140.15.128.6;
+     option domain-name-servers 11.2.2.26, 142.20.10.156;
+     option netbios-name-servers 140.11.6.107, 140.11.6.108;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.11.6.189;
+     option tftp-server-name "140.11.6.189";
+     next-server 140.11.6.189;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8c:0b:06:bd:09:18:ff:f0:15:50:72:6f:64:61:63:74:61:20:42:6f:6f:74:20:43:6f:6e:74:72:6f:6f:0a:04:00:41:41:41:47;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8c:0b:06:bd:07:d0;
+     log (info, "*****_____ Matched PXE ztbpre.icbpre Netz 140.15.128.0/255.255.252.0 _____*****");
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM80 
+subnet 140.15.148.0 netmask 255.255.252.0 {
+     option broadcast-address 140.15.151.255;
+     option subnet-mask 255.255.252.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.15.149.1 140.15.149.255;
+             range 140.15.150.1 140.15.150.255;
+        }
+     option domain-name "ztbpre.icbpre.commerzbank.com";
+     option routers 140.15.148.6;
+     option ntp-servers 140.15.148.6;
+     option domain-name-servers 11.2.2.26, 142.20.10.156;
+     option netbios-name-servers 140.11.6.107, 140.11.6.108;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.11.6.189;
+     option tftp-server-name "140.11.6.189";
+     next-server 140.11.6.189;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8c:0b:06:bd:09:18:ff:f0:15:50:72:6f:64:61:63:74:61:20:42:6f:6f:74:20:43:6f:6e:74:72:6f:6f:0a:04:00:41:41:41:47;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8c:0b:06:bd:07:d0;
+     log (info, "*****_____ Matched PXE ztbpre.icbpre Netz 140.15.148.0/255.255.252.0 _____*****");
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM80 
+subnet 140.15.152.0 netmask 255.255.252.0 {
+     option broadcast-address 140.15.155.255;
+     option subnet-mask 255.255.252.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.15.153.1 140.15.153.255;
+             range 140.15.154.1 140.15.154.255;
+        }
+     option domain-name "ztbpre.icbpre.commerzbank.com";
+     option routers 140.15.152.6;
+     option ntp-servers 140.15.152.6;
+     option domain-name-servers 11.2.2.26, 142.20.10.156;
+     option netbios-name-servers 140.11.6.107, 140.11.6.108;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.11.6.189;
+     option tftp-server-name "140.11.6.189";
+     next-server 140.11.6.189;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8c:0b:06:bd:09:18:ff:f0:15:50:72:6f:64:61:63:74:61:20:42:6f:6f:74:20:43:6f:6e:74:72:6f:6f:0a:04:00:41:41:41:47;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8c:0b:06:bd:07:d0;
+     log (info, "*****_____ Matched PXE ztbpre.icbpre Netz 140.15.152.0/255.255.252.0 _____*****");
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM80 
+subnet 140.15.156.0 netmask 255.255.252.0 {
+     option broadcast-address 140.15.159.255;
+     option subnet-mask 255.255.252.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.15.157.1 140.15.157.255;
+             range 140.15.158.1 140.15.158.255;
+        }
+     option domain-name "ztbpre.icbpre.commerzbank.com";
+     option routers 140.15.156.6;
+     option ntp-servers 140.15.156.6;
+     option domain-name-servers 11.2.2.26, 142.20.10.156;
+     option netbios-name-servers 140.11.6.107, 140.11.6.108;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.11.6.189;
+     option tftp-server-name "140.11.6.189";
+     next-server 140.11.6.189;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8c:0b:06:bd:09:18:ff:f0:15:50:72:6f:64:61:63:74:61:20:42:6f:6f:74:20:43:6f:6e:74:72:6f:6f:0a:04:00:41:41:41:47;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8c:0b:06:bd:07:d0;
+     log (info, "*****_____ Matched PXE ztbpre.icbpre Netz 140.15.156.0/255.255.252.0 _____*****");
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM80 
+subnet 140.15.160.0 netmask 255.255.252.0 {
+     option broadcast-address 140.15.163.255;
+     option subnet-mask 255.255.252.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.15.161.1 140.15.161.255;
+             range 140.15.162.1 140.15.162.255;
+        }
+     option domain-name "ztbpre.icbpre.commerzbank.com";
+     option routers 140.15.160.6;
+     option ntp-servers 140.15.160.6;
+     option domain-name-servers 11.2.2.26, 142.20.10.156;
+     option netbios-name-servers 140.11.6.107, 140.11.6.108;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.11.6.189;
+     option tftp-server-name "140.11.6.189";
+     next-server 140.11.6.189;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8c:0b:06:bd:09:18:ff:f0:15:50:72:6f:64:61:63:74:61:20:42:6f:6f:74:20:43:6f:6e:74:72:6f:6f:0a:04:00:41:41:41:47;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8c:0b:06:bd:07:d0;
+     log (info, "*****_____ Matched PXE ztbpre.icbpre Netz 140.15.160.0/255.255.252.0 _____*****");
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM80 
+subnet 140.15.174.0 netmask 255.255.255.0 {
+     option broadcast-address 140.15.174.255;
+     option subnet-mask 255.255.255.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.15.174.64 140.15.174.127;
+             range 140.15.174.128 140.15.174.191;
+        }
+     option domain-name "ztbpre.icbpre.commerzbank.com";
+     option routers 140.15.174.6;
+     option ntp-servers 140.15.174.6;
+     option domain-name-servers 11.2.2.26, 142.20.10.156;
+     option netbios-name-servers 140.11.6.107, 140.11.6.108;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.11.6.189;
+     option tftp-server-name "140.11.6.189";
+     next-server 140.11.6.189;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8c:0b:06:bd:09:18:ff:f0:15:50:72:6f:64:61:63:74:61:20:42:6f:6f:74:20:43:6f:6e:74:72:6f:6f:0a:04:00:41:41:41:47;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8c:0b:06:bd:07:d0;
+     log (info, "*****_____ Matched PXE ztbpre.icbpre Netz 140.15.174.0/255.255.255.0 _____*****");
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM80 
+subnet 140.15.252.0 netmask 255.255.255.0 {
+     option broadcast-address 140.15.252.255;
+     option subnet-mask 255.255.255.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.15.252.64 140.15.252.127;
+             range 140.15.252.128 140.15.252.191;
+        }
+     option domain-name "ztbpre.icbpre.commerzbank.com";
+     option routers 140.15.252.6;
+     option ntp-servers 140.15.252.6;
+     option domain-name-servers 11.2.2.26, 142.20.10.156;
+     option netbios-name-servers 140.11.6.107, 140.11.6.108;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.11.6.189;
+     option tftp-server-name "140.11.6.189";
+     next-server 140.11.6.189;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8C:0B:06:BD:09:18:ff:f0:15:50:72:6f:64:61:63:74:61:20:42:6f:6f:74:20:43:6f:6e:74:72:6f:6f:0a:04:00:41:41:41:47;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8C:0B:06:BD:07:d0;
+     log (info, "*****_____ Matched PXE ztb.icb Netz 140.15.252.0/255.255.255.0 _____*****");
+     default-lease-time 1800;
+     max-lease-time 1801;
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM48 
+subnet 140.152.36.0 netmask 255.255.255.0 {
+     option broadcast-address 140.152.36.255;
+     option subnet-mask 255.255.255.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.152.36.64 140.152.36.127;
+             range 140.152.36.128 140.152.36.191;
+        }
+     option domain-name "ztbpre.icbpre.commerzbank.com";
+     option routers 140.152.36.6;
+     option ntp-servers 140.152.36.6;
+     option domain-name-servers 11.2.2.26, 142.20.10.156;
+     option netbios-name-servers 140.11.6.107, 140.11.6.108;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.11.6.189;
+     option tftp-server-name "140.11.6.189";
+     next-server 140.11.6.189;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8C:0B:06:BD:09:18:ff:f0:15:50:72:6f:64:61:63:74:61:20:42:6f:6f:74:20:43:6f:6e:74:72:6f:6f:0a:04:00:41:41:41:47;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8C:0B:06:BD:07:d0;
+     log (info, "*****_____ Matched PXE ztb.icb Netz 140.152.36.0/255.255.255.0 _____*****");
+     default-lease-time 1800;
+     max-lease-time 1801;
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM48 
+subnet 140.152.40.0 netmask 255.255.255.0 {
+     option broadcast-address 140.152.40.255;
+     option subnet-mask 255.255.255.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.152.40.64 140.152.40.127;
+             range 140.152.40.128 140.152.40.191;
+        }
+     option domain-name "ztbpre.icbpre.commerzbank.com";
+     option routers 140.152.40.6;
+     option ntp-servers 140.152.40.6;
+     option domain-name-servers 11.2.2.26, 142.20.10.156;
+     option netbios-name-servers 140.11.6.107, 140.11.6.108;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.11.6.189;
+     option tftp-server-name "140.11.6.189";
+     next-server 140.11.6.189;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8c:0b:06:bd:09:18:ff:f0:15:50:72:6f:64:61:63:74:61:20:42:6f:6f:74:20:43:6f:6e:74:72:6f:6f:0a:04:00:41:41:41:47;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8c:0b:06:bd:07:d0;
+     log (info, "*****_____ Matched PXE ztbpre.icbpre Netz 140.152.40.0/255.255.255.0 _____*****");
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM80 
+subnet 140.26.20.0 netmask 255.255.252.0 {
+     option broadcast-address 140.26.23.255;
+     option subnet-mask 255.255.252.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.26.21.1 140.26.21.255;
+             range 140.26.22.1 140.26.22.255;
+        }
+     option domain-name "ztbpre.icbpre.commerzbank.com";
+     option routers 140.26.20.6;
+     option ntp-servers 140.26.20.6;
+     option domain-name-servers 11.2.2.26, 142.20.10.156;
+     option netbios-name-servers 140.11.6.107, 140.11.6.108;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.11.6.189;
+     option tftp-server-name "140.11.6.189";
+     next-server 140.11.6.189;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8c:0b:06:bd:09:18:ff:f0:15:50:72:6f:64:61:63:74:61:20:42:6f:6f:74:20:43:6f:6e:74:72:6f:6f:0a:04:00:41:41:41:47;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8c:0b:06:bd:07:d0;
+     log (info, "*****_____ Matched PXE ztbpre.icbpre Netz 140.11.69.0/255.255.255.0 _____*****");
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM80 
+subnet 140.26.70.0 netmask 255.255.255.0 {
+     option tftp-server-name "140.26.20.27";
+     filename "X86PC/UNDI/boot/rombl.0";
+     next-server 140.26.20.27;
+     option broadcast-address 140.26.70.255;
+     option subnet-mask 255.255.255.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.26.70.64 140.26.70.127;
+             range 140.26.70.128 140.26.70.191;
+        }
+     option domain-name "ztbpre.icbpre.commerzbank.com";
+     option routers 140.26.70.6;
+     option ntp-servers 140.26.70.6;
+     option domain-name-servers 11.2.2.26, 142.20.10.156;
+     log (info, "*****_____ Matched HP Netz 140.26.70.0/255.255.255.0 _____*****");
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM01 
+subnet 140.4.92.0 netmask 255.255.255.0 {
+     option broadcast-address 140.4.92.255;
+     option subnet-mask 255.255.255.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.4.92.64 140.4.92.127;
+             range 140.4.92.128 140.4.92.191;
+        }
+     option domain-name "ztbpre.icbpre.commerzbank.com";
+     option routers 140.4.92.6;
+     option ntp-servers 140.4.92.6;
+     option domain-name-servers 11.2.2.26, 142.20.10.156;
+     option netbios-name-servers 140.11.6.107, 140.11.6.108;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.11.6.189;
+     option tftp-server-name "140.11.6.189";
+     next-server 140.11.6.189;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8C:0B:06:BD:09:18:ff:f0:15:50:72:6f:64:61:63:74:61:20:42:6f:6f:74:20:43:6f:6e:74:72:6f:6f:0a:04:00:41:41:41:47;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8C:0B:06:BD:07:d0;
+     log (info, "*****_____ Matched PXE ztb.icb Netz 140.4.92.0/255.255.255.0 _____*****");
+     default-lease-time 1800;
+     max-lease-time 1801;
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM62 
+subnet 140.60.158.0 netmask 255.255.255.0 {
+     option broadcast-address 140.60.158.255;
+     option subnet-mask 255.255.255.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.60.158.64 140.60.158.127;
+             range 140.60.158.128 140.60.158.191;
+        }
+     option domain-name "ztbpre.icbpre.commerzbank.com";
+     option routers 140.60.158.6;
+     option ntp-servers 140.60.158.6;
+     option domain-name-servers 39.101.101.101, 39.102.102.102;
+     option netbios-name-servers 140.11.6.107, 140.11.6.108;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.11.6.189;
+     option tftp-server-name "140.11.6.189";
+     next-server 140.11.6.189;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8c:0b:06:bd:09:18:ff:f0:15:50:72:6f:64:61:63:74:61:20:42:6f:6f:74:20:43:6f:6e:74:72:6f:6f:0a:04:00:41:41:41:47;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8c:0b:06:bd:07:d0;
+     log (info, "*****_____ Matched PXE ztbpre.icbpre Netz 140.60.158.0/255.255.255.0 _____*****");
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1237987025
+# FFM80 
+subnet 181.20.16.0 netmask 255.255.255.0 {
+     option broadcast-address 181.20.16.255;
+     option subnet-mask 255.255.255.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 181.20.16.64 181.20.16.191;
+        }
+     option domain-name "ztbpre.icbpre.commerzbank.com";
+     option routers 181.20.16.6;
+     option ntp-servers 181.20.16.6;
+     option domain-name-servers 11.2.2.26, 142.20.10.156;
+     option netbios-name-servers 140.11.6.107, 140.11.6.108;
+   if substring (option vendor-class-identifier, 0, 4) = "Opti" {
+     option vendor-encapsulated-options 01:07:53:69:65:6D:65:6E:73:02:04:00:00:01:fe;
+     log (info, "Testnetz_Siemens_VoIP_181.20.16/24_firstBoot");
+     option domain-name "ffm81.voipt.commerzbank.com";
+     default-lease-time 100;
+     max-lease-time 101;
+   }
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.11.6.189;
+     option tftp-server-name "140.11.6.189";
+     next-server 140.11.6.189;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8C:0B:06:BD:09:18:ff:f0:15:50:72:6f:64:61:63:74:61:20:42:6f:6f:74:20:43:6f:6e:74:72:6f:6f:0a:04:00:41:41:41:47;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8C:0B:06:BD:07:d0;
+     log (info, "*****_____ Matched PXE ztb.icb Netz 181.20.16.0/255.255.255.0 _____*****");
+     default-lease-time 1800;
+     max-lease-time 1801;
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1239207172
+# FFM80 
+subnet 140.11.9.0 netmask 255.255.255.0 {
+     option tftp-server-name "140.26.20.27";
+     filename "X86PC/UNDI/boot/rombl.0";
+     next-server 140.26.20.27;
+     option broadcast-address 140.11.9.255;
+     option subnet-mask 255.255.255.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.11.9.44 140.11.9.132;
+             range 140.11.9.153 140.11.9.199;
+        }
+     option domain-name "ztbpre.icbpre.commerzbank.com";
+     option routers 140.11.9.6;
+     option ntp-servers 140.11.9.6;
+     option domain-name-servers 11.2.2.26, 142.20.10.156;
+     option netbios-name-servers 140.11.6.107, 140.11.6.108;
+     log (info, "*****_____ Matched HP Netz 140.11.9.0/255.255.255.0 _____*****");
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1240230486
+# FFM80 
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1240480253
+# FFM80 
+subnet 140.11.62.0 netmask 255.255.255.0 {
+     option broadcast-address 140.11.62.255;
+     option subnet-mask 255.255.255.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.11.62.31 140.11.62.127;
+             range 140.11.62.128 140.11.62.254;
+        }
+     option domain-name "ztbpre.icbpre.commerzbank.com";
+     option routers 140.11.62.6;
+     option ntp-servers 140.11.62.6;
+     option domain-name-servers 11.2.2.26, 142.20.10.156;
+     option netbios-name-servers 140.11.6.107, 140.11.6.108;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.11.6.189;
+     option tftp-server-name "140.11.6.189";
+     next-server 140.11.6.189;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8C:0B:06:BD:09:18:ff:f0:15:50:72:6f:64:61:63:74:61:20:42:6f:6f:74:20:43:6f:6e:74:72:6f:6f:0a:04:00:41:41:41:47;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8C:0B:06:BD:07:d0;
+     log (info, "*****_____ Matched PXE ztb.icb Netz 140.11.62.0/255.255.255.0 _____*****");
+     default-lease-time 1800;
+     max-lease-time 1801;
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1244540871
+# FFM80 
+subnet 140.11.7.0 netmask 255.255.255.0 {
+     option broadcast-address 140.11.7.255;
+     option subnet-mask 255.255.255.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.11.7.73 140.11.7.75;
+        }
+     option domain-name "ztbpre.icbpre.commerzbank.com";
+     option routers 140.11.7.6;
+     option ntp-servers 140.11.7.6;
+     option domain-name-servers 11.2.2.26, 142.20.10.156;
+     option netbios-name-servers 140.11.6.107, 140.11.6.108;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.11.6.189;
+     option tftp-server-name "140.11.6.189";
+     next-server 140.11.6.189;
+     option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8C:0B:06:BD:09:18:ff:f0:15:50:72:6f:64:61:63:74:61:20:42:6f:6f:74:20:43:6f:6e:74:72:6f:6f:0a:04:00:41:41:41:47;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     option option-129 42:63:53:72:56:8C:0B:06:BD:07:d0;
+     log (info, "*****_____ Matched PXE ztb.icb Netz 140.11.7.0/255.255.255.0 _____*****");
+     default-lease-time 1800;
+     max-lease-time 1801;
+   }
+}
+#
+#-------------------------------------------------------------
+#Automatisch erzeugte Konfiguration am 1245316104
+# FFM80 
+subnet 140.26.72.0 netmask 255.255.255.0 {
+     option broadcast-address 140.26.72.255;
+     option subnet-mask 255.255.255.0;
+	pool
+	{
+             deny dynamic bootp clients;
+             failover peer "cobafailover";
+             range 140.26.72.64 140.26.72.127;
+             range 140.26.72.128 140.26.72.191;
+        }
+     option domain-name "ztbpre.icbpre.commerzbank.com";
+     option routers 140.26.72.6;
+     option ntp-servers 140.26.36.6;
+     option domain-name-servers 11.2.2.26, 142.20.10.156;
+   if substring(option vendor-class-identifier, 0, 9) = "PXEClient" {
+     option dhcp-server-identifier 140.26.12.12;
+     option tftp-server-name "140.26.12.12";
+     next-server 140.26.12.12;
+     option vendor-encapsulated-options 06:01:0b:08:07:aa:aa:01:8c:1a:0c:0c:00;
+     option vendor-class-identifier "PXEClient";
+     option option-128 42:63:52:65:50:32:00;
+     filename "BStrap\\X86pc\\BStrap.0";
+     option domain-name "ztbpre.icbpre.commerzbank.com";
+     option routers 140.26.72.6;
+     log (info, "*****_____ Matched PXE HP Netz 140.26.72.0/255.255.252.0 _____*****");
+     default-lease-time 300;
+     max-lease-time 301;
+     option dhcp-parameter-request-list 1,2,3,4,5,6,11,12,13,15,16,17,18,42,43,44,46,51,54,58,59,60,61,66,67,119,128,129;
+   }
+}
+#

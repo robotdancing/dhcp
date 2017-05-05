@@ -1,4 +1,4 @@
-# option definition config
+# option data config
 
 # authoritative is mandatory
 authoritative;
@@ -47,6 +47,6 @@ option foobar.fmt-Ba code 50 = array of unsigned integer 8;
 option foobar.fmt-Ba 1, 2, 3;
 
 option foobar.fmt-fB code 100 = { boolean, unsigned integer 8 };
-option foobar.fmt-fB false, 66;
+option foobar.fmt-fB false 66;
 
 option dhcp6.name-servers 2a01:e00::2, 2a01:e00::2;

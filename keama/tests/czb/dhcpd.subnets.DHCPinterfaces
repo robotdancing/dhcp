@@ -1,0 +1,49 @@
+subnet 140.16.40.0 netmask 255.255.255.0
+{
+	option broadcast-address 140.16.40.255;
+	option domain-name-servers 39.101.101.101, 39.102.102.102;
+	option ntp-servers 140.16.40.6;
+	option routers 140.16.40.6;
+	option subnet-mask 255.255.255.0;
+	option domain-name "dhcp.test.commerzbank.com";
+}
+
+subnet 140.13.237.0 netmask 255.255.255.0
+{
+	option broadcast-address 140.13.237.255;
+	option domain-name-servers 39.101.101.101, 39.102.102.102;
+	option ntp-servers 140.13.237.6;
+	option routers 140.13.237.6;
+	option subnet-mask 255.255.255.0;
+	option domain-name "dhcp.test.commerzbank.com";
+}
+
+subnet 142.20.35.0 netmask 255.255.255.0
+{
+	option broadcast-address 142.20.35.255;
+	option domain-name-servers 39.101.101.101, 39.102.102.102;
+	option ntp-servers 142.20.35.6;
+	option routers 142.20.35.6;
+	option subnet-mask 255.255.255.0;
+	option domain-name "dhcp.test.commerzbank.com";
+}
+
+subnet 140.13.216.0 netmask 255.255.255.0
+{
+	option broadcast-address 140.13.216.255;
+	option domain-name-servers 39.101.101.101, 39.102.102.102;
+	option ntp-servers 140.13.216.6;
+	option routers 140.13.216.6;
+	option subnet-mask 255.255.255.0;
+	option domain-name "dhcp.test.commerzbank.com";
+}
+
+subnet 142.20.10.0 netmask 255.255.255.0
+{
+	option broadcast-address 142.20.10.255;
+	option domain-name-servers 39.101.101.101, 39.102.102.102;
+	option ntp-servers 142.20.10.6;
+	option routers 142.20.10.6;
+	option subnet-mask 255.255.255.0;
+	option domain-name "dhcp.test.commerzbank.com";
+}

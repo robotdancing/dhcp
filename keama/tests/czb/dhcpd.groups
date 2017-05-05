@@ -1,0 +1,82 @@
+
+#Die folgende Deny-Gruppe wurde angelegt, weil es sich dabei um falsch konfigurierte Rechner von Externen handelt
+group {
+        deny booting;
+        host bad1 { hardware ethernet 00:04:23:4a:de:3d; }
+        host bad2 { hardware ethernet 00:0b:db:a1:5f:1b; }
+}
+
+
+#Bei der Eurohyp wurde kurzfristig ein Netz angelegt in dem sowohl ZTB als auch zwei CBK-PCs stehen sollen
+#Daher wurde für die beiden CBK-PCs aus dem Netz 140.70.4.0 die folgende Gruppe angelegt, damit sie die richtigen PXE-Infos bekommen
+group {
+	if substring(option vendor-class-identifier, 0, 9) = "PXEClient"
+        {
+	        option vendor-class-identifier "PXEClient";
+        	option option-128 42:63:52:65:50:32:00;
+        	log (info, "***** Matched PXE der CBK Domain zit *****");
+        	option vendor-encapsulated-options 06:01:07:08:07:ff:f0:01:8c:0f:f8:39:09:18:ff:f0:15:4e:65:74:53:75:70:70:6f:72:74:42:6f:6f:74:43:6f:6e:74:72:6f:6c:0a:04:00:41:41:41:47:03:00:00:00:ff;
+        	next-server 140.15.248.57;
+        	option tftp-server-name "140.15.248.57";
+        	option dhcp-server-identifier 140.15.248.57;
+        	option option-129 42:63:53:72:56:8c:0f:f8:39:07:d0;
+        }
+	option domain-name "zke.commerzbank.com";
+
+        host apeuhyp1 {
+                hardware ethernet 00:11:0a:39:ec:cb;
+#                fixed-address 140.70.4.11;
+        }
+
+        host apeuhyp2 {
+                hardware ethernet 00:11:85:dc:1d:74;
+#                fixed-address 140.70.4.10;
+        }
+}
+
+group {
+	option domain-name "dev.icb.commerzbank.com";
+#Testclients fuer G.Goeller und Schickedanz um die Umstellung von zitd auf dev.icb testen zu koennen (rw 19.10.2006)
+	host AP325807 {
+		hardware ethernet 00:14:C2:08:5B:22;
+	}
+	host AP334716 {
+		hardware ethernet 00:14:C2:08:55:82;
+	}
+	host AP334717 {
+		hardware ethernet 00:14:C2:07:F2:85;
+	}
+}
+
+#Spezial-loesung fuer die SunRay von Herrn Santos:
+group {
+        option SunRay.AuthSrvr 140.11.33.68;
+        option SunRay.FWSrvr   140.11.33.68;
+	option SunRay.AltAuth 140.11.33.68;
+	host raysantos {
+		hardware ethernet 00:14:4f:57:4d:d2;
+	}
+}
+#und wenn man mit Spezialwuenschen erst mal anfaengt...
+#hier die Sunray von Ansgar Goebel
+group {
+        option SunRay.AuthSrvr 140.13.172.32;
+        option SunRay.FWSrvr   140.13.172.32;
+	option SunRay.AltAuth 140.13.172.32;
+	host ansgoebel {
+		hardware ethernet 00:14:4f:0e:96:fe;
+	}
+}
+#...dann hoerts nicht mehr auf. Und wieder eine.
+group {
+        option SunRay.AuthSrvr 140.13.236.210;
+	option SunRay.FWSrvr   140.13.236.210;
+	option SunRay.AltAuth  142.20.24.242;
+	host asteinmetz {
+		hardware ethernet 00:14:4f:86:18:a7;
+	}
+#	host sunray01 {
+#		hardware ethernet 00:14:4f:7c:da:54;
+#	}
+}
+

@@ -18,6 +18,7 @@
             "space": "dhcp4",
             "name": "domain-search",
             "code": 119,
+//          "original-data": "\"example.com\"",
             "data": "example.com"
           }
         ],
@@ -33,6 +34,7 @@
             "space": "dhcp4",
             "name": "domain-search",
             "code": 119,
+//          "original-data": "\"example.org\"",
             "data": "example.org"
           }
         ],

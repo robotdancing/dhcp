@@ -134,6 +134,7 @@ main(int argc, char **argv) {
 	} else
 		output = stdout;
 
+	TAILQ_INIT(&parses);
 	cfile = new_parse(fd, inbuf, newsize, input_file, 0);
 	assert(cfile != NULL);
 

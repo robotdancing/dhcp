@@ -362,7 +362,7 @@ conf_file_subparse(struct parse *cfile, int type)
 	return cfile->issue_counter;
 }
 
-/* statement :== parameter | declaration
+/* statement :== parameter | declaration | PERCENT directive
 
    parameter :== DEFAULT_LEASE_TIME lease_time
 	       | MAX_LEASE_TIME lease_time
@@ -735,7 +735,6 @@ parse_statement(struct parse *cfile, int type, isc_boolean_t declaration)
 		parse_option_statement(NULL, cfile, option,
 				       supersede_option_statement);
 		return declaration;
-		break;
 
 	case FAILOVER:
 		if (failover_once)
@@ -754,6 +753,14 @@ parse_statement(struct parse *cfile, int type, isc_boolean_t declaration)
 		token = next_token(&val, NULL, cfile);
 		/* ignore: ISC DHCP specific */
 		break;
+
+	case PERCENT:
+		skip_token(&val, NULL, cfile);
+		if (type != ROOT_GROUP)
+			parse_error(cfile, "directives are only supported "
+				    "at toplevel");
+		parse_directive(cfile);
+		return declaration;
 
 	unknown:
 		skip_token(&val, NULL, cfile);
@@ -3755,6 +3762,353 @@ is_hexa_only(const char *s, unsigned l)
 		if (!isxdigit((int)s[i]))
 			return ISC_FALSE;
 	return ISC_TRUE;
+}
+
+/*!
+ *
+ * \brief Parse (and execute) a directive (extension)
+ *
+ * OPTION SPACE <name> [ALIAS <kea-name>] [KNOWN*2|UNKNOWN*2|DYNAMIC]
+ * OPTION <universe>.<name> [CHECK]
+ *                          [ALIAS <name>]
+ *                          [CODE <code> = "<format>"]
+ *                          [KNOWN*2|UNKNOWN*2|DYNAMIC]
+ *                          [LOCAL|DEFINE]
+ */
+
+void
+parse_directive(struct parse *cfile)
+{
+	enum dhcp_token token;
+	const char *val;
+	isc_boolean_t known;
+	struct option *option;
+
+	token = peek_token(&val, NULL, cfile);
+
+	switch (token) {
+	case OPTION:
+		skip_token(&val, NULL, cfile);
+		token = peek_token(&val, NULL, cfile);
+		if (token == SPACE) {
+			parse_option_space_dir(cfile);
+			return;
+		}
+
+		known = ISC_FALSE;
+		option = parse_option_name(cfile, ISC_TRUE, &known);
+		token = next_token(&val, NULL, cfile);
+		if (token == CHECK) {
+			struct string *datatype;
+			isc_boolean_t is_array = ISC_FALSE;
+			isc_boolean_t encapsulate = ISC_FALSE;
+
+			datatype = convert_format(option->format,
+						  &is_array,
+						  &encapsulate);
+			printf("option ISC DHCP (Kea)\n"
+			       " %s.%s (%s.%s)\n"
+			       " format \"%s\" (type \"%s\" "
+			       "array %s encap %s)\n"
+			       " status %s\n",
+			       option->space->old, option->old,
+			       option->space->name, option->name,
+			       option->format, datatype->content,
+			       is_array ? "true" : "false",
+			       encapsulate ? "true" : "false",
+			       display_status(option->status));
+			parse_semi(cfile);
+			return;
+		}
+		if (option->space->status == special)
+			parse_error(cfile, "attempt to modify config %s.%s",
+				    option->space->old, option->name);
+		if (token == ALIAS) {
+			token = next_token(&val, NULL, cfile);
+			if (!is_identifier(token))
+				parse_error(cfile,
+					    "expecting identifier after "
+					    "alias keyword.");
+			if (option->status != dynamic)
+				parse_error(cfile,
+					    "attempt to rename %s.%s to %s",
+					    option->space->name,
+					    option->name, val);
+			option->name = strdup(val);
+			parse_semi(cfile);
+			return;
+		}
+		if (token == CODE) {
+			parse_option_code_dir(cfile, option);
+			return;
+		}
+		if ((token == KNOWN) || (token == UNKNOWN) ||
+		    (token == DYNAMIC)) {
+			parse_option_status_dir(cfile, option, token);
+			return;
+		}
+		if (token == LOCAL) {
+			parse_option_local_dir(cfile, option);
+			parse_semi(cfile);
+			return;
+		}
+		if (token == DEFINE) {
+			parse_option_define_dir(cfile, option);
+			parse_semi(cfile);
+			return;
+		}
+		parse_error(cfile, "unknown option directive %s", val);
+
+	default:
+		parse_error(cfile, "unknown directive %s", val);
+	}
+}
+
+void
+parse_option_space_dir(struct parse *cfile)
+{
+	/* TODO */
+}
+
+/* Alternative to parse_option_code_decl using the raw ISC DHCP format */
+
+void
+parse_option_code_dir(struct parse *cfile, struct option *option)
+{
+	const char *val;
+	enum dhcp_token token;
+	unsigned code;
+	struct element *def;
+	struct element *optdef;
+	struct string *datatype;
+	isc_boolean_t is_array = ISC_FALSE;
+	isc_boolean_t encapsulate = ISC_FALSE;
+
+	def = createMap();
+	mapSet(def,
+	       createString(makeString(-1, option->space->name)),
+	       "space");
+	mapSet(def, createString(makeString(-1, option->name)), "name");
+
+	/* Parse the option code. */
+	token = next_token(&val, NULL, cfile);
+	if (token != NUMBER)
+		parse_error(cfile, "expecting option code number.");
+	code = atoi(val);
+	mapSet(def, createInt(code), "code");
+
+	/* We have the code so we can get the real option now */
+	if (option->code == 0) {
+		struct option *from_code;
+
+		option->code = code;
+		from_code = option_lookup_code(option->space->old, code);
+		if (from_code != NULL)
+			option = from_code;
+	}
+
+	/* Redefinitions are not allowed */
+	if ((option->status != dynamic) ||
+	    (strcmp(option->format, "u") != 0))
+		parse_error(cfile, "attempt to redefine %s.%s code %u",
+			    option->space->name, option->name, code);
+
+	token = next_token(&val, NULL, cfile);
+	if (token != EQUAL)
+		parse_error(cfile, "expecting \"=\"");
+	token = next_token(&val, NULL, cfile);
+	if (token != STRING)
+		parse_error(cfile, "expecting format string");
+	option->format = strdup(val);
+	parse_semi(cfile);
+
+	datatype = convert_format(val, &is_array, &encapsulate);
+
+	if ((datatype == NULL) && (strchr(datatype->content, '?') != NULL))
+		parse_error(cfile, "failed to convert format \"%s\" for "
+			    "option %s.%s code %u",
+			    val, option->space->name, option->name, code);
+	/* todo */
+	if (encapsulate)
+		parse_error(cfile, "option %s.%s code %u encapsulate?",
+			    option->space->name, option->name, code);
+
+	if (strchr(datatype->content, ',') == NULL)
+		mapSet(def, createString(datatype), "type");
+	else {
+		mapSet(def, createString(datatype), "record-types");
+		mapSet(def, createString(makeString(-1, "record")), "type");
+	}
+	if (is_array)
+		mapSet(def, createBool(ISC_TRUE), "array");
+
+	optdef = mapGet(cfile->stack[1], "option-def");
+	if (optdef == NULL) {
+		optdef = createList();
+		mapSet(cfile->stack[1], optdef, "option-def");
+	}
+	listPush(optdef, def);
+}
+
+/* Update the option status for instance to add standard options */
+
+void
+parse_option_status_dir(struct parse *cfile, struct option *option,
+			enum dhcp_token token)
+{
+	isc_boolean_t isc_known;
+
+	if (token == DYNAMIC)
+		option->status = dynamic;
+	else if (token == KNOWN) {
+		isc_known = ISC_TRUE;
+		token = next_token(NULL, NULL, cfile);
+		if (token == KNOWN)
+			option->status = known;
+		else if (token == UNKNOWN)
+			option->status = kea_unknown;
+		else
+			parse_error(cfile, "expected KNOW or UNKNOWN");
+	} else if (token != UNKNOWN)
+		parse_error(cfile, "expected KNOW or UNKNOWN or DYNAMIC");
+	else {
+		isc_known = ISC_FALSE;
+		if (token == KNOWN)
+			option->status = isc_dhcp_unknown;
+		else if (token == UNKNOWN)
+			parse_error(cfile, "illicit combination: option"
+				    "%s.%s code %u is known by nobody",
+				    option->space->name, option->name,
+				    option->code);
+		else
+			parse_error(cfile, "expected KNOW or UNKNOWN");
+	}
+	parse_semi(cfile);
+}
+
+/* Make the option definition not exported to Kea */
+
+void
+parse_option_local_dir(struct parse *cfile, struct option *option)
+{
+	struct element *optdef;
+	struct element *def;
+	struct element *elem;
+	size_t i;
+
+	def = NULL;
+	if (option->code == 0)
+		parse_error(cfile, "unknown code for option %s.%s",
+			    option->space->name, option->name);
+
+	optdef = mapGet(cfile->stack[1], "option-def");
+	if (optdef == NULL) {
+		optdef = createList();
+		mapSet(cfile->stack[1], optdef, "option-def");
+		goto not_found;
+	}
+	for (i = 0; i < listSize(optdef); i++) {
+		def = listGet(optdef, i);
+		elem = mapGet(def, "space");
+		if ((elem == NULL) || (elem->type != ELEMENT_STRING))
+			parse_error(cfile, "got an option definition "
+				    "without space at %u", (unsigned)i);
+		if (strcmp(option->space->name,
+			   stringValue(elem)->content) != 0)
+			continue;
+		elem = mapGet(def, "code");
+		if ((elem == NULL) || (elem->type != ELEMENT_INTEGER))
+			parse_error(cfile, "got an option definition "
+				    "without code at %u", (unsigned)i);
+		if (intValue(elem) == option->code)
+			break;
+	}
+	if (def == NULL)
+		goto not_found;
+	def->skip = ISC_TRUE;
+	mapSet(def, createNull(), "no-export");
+	return;
+
+not_found:
+	parse_error(cfile, "can't find option %s.%s code %u in definitions",
+		    option->space->name, option->name, option->code);
+}
+
+/* Make the opposite: force the definition */
+
+void
+parse_option_define_dir(struct parse *cfile, struct option *option)
+{
+	struct element *optdef;
+	struct element *def;
+	struct element *elem;
+	struct string *datatype;
+	isc_boolean_t is_array = ISC_FALSE;
+	isc_boolean_t encapsulate = ISC_FALSE;
+	size_t i;
+
+	def = NULL;
+	if (option->code == 0)
+		parse_error(cfile, "unknown code for option %s.%s",
+			    option->space->name, option->name);
+
+	optdef = mapGet(cfile->stack[1], "option-def");
+	if (optdef == NULL) {
+		optdef = createList();
+		mapSet(cfile->stack[1], optdef, "option-def");
+		goto no_search;
+	}
+	for (i = 0; i < listSize(optdef); i++) {
+		def = listGet(optdef, i);
+		elem = mapGet(def, "space");
+		if ((elem == NULL) || (elem->type != ELEMENT_STRING))
+			parse_error(cfile, "got an option definition "
+				    "without space at %u", (unsigned)i);
+		if (strcmp(option->space->name,
+			   stringValue(elem)->content) != 0)
+			continue;
+		elem = mapGet(def, "code");
+		if ((elem == NULL) || (elem->type != ELEMENT_INTEGER))
+			parse_error(cfile, "got an option definition "
+				    "without code at %u", (unsigned)i);
+		if (intValue(elem) == option->code)
+			parse_error(cfile, "unexpected definition for "
+				    "option %s.%s code %u",
+				    option->space->name, option->name,
+				    option->code);
+	}
+no_search:
+	def = createMap();
+	mapSet(def,
+	       createString(makeString(-1, option->space->name)),
+	       "space");
+	mapSet(def, createString(makeString(-1, option->name)), "name");
+	mapSet(def, createInt(option->code), "code");
+
+	datatype = convert_format(option->format, &is_array, &encapsulate);
+
+	if ((datatype == NULL) && (strchr(datatype->content, '?') != NULL))
+		parse_error(cfile, "failed to convert format \"%s\" for "
+			    "option %s.%s code %u",
+			    option->format, option->space->name,
+			    option->name, option->code);
+	/* todo */
+	if (encapsulate)
+		parse_error(cfile, "option %s.%s code %u encapsulate?",
+			    option->space->name, option->name, option->code);
+
+	if (strchr(datatype->content, ',') == NULL)
+		mapSet(def, createString(datatype), "type");
+	else {
+		mapSet(def, createString(datatype), "record-types");
+		mapSet(def, createString(makeString(-1, "record")), "type");
+	}
+	if (is_array)
+		mapSet(def, createBool(ISC_TRUE), "array");
+
+	listPush(optdef, def);
+
+	return;
 }
 
 /*

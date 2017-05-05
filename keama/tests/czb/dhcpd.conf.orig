@@ -1,0 +1,114 @@
+authoritative; 
+ddns-const-dhcid;
+ddns-update-style interim;
+ddns-updates true;
+update-optimization false; 
+update-static-leases false; 
+deny declines;
+min-lease-time 43199; # 12 Stunden
+default-lease-time 43200; # 12 Stunden
+max-lease-time 43201; # 12 Stunden 
+#min-lease-time 21199; # 6 Stunden
+#default-lease-time 21200; # 6 Stunden
+#max-lease-time 21201; # 6 Stunden 
+lease-file-name "/dhcp/var/db/dhcpd.leases";
+log-facility local7;
+omapi-key OMAPIKEY;
+omapi-port 7911;
+pid-file-name "/dhcp/var/run/dhcpd.pid";
+ping-check true;
+deny client-updates;
+if substring(option vendor-class-identifier, 0, 9) = "PXEClient"
+{
+	min-lease-time 299;
+	default-lease-time 300;
+        max-lease-time 301;
+}
+
+
+include "/dhcp/etc/dhcpd.optionsclass";
+include "/dhcp/etc/dhcpd.groups";
+include "/dhcp/etc/dhcpd.LOCAL.failover";
+include "/dhcp/etc/dhcpd.LOCAL";
+include "/dhcp/etc/dhcpd.keys";
+include "/dhcp/etc/dhcpd.zonen";
+include "/dhcp/etc/dhcpd.domains";
+
+
+include "/dhcp/etc/dhcpd.subnets.DHCPinterfaces";
+
+
+include "/dhcp/etc/dhcpd.subnets.ast01.voip";
+include "/dhcp/etc/dhcpd.subnets.bhb01.voip";
+include "/dhcp/etc/dhcpd.subnets.brzent";
+include "/dhcp/etc/dhcpd.subnets.bvd01.voip";
+include "/dhcp/etc/dhcpd.subnets.bxl01.voip";
+include "/dhcp/etc/dhcpd.subnets.cfm";
+include "/dhcp/etc/dhcpd.subnets.ci.icb";
+include "/dhcp/etc/dhcpd.subnets.ddf01.voip";
+include "/dhcp/etc/dhcpd.subnets.dev.icb";
+include "/dhcp/etc/dhcpd.subnets.ffm01.voip";
+include "/dhcp/etc/dhcpd.subnets.ffm03.voip";
+include "/dhcp/etc/dhcpd.subnets.ffm14.voip";
+include "/dhcp/etc/dhcpd.subnets.ffm19.voip";
+include "/dhcp/etc/dhcpd.subnets.ffm22.voip";
+include "/dhcp/etc/dhcpd.subnets.ffm24.voip";
+include "/dhcp/etc/dhcpd.subnets.ffm49.voip";
+include "/dhcp/etc/dhcpd.subnets.ffm62.voip";
+include "/dhcp/etc/dhcpd.subnets.ffm81.voipt";
+include "/dhcp/etc/dhcpd.subnets.ffm82.voip";
+include "/dhcp/etc/dhcpd.subnets.ffm85.voip";
+include "/dhcp/etc/dhcpd.subnets.ffm91.voip";
+include "/dhcp/etc/dhcpd.subnets.gra01.voip";
+include "/dhcp/etc/dhcpd.subnets.hbg30.voip";
+include "/dhcp/etc/dhcpd.subnets.hhtanw00";
+include "/dhcp/etc/dhcpd.subnets.hhtanw01";
+include "/dhcp/etc/dhcpd.subnets.hhtanw02";
+include "/dhcp/etc/dhcpd.subnets.hhtanw03";
+include "/dhcp/etc/dhcpd.subnets.hhtanw04";
+include "/dhcp/etc/dhcpd.subnets.hhtanw05";
+include "/dhcp/etc/dhcpd.subnets.hhtist01";
+include "/dhcp/etc/dhcpd.subnets.hhtist02";
+include "/dhcp/etc/dhcpd.subnets.hhtist03";
+include "/dhcp/etc/dhcpd.subnets.hhtist04";
+include "/dhcp/etc/dhcpd.subnets.hhtist05";
+include "/dhcp/etc/dhcpd.subnets.ilm01.voip";
+include "/dhcp/etc/dhcpd.subnets.nom01.voip";
+include "/dhcp/etc/dhcpd.subnets.nrd02.voip";
+include "/dhcp/etc/dhcpd.subnets.pap02.voip";
+include "/dhcp/etc/dhcpd.subnets.rwl01.voip";
+include "/dhcp/etc/dhcpd.subnets.sgp01.voip";
+include "/dhcp/etc/dhcpd.subnets.sgp02.voip";
+include "/dhcp/etc/dhcpd.subnets.sgp04.voip";
+include "/dhcp/etc/dhcpd.subnets.sha04.voip";
+include "/dhcp/etc/dhcpd.subnets.spo01.voip";
+include "/dhcp/etc/dhcpd.subnets.stu15.voip";
+include "/dhcp/etc/dhcpd.subnets.stw01.voip";
+include "/dhcp/etc/dhcpd.subnets.swl01.voip";
+include "/dhcp/etc/dhcpd.subnets.test";
+include "/dhcp/etc/dhcpd.subnets.tij01.voip";
+include "/dhcp/etc/dhcpd.subnets.voip";
+include "/dhcp/etc/dhcpd.subnets.vpn";
+include "/dhcp/etc/dhcpd.subnets.vs";
+include "/dhcp/etc/dhcpd.subnets.wlo01.voip";
+include "/dhcp/etc/dhcpd.subnets.wsf02.voip";
+include "/dhcp/etc/dhcpd.subnets.zbs";
+include "/dhcp/etc/dhcpd.subnets.zcf";
+include "/dhcp/etc/dhcpd.subnets.zcs";
+include "/dhcp/etc/dhcpd.subnets.zfc";
+include "/dhcp/etc/dhcpd.subnets.zfk";
+include "/dhcp/etc/dhcpd.subnets.zfo";
+include "/dhcp/etc/dhcpd.subnets.zib";
+include "/dhcp/etc/dhcpd.subnets.zit";
+include "/dhcp/etc/dhcpd.subnets.zitd.global";
+include "/dhcp/etc/dhcpd.subnets.zka";
+include "/dhcp/etc/dhcpd.subnets.zke";
+include "/dhcp/etc/dhcpd.subnets.zkv";
+include "/dhcp/etc/dhcpd.subnets.zpa";
+include "/dhcp/etc/dhcpd.subnets.zpk";
+include "/dhcp/etc/dhcpd.subnets.zra";
+include "/dhcp/etc/dhcpd.subnets.zrc";
+include "/dhcp/etc/dhcpd.subnets.zrev";
+include "/dhcp/etc/dhcpd.subnets.ztb.icb";
+include "/dhcp/etc/dhcpd.subnets.ztbpre.icbpre";
+

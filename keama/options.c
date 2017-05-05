@@ -32,6 +32,13 @@ TAILQ_HEAD(options, option) options;
 
 /* From common/tables.c */
 
+/* Additional format codes:
+
+   x - ISC DHCP and Kea string
+   Y - force full binary
+   u - undefined (parsed as X)
+*/
+
 /// SPACES
 struct space_def space_defs[] = {
 	{ "dhcp", "dhcp4", 2},
@@ -56,16 +63,16 @@ struct space_def space_defs[] = {
 struct option_def options4[] = {
 	{ "subnet-mask", "I",			"dhcp",   1, 2},
 	{ "time-offset", "l",			"dhcp",   2, 2},
-	{ "routers", "IA",			"dhcp",   3, 2},
-	{ "time-servers", "IA",			"dhcp",   4, 2},
-	{ "ien116-name-servers", "IA",		"dhcp",   5, 2},
+	{ "routers", "Ia",			"dhcp",   3, 2},
+	{ "time-servers", "Ia",			"dhcp",   4, 2},
+	{ "ien116-name-servers", "Ia",		"dhcp",   5, 2},
 	/// ien116-name-servers -> name-servers
-	{ "domain-name-servers", "IA",		"dhcp",   6, 2},
-	{ "log-servers", "IA",			"dhcp",   7, 2},
-	{ "cookie-servers", "IA",		"dhcp",   8, 2},
-	{ "lpr-servers", "IA",			"dhcp",   9, 2},
-	{ "impress-servers", "IA",		"dhcp",  10, 2},
-	{ "resource-location-servers", "IA",	"dhcp",  11, 2},
+	{ "domain-name-servers", "Ia",		"dhcp",   6, 2},
+	{ "log-servers", "Ia",			"dhcp",   7, 2},
+	{ "cookie-servers", "Ia",		"dhcp",   8, 2},
+	{ "lpr-servers", "Ia",			"dhcp",   9, 2},
+	{ "impress-servers", "Ia",		"dhcp",  10, 2},
+	{ "resource-location-servers", "Ia",	"dhcp",  11, 2},
 	{ "host-name", "t",			"dhcp",  12, 2},
 	{ "boot-size", "S",			"dhcp",  13, 2},
 	{ "merit-dump", "t",			"dhcp",  14, 2},
@@ -75,11 +82,11 @@ struct option_def options4[] = {
 	{ "extensions-path", "t",		"dhcp",  18, 2},
 	{ "ip-forwarding", "f",			"dhcp",  19, 2},
 	{ "non-local-source-routing", "f",	"dhcp",  20, 2},
-	{ "policy-filter", "IIA",		"dhcp",  21, 2},
+	{ "policy-filter", "IIa",		"dhcp",  21, 2},
 	{ "max-dgram-reassembly", "S",		"dhcp",  22, 2},
 	{ "default-ip-ttl", "B",		"dhcp",  23, 2},
 	{ "path-mtu-aging-timeout", "L",	"dhcp",  24, 2},
-	{ "path-mtu-plateau-table", "SA",	"dhcp",  25, 2},
+	{ "path-mtu-plateau-table", "Sa",	"dhcp",  25, 2},
 	{ "interface-mtu", "S",			"dhcp",  26, 2},
 	{ "all-subnets-local", "f",		"dhcp",  27, 2},
 	{ "broadcast-address", "I",		"dhcp",  28, 2},
@@ -87,7 +94,7 @@ struct option_def options4[] = {
 	{ "mask-supplier", "f",			"dhcp",  30, 2},
 	{ "router-discovery", "f",		"dhcp",  31, 2},
 	{ "router-solicitation-address", "I",	"dhcp",  32, 2},
-	{ "static-routes", "IIA",		"dhcp",  33, 2},
+	{ "static-routes", "IIa",		"dhcp",  33, 2},
 	{ "trailer-encapsulation", "f",		"dhcp",  34, 2},
 	{ "arp-cache-timeout", "L",		"dhcp",  35, 2},
 	{ "ieee802-3-encapsulation", "f",	"dhcp",  36, 2},
@@ -95,47 +102,47 @@ struct option_def options4[] = {
 	{ "tcp-keepalive-interval", "L",	"dhcp",  38, 2},
 	{ "tcp-keepalive-garbage", "f",		"dhcp",  39, 2},
 	{ "nis-domain", "t",			"dhcp",  40, 2},
-	{ "nis-servers", "IA",			"dhcp",  41, 2},
-	{ "ntp-servers", "IA",			"dhcp",  42, 2},
+	{ "nis-servers", "Ia",			"dhcp",  41, 2},
+	{ "ntp-servers", "Ia",			"dhcp",  42, 2},
 	{ "vendor-encapsulated-options", "E.",	"dhcp",  43, 2},
-	{ "netbios-name-servers", "IA",		"dhcp",  44, 2},
-	{ "netbios-dd-server", "IA",		"dhcp",  45, 2},
+	{ "netbios-name-servers", "Ia",		"dhcp",  44, 2},
+	{ "netbios-dd-server", "Ia",		"dhcp",  45, 2},
 	{ "netbios-node-type", "B",		"dhcp",  46, 2},
 	{ "netbios-scope", "t",			"dhcp",  47, 2},
-	{ "font-servers", "IA",			"dhcp",  48, 2},
-	{ "x-display-manager", "IA",		"dhcp",  49, 2},
+	{ "font-servers", "Ia",			"dhcp",  48, 2},
+	{ "x-display-manager", "Ia",		"dhcp",  49, 2},
 	{ "dhcp-requested-address", "I",	"dhcp",  50, 2},
 	{ "dhcp-lease-time", "L",		"dhcp",  51, 2},
 	{ "dhcp-option-overload", "B",		"dhcp",  52, 2},
 	{ "dhcp-message-type", "B",		"dhcp",  53, 2},
 	{ "dhcp-server-identifier", "I",	"dhcp",  54, 2},
-	{ "dhcp-parameter-request-list", "BA",	"dhcp",  55, 2},
+	{ "dhcp-parameter-request-list", "Ba",	"dhcp",  55, 2},
 	{ "dhcp-message", "t",			"dhcp",  56, 2},
 	{ "dhcp-max-message-size", "S",		"dhcp",  57, 2},
 	{ "dhcp-renewal-time", "L",		"dhcp",  58, 2},
 	{ "dhcp-rebinding-time", "L",		"dhcp",  59, 2},
-	{ "vendor-class-identifier", "X",	"dhcp",  60, 2},
+	{ "vendor-class-identifier", "x",	"dhcp",  60, 2},
 	{ "dhcp-client-identifier", "X",	"dhcp",  61, 2},
 	{ "nwip-domain", "t",			"dhcp",  62, 2},
 	/// nwip-domain nwip-domain-name
 	{ "nwip-suboptions", "Enwip.",		"dhcp",  63, 2},
 	{ "nisplus-domain", "t",		"dhcp",  64, 2},
 	/// nisplus-domain nisplus-domain-name
-	{ "nisplus-servers", "IA",		"dhcp",  65, 2},
+	{ "nisplus-servers", "Ia",		"dhcp",  65, 2},
 	{ "tftp-server-name", "t",		"dhcp",  66, 2},
 	{ "bootfile-name", "t",			"dhcp",  67, 2},
 	/// bootfile-name boot-file-name
-	{ "mobile-ip-home-agent", "IA",		"dhcp",  68, 2},
-	{ "smtp-server", "IA",			"dhcp",  69, 2},
-	{ "pop-server", "IA",			"dhcp",  70, 2},
-	{ "nntp-server", "IA",			"dhcp",  71, 2},
-	{ "www-server", "IA",			"dhcp",  72, 2},
-	{ "finger-server", "IA",		"dhcp",  73, 2},
-	{ "irc-server", "IA",			"dhcp",  74, 2},
-	{ "streettalk-server", "IA",		"dhcp",  75, 2},
-	{ "streettalk-directory-assistance-server", "IA",
+	{ "mobile-ip-home-agent", "Ia",		"dhcp",  68, 2},
+	{ "smtp-server", "Ia",			"dhcp",  69, 2},
+	{ "pop-server", "Ia",			"dhcp",  70, 2},
+	{ "nntp-server", "Ia",			"dhcp",  71, 2},
+	{ "www-server", "Ia",			"dhcp",  72, 2},
+	{ "finger-server", "Ia",		"dhcp",  73, 2},
+	{ "irc-server", "Ia",			"dhcp",  74, 2},
+	{ "streettalk-server", "Ia",		"dhcp",  75, 2},
+	{ "streettalk-directory-assistance-server", "Ia",
 						"dhcp",  76, 2},
-	{ "user-class", "t",			"dhcp",  77, 2},
+	{ "user-class", "tY",			"dhcp",  77, 2},
 	{ "slp-directory-agent", "fIa",		"dhcp",  78, 0},
 	/// not supported by Kea
 	{ "slp-service-scope", "fto",		"dhcp",  79, 0},
@@ -146,7 +153,7 @@ struct option_def options4[] = {
 	/// relay-agent-information dhcp-agent-options
 	/* 83 is iSNS (RFC 4174) */
 	/* 84 is unassigned */
-	{ "nds-servers", "IA",			"dhcp",  85, 0},
+	{ "nds-servers", "Ia",			"dhcp",  85, 0},
 	/// not supported by Kea
 	{ "nds-tree-name", "t",			"dhcp",  86, 0},
 	/// not supported by Kea
@@ -156,7 +163,7 @@ struct option_def options4[] = {
 	/// not supported by Kea
 	{ "bcms-controller-address", "Ia",	"dhcp",  89, 0},
 	/// not supported by Kea
-	{ "authentication", "X",		"dhcp",  90, 1},
+	{ "authenticate", "X",			"dhcp",  90, 1},
 	/// not supported by ISC DHCP
 	{ "client-last-transaction-time", "L",  "dhcp",  91, 2},
 	{ "associated-ip", "Ia",                "dhcp",  92, 2},
@@ -198,7 +205,7 @@ struct option_def options4[] = {
 	/// not supported by Kea
 	{ "sip-ua-cs-domains", "Dc",		"dhcp", 141, 0},
 	/// not supported by Kea
-	{ "ipv4-address-andsf", "IA",		"dhcp", 142, 0},
+	{ "ipv4-address-andsf", "Ia",		"dhcp", 142, 0},
 	/// not supported by Kea
         { "rdnss-selection", "BIID",		"dhcp", 146, 0},
 	/// not supported by Kea
@@ -223,7 +230,7 @@ struct option_def options6[] = {
 	{ "ia-ta", "X",				"dhcp6",  4, 2},
 	{ "ia-addr", "X",			"dhcp6",  5, 2},
 	/// ia-addr iaaddr
-	{ "oro", "SA",				"dhcp6",  6, 2},
+	{ "oro", "Sa",				"dhcp6",  6, 2},
 	{ "preference", "B",			"dhcp6",  7, 2},
 	{ "elapsed-time", "S",			"dhcp6",  8, 2},
 	{ "relay-msg", "X",			"dhcp6",  9, 2},
@@ -242,24 +249,24 @@ struct option_def options6[] = {
 	{ "reconf-accept", "Z",			"dhcp6", 20, 2},
 	{ "sip-servers-names", "D",		"dhcp6", 21, 2},
 	/// sip-servers-names sip-server-dns
-	{ "sip-servers-addresses", "6A",	"dhcp6", 22, 2},
+	{ "sip-servers-addresses", "6a",	"dhcp6", 22, 2},
 	/// sip-servers-addresses sip-server-addr
-	{ "name-servers", "6A",			"dhcp6", 23, 2},
+	{ "name-servers", "6a",			"dhcp6", 23, 2},
 	/// name-servers dns-servers
 	{ "domain-search", "D",			"dhcp6", 24, 2},
 	{ "ia-pd", "X",				"dhcp6", 25, 2},
 	{ "ia-prefix", "X",			"dhcp6", 26, 2},
 	/// ia-prefix iaprefix
-	{ "nis-servers", "6A", 			"dhcp6", 27, 2},
-	{ "nisp-servers", "6A",			"dhcp6", 28, 2},
+	{ "nis-servers", "6a", 			"dhcp6", 27, 2},
+	{ "nisp-servers", "6a",			"dhcp6", 28, 2},
 	{ "nis-domain-name", "D",		"dhcp6", 29, 2},
 	{ "nisp-domain-name", "D",		"dhcp6", 30, 2},
-	{ "sntp-servers", "6A",			"dhcp6", 31, 2},
+	{ "sntp-servers", "6a",			"dhcp6", 31, 2},
 	{ "info-refresh-time", "T",		"dhcp6", 32, 2},
 	/// info-refresh-time information-refresh-time
 	{ "bcms-server-d", "D",			"dhcp6", 33, 2},
 	/// bcms-server-d bcms-server-dns
-	{ "bcms-server-a", "6A",		"dhcp6", 34, 2},
+	{ "bcms-server-a", "6a",		"dhcp6", 34, 2},
 	/// bcms-server-a bcms-server-addr
 	/* Note that 35 is not assigned. */
 	{ "geoconf-civic", "X",			"dhcp6", 36, 2},
@@ -268,15 +275,15 @@ struct option_def options6[] = {
 	{ "fqdn", "Efqdn6-if-you-see-me-its-a-bug-bug-bug.",
 						"dhcp6", 39, 2},
 	/// fqdn client-fqdn
-	{ "pana-agent", "6A",			"dhcp6", 40, 2},
+	{ "pana-agent", "6a",			"dhcp6", 40, 2},
 	{ "new-posix-timezone", "t",		"dhcp6", 41, 2},
 	{ "new-tzdb-timezone", "t",		"dhcp6", 42, 2},
-	{ "ero", "SA",				"dhcp6", 43, 2},
+	{ "ero", "Sa",				"dhcp6", 43, 2},
 	{ "lq-query", "X",			"dhcp6", 44, 2},
 	{ "client-data", "X",			"dhcp6", 45, 2},
 	{ "clt-time", "L",			"dhcp6", 46, 2},
 	{ "lq-relay-data", "6X",		"dhcp6", 47, 2},
-	{ "lq-client-link", "6A",		"dhcp6", 48, 2},
+	{ "lq-client-link", "6a",		"dhcp6", 48, 2},
 	{ "v6-lost", "d",			"dhcp6", 51, 0},
 	/// not supported by Kea
 	{ "capwap-ac-v6", "6a",			"dhcp6", 52, 0},
@@ -289,11 +296,12 @@ struct option_def options6[] = {
 	/// not supported by Kea
 	{ "bootfile-url", "t",			"dhcp6", 59, 2},
 	{ "bootfile-param", "X",		"dhcp6", 60, 2},
-	{ "client-arch-type", "SA",		"dhcp6", 61, 2},
+	{ "client-arch-type", "Sa",		"dhcp6", 61, 2},
 	{ "nii", "BBB",				"dhcp6", 62, 2},
-	{ "aftr-name", "d",			"dhcp6", 64, 2},
+	{ "aftr-name", "d",			"dhcp6", 64, 0},
+	/// not supported by Kea
 	{ "erp-local-domain-name", "d",		"dhcp6", 65, 2},
-	{ "rsoo", "Ersoo,",			"dhcp6", 66, 1},
+	{ "rsoo", "Ersoo.",			"dhcp6", 66, 1},
 	/// not supported by ISC DHCP
 	{ "pd-exclude", "X",			"dhcp6", 67, 1},
 	/// not supported by ISC DHCP (prefix6 format)
@@ -308,12 +316,23 @@ struct option_def options6[] = {
 	/// not supported by Kea
 	{ "dhcpv4-msg", "X",			"dhcp6", 87, 2},
 	/// dhcpv4-msg dhcpv4-message
-	{ "dhcp4-o-dhcp6-server", "6A",		"dhcp6", 88, 2},
+	{ "dhcp4-o-dhcp6-server", "6a",		"dhcp6", 88, 2},
 	/// dhcp4-o-dhcp6-server dhcp4o6-server-addr
 	{ "v6-captive-portal", "t",		"dhcp6", 103, 0},
 	/// not supported by Kea
-	{ "ipv6-address-andsf", "6A",		"dhcp6", 143, 0},
+	{ "ipv6-address-andsf", "6a",		"dhcp6", 143, 0},
 	/// not supported by Kea
+	{ NULL, NULL, NULL, 0, 0 }
+};
+
+/// DHCPv4 AGENT
+struct option_def agents[] = {
+	/// All not supported by Kea
+	{ "circuit-id", "X",			"agent",   1, 0},
+	{ "remote-id", "X",			"agent",   2, 0},
+	{ "agent-id", "I",			"agent",   3, 0},
+	{ "DOCSIS-device-class", "L",		"agent",   4, 0},
+	{ "link-selection", "I",		"agent",   5, 0},
 	{ NULL, NULL, NULL, 0, 0 }
 };
 
@@ -512,6 +531,21 @@ options_init(void)
 			option->name = def->name;
 			break;
 		}
+		option->format = def->format;
+		option->space = space_lookup(def->space);
+		assert(option->space != NULL);
+		option->code = def->code;
+		option->status = def->status;
+		TAILQ_INSERT_TAIL(&options, option);
+	}
+
+	/* Fill agent options */
+	for (def = agents; def->name != NULL; def++) {
+		option = (struct option *)malloc(sizeof(*option));
+		assert(option != NULL);
+		memset(option, 0, sizeof(*option));
+		option->old = def->name;
+		option->name = def->name;
 		option->format = def->format;
 		option->space = space_lookup(def->space);
 		assert(option->space != NULL);
@@ -1104,4 +1138,22 @@ get_config_comments(unsigned code)
 		break;
 	}
 	return &comments;
+}
+
+const char *
+display_status(enum option_status status)
+{
+	switch (status) {
+	case kea_unknown:
+	case special:
+		return "known (unknown)";
+	case isc_dhcp_unknown:
+		return "unknown (known)";
+	case known:
+		return "known (known)";
+	case dynamic:
+		return "dynamic (dynamic)";
+	default:
+		return "??? (" "???" ")";
+	}
 }
