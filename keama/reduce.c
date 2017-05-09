@@ -587,6 +587,40 @@ reduce_data_expression(struct element *expr)
 		return createString(result);
 	}
 
+	/* hw-type */
+	if (mapContains(expr, "hw-type")) {
+		/*
+		 * ADDED
+		 * syntax := { "hw-type": null }
+		 * semantic: get mac type from incoming packet
+		 */
+		struct string *result;
+
+		if (local_family != AF_INET) {
+			debug("get hw-type for DHCPv6");
+			return NULL;
+		}
+		result = makeString(-1, "substring(pkt4.htype,-1,all)");
+		return createString(result);
+	}
+
+	/* hw-address */
+	if (mapContains(expr, "hw-address")) {
+		/*
+		 * ADDED
+		 * syntax := { "hw-address": null }
+		 * semantic: get mac address from incoming packet
+		 */
+		struct string *result;
+
+		if (local_family != AF_INET) {
+			debug("get hw-address for DHCPv6");
+			return NULL;
+		}
+		result = makeString(-1, "pkt4.mac");
+		return createString(result);
+	}
+
 	/* const-data */
 	if (mapContains(expr, "const-data")) {
 		/*

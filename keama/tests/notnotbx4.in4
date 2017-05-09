@@ -1,0 +1,18 @@
+# double not boolean expression
+
+# authoritative is mandatory
+authoritative;
+
+# empty configs are not accepted by Kea
+default-lease-time 1800;
+
+# use double not in a reductible match if
+class "reductible" {
+    match if not (not ((option host-name = "www.example.com") or
+                       (option host-name = "www.example.org")));
+}
+
+# use not with !=
+class "other" {
+    match if not (option host-name != "www.example.com");
+}

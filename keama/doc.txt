@@ -361,8 +361,6 @@ Shared-Networks:
 TODO (useful only with Kea support for shared networks): combine permit /
 deny classes (e.g. create negation) and pop filters to subnets when
 there is one pool.
-TODO (put here even not so related) simplify not o not or convert
-not-equal into != vs not =.
 
 Vendor-Classes and User-Classes:
 --------------------------------
@@ -464,9 +462,6 @@ Options:
    domain-name array.
 Each time an option data has a format which is not convertible than
 a CSV false binary data is produced.
-TODO revamp parse_option_data & co
- add option directives
-TODO fix vendor option (of course when Kea will have what is needed)
  We have no example in ISC DHCP, Kea or standard but it is possible
  than an option defined as a fixed sized record followed by
  (encapsulated) suboptions bugs (it already bugs toElement).
@@ -517,6 +512,8 @@ TODO reduce more hexa aka const-data
  reference... And I expect ISC DHCP makes this true a false at runtime
  because the variable "true" is not defined by default.
  Reduced expressions are pretty printed to allow an extra check.
+ Hardware for DHCPv4 is expansed into a concatenation of hw-type and
+ hw-address, this allows to simplify expression where only one is used.
 
 Variables:
 ----------

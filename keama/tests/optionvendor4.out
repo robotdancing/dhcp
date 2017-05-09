@@ -13,7 +13,7 @@
     ],
     "option-data": [
       {
-        "space": "vendor-12345",
+        "space": "dhcp4",
         "name": "vivso-suboptions",
         "code": 125,
         "data": "12345"

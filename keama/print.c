@@ -650,6 +650,14 @@ print_data_expression(struct element *expr, isc_boolean_t *lose)
 	if (mapContains(expr, "hardware"))
 		return "hardware";
 
+	/* hw-type */
+	if (mapContains(expr, "hw-type"))
+		return "hw-type";
+
+	/* hw-address */
+	if (mapContains(expr, "hw-address"))
+		return "hw-address";
+
 	/* const-data */
 	if (mapContains(expr, "const-data")) {
 		struct element *arg;

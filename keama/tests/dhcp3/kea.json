@@ -948,7 +948,7 @@
       {
         "name": "BEC",
         /// from: match if (substring(hardware, 1, 3)) = 0x0004ed
-        "test": "substring(concat(substring(pkt4.htype,-1,all),pkt4.mac),1,3) == 0x0004ed"
+        "test": "substring(pkt4.mac,0,3) == 0x0004ed"
       }
     ]
 //  /// Kea does not support yet shared networks

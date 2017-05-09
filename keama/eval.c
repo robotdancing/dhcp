@@ -390,6 +390,39 @@ eval_boolean_expression(struct element *expr, isc_boolean_t *modifiedp)
 			mapSet(expr, arg, "not");
 		}
 
+		/* remove double not */
+		if ((arg->type == ELEMENT_MAP) && mapContains(arg, "not")) {
+			arg = mapGet(arg, "not");
+			if (arg == NULL)
+				return expr;
+			*modifiedp = ISC_TRUE;
+			return arg;
+		}
+
+		/* compose with equal */
+		if ((arg->type == ELEMENT_MAP) &&
+		    mapContains(arg, "equal")) {
+			arg = mapGet(arg, "equal");
+			if (arg == NULL)
+				return expr;
+			*modifiedp = ISC_TRUE;
+			result = createMap();
+			mapSet(result, arg, "not-equal");
+			return result;
+		}
+
+		/* compose with not-equal */
+		if ((arg->type == ELEMENT_MAP) &&
+		    mapContains(arg, "not-equal")) {
+			arg = mapGet(arg, "not-equal");
+			if (arg == NULL)
+				return expr;
+			*modifiedp = ISC_TRUE;
+			result = createMap();
+			mapSet(result, arg, "equal");
+			return result;
+		}
+
 		if (arg->type != ELEMENT_BOOLEAN)
 			return expr;
 		*modifiedp = ISC_TRUE;
@@ -505,13 +538,80 @@ eval_data_expression(struct element *expr, isc_boolean_t *modifiedp)
 			mapSet(arg, length, "length");
 		}
 
-		if ((string->type != ELEMENT_STRING) ||
-		    (offset->type != ELEMENT_INTEGER) ||
+		if ((offset->type != ELEMENT_INTEGER) ||
 		    (length->type != ELEMENT_INTEGER))
 			return expr;
 		off = intValue(offset);
 		len = intValue(length);
 		if ((off < 0) || (len < 0))
+			return expr;
+		/* degenerated case */
+		if (len == 0) {
+			*modifiedp = ISC_TRUE;
+			r = allocString();
+			result = createString(r);
+			return result;
+		}
+
+		/* return (part of) hw-address? */
+		if ((local_family == AF_INET) &&
+		    (string->type == ELEMENT_MAP) &&
+		    mapContains(string, "concat") &&
+		    (off >= 1)) {
+			struct element *concat;
+			struct element *left;
+			struct element *right;
+
+			concat = mapGet(string, "concat");
+			if (concat->type != ELEMENT_MAP)
+				return expr;
+			left = mapGet(concat, "left");
+			if (left == NULL)
+				return expr;
+			right = mapGet(concat, "right");
+			if (right == NULL)
+				return expr;
+			/* from substring(hardware, ...) */
+			if ((left->type == ELEMENT_MAP) &&
+			    mapContains(left, "hw-type")) {
+				*modifiedp = ISC_TRUE;
+				mapRemove(arg, "expression");
+				mapSet(arg, right, "expression");
+				mapRemove(arg, "offset");
+				mapSet(arg, createInt(off - 1), "offset");
+				return expr;
+			}
+			return expr;
+		}
+
+		/* return hw-type? */
+		if ((local_family == AF_INET) &&
+		    (string->type == ELEMENT_MAP) &&
+		    mapContains(string, "concat") &&
+		    (off == 0) && (len == 1)) {
+			struct element *concat;
+			struct element *left;
+			struct element *right;
+
+			concat = mapGet(string, "concat");
+			if (concat->type != ELEMENT_MAP)
+				return expr;
+			left = mapGet(concat, "left");
+			if (left == NULL)
+				return expr;
+			right = mapGet(concat, "right");
+			if (right == NULL)
+				return expr;
+			/* from substring(hardware, ...) */
+			if ((left->type == ELEMENT_MAP) &&
+			    mapContains(left, "hw-type")) {
+				*modifiedp = ISC_TRUE;
+				return left;
+			}
+			return expr;
+		}
+
+		if (string->type != ELEMENT_STRING)
 			return expr;
 		*modifiedp = ISC_TRUE;
 		s = stringValue(string);
@@ -670,9 +770,43 @@ eval_data_expression(struct element *expr, isc_boolean_t *modifiedp)
 		return expr;
 
 	/* hardware */
-	if (mapContains(expr, "hardware"))
+	if (mapContains(expr, "hardware")) {
 		/*
 		 * syntax := { "hardware": null }
+		 * semantic: get mac type and address from incoming packet
+		 */
+		struct element *left;
+		struct element *right;
+		struct element *concat;
+		struct element *result;
+
+		if (local_family != AF_INET)
+			return expr;
+		*modifiedp = ISC_TRUE;
+		left = createMap();
+		mapSet(left, createNull(), "hw-type");
+		concat = createMap();
+		mapSet(concat, left, "left");
+		right = createMap();
+		mapSet(right, createNull(), "hw-address");
+		mapSet(concat, right, "right");
+		result = createMap();
+		mapSet(result, concat, "concat");
+		return result;
+	}
+
+	/* hw-type */
+	if (mapContains(expr, "hw-type"))
+		/*
+		 * syntax := { "hw-type": null }
+		 * semantic: get mac type and address from incoming packet
+		 */
+		return expr;
+
+	/* hw-address */
+	if (mapContains(expr, "hw-address"))
+		/*
+		 * syntax := { "hw-address": null }
 		 * semantic: get mac type and address from incoming packet
 		 */
 		return expr;
@@ -732,6 +866,18 @@ eval_data_expression(struct element *expr, isc_boolean_t *modifiedp)
 		if (rmodified) {
 			mapRemove(arg, "right");
 			mapSet(arg, right, "right");
+		}
+
+		/* degenerated cases */
+		if ((left->type == ELEMENT_STRING) &&
+		    (stringValue(left)->length == 0)) {
+			*modifiedp = ISC_TRUE;
+			return right;
+		}
+		if ((right->type == ELEMENT_STRING) &&
+		    (stringValue(right)->length == 0)) {
+			*modifiedp = ISC_TRUE;
+			return left;
 		}
 
 		if ((left->type != ELEMENT_STRING) ||
