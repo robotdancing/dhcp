@@ -200,6 +200,8 @@ enum expr_op {
 	expr_not,
 	expr_option,
 	expr_hardware,
+	expr_hw_type,		/* derived from expr_hardware */
+	expr_hw_address,	/* derived from expr_hardware */
 	expr_packet,
 	expr_const_data,
 	expr_extract_int8,

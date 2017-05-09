@@ -1307,13 +1307,15 @@ parse_vendor_code_definition(struct parse *cfile, struct option *option)
 	/* Create the vendor option */
 	vendor = createMap();
 	if (local_family == AF_INET) {
+		space = makeString(-1, "dhcp4");
 		name = makeString(-1, "vivso-suboptions");
 		code = DHO_VIVSO_SUBOPTIONS;
 	} else {
+		space =makeString(-1, "dhcp6");
 		name = makeString(-1, "vendor-opts");
 		code = D6O_VENDOR_OPTS;
 	}
-	mapSet(vendor, createString(makeString(-1, universe->name)), "space");
+	mapSet(vendor, createString(space), "space");
 	mapSet(vendor, createString(name), "name");
 	mapSet(vendor, createInt(code), "code");
 	mapSet(vendor, createString(id), "data");
@@ -5444,6 +5446,8 @@ is_data_expression(struct element *expr)
 		mapContains(expr, "uppercase") ||
 		mapContains(expr, "option") ||
 		mapContains(expr, "hardware") ||
+		mapContains(expr, "hw-type") ||
+		mapContains(expr, "hw-address") ||
 		mapContains(expr, "const-data") ||
 		mapContains(expr, "packet") ||
 		mapContains(expr, "concat") ||
@@ -5527,6 +5531,8 @@ op_context(enum expr_op op)
 	case expr_not:
 	case expr_option:
 	case expr_hardware:
+	case expr_hw_type:
+	case expr_hw_address:
 	case expr_packet:
 	case expr_const_data:
 	case expr_extract_int8:
@@ -5607,6 +5613,8 @@ op_val(enum expr_op op)
 	case expr_not:
 	case expr_option:
 	case expr_hardware:
+	case expr_hw_type:
+	case expr_hw_address:
 	case expr_packet:
 #ifdef keep_expr_const_data_precedence
 	case expr_const_data:
@@ -5721,6 +5729,10 @@ expression(struct element *expr)
 		return expr_option;
 	if (mapContains(expr, "hardware"))
 		return expr_hardware;
+	if (mapContains(expr, "hw-type"))
+		return expr_hw_type;
+	if (mapContains(expr, "hw-address"))
+		return expr_hw_address;
 	if (mapContains(expr, "packet"))
 		return expr_packet;
 	if (mapContains(expr, "const-data"))

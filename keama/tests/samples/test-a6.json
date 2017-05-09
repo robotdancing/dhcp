@@ -21,39 +21,10 @@
         "name": "time-offset",
         "code": 1041,
         "type": "int32"
-      },
-      #
-      # Define the DOCSIS option space.
-      # TODO: DOCSIS oro definition
-      #
-      {
-        "space": "vendor-44910",
-        "name": "tftp-servers",
-        "code": 32,
-        "array": true,
-        "type": "ipv6-address"
-      },
-      {
-        "space": "vendor-44910",
-        "name": "cablelabs-configuration-file",
-        "code": 33,
-        "type": "string"
-      },
-      {
-        "space": "vendor-44910",
-        "name": "cablelabs-syslog-servers",
-        "code": 34,
-        "array": true,
-        "type": "ipv6-address"
-      },
-      {
-        "space": "vendor-44910",
-        "name": "device-id",
-        "code": 36,
-        "type": "string"
       }
     ],
     "option-data": [
+      #option docsis.device-id code 36 = string;
       # 
       # Declare some options.
       #
@@ -64,13 +35,13 @@
         "data": "3ffe:bbbb:aaaa:aaaa::1, 3ffe:bbbb:aaaa:aaaa::2"
       },
       {
-        "space": "vendor-44910",
+        "space": "dhcp6",
         "name": "vendor-opts",
         "code": 17,
-        "data": "44910"
+        "data": "4491"
       },
       {
-        "space": "vendor-44910",
+        "space": "vendor-4491",
         "name": "tftp-servers",
         "code": 32,
         "data": "3ffe:cccc:aaaa:aaaa::1, 3ffe:cccc:aaaa:aaaa::2"
@@ -131,13 +102,13 @@
                 "data": "3ffe:aaaa:aaaa:aaaa::1, 3ffe:aaaa:aaaa:aaaa::2"
               },
               {
-                "space": "vendor-44910",
+                "space": "dhcp6",
                 "name": "vendor-opts",
                 "code": 17,
-                "data": "44910"
+                "data": "4491"
               },
               {
-                "space": "vendor-44910",
+                "space": "vendor-4491",
                 "name": "tftp-servers",
                 "code": 32,
 //              "original-data": "3ffe:aaaa:aaaa:aaaa::1,\n\t\t\t\t   3ffe:aaaa:aaaa:aaaa::2",
@@ -151,14 +122,14 @@
               },
               # -4 hours
               {
-                "space": "vendor-44910",
-                "name": "cablelabs-configuration-file",
+                "space": "vendor-4491",
+                "name": "config-file",
                 "code": 33,
                 "data": "bootfile.cfg"
               },
               {
-                "space": "vendor-44910",
-                "name": "cablelabs-syslog-servers",
+                "space": "vendor-4491",
+                "name": "syslog-servers",
                 "code": 34,
 //              "original-data": "3ffe:aaaa:aaaa:aaaa::1,\n\t\t\t\t\t       3ffe:aaaa:aaaa:aaaa::2",
                 "data": "3ffe:aaaa:aaaa:aaaa::1, 3ffe:aaaa:aaaa:aaaa::2"

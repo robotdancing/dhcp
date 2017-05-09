@@ -62,6 +62,10 @@ struct subnet {
 
 TAILQ_HEAD(subnets, subnet) known_subnets;
 
+static void post_process_authoritative(struct parse *);
+static size_t post_process_reservations(struct parse *);
+static void post_process_classes(struct parse *);
+static void post_process_option_definitions(struct parse *);
 static void add_host_reservation_identifiers(struct parse *, const char *);
 static void add_host_id_option(struct parse *, const struct option *, int);
 static void subclass_inherit(struct parse *, struct element *,
@@ -87,10 +91,7 @@ conf_file_parse(struct parse *cfile)
 {
 	struct element *top;
 	struct element *dhcp;
-	struct element *hosts;
-	struct element *classes;
 	size_t issues;
-	size_t i;
 
 	TAILQ_INIT(&known_subnets);
 
@@ -115,159 +116,6 @@ conf_file_parse(struct parse *cfile)
 
 	issues = conf_file_subparse(cfile, ROOT_GROUP);
 
-	/* Cleanup authoritative */ 
-	if (mapContains(cfile->stack[1], "authoritative"))
-		mapRemove(cfile->stack[1], "authoritative");
-
-	/*
-	 * Reservation post-processing
-	 */
-	hosts = mapGet(cfile->stack[1], "reservations");
-	if (hosts != NULL) {
-		struct element *orphans;
-		struct element *host;
-		struct element *where;
-		struct element *dest;
-		isc_boolean_t used_heuristic;
-
-		mapRemove(cfile->stack[1], "reservations");
-		orphans = createList();
-		orphans->kind = HOST_DECL;
-		while (listSize(hosts) > 0) {
-			host = listGet(hosts, 0);
-			listRemove(hosts, 0);
-			used_heuristic = ISC_FALSE;
-			where = find_match(cfile, host, &used_heuristic);
-			if (where == cfile->stack[1])
-				dest = orphans;
-			else
-				dest = mapGet(where, "reservations");
-			if (dest == NULL) {
-				dest = createList();
-				dest->kind = HOST_DECL;
-				mapSet(where, dest, "reservations");
-			}
-			listPush(dest, host);
-		}
-		if (listSize(orphans) > 0) {
-			struct comment *comment;
-
-			comment = createComment("/// Orphan reservations");
-			TAILQ_INSERT_TAIL(&orphans->comments, comment);
-			comment = createComment("/// Kea reservations are "
-						"per subnet");
-			TAILQ_INSERT_TAIL(&orphans->comments, comment);
-			comment = createComment("/// Reference Kea #5246");
-			TAILQ_INSERT_TAIL(&orphans->comments, comment);
-			orphans->skip = ISC_TRUE;
-			issues++;
-			mapSet(cfile->stack[1], orphans, "reservations");
-		}
-	}
-
-	/* Cleanup classes */
-	classes = mapGet(cfile->stack[1], "client-classes");
-	if ((classes != NULL) && (listSize(classes) > 0))
-		for (i = 0; i < listSize(classes); i++) {
-			struct element *class;
-			struct element *name;
-			struct element *entry;
-			struct string *msg;
-			struct comment *comment;
-			isc_boolean_t lose;
-
-			class = listGet(classes, i);
-			if ((class == NULL) || (class->type != ELEMENT_MAP))
-				parse_error(cfile, "null global class at %i",
-					    (unsigned)i);
-			name = mapGet(class, "name");
-			if ((name == NULL) || (name->type != ELEMENT_STRING))
-				parse_error(cfile, "global class at %u "
-					    "without a name", (unsigned)i);
-			if (!mapContains(class, "super"))
-				goto cleanup_superclass;
-
-			/* cleanup subclass */
-			mapRemove(class,"super");
-			entry = mapGet(class, "string");
-			if (entry != NULL) {
-				if (entry->type != ELEMENT_STRING)
-					parse_error(cfile, "subclass %s has "
-						    "a bad string selector",
-						    stringValue(name)->
-						    content);
-				msg = makeString(-1, "/// subclass selector ");
-				appendString(msg, "'");
-				concatString(msg, stringValue(entry));
-				appendString(msg, "'");
-				comment = createComment(msg->content);
-				TAILQ_INSERT_TAIL(&class->comments, comment);
-				mapRemove(class, "string");
-				continue;
-			}
-			entry = mapGet(class, "binary");
-			if (entry == NULL)
-				parse_error(cfile, "subclass %s has no "
-					    "selector",
-					    stringValue(name)->content);
-			msg = makeString(-1, "/// subclass selector 0x");
-			concatString(msg, stringValue(entry));
-			comment = createComment(msg->content);
-			TAILQ_INSERT_TAIL(&class->comments, comment);
-			mapRemove(class, "binary");
-
-		cleanup_superclass:
-			/* cleanup superclass */
-			entry = mapGet(class, "spawning");
-			if (entry == NULL)
-				goto cleanup_class;
-			if (entry->type != ELEMENT_BOOLEAN)
-				parse_error(cfile, "superclass %s has bad "
-					    "spawning flag",
-					    stringValue(name)->content);
-			if (boolValue(entry)) {
-				msg = makeString(-1, "/// Spawning classes "
-						 "are not supported by Kea");
-				comment = createComment(msg->content);
-				TAILQ_INSERT_TAIL(&class->comments, comment);
-				msg = makeString(-1, "/// Reference Kea "
-						 "#5269");
-				comment = createComment(msg->content);
-				TAILQ_INSERT_TAIL(&class->comments, comment);
-				msg = makeString(-1, "/// spawn with: ");
-			} else
-				msg = makeString(-1, "/// match: ");
-			entry = mapGet(class, "submatch");
-
-			if (entry == NULL)
-				parse_error(cfile, "superclass %s has no "
-					    "submatch",
-					    stringValue(name)->content);
-			lose = ISC_FALSE;
-			appendString(msg, print_data_expression(entry, &lose));
-			if (!lose) {
-				comment = createComment(msg->content);
-				TAILQ_INSERT_TAIL(&class->comments, comment);
-				mapRemove(class, "spawning");
-				mapRemove(class, "submatch");
-			}
-
-		cleanup_class:
-			/* cleanup class */
-			entry = mapGet(class, "match-if");
-			if (entry == NULL)
-				continue;
-			lose = ISC_FALSE;
-			msg = makeString(-1, "/// match if: ");
-			appendString(msg, print_boolean_expression(entry,
-								   &lose));
-			if (!lose) {
-				comment = createComment(msg->content);
-				TAILQ_INSERT_TAIL(&class->comments, comment);
-				mapRemove(class, "match-if");
-			}
-		}
-
 	/* Add a warning when interfaces-config is not present */
 	if (subnet_counter > 0) {
 		struct element *ifconf;
@@ -285,7 +133,194 @@ conf_file_parse(struct parse *cfile)
 		}
 	}
 
+	post_process_authoritative(cfile);
+	issues += post_process_reservations(cfile);
+	post_process_classes(cfile);
+	post_process_option_definitions(cfile);
+
 	return issues;
+}
+
+/* Cleanup authoritative */ 
+
+static void
+post_process_authoritative(struct parse *cfile)
+{
+	if (mapContains(cfile->stack[1], "authoritative"))
+		mapRemove(cfile->stack[1], "authoritative");
+}
+
+/* Reservation post-processing */
+
+static size_t
+post_process_reservations(struct parse *cfile)
+{
+	struct element *hosts;
+	struct element *orphans;
+	struct element *host;
+	struct element *where;
+	struct element *dest;
+	isc_boolean_t used_heuristic;
+	size_t issues;
+
+	issues = 0;
+	hosts = mapGet(cfile->stack[1], "reservations");
+	if (hosts == NULL)
+		return issues;
+	mapRemove(cfile->stack[1], "reservations");
+	orphans = createList();
+	orphans->kind = HOST_DECL;
+	while (listSize(hosts) > 0) {
+		host = listGet(hosts, 0);
+		listRemove(hosts, 0);
+		used_heuristic = ISC_FALSE;
+		where = find_match(cfile, host, &used_heuristic);
+		if (where == cfile->stack[1])
+			dest = orphans;
+		else
+			dest = mapGet(where, "reservations");
+		if (dest == NULL) {
+			dest = createList();
+			dest->kind = HOST_DECL;
+			mapSet(where, dest, "reservations");
+		}
+		listPush(dest, host);
+	}
+	if (listSize(orphans) > 0) {
+		struct comment *comment;
+
+		comment = createComment("/// Orphan reservations");
+		TAILQ_INSERT_TAIL(&orphans->comments, comment);
+		comment = createComment("/// Kea reservations are per subnet");
+		TAILQ_INSERT_TAIL(&orphans->comments, comment);
+		comment = createComment("/// Reference Kea #5246");
+		TAILQ_INSERT_TAIL(&orphans->comments, comment);
+		orphans->skip = ISC_TRUE;
+		issues++;
+		mapSet(cfile->stack[1], orphans, "reservations");
+	}
+	return issues;
+}
+
+/* Cleanup classes */
+
+static void
+post_process_classes(struct parse *cfile)
+{
+	struct element *classes;
+	struct element *class;
+	struct element *name;
+	struct element *entry;
+	struct string *msg;
+	struct comment *comment;
+	isc_boolean_t lose;
+	size_t i;
+
+	classes = mapGet(cfile->stack[1], "client-classes");
+	if ((classes == NULL) || (listSize(classes) == 0))
+		return;
+	for (i = 0; i < listSize(classes); i++) {
+		class = listGet(classes, i);
+		if ((class == NULL) || (class->type != ELEMENT_MAP))
+			parse_error(cfile, "null global class at %i",
+				    (unsigned)i);
+		name = mapGet(class, "name");
+		if ((name == NULL) || (name->type != ELEMENT_STRING))
+			parse_error(cfile, "global class at %u "
+				    "without a name", (unsigned)i);
+		if (!mapContains(class, "super"))
+			goto cleanup_superclass;
+
+		/* cleanup subclass */
+		mapRemove(class,"super");
+		entry = mapGet(class, "string");
+		if (entry != NULL) {
+			if (entry->type != ELEMENT_STRING)
+				parse_error(cfile, "subclass %s has "
+					    "a bad string selector",
+					    stringValue(name)->content);
+			msg = makeString(-1, "/// subclass selector ");
+			appendString(msg, "'");
+			concatString(msg, stringValue(entry));
+			appendString(msg, "'");
+			comment = createComment(msg->content);
+			TAILQ_INSERT_TAIL(&class->comments, comment);
+			mapRemove(class, "string");
+			continue;
+		}
+		entry = mapGet(class, "binary");
+		if (entry == NULL)
+			parse_error(cfile, "subclass %s has no selector",
+				    stringValue(name)->content);
+		msg = makeString(-1, "/// subclass selector 0x");
+		concatString(msg, stringValue(entry));
+		comment = createComment(msg->content);
+		TAILQ_INSERT_TAIL(&class->comments, comment);
+		mapRemove(class, "binary");
+
+	cleanup_superclass:
+		/* cleanup superclass */
+		entry = mapGet(class, "spawning");
+		if (entry == NULL)
+			goto cleanup_class;
+		if (entry->type != ELEMENT_BOOLEAN)
+			parse_error(cfile, "superclass %s has bad "
+				    "spawning flag",
+				    stringValue(name)->content);
+		if (boolValue(entry)) {
+			msg = makeString(-1, "/// Spawning classes "
+					 "are not supported by Kea");
+			comment = createComment(msg->content);
+			TAILQ_INSERT_TAIL(&class->comments, comment);
+			msg = makeString(-1, "/// Reference Kea #5269");
+			comment = createComment(msg->content);
+			TAILQ_INSERT_TAIL(&class->comments, comment);
+			msg = makeString(-1, "/// spawn with: ");
+		} else
+			msg = makeString(-1, "/// match: ");
+		entry = mapGet(class, "submatch");
+
+		if (entry == NULL)
+			parse_error(cfile, "superclass %s has no submatch",
+				    stringValue(name)->content);
+		lose = ISC_FALSE;
+		appendString(msg, print_data_expression(entry, &lose));
+		if (!lose) {
+			comment = createComment(msg->content);
+			TAILQ_INSERT_TAIL(&class->comments, comment);
+			mapRemove(class, "spawning");
+			mapRemove(class, "submatch");
+		}
+
+	cleanup_class:
+		/* cleanup class */
+		entry = mapGet(class, "match-if");
+		if (entry == NULL)
+			continue;
+		lose = ISC_FALSE;
+		msg = makeString(-1, "/// match if: ");
+		appendString(msg, print_boolean_expression(entry, &lose));
+		if (!lose) {
+			comment = createComment(msg->content);
+			TAILQ_INSERT_TAIL(&class->comments, comment);
+			mapRemove(class, "match-if");
+		}
+	}
+}
+
+static void
+post_process_option_definitions(struct parse *cfile)
+{
+	struct element *opt_def;
+	struct element *def, *ndef;
+
+	opt_def = mapGet(cfile->stack[1], "option-def");
+	if (opt_def == NULL)
+		return;
+	TAILQ_FOREACH_SAFE(def, &opt_def->value.list_value, ndef) {
+		if (mapContains(def, "no-export"))
+			TAILQ_REMOVE(&opt_def->value.list_value, def);
+	}
 }
 
 void
@@ -3864,10 +3899,75 @@ parse_directive(struct parse *cfile)
 	}
 }
 
+/* Set alias and status for option spaces */
+
 void
 parse_option_space_dir(struct parse *cfile)
 {
-	/* TODO */
+	enum dhcp_token token;
+	const char *val;
+	struct space *space;
+
+	skip_token(NULL, NULL, cfile);	/* Discard SPACE */
+	token = next_token(&val, NULL, cfile);
+	if (!is_identifier(token))
+		parse_error(cfile, "expecting identifier.");
+	space = space_lookup(val);
+	if (space == NULL)
+		parse_error(cfile, "can't find space '%s", val);
+
+	token = next_token(&val, NULL, cfile);
+	if (token == CHECK) {
+		printf("space ISC DHCP (kea)\n"
+		       " %s (%s)\n status %s\n%s",
+		       space->old, space->name,
+		       display_status(space->status),
+		       space->vendor != NULL ? " vendor\n" : "");
+		parse_semi(cfile);
+		return;
+	}
+	if (token == ALIAS) {
+		token = next_token(&val, NULL, cfile);
+		if (!is_identifier(token))
+			parse_error(cfile,
+				    "expecting identifier after "
+				    "alias keyword.");
+		if (space->status != dynamic)
+			parse_error(cfile,
+				    "attempt to rename %s to %s",
+				    space->name, val);
+		space->name = strdup(val);
+		parse_semi(cfile);
+		return;
+	}
+	if (token == DYNAMIC)
+		space->status = dynamic;
+	else if (token == UNKNOWN) {
+		isc_boolean_t isc_known;
+
+		isc_known = ISC_TRUE;
+		token = next_token(NULL, NULL, cfile);
+		if (token == KNOWN)
+			space->status = known;
+		else if (token == UNKNOWN)
+			space->status = kea_unknown;
+		else
+			parse_error(cfile, "expected KNOW or UNKNOWN");
+	} else if (token != UNKNOWN)
+		parse_error(cfile, "expected KNOW or UNKNOWN or DYNAMIC");
+	else {
+		isc_boolean_t isc_known;
+
+		isc_known = ISC_FALSE;
+                if (token == KNOWN)
+			space->status = isc_dhcp_unknown;
+                else if (token == UNKNOWN)
+                        parse_error(cfile, "illicit combination: space "
+                                    "%s is known by nobody", space->name);
+		else
+			parse_error(cfile, "expected KNOW or UNKNOWN");
+	}
+	parse_semi(cfile);
 }
 
 /* Alternative to parse_option_code_decl using the raw ISC DHCP format */
@@ -3976,7 +4076,7 @@ parse_option_status_dir(struct parse *cfile, struct option *option,
 		if (token == KNOWN)
 			option->status = isc_dhcp_unknown;
 		else if (token == UNKNOWN)
-			parse_error(cfile, "illicit combination: option"
+			parse_error(cfile, "illicit combination: option "
 				    "%s.%s code %u is known by nobody",
 				    option->space->name, option->name,
 				    option->code);
