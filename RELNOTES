@@ -1497,6 +1497,11 @@ by Eric Young (eay@cryptsoft.com).
   and our website for directions on bug submissions.
   [ISC-Bugs #24789]
 
+- The new lmdb (Lightning Memory DataBase) bind9 configure option is
+  now disabled by default to avoid the presence of this library to be
+  detected which can lead to a link failure.
+  [ISC-Bugs #45069]
+
 			Changes since 4.2.0 (new features)
 
 - If a client renews before 'dhcp-cache-threshold' percent of its lease
