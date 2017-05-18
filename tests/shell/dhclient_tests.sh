@@ -148,7 +148,7 @@ script_call_1fail_test() {
         return
     fi
 
-    printf "This test may take up to ${timeout} seconds to run. Sorry"
+    printf "This test may take up to ${timeout} seconds to run. Sorry\n"
 
     # Remove dangling instances and remove log files.
     cleanup
@@ -174,7 +174,6 @@ script_call_1fail_test() {
         send_signal 9 ${bin}
         sleep 1
     fi
-
 
     test_finish 0
 }
