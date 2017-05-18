@@ -221,7 +221,7 @@ kill_processes_by_name() {
     # For each PID found, send kill signal.
     for pid in ${pids}
     do
-        printf "Shutting down Kea process ${proc_name} having pid %d.\n" ${pid}
+        printf "Shutting down process ${proc_name} having pid %d.\n" ${pid}
         kill -9 ${pid}
     done
 }
@@ -259,6 +259,26 @@ check_client_started() {
     # Remove whitespaces
     ${_CHECK_CLIENT_STARTED##*[! ]}
     ${_CHECK_CLIENT_EXIT##*[! ]}
+}
+
+grep_file() {
+    local file="${1}" # file to grep.
+    local expr="${2}" # Expression to grep for.
+    local expected="${3}" # expected number of occurences
+
+    if [ ! -e ${file} ]; then
+        printf "ERROR: file [%s] does not exist, can't grep\n" ${file}
+        clean_exit 1
+    fi
+
+    _GREP_FILE_COUNT=$( grep -o ${expr} ${file} | wc -l )
+    printf "File %s contains %d instances of \"%s\"\n" "${file}" "${_GREP_FILE_COUNT}" "${expr}"
+
+    if [ ${_GREP_FILE_COUNT} != ${expected} ]; then
+        printf "ERROR: File %s expected to contain %d instances of '%s', but contains %d\n" \
+               "${file}" "${expected}" "${expr}" "${_GREP_FILE_COUNT}"
+        clean_exit 1
+    fi
 }
 
 # Performs cleanup after test.
@@ -317,8 +337,9 @@ start_kea() {
         test_lib_error "binary name must be specified for start_kea"
         clean_exit 1
     fi
-    printf "Running command %s.\n" "\"${bin} -cf ${CFG_FILE}\ -lf ${LEASE_FILE} -pf ${PID_FILE} -d ${IFACE} &> ${LOG_FILE}\""
-    ${bin} -cf ${CFG_FILE} -lf ${LEASE_FILE} -pf ${PID_FILE} -d ${IFACE} &> ${LOG_FILE} &
+    local extra_params=${2}
+    printf "Running command %s.\n" "\"${bin} -cf ${CFG_FILE}\ -lf ${LEASE_FILE} -pf ${PID_FILE} -sf ${SCRIPT_FILE} -d ${extra_params} ${IFACE} &> ${LOG_FILE}\""
+    ${bin} -cf ${CFG_FILE} -lf ${LEASE_FILE} -pf ${PID_FILE} -sf ${SCRIPT_FILE} -d ${extra_params} ${IFACE} &> ${LOG_FILE} &
 }
 
 # Waits with timeout for Kea to start.
@@ -377,7 +398,7 @@ be a number"
     esac
 
     # Validate message
-    if [ -z ${message} ]; then
+    if [ -z "${message}" ]; then
         test_lib_error "message id is a required argument for wait_for_message"
         clean_exit 1
     fi
@@ -392,14 +413,14 @@ must be a number"
 
     local loops=0          # Number of loops performed so far.
     _WAIT_FOR_MESSAGE=0
-    test_lib_info "wait_for_message ${message}: " "skip-new-line"
+    test_lib_info "wait_for_message '${message}': " "skip-new-line"
     # Check if log file exists and if we reached timeout.
     while [ ${loops} -le ${timeout} ]; do
         printf "."
         # Check if the message has been logged.
         get_log_messages ${message}
         if [ ${_GET_LOG_MESSAGES} -ge ${occurrences} ]; then
-            printf "\n"
+            printf "found\n"
             _WAIT_FOR_MESSAGE=1
             return
         fi
@@ -407,7 +428,7 @@ must be a number"
         sleep 1
         loops=$( expr ${loops} + 1 )
     done
-    printf "\n"
+    printf "not found\n"
     # Timeout.
 }
 
@@ -461,11 +482,11 @@ must be a number"
     # Get Kea pid.
     get_pid ${proc_name}
     if [ ${_GET_PIDS_NUM} -ne 1 ]; then
-        printf "ERROR: expected one Kea process to be started.\
+        printf "ERROR: expected one process to be started.\
  Found %d processes started.\n" ${_GET_PIDS_NUM}
         clean_exit 1
     fi
-    printf "Sending signal ${sig} to Kea process (pid=%s).\n" ${_GET_PID}
+    printf "Sending signal ${sig} to process (pid=%s).\n" ${_GET_PID}
     # Actually send a signal.
     kill -${sig} ${_GET_PID}
 }

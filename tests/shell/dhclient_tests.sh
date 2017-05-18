@@ -18,6 +18,10 @@ LEASE_FILE=/home/thomson/devel/dhcp-git/tests/dhclient.leases
 
 PID_FILE=/home/thomson/devel/dhcp-git/tests/dhclient.pid
 
+SCRIPT_FILE=/home/thomson/devel/dhcp-git/tests/shell/echo.sh
+
+SCRIPT_LOG_FILE=/home/thomson/devel/dhcp-git/tests/echo.log
+
 IFACE=lo
 
 bin="dhclient"
@@ -39,14 +43,14 @@ shutdown_test() {
         test_finish 2
         return
     fi
-    
+
     # Remove dangling instances and remove log files.
     cleanup
 
     # Create new configuration file.
     create_config "${CONFIG}"
 
-    # Start Control Agent.
+    # Start a client.
     start_kea ${bin_path}/${bin}
     # Wait up to 5s for Control Agent to start.
     wait_for_kea 5
@@ -85,5 +89,96 @@ shutdown_test() {
     test_finish 0
 }
 
+# This test verifies that dhclient actually calls a shell script.
+# The first reason to call is PREINIT. It's called before any
+# actual DHCP operations are conducted.
+script_call_preinit_test() {
+    test_name="dhclient.script-call.preinit" # Test name
+    grep_expr="reason=PREINIT"  # name of the expression the script should log.
+
+    # Log the start of the test and print test name.
+    test_start ${test_name}
+
+    # Currently we need root to start a client, hence this check.
+    if [ "$EUID" -ne 0 ]; then
+        printf "This test requires to be run as root, skipping.\n"
+        test_finish 2
+        return
+    fi
+
+    # Remove dangling instances and remove log files.
+    cleanup
+
+    # Create new configuration file.
+    create_config "${CONFIG}"
+
+    # Start Control Agent.
+    start_kea ${bin_path}/${bin} -1 ${IFACE}
+    # Wait up to 120 for dhclient to fail (there's no server running).
+    wait_for_kea 5
+
+    # Check that the script was called and it reported appropriate
+    # reason.
+    grep_file ${SCRIPT_LOG_FILE} ${grep_expr} 1
+
+    # Send SIGTERM signal if the process is still running
+    send_signal 15 ${bin}
+
+    # Make sure the server is down.
+    wait_for_process_down 5 ${bin}
+    assert_eq 1 ${_WAIT_FOR_PROCESS_DOWN} \
+        "Expected wait_for_server_down return %d, returned %d"
+
+    test_finish 0
+}
+
+# This test verifies that dhclient actually calls a shell script.
+script_call_1fail_test() {
+    test_name="dhclient.script-call.onetry-fail" # Test name
+    grep_expr="reason=FAIL"  # name of the expression the script should log.
+    timeout=120
+
+    # Log the start of the test and print test name.
+    test_start ${test_name}
+
+    # Currently we need root to start a client, hence this check.
+    if [ "$EUID" -ne 0 ]; then
+        printf "This test requires to be run as root, skipping.\n"
+        test_finish 2
+        return
+    fi
+
+    printf "This test may take up to ${timeout} seconds to run. Sorry"
+
+    # Remove dangling instances and remove log files.
+    cleanup
+
+    # Create new configuration file.
+    create_config "${CONFIG}"
+
+    # Start Control Agent.
+    start_kea ${bin_path}/${bin} -1 ${IFACE}
+    # Wait up to 120s for dhclient to fail (there's no server running).
+    wait_for_message ${timeout} "Unable to obtain a lease on first try.  Exiting." 1
+
+    # Check that the script was called and it reported appropriate
+    # reason.
+    grep_file ${SCRIPT_LOG_FILE} ${grep_expr} 1
+
+    # Send SIGTERM signal if the process is still running
+    get_pid ${proc_name}
+    if [ ${_GET_PIDS_NUM} -eq 1 ]; then
+        # Assuming the client worked as expected, the process should be long
+        # gone. However, if it misbehaved for whatever reason, we will send
+        # a SIGKILL and wait a second. This should kill that bastard.
+        send_signal 9 ${bin}
+        sleep 1
+    fi
+
+
+    test_finish 0
+}
+
 version_test  "dhclient.version"
-shutdown_test "dhclient.sigterm" 15
+script_call_preinit_test
+script_call_1fail_test
