@@ -73,6 +73,7 @@ struct dhcp_packet {
 #define BOOTP_BROADCAST 32768L
 
 /* Possible values for hardware type (htype) field... */
+/* See RFC1700, page 163 for details. */
 #define HTYPE_ETHER	1               /* Ethernet 10Mbps              */
 #define HTYPE_IEEE802	6               /* IEEE 802.2 Token Ring...	*/
 #define HTYPE_FDDI	8		/* FDDI...			*/
@@ -80,6 +81,9 @@ struct dhcp_packet {
 #define HTYPE_IPMP       255            /* IPMP - random hw address - there
 					 * is no standard for this so we
 					 * just steal a type            */
+#define HTYPE_LOOPBACK 0 /* According to RFC1700, page 163, zero is not used.
+                            It seems a fitting value for loopback interface
+                            that does not use any particular hardware. */
 
 /* Magic cookie validating dhcp options field (and bootp vendor
    extensions field). */
