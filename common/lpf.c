@@ -548,6 +548,13 @@ get_hw_addr(const char *name, struct hardware *hw) {
 			hw->hbuf[0] = HTYPE_FDDI;
 			memcpy(&hw->hbuf[1], sa->sa_data, 6);
 			break;
+                case ARPHRD_LOOPBACK:
+                        /* Pretend loopback is a real interface and fake a
+                           hardware address for it. */
+                        hw->hlen = 7;
+                        hw->hbuf[0] = HTYPE_LOOPBACK;
+                        memset(&hw->hbuf[1], 0, 6);
+                        break;
 		default:
 			log_fatal("Unsupported device type %ld for \"%s\"",
 				  (long int)sa->sa_family, name);
