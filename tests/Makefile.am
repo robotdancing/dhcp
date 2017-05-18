@@ -24,10 +24,25 @@ EXTRA_DIST = failover/dhcp-1.cf failover/dhcp-2.cf failover/new-failover \
 	     DHCPv6/stubcli-opt-in-na.pl DHCPv6/stubcli.pl \
 	     DHCPv6/test-a.conf DHCPv6/test-b.conf \
 	     HOWTO-unit-test \
-	     unit_test_sample.c
+	     unit_test_sample.c \
+             shell/dhclient_tests.sh \
+             shell/dhcp_test_lib.sh
 
 AM_CPPFLAGS = -I..
 
 check_LIBRARIES = libt_api.a
 libt_api_a_SOURCES = t_api.c t_api_dhcp.c
 
+# Let's start with an empty list of shell tests.
+SHTESTS =
+
+# Let's add dhclient tests. In the future, it will be possible to specify
+# whether those tests should run or not.
+SHTESTS += shell/dhclient_tests.sh
+
+# test using command-line arguments, so use check-local target instead of TESTS
+check-local:
+	@for shtest in $(SHTESTS) ; do \
+	echo Running test: $$shtest ; \
+	${SHELL} $(abs_builddir)/$$shtest || exit ; \
+	done
