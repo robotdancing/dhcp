@@ -39,6 +39,7 @@ SHTESTS =
 # Let's add dhclient tests. In the future, it will be possible to specify
 # whether those tests should run or not.
 SHTESTS += shell/dhclient_tests.sh
+SHTESTS += shell/linux_script_tests.sh
 
 # test using command-line arguments, so use check-local target instead of TESTS
 check-local:
