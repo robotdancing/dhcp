@@ -27,6 +27,8 @@ IFACE=lo
 bin="dhclient"
 bin_path=/home/thomson/devel/dhcp-git/client
 
+PROCS="dhcpd dhclient"
+
 # Import common test library.
 . /home/thomson/devel/dhcp-git/tests/shell/dhcp_test_lib.sh
 

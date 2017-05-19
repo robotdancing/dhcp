@@ -5,7 +5,6 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 # A list of processes, mainly used by the cleanup functions.
-PROCS="dhcpd dhclient"
 
 # colors if not outputting to a dumb terminal and stdout is a tty
 if test "$TERM" != dumb && { test -t 1; } 2>/dev/null; then \
@@ -271,8 +270,8 @@ grep_file() {
         clean_exit 1
     fi
 
-    _GREP_FILE_COUNT=$( grep -o ${expr} ${file} | wc -l )
-    printf "File %s contains %d instances of \"%s\"\n" "${file}" "${_GREP_FILE_COUNT}" "${expr}"
+    _GREP_FILE_COUNT=$( grep -o "${expr}" ${file} | wc -l )
+    printf "File %s contains %d instance(s) of \"%s\"\n" "${file}" "${_GREP_FILE_COUNT}" "${expr}"
 
     if [ ${_GREP_FILE_COUNT} != ${expected} ]; then
         printf "ERROR: File %s expected to contain %d instances of '%s', but contains %d\n" \
