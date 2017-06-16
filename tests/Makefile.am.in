@@ -24,7 +24,11 @@ EXTRA_DIST = failover/dhcp-1.cf failover/dhcp-2.cf failover/new-failover \
 	     DHCPv6/stubcli-opt-in-na.pl DHCPv6/stubcli.pl \
 	     DHCPv6/test-a.conf DHCPv6/test-b.conf \
 	     HOWTO-unit-test \
-	     unit_test_sample.c
+	     unit_test_sample.c \
+             shell/dhclient_tests.sh \
+             shell/linux_script_tests.sh \
+             shell/example_tests.sh \
+             shell/dhcp_test_lib.sh
 
 AM_CPPFLAGS = -I..
 

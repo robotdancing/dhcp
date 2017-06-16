@@ -277,6 +277,7 @@ pkgcfg_found = @pkgcfg_found@
 prefix = @prefix@
 program_transform_name = @program_transform_name@
 psdir = @psdir@
+runstatedir = @runstatedir@
 sbindir = @sbindir@
 sharedstatedir = @sharedstatedir@
 srcdir = @srcdir@
@@ -311,11 +312,19 @@ EXTRA_DIST = failover/dhcp-1.cf failover/dhcp-2.cf failover/new-failover \
 	     DHCPv6/stubcli-opt-in-na.pl DHCPv6/stubcli.pl \
 	     DHCPv6/test-a.conf DHCPv6/test-b.conf \
 	     HOWTO-unit-test \
-	     unit_test_sample.c
+	     unit_test_sample.c \
+             shell/dhclient_tests.sh \
+             shell/dhcp_test_lib.sh
 
 AM_CPPFLAGS = -I..
 check_LIBRARIES = libt_api.a
 libt_api_a_SOURCES = t_api.c t_api_dhcp.c
+
+# Let's start with an empty list of shell tests.
+
+# Let's add dhclient tests. In the future, it will be possible to specify
+# whether those tests should run or not.
+SHTESTS = shell/dhclient_tests.sh shell/linux_script_tests.sh
 all: all-am
 
 .SUFFIXES:
@@ -469,6 +478,7 @@ distdir: $(DISTFILES)
 	done
 check-am: all-am
 	$(MAKE) $(AM_MAKEFLAGS) $(check_LIBRARIES)
+	$(MAKE) $(AM_MAKEFLAGS) check-local
 check: check-am
 all-am: Makefile
 installdirs:
@@ -573,7 +583,7 @@ uninstall-am:
 
 .MAKE: check-am install-am install-strip
 
-.PHONY: CTAGS GTAGS TAGS all all-am check check-am clean \
+.PHONY: CTAGS GTAGS TAGS all all-am check check-am check-local clean \
 	clean-checkLIBRARIES clean-generic cscopelist-am ctags \
 	ctags-am distclean distclean-compile distclean-generic \
 	distclean-tags distdir dvi dvi-am html html-am info info-am \
@@ -588,6 +598,13 @@ uninstall-am:
 
 .PRECIOUS: Makefile
 
+
+# test using command-line arguments, so use check-local target instead of TESTS
+check-local:
+	@for shtest in $(SHTESTS) ; do \
+	echo Running test: $$shtest ; \
+	${SHELL} $(abs_builddir)/$$shtest || exit ; \
+	done
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
