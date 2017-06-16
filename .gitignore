@@ -1,5 +1,6 @@
 *.lo
 *.o
+*~
 bind
 doc/html
 .deps
@@ -34,3 +35,10 @@ server/tests/test-suite.log
 tests/libt_api.a
 tests/libt_api.la
 tests/unittest.sh
+tests/shell/linux_script_test.sh
+tests/shell/example_tests.sh
+tests/shell/dhclient_tests.sh
+tests/dhclient.log
+tests/dhclient.pid
+tests/echo.log
+debian/
