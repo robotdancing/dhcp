@@ -9,8 +9,11 @@
 # colors if not outputting to a dumb terminal and stdout is a tty
 if test "$TERM" != dumb && { test -t 1; } 2>/dev/null; then \
     red='\033[0;31m'
-    green='\033[0;32m'
-    noclr='\033[0m'
+    red='\e[1;31m'
+    green='\e[1;32m'
+    blue='\e[1;34m'
+    yellow='\e[1;33m'
+    clear='\e[m'
 
     # if echo supports -e, we must use it to set colors
     # (output will be "" if its supported)
@@ -108,7 +111,7 @@ test_start() {
         test_lib_error "test_start requires test name as an argument"
         clean_exit 1
     fi
-    printf "\n\e[1;34m%-6s\e[m\n" "START TEST ${TEST_NAME}"
+    echo ${dash_e} "${clear}${blue}START TEST ${TEST_NAME}${clear}"
 }
 
 # Prints test result an cleans up after the test.
@@ -116,11 +119,11 @@ test_finish() {
     local exit_code=${1}  # Exit code to be returned by the exit function.
     if [ ${exit_code} -eq 0 ]; then
         cleanup
-        printf "\e[1;32m%-6s\e[m\n\n" "PASSED ${TEST_NAME}"
+        echo ${dash_e} "${green}PASSED ${TEST_NAME}${clear}"
     else
     if [ ${exit_code} -eq 2 ]; then
         cleanup
-        printf "\e[1;33m%-6s\e[m\n\n" "SKIPPED ${TEST_NAME}"
+        echo ${dash_e} "${yellow}SKIPPED ${TEST_NAME}${clear}"
     else
         # Dump log file for debugging purposes if specified and exists.
         # Otherwise the code below would simply call cat.
@@ -129,9 +132,10 @@ test_finish() {
             cat ${LOG_FILE}
         fi
         cleanup
-        printf "\e[1;31m%-6s\e[m\n\n" "FAILED ${TEST_NAME}"
+        echo ${dash_e} "${red}FAILED ${TEST_NAME}${clear}"
     fi
     fi
+    echo ""
 }
 
 # Stores the configuration specified as a parameter in the configuration
