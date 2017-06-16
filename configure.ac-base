@@ -1026,6 +1026,9 @@ AC_CONFIG_FILES([
   server/Makefile
   tests/Makefile.am
   tests/Makefile
+  tests/shell/dhclient_tests.sh
+  tests/shell/example_tests.sh
+  tests/shell/linux_script_tests.sh
   tests/unittest.sh
   server/tests/Makefile
   doc/devel/doxyfile
