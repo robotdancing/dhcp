@@ -40,16 +40,16 @@ esac
 echo "Loopback interface to be used: ${IFACE} (system is ${SYSTEM})"
 
 bin="dhclient"
-bin_path=/home/thomson/devel/dhcp-git/client
+bin_path=@abs_top_builddir@/client
 
 PROCS="dhcpd dhclient"
 
 # Check out effective userid. If it's non-0 (non root), then some of the tests
 # will skip.
-EUID=`id -u`
+EFFECTIVE_UID=`id -u`
 
 # Import common test library.
-. /home/thomson/devel/dhcp-git/tests/shell/dhcp_test_lib.sh
+. @abs_top_builddir@/tests/shell/dhcp_test_lib.sh
 
 # This test verifies that dhclient shuts down gracefully when it
 # receives a SIGINT or SIGTERM signal.
@@ -59,7 +59,7 @@ shutdown_test() {
     # Log the start of the test and print test name.
     test_start ${test_name}
 
-    if [ "$EUID" -ne 0 ]; then
+    if [ "${EFFECTIVE_UID}" -ne 0 ]; then
         printf "This test requires to be run as root, skipping.\n"
         test_finish 2
         return
@@ -121,7 +121,7 @@ script_call_preinit_test() {
     test_start ${test_name}
 
     # Currently we need root to start a client, hence this check.
-    if [ "$EUID" -ne 0 ]; then
+    if [ "${EFFECTIVE_UID}" -ne 0 ]; then
         printf "This test requires to be run as root, skipping.\n"
         test_finish 2
         return
@@ -163,7 +163,7 @@ script_call_1fail_test() {
     test_start ${test_name}
 
     # Currently we need root to start a client, hence this check.
-    if [ "$EUID" -ne 0 ]; then
+    if [ "${EFFECTIVE_UID}" -ne 0 ]; then
         printf "This test requires to be run as root, skipping.\n"
         test_finish 2
         return
