@@ -1,0 +1,31 @@
+/**
+ @page shellTests Shell Tests
+
+There is a certain small number of shell unit-tests. Those tests are located
+in tests/shell directory. They use the same framework as Kea
+(http://kea.isc.org), ISC's new DHCP server software. Shell tests
+currently cover two features: ability of the dhclient to call external
+script when certain events happen; and the proper behavior of linux
+script.
+
+The tests use a framework that is defined in tests/shell/dhcp_test_lib.sh.
+It offers a number of utility functions, like pretty printing start and
+end of a test, waiting for a message to appear in file, terminate process etc.
+
+It is envisaged that each component will have its own tests written in a
+separate file. Two examples are dhclient_tests.sh (that tests dhclient) and
+linux_script_tests.sh (which test a script intended to be used on Linux). An
+example minimal skeleton file is available in example_tests.sh. It contains
+one passing, one skipping and one failing test.
+
+To run unit-tests, use the following commands:
+
+@verbatim
+cd tests
+make check
+@endverbatim
+
+If you want to add extra tests, please add your unit-tests to SHTESTS in
+tests/Makefile.am file.
+
+*/

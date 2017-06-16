@@ -29,6 +29,22 @@ We are using ATF (Automated Test Framework) as a framework to run our
 unit tests. See ISC DHCP Developer's Guide for much more thorough
 description of unit-test and ATF framework in general.
 
+We also have shell tests.
+
+Shell tests
+-----------
+
+Shell tests do not have any special dependencies. They can be run on
+any system, but certain tests may be skipped if certain conditions are
+not met. Detailed description is available in Developer's Guide
+(or see doc/devel/shell-tests.dox). To see the Developer's Guide, run
+those commands:
+
+cd doc
+make devel
+
+and then open doc/html/index.html
+
 Installing ATF
 --------------
 ATF sources can be downloaded from https://github.com/jmmv/kyua. ATF
