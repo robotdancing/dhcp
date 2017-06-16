@@ -7526,7 +7526,7 @@ $as_echo "#define FLEXIBLE_ARRAY_MEMBER /**/" >>confdefs.h
   fi
 
 
-ac_config_files="$ac_config_files Makefile client/Makefile client/tests/Makefile common/Makefile.am common/Makefile common/tests/Makefile dhcpctl/Makefile.am dhcpctl/Makefile includes/Makefile omapip/Makefile.am omapip/Makefile relay/Makefile server/Makefile tests/Makefile.am tests/Makefile tests/unittest.sh server/tests/Makefile doc/devel/doxyfile"
+ac_config_files="$ac_config_files Makefile client/Makefile client/tests/Makefile common/Makefile.am common/Makefile common/tests/Makefile dhcpctl/Makefile.am dhcpctl/Makefile includes/Makefile omapip/Makefile.am omapip/Makefile relay/Makefile server/Makefile tests/Makefile.am tests/Makefile tests/shell/dhclient_tests.sh tests/shell/example_tests.sh tests/shell/linux_script_tests.sh tests/unittest.sh server/tests/Makefile doc/devel/doxyfile"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -8292,6 +8292,9 @@ do
     "server/Makefile") CONFIG_FILES="$CONFIG_FILES server/Makefile" ;;
     "tests/Makefile.am") CONFIG_FILES="$CONFIG_FILES tests/Makefile.am" ;;
     "tests/Makefile") CONFIG_FILES="$CONFIG_FILES tests/Makefile" ;;
+    "tests/shell/dhclient_tests.sh") CONFIG_FILES="$CONFIG_FILES tests/shell/dhclient_tests.sh" ;;
+    "tests/shell/example_tests.sh") CONFIG_FILES="$CONFIG_FILES tests/shell/example_tests.sh" ;;
+    "tests/shell/linux_script_tests.sh") CONFIG_FILES="$CONFIG_FILES tests/shell/linux_script_tests.sh" ;;
     "tests/unittest.sh") CONFIG_FILES="$CONFIG_FILES tests/unittest.sh" ;;
     "server/tests/Makefile") CONFIG_FILES="$CONFIG_FILES server/tests/Makefile" ;;
     "doc/devel/doxyfile") CONFIG_FILES="$CONFIG_FILES doc/devel/doxyfile" ;;
