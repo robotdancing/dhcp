@@ -21,10 +21,17 @@ PROCS=""
 # Import common test library.
 . @abs_top_builddir@/tests/shell/dhcp_test_lib.sh
 
+# This test suite requires Linux to run. Actually, it should run on
+# many other platforms as long as /bin/bash points an actual shell, because
+# this is what the linux script assumes. It is true on Linuxes, but
+# it is not on FreeBSD for example.
+if [ ! -e /bin/bash ]; then
+    echo "This test requires bash to be present in /bin/bash. Skipping tests"
+    exit 0
+fi
+
 # Ok, before we start we need to update the script to use our ip tool, not
 # the one in /sbin/ip.
-
-
 cp -f ${SCRIPT_FILE} ${TMP_SCRIPT}
 sed -ri -e "s,/sbin/ip,${IP},g" ${TMP_SCRIPT}
 
