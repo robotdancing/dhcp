@@ -26,7 +26,11 @@ EXTRA_DIST = failover/dhcp-1.cf failover/dhcp-2.cf failover/new-failover \
 	     HOWTO-unit-test \
 	     unit_test_sample.c \
              shell/dhclient_tests.sh \
-             shell/dhcp_test_lib.sh
+             shell/linux_script_tests.sh \
+             shell/example_tests.sh \
+             shell/dhcp_test_lib.sh \
+             shell/ip-echo.sh \
+             shell/echo.sh
 
 AM_CPPFLAGS = -I..
 
@@ -40,6 +44,10 @@ SHTESTS =
 # whether those tests should run or not.
 SHTESTS += shell/dhclient_tests.sh
 SHTESTS += shell/linux_script_tests.sh
+
+# The following is a very simple example set of scripts. Do not uncomment it
+# on production systems, as one test there fails on purpose.
+# SHTESTS += shell/example_tests.sh
 
 # test using command-line arguments, so use check-local target instead of TESTS
 check-local:
