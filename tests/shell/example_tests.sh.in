@@ -1,0 +1,31 @@
+# Copyright (C) 2016-2017 Internet Systems Consortium, Inc. ("ISC")
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+# Import common test library.
+. @abs_top_builddir@/tests/shell/dhcp_test_lib.sh
+
+passed_test() {
+
+    test_start "positive"
+
+    test_finish 0
+}
+
+skipped_test() {
+    test_start "skipped"
+
+    test_finish 2
+}
+
+failed_test() {
+    test_start "what-a-terrible-failure"
+
+    test_finish 1
+}
+
+passed_test
+skipped_test
+failed_test
