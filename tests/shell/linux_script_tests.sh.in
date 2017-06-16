@@ -8,9 +8,9 @@
 # This is fake ip tool. The original ip tool in Linux comes from
 # ip-route2 suite. This one is a fake one. It simply echoes all
 # its parameters to a log file.
-IP=@abs_top_builddir@/tests/shell/ip-echo
+IP=@abs_top_builddir@/tests/shell/ip-echo.sh
 
-IP_LOG_FILE=@abs_top_builddir@/tests/ip-echo.log
+IP_LOG_FILE=@abs_top_builddir@/tests/echo.log
 
 SCRIPT_FILE=@abs_top_builddir@/client/scripts/linux
 
