@@ -73,7 +73,7 @@ static void subclass_inherit(struct parse *, struct element *,
 static void add_match_class(struct parse *, struct element *,
 			    struct element *);
 static void option_data_derive(struct parse *, struct handle *,
-			       struct handle *, isc_boolean_t);
+			       struct handle *);
 static void derive_classes(struct parse *, struct handle *, struct handle *);
 static isc_boolean_t is_hexa_only(const char *, unsigned len);
 static void new_network_interface(struct parse *, struct element *);
@@ -1042,23 +1042,6 @@ parse_pool_statement(struct parse *cfile, int type)
 		cfile->issue_counter++;
 	}
 
-	if (local_family == AF_INET) {
-		struct element *opt_list;
-
-		opt_list = mapGet(pool, "option-data");
-		if (opt_list != NULL) {
-			struct comment *comment;
-
-			comment = createComment("/// Kea doesn't support "
-						"option-data in DHCPv4 pools");
-			TAILQ_INSERT_TAIL(&opt_list->comments, comment);
-			if (!opt_list->skip) {
-				opt_list->skip = ISC_TRUE;
-				cfile->issue_counter++;
-			}
-		}
-	}
-
 	pools = mapGet(cfile->stack[cfile->stack_top], "pools");
 	if (pools == NULL) {
 		pools = createList();
@@ -1305,23 +1288,6 @@ parse_host_declaration(struct parse *cfile)
 			expr->skip = ISC_TRUE;
 			cfile->issue_counter++;
 			mapSet(host, expr, "host-identifier");
-
-			if ((relays > 0) && (relays <= MAX_V6RELAY_HOPS)) {
-				struct comment *comment;
-				char buf[100];
-
-				snprintf(buf, sizeof(buf),
-					 "/// Only v6relopt 0 or > %d are %s",
-					 MAX_V6RELAY_HOPS, "supported by Kea");
-				comment = createComment(buf);
-				TAILQ_INSERT_TAIL(&expr->comments, comment);
-				snprintf(buf, sizeof(buf),
-					 "/// v6relopt %d was specified",
-					 relays);
-				comment= createComment(buf);
-				TAILQ_INSERT_TAIL(&expr->comments, comment);
-				continue;
-			}
 
 			if (host_id_option == NULL)
 				add_host_id_option(cfile, option, relays);
@@ -2652,12 +2618,12 @@ close_group(struct parse *cfile, struct element *group)
 	}
 	TAILQ_FOREACH_SAFE(handle, &downs, nh) {
 		if (strcmp(handle->key, "option-data") == 0) {
-			option_data_derive(cfile, handle, hosts, ISC_FALSE);
-			option_data_derive(cfile, handle, shares, ISC_FALSE);
-			option_data_derive(cfile, handle, subnets, ISC_FALSE);
+			option_data_derive(cfile, handle, hosts);
+			option_data_derive(cfile, handle, shares);
+			option_data_derive(cfile, handle, subnets);
 			derive_classes(cfile, handle, classes);
-			option_data_derive(cfile, handle, pdpools, ISC_FALSE);
-			option_data_derive(cfile, handle, pools, ISC_TRUE);
+			option_data_derive(cfile, handle, pdpools);
+			option_data_derive(cfile, handle, pools);
 		} else if ((strcmp(handle->key, "allow") == 0) ||
 			   (strcmp(handle->key, "deny") == 0)) {
 			derive(handle, pdpools);
@@ -2756,8 +2722,7 @@ close_group(struct parse *cfile, struct element *group)
  */
 
 static void
-option_data_derive(struct parse *cfile, struct handle *src,
-		   struct handle *dst, isc_boolean_t is_pools)
+option_data_derive(struct parse *cfile, struct handle *src, struct handle *dst)
 {
 	struct element *list;
 	struct element *item;
@@ -2779,17 +2744,6 @@ option_data_derive(struct parse *cfile, struct handle *src,
 			continue;
 		}
 		opt_list = copy(src->value);
-		if (is_pools && (local_family == AF_INET)) {
-			struct comment *comment;
-
-			comment = createComment("/// Kea doesn't support "
-						"option-data in DHCPv4 pools");
-			TAILQ_INSERT_TAIL(&opt_list->comments, comment);
-			if (!opt_list->skip) {
-				opt_list->skip = ISC_TRUE;
-				cfile->issue_counter++;
-			}
-		}
 		mapSet(item, opt_list, src->key);
 	}
 }

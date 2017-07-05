@@ -903,11 +903,6 @@ reduce_data_expression(struct element *expr)
 			      (long long)r);
 			return NULL;
 		}
-		/* unfortunately Kea nested level is incompatible */
-		/* ISC DHCP 0 means at client, ISC DHCP > max (32)
-		 * means closest to server. Cf #5249 */
-		if ((r != 0) && (r <= MAX_V6RELAY_HOPS))
-			return NULL;
 		arg = mapGet(arg, "relay-option");
 		if ((arg == NULL) || (arg->type != ELEMENT_MAP)) {
 			debug("can't get v6relay relay-option");
@@ -928,10 +923,20 @@ reduce_data_expression(struct element *expr)
 		if ((option == NULL) || (option->code == 0) ||
 		    (strcmp(option->space->name, "dhcp6") != 0))
 			return NULL;
-		snprintf(result, sizeof(result),
-			 "%soption[%u].hex",
-			 r > 32 ? "relay6[0]." : "",
-			 option->code);
+		if (r == 0)
+			snprintf(result, sizeof(result),
+				 "option[%u].hex", option->code);
+		else {
+			/* r > MAX_V6RELAY_HOPS means the relay closest
+			   to server */
+			if (r > MAX_V6RELAY_HOPS)
+				r = 0;
+			/* Kea counts from the server, use negative nesting
+			   levels to count from the client */
+			snprintf(result, sizeof(result),
+				 "relay6[%d].option[%u].hex",
+				 (int)-r, option->code);
+		}
 		return createString(makeString(-1, result));
 	}
 

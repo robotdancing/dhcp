@@ -5,7 +5,7 @@
 cd "$(dirname "$0")"
 
 echo subdirs:
-for d in fordhcp dhcp3 czb ws ba
+for d in fordhcp dhcp3 czb ws ba gcet
 do
 	echo $d
 	/bin/sh $d/run.sh
