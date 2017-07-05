@@ -1,0 +1,106 @@
+{
+  /// This configuration declares some subnets but has no interfaces-config
+  /// Reference Kea #5256
+  "Dhcp4": {
+    "option-def": [
+      {
+        "space": "RKUS",
+        "name": "fm-address",
+        "code": 1,
+        "type": "string"
+      },
+      {
+        "space": "RKUS",
+        "name": "zd-address",
+        "code": 3,
+        "type": "string"
+      },
+      {
+        "space": "RKUS",
+        "name": "scg-address",
+        "code": 6,
+        "type": "string"
+      }
+    ],
+    "subnet4": [
+      {
+        "subnet": "192.168.12.0/24",
+        "pools": [
+          {
+            "pool": "192.168.12.100 - 192.168.12.199"
+          }
+        ],
+        "option-data": [
+          {
+            "space": "dhcp4",
+            "name": "routers",
+            "code": 3,
+            "data": "192.168.12.1"
+          },
+          {
+            "space": "dhcp4",
+            "name": "subnet-mask",
+            "code": 1,
+            "data": "255.255.255.0"
+          },
+          {
+            "space": "dhcp4",
+            "name": "broadcast-address",
+            "code": 28,
+            "data": "192.168.12.255"
+          },
+          {
+            "space": "dhcp4",
+            "name": "ntp-servers",
+            "code": 42,
+            "data": "192.168.11.22"
+          }
+        ]
+      }
+    ],
+    "client-classes": [
+      {
+        "name": "Ruckus AP",
+        /// from: match if (option dhcp.vendor-class-identifier) = 'Ruckus CPE'
+        "test": "option[60].hex == 'Ruckus CPE'",
+        "option-data": [
+          {
+            "space": "dhcp4",
+            "name": "vendor-class-identifier",
+            "code": 60,
+            "data": "Ruckus CPE"
+          },
+          {
+            "space": "RKUS",
+            "name": "fm-address",
+            "code": 1,
+            "data": "192.168.150.13"
+          },
+          {
+            "space": "RKUS",
+            "name": "zd-address",
+            "code": 3,
+            "data": "192.168.11.12"
+          },
+          {
+            "space": "RKUS",
+            "name": "scg-address",
+            "code": 6,
+            "data": "https://192.168.11.200/wsg/ap"
+          }
+        ]
+//      /// valid-lifetime in unsupported scope
+//      "valid-lifetime": 86400
+//      "config": [
+//        /// vendor-option-space is not (yet?) supported
+//        /// Reference Kea #5073
+//        {
+//          "name": "vendor-option-space",
+//          "code": 19,
+//          "value": "RKUS"
+//        }
+//      ]
+      }
+    ]
+  }
+}

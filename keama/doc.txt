@@ -343,7 +343,6 @@ Reservations:
   - it is not easy to use prefix6
  The use of groups in host declarations is unclear.
  ISC DHCP UID is mapped to client-id, host-identifier to flex-id
- Only the two extreme cases for DHCPv6 relay options work (cf #5249)
  Host reservation identifiers are generated on first use.
 
 Groups:
@@ -405,7 +404,6 @@ Pools:
  ISC DHCP supports interval ranges for prefix6. Kea has a different
  and IMHO more powerful model.
  Pool6 permissions are not supported.
- option-data is not allowed in DHCPv4 pools
 
 Authoritative declaration:
 --------------------------
