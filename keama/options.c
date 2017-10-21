@@ -234,7 +234,8 @@ struct option_def options6[] = {
 	{ "preference", "B",			"dhcp6",  7, 2},
 	{ "elapsed-time", "S",			"dhcp6",  8, 2},
 	{ "relay-msg", "X",			"dhcp6",  9, 2},
-	{ "auth", "X",				"dhcp6", 10, 1},
+        /// 10 is unassigned
+	{ "auth", "X",				"dhcp6", 11, 1},
 	/// not supported by ISC DHCP
 	{ "unicast", "6",			"dhcp6", 12, 2},
 	{ "status-code", "Nstatus-codes.to",	"dhcp6", 13, 2},
