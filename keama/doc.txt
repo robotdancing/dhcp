@@ -525,7 +525,8 @@ TODO:
  - missing CASE
  - match if *and* spawn with
  - host set class & setReservedClientClasses
- - options 5226, 5227
  - shared network 5306, 5307
  - vendor/site 5073
  - always-send 5241
+ - fix badcheck
+ - add command line argument for library path

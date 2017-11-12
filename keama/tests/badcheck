@@ -1,0 +1,23 @@
+ddnsupdstyle6.out
+enableupdates6.out
+ parameter 'qualifying-suffix' is required when updates are enabled
+
+groupsubnet4.out
+groupsubnet6.out
+ interface 'bar'
+
+optiondecl4.out
+optiondecl6.out
+optiondeclBat4.out
+ (bug) array of binary values
+
+pool42.out
+prefix62.out
+range6.out
+shareone4.out
+shareone6.out
+subnet4noauth.out
+subnet6auth.out
+subnet6one.out
+ interface 'foo'
+
