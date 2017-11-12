@@ -6,7 +6,7 @@ authoritative;
 # shared-network declaration
 shared-network "foobar" {
     # interface
-    interface "foo";
+    interface "en0";
     # option
     option dhcp6.domain-search "example.com", "example.org";
     # parameter

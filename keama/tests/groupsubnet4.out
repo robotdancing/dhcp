@@ -5,7 +5,7 @@
     "valid-lifetime": 1200,
     "interfaces-config": {
       "interfaces": [
-        "bar"
+        "en0"
       ]
     },
     "subnet4": [
@@ -18,7 +18,7 @@
             "pool": "10.5.5.5 - 10.5.5.10"
           }
         ],
-        "interface": "bar",
+        "interface": "en0",
         "valid-lifetime": 1800,
         "option-data": [
           # option

@@ -20,3 +20,13 @@ runone.sh xyz.ext
  -> run the xyz test
 runall.sh
  -> run all tests
+
+Check output syntax with kea-dhcp4 and kea-dhcp6
+
+Set KEA4 and KEA6 environment variables to kea-dhcp4 and kea-dhcp6
+The en0 interface is supposed to exist (or replace "en0" in all files)
+
+checkone.sh xyz.out
+ -> check the syntax of xyz.out
+checkall.sh
+ -> check the syntax of all .out files

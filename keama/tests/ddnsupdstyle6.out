@@ -5,6 +5,10 @@
   /// Reference Kea #5256
   "Dhcp6": {
     "dhcp-ddns": {
+      /// Unspecified ddns-domainname (default domain-name option value)
+      /// Kea requires a qualifying-suffix
+      /// Initialized to "": please put a value
+      "qualifying-suffix": "",
       "enable-updates": true
     },
     "subnet6": [

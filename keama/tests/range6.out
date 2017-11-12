@@ -25,12 +25,12 @@
             "pool": "2001::1000/116"
           }
         ],
-        "interface": "foo"
+        "interface": "en0"
       }
     ],
     "interfaces-config": {
       "interfaces": [
-        "foo"
+        "en0"
       ]
     }
   }

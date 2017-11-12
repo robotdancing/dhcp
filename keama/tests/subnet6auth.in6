@@ -16,7 +16,7 @@ subnet6 2001::/64 {
     authoritative;
     option dhcp6.domain-search "example.com", "example.org";
     default-lease-time 3600;
-    interface "foo";
+    interface "en0";
     pool6 {
         prefix6 2001:0:0:10:: 2001:0:0:1f:: /64;
     }

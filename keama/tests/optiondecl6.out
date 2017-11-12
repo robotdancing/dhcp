@@ -127,7 +127,7 @@
         "space": "foobar",
         "name": "fmt-Lfa",
         "code": 150,
-        "array": true,
+//      "array": true,
 //      "definition": "{ uint32, array of boolean}",
         /// Option definition is not compatible with Kea
         /// Fallback to full binary

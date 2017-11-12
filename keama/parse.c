@@ -34,6 +34,7 @@ static void config_valid_lifetime(struct element *, struct parse *);
 static void config_file(struct element *, struct parse *);
 static void config_sname(struct element *, struct parse *);
 static void config_next_server(struct element *, struct parse *);
+static struct element *default_qualifying_suffix(void);
 static void config_qualifying_suffix(struct element *, struct parse *);
 static void config_enable_updates(struct element *, struct parse *);
 static void config_ddns_update_style(struct element *, struct parse *);
@@ -1221,8 +1222,14 @@ parse_option_code_definition(struct parse *cfile, struct option *option)
 			    "Arrays of encapsulations don't make sense.");
 	if (arrayp)
 		appendString(format, (arrayp > recordp) ? "a" : "A");
-	if (is_array || arrayp)
-		mapSet(def, createBool(ISC_TRUE), "array");
+	if (is_array || arrayp) {
+		struct element *array_def;
+
+		array_def = createBool(ISC_TRUE);
+		if (not_supported)
+			array_def->skip = ISC_TRUE;
+		mapSet(def, array_def, "array");
+	}
 
 	if (not_supported) {
 		struct element *type_def;
@@ -5063,6 +5070,23 @@ config_next_server(struct element *config, struct parse *cfile)
 	mapSet(cfile->stack[scope], value, "next-server");
 }
 
+static struct element *
+default_qualifying_suffix(void)
+{
+	struct element *qs;
+	struct comment *comment;
+
+	qs = createString(makeString(-1, ""));
+	comment = createComment("/// Unspecified ddns-domainname (default "
+				"domain-name option value)");
+	TAILQ_INSERT_TAIL(&qs->comments, comment);
+	comment = createComment("/// Kea requires a qualifying-suffix");
+	TAILQ_INSERT_TAIL(&qs->comments, comment);
+	comment = createComment("/// Initialized to \"\": please put a value");
+	TAILQ_INSERT_TAIL(&qs->comments, comment);
+	return qs;
+}
+
 static void
 config_qualifying_suffix(struct element *config, struct parse *cfile)
 {
@@ -5092,7 +5116,8 @@ config_qualifying_suffix(struct element *config, struct parse *cfile)
 			d2 = createMap();
 			mapSet(d2, createBool(ISC_FALSE), "enable-updates");
 			mapSet(cfile->stack[1], d2, "dhcp-ddns");
-		}
+		} else if (mapContains(d2, "qualifying-suffix"))
+			mapRemove(d2, "qualifying-suffix");
 		mapSet(d2, value, "qualifying-suffix");
 	}
 }
@@ -5125,6 +5150,12 @@ config_enable_updates(struct element *config, struct parse *cfile)
 		if (d2 == NULL) {
 			d2 = createMap();
 			mapSet(cfile->stack[1], d2, "dhcp-ddns");
+			if (boolValue(value)) {
+				struct element *qs;
+
+				qs = default_qualifying_suffix();
+				mapSet(d2, qs, "qualifying-suffix");
+			}
 		} else if (mapContains(d2, "enable-updates"))
 			mapRemove(d2, "enable-updates");
 		mapSet(d2, value, "enable-updates");
@@ -5182,6 +5213,12 @@ config_ddns_update_style(struct element *config, struct parse *cfile)
 		if (d2 == NULL) {
 			d2 = createMap();
 			mapSet(cfile->stack[1], d2, "dhcp-ddns");
+			if (boolValue(value)) {
+				struct element *qs;
+
+				qs = default_qualifying_suffix();
+				mapSet(d2, qs, "qualifying-suffix");
+			}
 		} else if (mapContains(d2, "enable-updates"))
 			mapRemove(d2, "enable-updates");
 		mapSet(d2, value, "enable-updates");

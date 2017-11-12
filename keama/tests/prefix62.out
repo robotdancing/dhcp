@@ -24,12 +24,12 @@
 //          "prefix-highest": "2001:0:0:3::"
 //        }
         ],
-        "interface": "foo"
+        "interface": "en0"
       }
     ],
     "interfaces-config": {
       "interfaces": [
-        "foo"
+        "en0"
       ]
     }
   }
