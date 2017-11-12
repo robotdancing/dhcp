@@ -23,7 +23,7 @@
           }
         ],
         "valid-lifetime": 3600,
-        "interface": "foo",
+        "interface": "en0",
         "pd-pools": [
           {
             "prefix": "2001:0:0:10::",
@@ -35,7 +35,7 @@
     ],
     "interfaces-config": {
       "interfaces": [
-        "foo"
+        "en0"
       ]
     }
   }

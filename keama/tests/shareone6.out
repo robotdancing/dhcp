@@ -4,7 +4,7 @@
   "Dhcp6": {
     "interfaces-config": {
       "interfaces": [
-        "foo"
+        "en0"
       ]
     },
     "subnet6": [
@@ -18,7 +18,7 @@
             "pool": "2001::1000 - 2001::2000"
           }
         ],
-        "interface": "foo",
+        "interface": "en0",
         "option-data": [
           # interface
           # option

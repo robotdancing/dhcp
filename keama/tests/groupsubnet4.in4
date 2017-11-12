@@ -21,7 +21,7 @@ group foobar {
         pool {
             range 10.5.5.5 10.5.5.10;
         }
-	interface "bar";
+	interface "en0";
         default-lease-time 1800;	
     }
 }

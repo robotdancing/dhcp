@@ -20,7 +20,7 @@ group foobar {
         pool6 {
             range6 2001::100 2001::200;
         }
-	interface "bar";
+	interface "en0";
         default-lease-time 1800;	
 	option dhcp6.lq-relay-data 2001::1 "foobar";
     }

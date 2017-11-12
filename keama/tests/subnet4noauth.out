@@ -26,13 +26,13 @@
 //        }
 //      ],
 //      "valid-lifetime": 3600,
-//      "interface": "foo",
+//      "interface": "en0",
 //      "match-client-id": true
 //    }
     ],
     "interfaces-config": {
       "interfaces": [
-        "foo"
+        "en0"
       ]
     }
   }

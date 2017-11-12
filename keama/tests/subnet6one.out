@@ -32,12 +32,12 @@
           }
         ],
         "valid-lifetime": 3600,
-        "interface": "foo"
+        "interface": "en0"
       }
     ],
     "interfaces-config": {
       "interfaces": [
-        "foo"
+        "en0"
       ]
     }
   }

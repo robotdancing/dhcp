@@ -4,7 +4,7 @@
   "Dhcp4": {
     "interfaces-config": {
       "interfaces": [
-        "foo"
+        "en0"
       ]
     },
     "subnet4": [
@@ -29,7 +29,7 @@
             "data": "example.com, example.org"
           }
         ],
-        "interface": "foo",
+        "interface": "en0",
         "pools": [
           # pool (must be after the subnet)
           {

@@ -7,7 +7,7 @@
         "space": "foobar",
         "name": "fmt-Bat",
         "code": 1,
-        "array": true,
+//      "array": true,
 //      "definition": "{ array of uint8, string}",
         /// Option definition is not compatible with Kea
         /// Fallback to full binary
