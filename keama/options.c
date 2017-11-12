@@ -143,26 +143,19 @@ struct option_def options4[] = {
 	{ "streettalk-directory-assistance-server", "Ia",
 						"dhcp",  76, 2},
 	{ "user-class", "tY",			"dhcp",  77, 2},
-	{ "slp-directory-agent", "fIa",		"dhcp",  78, 0},
-	/// not supported by Kea
-	{ "slp-service-scope", "fto",		"dhcp",  79, 0},
-	/// not supported by Kea
+	{ "slp-directory-agent", "fIa",		"dhcp",  78, 2},
+	{ "slp-service-scope", "fto",		"dhcp",  79, 2},
 	/* 80 is the zero-length rapid-commit (RFC 4039) */
 	{ "fqdn", "Efqdn.",			"dhcp",  81, 2},
 	{ "relay-agent-information", "Eagent.",	"dhcp",  82, 2},
 	/// relay-agent-information dhcp-agent-options
 	/* 83 is iSNS (RFC 4174) */
 	/* 84 is unassigned */
-	{ "nds-servers", "Ia",			"dhcp",  85, 0},
-	/// not supported by Kea
-	{ "nds-tree-name", "t",			"dhcp",  86, 0},
-	/// not supported by Kea
-	{ "nds-context", "t",			"dhcp",  87, 0},
-	/// not supported by Kea
-	{ "bcms-controller-names", "D",		"dhcp",  88, 0},
-	/// not supported by Kea
-	{ "bcms-controller-address", "Ia",	"dhcp",  89, 0},
-	/// not supported by Kea
+	{ "nds-servers", "Ia",			"dhcp",  85, 2},
+	{ "nds-tree-name", "t",			"dhcp",  86, 2},
+	{ "nds-context", "t",			"dhcp",  87, 2},
+	{ "bcms-controller-names", "D",		"dhcp",  88, 2},
+	{ "bcms-controller-address", "Ia",	"dhcp",  89, 2},
 	{ "authenticate", "X",			"dhcp",  90, 1},
 	/// not supported by ISC DHCP
 	{ "client-last-transaction-time", "L",  "dhcp",  91, 2},
@@ -173,50 +166,32 @@ struct option_def options4[] = {
 	/// not supported by ISC DHCP
 	{ "uuid-guid", "BX",			"dhcp",  97, 1},
 	/// not supported by ISC DHCP
-	{ "uap-servers", "t",			"dhcp",  98, 0},
-	/// not supported by Kea
-        { "geoconf-civic", "X",                 "dhcp",  99, 0},
-	/// not supported by Kea
-	{ "pcode", "t",				"dhcp", 100, 0},
-	/// not supported by Kea
-	{ "tcode", "t",				"dhcp", 101, 0},
-	/// not supported by Kea
-	{ "netinfo-server-address", "Ia",	"dhcp", 112, 0},
-	/// not supported by Kea
-	{ "netinfo-server-tag", "t",		"dhcp", 113, 0},
-	/// not supported by Kea
-	{ "default-url", "t",			"dhcp", 114, 0},
-	/// not supported by Kea
-	{ "auto-config", "B",			"dhcp", 116, 0},
-	/// not supported by Kea
-	{ "name-service-search", "Sa",		"dhcp", 117, 0},
-	/// not supported by Kea
+	{ "uap-servers", "t",			"dhcp",  98, 2},
+        { "geoconf-civic", "X",                 "dhcp",  99, 2},
+	{ "pcode", "t",				"dhcp", 100, 2},
+	{ "tcode", "t",				"dhcp", 101, 2},
+	{ "netinfo-server-address", "Ia",	"dhcp", 112, 2},
+	{ "netinfo-server-tag", "t",		"dhcp", 113, 2},
+	{ "default-url", "t",			"dhcp", 114, 2},
+	{ "auto-config", "B",			"dhcp", 116, 2},
+	{ "name-service-search", "Sa",		"dhcp", 117, 2},
 	{ "subnet-selection", "I",		"dhcp", 118, 2},
 	{ "domain-search", "Dc",		"dhcp", 119, 2},
 	{ "vivco", "Evendor-class.",		"dhcp", 124, 2},
 	/// vivco vivco-suboptions
 	{ "vivso", "Evendor.",			"dhcp", 125, 2},
 	/// vivso vivso-suboptions
-	{"pana-agent", "Ia",			"dhcp", 136, 0},
-	/// not supported by Kea
-	{"v4-lost", "d",			"dhcp", 137, 0},
-	/// not supported by Kea
-	{"capwap-ac-v4", "Ia",			"dhcp", 138, 0},
-	/// not supported by Kea
-	{ "sip-ua-cs-domains", "Dc",		"dhcp", 141, 0},
-	/// not supported by Kea
+	{"pana-agent", "Ia",			"dhcp", 136, 2},
+	{"v4-lost", "d",			"dhcp", 137, 2},
+	{"capwap-ac-v4", "Ia",			"dhcp", 138, 2},
+	{ "sip-ua-cs-domains", "Dc",		"dhcp", 141, 2},
 	{ "ipv4-address-andsf", "Ia",		"dhcp", 142, 0},
 	/// not supported by Kea
-        { "rdnss-selection", "BIID",		"dhcp", 146, 0},
-	/// not supported by Kea
-	{ "v4-portparams", "BBS",		"dhcp", 159, 0},
-	/// not supported by Kea
-	{ "v4-captive-portal", "t",		"dhcp", 160, 0},
-	/// not supported by Kea
-        { "option-6rd", "BB6Ia",		"dhcp", 212, 0},
-	/// not supported by Kea
-	{"v4-access-domain", "d",		"dhcp", 213, 0},
-	/// not supported by Kea
+        { "rdnss-selection", "BIID",		"dhcp", 146, 2},
+	{ "v4-portparams", "BBS",		"dhcp", 159, 2},
+	{ "v4-captive-portal", "t",		"dhcp", 160, 2},
+        { "option-6rd", "BB6Ia",		"dhcp", 212, 2},
+	{"v4-access-domain", "d",		"dhcp", 213, 2},
 	{ NULL, NULL, NULL, 0, 0 }
 };
 
@@ -285,44 +260,32 @@ struct option_def options6[] = {
 	{ "clt-time", "L",			"dhcp6", 46, 2},
 	{ "lq-relay-data", "6X",		"dhcp6", 47, 2},
 	{ "lq-client-link", "6a",		"dhcp6", 48, 2},
-	{ "v6-lost", "d",			"dhcp6", 51, 0},
-	/// not supported by Kea
-	{ "capwap-ac-v6", "6a",			"dhcp6", 52, 0},
-	/// not supported by Kea
-	{ "relay-id", "X",			"dhcp6", 53, 0},
-	/// not supported by Kea
-	{ "v6-access-domain", "d",		"dhcp6", 57, 0},
-	/// not supported by Kea
-	{ "sip-ua-cs-list", "D",		"dhcp6", 58, 0},
-	/// not supported by Kea
+	{ "v6-lost", "d",			"dhcp6", 51, 2},
+	{ "capwap-ac-v6", "6a",			"dhcp6", 52, 2},
+	{ "relay-id", "X",			"dhcp6", 53, 2},
+	{ "v6-access-domain", "d",		"dhcp6", 57, 2},
+	{ "sip-ua-cs-list", "D",		"dhcp6", 58, 2},
 	{ "bootfile-url", "t",			"dhcp6", 59, 2},
 	{ "bootfile-param", "X",		"dhcp6", 60, 2},
 	{ "client-arch-type", "Sa",		"dhcp6", 61, 2},
 	{ "nii", "BBB",				"dhcp6", 62, 2},
-	{ "aftr-name", "d",			"dhcp6", 64, 0},
-	/// not supported by Kea
+	{ "aftr-name", "d",			"dhcp6", 64, 2},
 	{ "erp-local-domain-name", "d",		"dhcp6", 65, 2},
 	{ "rsoo", "Ersoo.",			"dhcp6", 66, 1},
 	/// not supported by ISC DHCP
 	{ "pd-exclude", "X",			"dhcp6", 67, 1},
 	/// not supported by ISC DHCP (prefix6 format)
-	{ "rdnss-selection", "6BD",		"dhcp6", 74, 0},
-	/// not supported by Kea
+	{ "rdnss-selection", "6BD",		"dhcp6", 74, 2},
 	{ "client-linklayer-addr", "X",		"dhcp6", 79, 2},
-	{ "link-address", "6",			"dhcp6", 80, 0},
-	/// not supported by Kea
-	{ "solmax-rt", "L",			"dhcp6", 82, 0},
-	/// not supported by Kea
-	{ "inf-max-rt", "L",			"dhcp6", 83, 0},
-	/// not supported by Kea
+	{ "link-address", "6",			"dhcp6", 80, 2},
+	{ "solmax-rt", "L",			"dhcp6", 82, 2},
+	{ "inf-max-rt", "L",			"dhcp6", 83, 2},
 	{ "dhcpv4-msg", "X",			"dhcp6", 87, 2},
 	/// dhcpv4-msg dhcpv4-message
 	{ "dhcp4-o-dhcp6-server", "6a",		"dhcp6", 88, 2},
 	/// dhcp4-o-dhcp6-server dhcp4o6-server-addr
-	{ "v6-captive-portal", "t",		"dhcp6", 103, 0},
-	/// not supported by Kea
-	{ "ipv6-address-andsf", "6a",		"dhcp6", 143, 0},
-	/// not supported by Kea
+	{ "v6-captive-portal", "t",		"dhcp6", 103, 2},
+	{ "ipv6-address-andsf", "6a",		"dhcp6", 143, 2},
 	{ NULL, NULL, NULL, 0, 0 }
 };
 
