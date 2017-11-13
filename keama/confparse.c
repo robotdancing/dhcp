@@ -1222,7 +1222,7 @@ parse_host_declaration(struct parse *cfile)
 			isc_boolean_t known;
 			struct option *option;
 			struct element *expr;
-			struct element *data;
+			struct string *data;
 			int relays = 0;
 
 			if (!use_flex_id) {
@@ -1270,23 +1270,12 @@ parse_host_declaration(struct parse *cfile)
 			appendString(host_id, option->name);
 			appendString(host_id, " ");
 
-			expr = createMap();
-			if (!parse_option_data(expr, cfile, option))
-				parse_error(cfile, "can't parse option data");
-
+			data = parse_option_textbin(cfile, option);
 			parse_semi(cfile);
 
-			data = mapGet(expr, "data");
 			if (data == NULL)
 				parse_error(cfile, "can't get option data");
-			if (data->type != ELEMENT_STRING)
-				parse_error(cfile, "option data must be a "
-					    "string or binary option");
-			/* quote data if it is a text */
-			if (strcmp(option->format, "t") == 0)
-				data = createString(quote(stringValue(data)));
-			
-			concatString(host_id, stringValue(data));
+			concatString(host_id, data);
 			expr = createString(host_id);
 			expr->skip = ISC_TRUE;
 			cfile->issue_counter++;
@@ -1313,7 +1302,7 @@ parse_host_declaration(struct parse *cfile)
 			 * Everything good: set a flex-id and remove
 			 * the host-identifier entry.
 			 */
-			mapSet(host, data, "flex-id");
+			mapSet(host, createString(data), "flex-id");
 			mapRemove(host, "host-identifier");
 			continue;
 		}
@@ -1385,11 +1374,16 @@ add_host_id_option(struct parse *cfile,
 	TAILQ_INSERT_TAIL(&hooks->comments, comment);
 	entry = createMap();
 	listPush(hooks, entry);
-	path = makeString(-1, hook_path);
+	if (hook_library_path != NULL)
+		path = makeString(-1, hook_library_path);
+	else
+		path = makeString(-1, "/path/");
 	appendString(path, "libdhcp_flex_id.so");
 	params = createString(path);
-	comment = createComment("/// Please update the path here");
-	TAILQ_INSERT_TAIL(&params->comments, comment);
+	if (hook_library_path == NULL) {
+		comment = createComment("/// Please update the path here");
+		TAILQ_INSERT_TAIL(&params->comments, comment);
+	}
 	mapSet(entry, params, "library");
 	params = createMap();
 	mapSet(entry, params, "parameters");

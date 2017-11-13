@@ -4164,6 +4164,41 @@ parse_option_binary(struct element *expr, struct parse *cfile,
         return ISC_TRUE;
 }
 
+struct string *
+parse_option_textbin(struct parse *cfile, struct option *option)
+{
+	struct element *expr;
+	struct element *data;
+	const char *fmt;
+
+	expr = createMap();
+	fmt = option->format;
+
+	if ((fmt == NULL) || (*fmt == 0))
+		parse_error(cfile, "unknown format for option %s.%s\n",
+			    option->space->name, option->name);
+
+	if (strcmp(fmt, "t") != 0) {
+		if (!parse_option_binary(expr, cfile, option, ISC_FALSE))
+			parse_error(cfile, "can't parse binary option data");
+		data = mapGet(expr, "data");
+		if (data == NULL)
+			parse_error(cfile, "can't get binary option data");
+		if (data->type != ELEMENT_STRING)
+			parse_error(cfile, "option data must be binary");
+		return stringValue(data);
+	}
+
+	if (!parse_option_data(expr, cfile, option))
+		parse_error(cfile, "can't parse text option data");
+	data = mapGet(expr, "data");
+	if (data == NULL)
+		parse_error(cfile, "can't get test option data");
+	if (data->type != ELEMENT_STRING)
+		parse_error(cfile, "option data must be a string");
+	return quote(stringValue(data));
+}
+
 /* option-statement :== identifier DOT identifier <syntax> SEMI
 		      | identifier <syntax> SEMI
 

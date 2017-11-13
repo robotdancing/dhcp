@@ -300,7 +300,7 @@ struct option {
 void stackPush(struct parse *cfile, struct element *elem);
 
 /* From command line */
-char *hook_path;
+extern char *hook_library_path;
 
 /* From common/parse.c */
 void parse_error(struct parse *, const char *, ...)
@@ -414,6 +414,7 @@ isc_boolean_t parse_option_data(struct element *, struct parse *,
 				struct option *);
 isc_boolean_t parse_option_binary(struct element *, struct parse *,
 				  struct option *, isc_boolean_t);
+struct string * parse_option_textbin(struct parse *, struct option *);
 isc_boolean_t parse_option_statement(struct element *, struct parse *,
 				     struct option *, enum statement_op);
 isc_boolean_t parse_config_data(struct element *, struct parse *,

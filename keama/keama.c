@@ -47,7 +47,7 @@ usage(const char *sfmt, const char *sarg) {
 }
 
 int local_family = 0;
-char *hook_path = "/path/";
+char *hook_library_path = NULL;
 char *input_file = NULL;
 char *output_file = NULL;
 FILE *input = NULL;
@@ -88,7 +88,7 @@ main(int argc, char **argv) {
 		} else if (strcmp(argv[i], "-l") == 0) {
 			if (++i == argc)
 				usage(use_noarg, argv[i -  1]);
-			hook_path = argv[i];
+			hook_library_path = argv[i];
 		} else if (strcmp(argv[i], "-i") == 0) {
 			if (++i == argc)
 				usage(use_noarg, argv[i -  1]);
