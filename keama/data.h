@@ -183,6 +183,8 @@ struct string *makeStringArray(int l, const char *s, char fmt);
 void appendString(struct string *s, const char *a);
 void concatString(struct string *s, const struct string *a);
 isc_boolean_t eqString(const struct string *s, const struct string *o);
+/* quoting */
+struct string *quote(struct string *);
 
 /* Comments */
 struct comment {

@@ -299,6 +299,9 @@ struct option {
 /* Kea parse tools */
 void stackPush(struct parse *cfile, struct element *elem);
 
+/* From command line */
+char *hook_path;
+
 /* From common/parse.c */
 void parse_error(struct parse *, const char *, ...)
 	__attribute__((__format__(__printf__,2,3)))

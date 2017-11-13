@@ -352,6 +352,17 @@ eqString(const struct string *s, const struct string *o)
 	return ISC_TF(memcmp(s->content, o->content, s->length) == 0);
 }
 
+struct string *
+quote(struct string *s)
+{
+	struct string *result;
+
+	result = makeString(-1, "'");
+	concatString(result, s);
+	appendString(result, "'");
+	return result;
+}
+
 struct comment *
 createComment(const char *line)
 {

@@ -11,6 +11,7 @@ Extensions:
  - .msg  = resultat (first line of standard error) for error test
  - .in4  = source for working test in DHCPv4
  - .in6  = source for working test in DHCPv6
+ - .inL  = source for working test in DHCPv4 with -l $HOOK
  - .out  = resultat for working test
 There is no working test in DHCPv4 and DHCPv6.
 The body of the name of a working test must include 4 or 6 so

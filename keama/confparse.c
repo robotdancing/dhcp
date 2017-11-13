@@ -1282,6 +1282,9 @@ parse_host_declaration(struct parse *cfile)
 			if (data->type != ELEMENT_STRING)
 				parse_error(cfile, "option data must be a "
 					    "string or binary option");
+			/* quote data if it is a text */
+			if (strcmp(option->format, "t") == 0)
+				data = createString(quote(stringValue(data)));
 			
 			concatString(host_id, stringValue(data));
 			expr = createString(host_id);
@@ -1360,6 +1363,7 @@ static void
 add_host_id_option(struct parse *cfile,
 		   const struct option *option, int relays)
 {
+	struct string *path;
 	struct string *expr;
 	struct element *params;
 	struct element *entry;
@@ -1381,7 +1385,9 @@ add_host_id_option(struct parse *cfile,
 	TAILQ_INSERT_TAIL(&hooks->comments, comment);
 	entry = createMap();
 	listPush(hooks, entry);
-	params = createString(makeString(-1, "/path/libdhcp_flex_id.so"));
+	path = makeString(-1, hook_path);
+	appendString(path, "libdhcp_flex_id.so");
+	params = createString(path);
 	comment = createComment("/// Please update the path here");
 	TAILQ_INSERT_TAIL(&params->comments, comment);
 	mapSet(entry, params, "library");
