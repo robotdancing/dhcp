@@ -33,7 +33,6 @@
 #include <string.h>
 #include <unistd.h>
 
-static struct string *quote(struct string *);
 static void debug(const char* fmt, ...);
 
 const char *
@@ -1477,17 +1476,6 @@ print_numeric_expression(struct element *expr, isc_boolean_t *lose)
 	*lose = ISC_TRUE;
 	appendString(result, "???");
 	return result->content;
-}
-
-static struct string *
-quote(struct string *s)
-{
-	struct string *result;
-
-	result = makeString(-1, "'");
-	concatString(result, s);
-	appendString(result, "'");
-	return result;
 }
 
 static void

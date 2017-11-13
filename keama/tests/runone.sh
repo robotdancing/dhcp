@@ -45,6 +45,7 @@ case $trail in
 	6) options="-6";;
 	F) options="-4 -r fatal";;
 	P) options="-4 -r pass";;
+	L) options="-4 -l $HOOK";;
 	*) echo "unrecognized trail '$trail' in '$full'" >&2; exit 1;;
 esac
 

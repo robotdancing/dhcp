@@ -35,7 +35,6 @@
 
 static struct element *reduce_equal_expression(struct element *left,
 					       struct element *right);
-static struct string *quote(struct string *);
 static void debug(const char* fmt, ...);
 
 /*
@@ -1003,17 +1002,6 @@ reduce_equal_expression(struct element *left, struct element *right)
 	appendString(result, " == ");
 	concatString(result, stringValue(right));
 	return createString(result);
-}
-
-static struct string *
-quote(struct string *s)
-{
-	struct string *result;
-
-	result = makeString(-1, "'");
-	concatString(result, s);
-	appendString(result, "'");
-	return result;
 }
 
 static void

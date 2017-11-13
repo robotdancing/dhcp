@@ -33,6 +33,7 @@
 #include "keama.h"
 
 #define KEAMA_USAGE	"Usage: keama [-4|-6] [-r {perform|fatal|pass}\\n" \
+			" [-l hook-library-path]" \
 			" [-i input-file] [-o output-file]\n"
 
 static void
@@ -46,6 +47,7 @@ usage(const char *sfmt, const char *sarg) {
 }
 
 int local_family = 0;
+char *hook_path = "/path/";
 char *input_file = NULL;
 char *output_file = NULL;
 FILE *input = NULL;
@@ -83,6 +85,10 @@ main(int argc, char **argv) {
 				resolve = pass;
 			else
 				usage(bad_resolve, argv[i]);
+		} else if (strcmp(argv[i], "-l") == 0) {
+			if (++i == argc)
+				usage(use_noarg, argv[i -  1]);
+			hook_path = argv[i];
 		} else if (strcmp(argv[i], "-i") == 0) {
 			if (++i == argc)
 				usage(use_noarg, argv[i -  1]);
