@@ -68,7 +68,7 @@
     /// The flexible host identifier is a premium feature
     "hooks-libraries": [
       {
-        "library": "/tmp/kea/premium/src/hooks/dhcp/flex_id/.libs/libdhcp_flex_id.so",
+        "library": "/path/libdhcp_flex_id.so",
         "parameters": {
           "identifier-expression": "option[250].hex"
         }

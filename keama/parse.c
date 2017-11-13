@@ -4264,6 +4264,32 @@ parse_option_statement(struct element *result,
 		TAILQ_INSERT_TAIL(&opt_data->comments, comment);
 	}
 
+	/* Setting PRL is a standard hack */
+	if ((option->space == space_lookup("dhcp")) &&
+	    (option->code == 55)) {
+		struct comment *comment;
+
+		comment = createComment("/// Possible PRL hack");
+		TAILQ_INSERT_TAIL(&opt_data->comments, comment);
+		comment = createComment("/// Consider setting \"always-send\" "
+					"to true when setting data "
+					"for relevant options, cf Kea #5241");
+		TAILQ_INSERT_TAIL(&opt_data->comments, comment);
+	}
+
+	/* Setting ORO is a standard hack */
+	if ((option->space == space_lookup("dhcp6")) &&
+	    (option->code == 6)) {
+		struct comment *comment;
+
+		comment = createComment("/// Possible ORO hack");
+		TAILQ_INSERT_TAIL(&opt_data->comments, comment);
+		comment = createComment("/// Consider setting \"always-send\" "
+					"to true when setting data "
+					"for relevant options, cf Kea #5241");
+		TAILQ_INSERT_TAIL(&opt_data->comments, comment);
+	}
+
 	token = peek_token(&val, NULL, cfile);
 	/* We should keep a list of defined empty options */
 	if ((token == SEMI) && (option->format[0] != 'Z')) {

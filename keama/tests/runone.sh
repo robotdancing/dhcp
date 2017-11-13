@@ -38,6 +38,7 @@ fi
 
 options=""
 dual=0
+hook=0
 
 case $trail in
 	'') dual=1;;
@@ -45,7 +46,7 @@ case $trail in
 	6) options="-6";;
 	F) options="-4 -r fatal";;
 	P) options="-4 -r pass";;
-	L) options="-4 -l ${HOOK:-/path/}";;
+	L) options="-4 -l ${HOOK:-/path/}"; hook=1;;
 	*) echo "unrecognized trail '$trail' in '$full'" >&2; exit 1;;
 esac
 
@@ -92,6 +93,10 @@ else
 		echo "$full raised an error" >&2
 		exit 1
 	fi
+fi
+
+if [ $hook -eq 1 ]; then
+    sed s,/path/,${HOOK:-/path/}, < ${expected}L > $expected
 fi
 
 if [ $errcase -ne 0 ]; then
