@@ -177,38 +177,39 @@
         /// from: match if (substring(option dhcp.vendor-class-identifier, 0, 4)) = 'SUNW'
         "test": "substring(option[60].hex,0,4) == 'SUNW'"
       }
-    ]
-//  /// Kea does not support yet shared networks
-//  /// Reference Kea #5273
-//  "shared-networks": [
-//    {
-//      "name": "224-29",
-//      "subnets": [
-//        {
-//          "subnet": "10.17.224.0/24",
-//          "option-data": [
-//            #   option routers rtr-224.example.org;
-//            {
-//              "space": "dhcp4",
-//              "name": "routers",
-//              "code": 3,
-//              "data": "10.17.224.1"
-//            }
-//          ]
-//        },
-//        {
-//          "subnet": "10.0.29.0/24",
-//          "option-data": [
-//            #   option routers rtr-29.example.org;
-//            {
-//              "space": "dhcp4",
-//              "name": "routers",
-//              "code": 3,
-//              "data": "10.0.29.1"
-//            }
-//          ]
-//        }
-//      ],
+    ],
+    /// Kea shared-networks are different, cf Kea #5430
+    "shared-networks": [
+      {
+        "name": "224-29",
+        "subnet4": [
+          {
+            "subnet": "10.17.224.0/24",
+            "option-data": [
+              #   option routers rtr-224.example.org;
+              {
+                "space": "dhcp4",
+                "name": "routers",
+                "code": 3,
+                "data": "10.17.224.1"
+              }
+            ]
+          },
+          {
+            "subnet": "10.0.29.0/24",
+            "option-data": [
+              #   option routers rtr-29.example.org;
+              {
+                "space": "dhcp4",
+                "name": "routers",
+                "code": 3,
+                "data": "10.0.29.1"
+              }
+            ]
+          }
+        ]
+//      /// Kea pools must be in a subnet
+//      /// Reference Kea #5431
 //      "pools": [
 //        {
 //          "pool": "10.17.224.10 - 10.17.224.250",
@@ -223,7 +224,7 @@
 //          ]
 //        }
 //      ]
-//    }
-//  ]
+      }
+    ]
   }
 }

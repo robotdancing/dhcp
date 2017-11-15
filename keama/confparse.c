@@ -702,7 +702,8 @@ parse_statement(struct parse *cfile, int type, isc_boolean_t declaration)
 			struct element *subnets;
 
 			subnets = mapGet(cfile->stack[cfile->stack_top],
-					 "subnets");
+					 local_family == AF_INET ?
+					 "subnet4" : "subnet6");
 			if ((subnets == NULL) ||
 			    (subnets->type != ELEMENT_LIST))
 				parse_error(cfile, "can't get subnets from "
@@ -1085,11 +1086,6 @@ parse_pool_statement(struct parse *cfile, int type)
 		pool = saved;
 	}
 	listPush(pools, pool);
-
-	if ((type == SHARED_NET_DECL) && (listSize(pools) > 1)) {
-		cfile->stack[cfile->stack_top]->skip = ISC_TRUE;
-		cfile->issue_counter++;
-	}
 }
 
 /* Expect a left brace */
@@ -1907,7 +1903,8 @@ parse_shared_net_declaration(struct parse *cfile)
 	mapSet(share, createString(name), "name");
 
 	subnets = createList();
-	mapSet(share, subnets, "subnets");
+	mapSet(share, subnets,
+	       local_family == AF_INET ? "subnet4" : "subnet6");
 
 	parse_lbrace(cfile);
 
@@ -1949,26 +1946,56 @@ parse_shared_net_declaration(struct parse *cfile)
 		parse_error(cfile, "empty shared-network decl");
 	if (listSize(subnets) > 1) {
 		struct element *shares;
+		struct element *pools;
 
-		share->skip = ISC_TRUE;
-		cfile->issue_counter++;
 		shares = mapGet(cfile->stack[cfile->stack_top],
 				"shared-networks");
 		if (shares == NULL) {
 			struct comment *comment;
 
 			shares = createList();
-			shares->skip = ISC_TRUE;
 			shares->kind = SHARED_NET_DECL;
 			mapSet(cfile->stack[cfile->stack_top],
 			       shares, "shared-networks");
-			comment = createComment("/// Kea does not support "
-						"yet shared networks");
-			TAILQ_INSERT_TAIL(&shares->comments, comment);
-			comment= createComment("/// Reference Kea #5273");
+			comment = createComment("/// Kea shared-networks "
+						"are different, cf Kea #5430");
 			TAILQ_INSERT_TAIL(&shares->comments, comment);
 		}
 		listPush(shares, share);
+
+		/* Pools are forbidden at shared-network level in Kea */
+		pools = mapGet(share, "pools");
+		if ((pools != NULL) && (listSize(pools) == 0)) {
+			mapRemove(share, "pools");
+			pools = NULL;
+		}
+		if (pools != NULL) {
+			struct comment *comment;
+
+			pools->skip = ISC_TRUE;
+			cfile->issue_counter++;
+			comment = createComment("/// Kea pools must be "
+						"in a subnet");
+			TAILQ_INSERT_TAIL(&pools->comments, comment);
+			comment = createComment("/// Reference Kea #5431");
+			TAILQ_INSERT_TAIL(&pools->comments, comment);
+		}
+		pools = mapGet(share, "pd-pools");
+		if ((pools != NULL) && (listSize(pools) == 0)) {
+			mapRemove(share, "pd-pools");
+			pools = NULL;
+		}
+		if (pools != NULL) {
+			struct comment *comment;
+
+			pools->skip = ISC_TRUE;
+			cfile->issue_counter++;
+			comment = createComment("/// Kea pools must be "
+						"in a subnet");
+			TAILQ_INSERT_TAIL(&pools->comments, comment);
+			comment = createComment("/// Reference Kea #5431");
+			TAILQ_INSERT_TAIL(&pools->comments, comment);
+		}
 		return;
 	}
 
@@ -1976,7 +2003,7 @@ parse_shared_net_declaration(struct parse *cfile)
 	subnet = listGet(subnets, 0);
 	listRemove(subnets, 0);
 	mapRemove(share, "name");
-	mapRemove(share, "subnets");
+	mapRemove(share, local_family == AF_INET ? "subnet4" : "subnet6");
 	/* specific case before calling generic merge */
 	if (mapContains(share, "pools") &&
 	    mapContains(subnet, "pools")) {
@@ -2158,17 +2185,13 @@ parse_subnet_declaration(struct parse *cfile)
 	}
 	if (kind == 0)
 		parse_error(cfile, "can't find a place to put subnet");
-	if (kind == SHARED_NET_DECL) {
-		subnets = mapGet(cfile->stack[parent], "subnets");
-		if (subnets == NULL)
+	subnets = mapGet(cfile->stack[parent], "subnet4");
+	if (subnets == NULL) {
+		if (kind == SHARED_NET_DECL)
 			parse_error(cfile, "shared network without subnets");
-	} else {
-		subnets = mapGet(cfile->stack[parent], "subnet4");
-		if (subnets == NULL) {
-			subnets = createList();
-			subnets->kind = SUBNET_DECL;
-			mapSet(cfile->stack[parent], subnets, "subnet4");
-		}
+		subnets = createList();
+		subnets->kind = SUBNET_DECL;
+		mapSet(cfile->stack[parent], subnets, "subnet4");
 	}
 
 	/* Get the network number... */
@@ -2252,17 +2275,13 @@ parse_subnet6_declaration(struct parse *cfile)
 	}
 	if (kind == 0)
 		parse_error(cfile, "can't find a place to put subnet");
-	if (kind == SHARED_NET_DECL) {
-		subnets = mapGet(cfile->stack[parent], "subnets");
-		if (subnets == NULL)
+	subnets = mapGet(cfile->stack[parent], "subnet6");
+	if (subnets == NULL) {
+		if (kind == SHARED_NET_DECL)
 			parse_error(cfile, "shared network without subnets");
-	} else {
-		subnets = mapGet(cfile->stack[parent], "subnet6");
-		if (subnets == NULL) {
-			subnets = createList();
-			subnets->kind = SUBNET_DECL;
-			mapSet(cfile->stack[parent], subnets, "subnet6");
-		}
+		subnets = createList();
+		subnets->kind = SUBNET_DECL;
+		mapSet(cfile->stack[parent], subnets, "subnet6");
 	}
 
 	address = parse_ip6_addr(cfile);
@@ -2528,7 +2547,6 @@ close_group(struct parse *cfile, struct element *group)
 		if ((strcmp(handle->key, "reservations") == 0) ||
 		    (strcmp(handle->key, "group") == 0) ||
 		    (strcmp(handle->key, "shared-networks") == 0) ||
-		    (strcmp(handle->key, "subnets") == 0) ||
 		    (strcmp(handle->key, "subnet4") == 0) ||
 		    (strcmp(handle->key, "subnet6") == 0) ||
 		    (strcmp(handle->key, "subnet") == 0) ||
@@ -3451,14 +3469,6 @@ parse_pool6_statement(struct parse *cfile, int type)
 			pool = saved;
 		}
 		listPush(pools, pool);
-	}
-
-	if (type != SHARED_NET_DECL)
-		return;
-	if (((pools != NULL) && (listSize(pool) > 1)) ||
-	    ((pdpools != NULL) && (listSize(pdpool) > 1))) {
-		cfile->stack[cfile->stack_top]->skip = ISC_TRUE;
-		cfile->issue_counter++;
 	}
 }
 
