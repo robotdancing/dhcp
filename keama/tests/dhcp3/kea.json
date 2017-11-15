@@ -866,16 +866,19 @@
         "name": "ruckus",
         /// from: match if ((option dhcp.vendor-class-identifier) = 'Ruckus CPE') or ((option dhcp.vendor-class-identifier) = 'Ruckus')
         "test": "(option[60].hex == 'Ruckus CPE') or (option[60].hex == 'Ruckus')",
-//      "config": [
-//        /// vendor-option-space is not (yet?) supported
-//        /// Reference Kea #5073
-//        {
-//          "name": "vendor-option-space",
-//          "code": 19,
-//          "value": "VendorInfo"
-//        }
-//      ],
+        "option-def": [
+          {
+            "name": "vendor-encapsulated-options",
+            "code": 43,
+            "type": "empty",
+            "encapsulate": "VendorInfo"
+          }
+        ],
         "option-data": [
+          {
+            "name": "vendor-encapsulated-options",
+            "code": 43
+          },
           {
             "space": "VendorInfo",
             "name": "acsurl",
@@ -906,21 +909,24 @@
             "data": "ubnt"
           },
           {
+            "name": "vendor-encapsulated-options",
+            "code": 43
+          },
+          {
             "space": "ubnt",
             "name": "unifi-address",
             "code": 1,
             "data": "66.253.253.32"
           }
+        ],
+        "option-def": [
+          {
+            "name": "vendor-encapsulated-options",
+            "code": 43,
+            "type": "empty",
+            "encapsulate": "ubnt"
+          }
         ]
-//      "config": [
-//        /// vendor-option-space is not (yet?) supported
-//        /// Reference Kea #5073
-//        {
-//          "name": "vendor-option-space",
-//          "code": 19,
-//          "value": "ubnt"
-//        }
-//      ]
       },
       {
         "name": "unifi",
