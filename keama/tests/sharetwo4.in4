@@ -1,4 +1,4 @@
-# DHCPv4 two-subnet shared-network declaration config
+# DHCPv4 two subnets in shared-network declaration config
 
 # authoritative is mandatory
 authoritative;
@@ -6,7 +6,7 @@ authoritative;
 # shared-network declaration
 shared-network "foobar" {
     # interface
-    interface "foo";
+    interface "en0";
     # option
     option domain-search "example.com", "example.org";
     # parameter
@@ -17,14 +17,16 @@ shared-network "foobar" {
         default-lease-time 3600;
         # another option
         option ip-forwarding true;
+	# pool inside the subnet
+        pool {
+            range 10.5.5.5 10.5.5.10;
+        }
     }
     # second subnet declaration
-    subnet 10.10.10.0 netmask 255.255.255.224 { }
-    # pools (must be after the subnet)
-    pool {
-        range 10.5.5.5 10.5.5.10;
-    }
-    pool {
-        range 0.10.10.5 0.10.10.10;
+    subnet 10.10.10.0 netmask 255.255.255.224 {
+        # pool inside the subnet
+        pool {
+            range 10.10.10.5 10.10.10.10;
+        }
     }    
 }
