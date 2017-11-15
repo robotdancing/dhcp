@@ -55,12 +55,23 @@ unsigned subclass_counter = 0;
 /* To map reservations to declared subnets */
 struct subnet {
 	struct element *subnet;
+	struct element *share;
 	struct string *addr;
 	struct string *mask;
 	TAILQ_ENTRY(subnet) next;
 };
 
 TAILQ_HEAD(subnets, subnet) known_subnets;
+
+/* To map pools to subnets inside a shared-network */
+struct range {
+	struct element *pool;
+	struct element *share;
+	struct string *low;
+	TAILQ_ENTRY(range) next;
+};
+
+TAILQ_HEAD(ranges, range) known_ranges;
 
 static void post_process_authoritative(struct parse *);
 static size_t post_process_reservations(struct parse *);
@@ -80,6 +91,7 @@ static void new_network_interface(struct parse *, struct element *);
 static struct string *addrmask(const struct string *, const struct string *);
 static struct element *find_match(struct parse *, struct element *,
 				  isc_boolean_t *);
+static struct element *find_location(struct element *, struct range *);
 static int get_prefix_length(const char *, const char *);
 static struct element *get_class(struct parse *, struct element *);
 static void concat_classes(struct parse *, struct element *, struct element *);
@@ -94,6 +106,7 @@ conf_file_parse(struct parse *cfile)
 	size_t issues;
 
 	TAILQ_INIT(&known_subnets);
+	TAILQ_INIT(&known_ranges);
 
 	top = createMap();
 	top->kind = TOPLEVEL;
@@ -1867,6 +1880,45 @@ add_match_class(struct parse *cfile,
 	}
 }
 
+/* Move pools to subnets */
+
+static void
+relocate_pools(struct element *share)
+{
+	struct element *srcs;
+	struct element *dsts;
+	struct element *subnet;
+	struct range *range;
+	size_t i;
+
+	srcs = mapGet(share, "pools");
+	if (srcs == NULL)
+		return;
+	if (listSize(srcs) == 0)
+		return;
+	TAILQ_FOREACH(range, &known_ranges) {
+		if (range->share != share)
+			continue;
+		subnet = find_location(share, range);
+		if (subnet == NULL)
+			continue;
+		for (i = 0; i < listSize(srcs); i++) {
+			struct element *pool;
+
+			pool = listGet(srcs, i);
+			if (range->pool != pool)
+				continue;
+			listRemove(srcs, i);
+			dsts = mapGet(subnet, "pools");
+			if (dsts == NULL) {
+				dsts = createList();
+				mapSet(subnet, dsts, "pools");
+			}
+			listPush(dsts, pool);
+		}
+	}
+}
+
 /* shared-network-declaration :==
 			hostname LBRACE declarations parameters RBRACE */
 
@@ -1964,6 +2016,7 @@ parse_shared_net_declaration(struct parse *cfile)
 		listPush(shares, share);
 
 		/* Pools are forbidden at shared-network level in Kea */
+		relocate_pools(share);
 		pools = mapGet(share, "pools");
 		if ((pools != NULL) && (listSize(pools) == 0)) {
 			mapRemove(share, "pools");
@@ -2185,6 +2238,8 @@ parse_subnet_declaration(struct parse *cfile)
 	}
 	if (kind == 0)
 		parse_error(cfile, "can't find a place to put subnet");
+	if (kind == SHARED_NET_DECL)
+		chain->share = cfile->stack[parent];
 	subnets = mapGet(cfile->stack[parent], "subnet4");
 	if (subnets == NULL) {
 		if (kind == SHARED_NET_DECL)
@@ -2275,6 +2330,8 @@ parse_subnet6_declaration(struct parse *cfile)
 	}
 	if (kind == 0)
 		parse_error(cfile, "can't find a place to put subnet");
+	if (kind == SHARED_NET_DECL)
+		chain->share = cfile->stack[parent];
 	subnets = mapGet(cfile->stack[parent], "subnet6");
 	if (subnets == NULL) {
 		if (kind == SHARED_NET_DECL)
@@ -2909,6 +2966,9 @@ parse_address_range(struct parse *cfile, int type, size_t where)
 	isc_boolean_t dynamic = ISC_FALSE;
 	struct element *pool;
 	struct element *r;
+	struct range *chain;
+	size_t i;
+	int kind;
 
 	if ((token = peek_token(&val, NULL, cfile)) == DYNAMIC_BOOTP) {
 		skip_token(&val, NULL, cfile);
@@ -2991,6 +3051,21 @@ parse_address_range(struct parse *cfile, int type, size_t where)
 	TAILQ_CONCAT(&r->comments, &cfile->comments);
 
 	mapSet(pool, r, "pool");
+
+	chain = (struct range *)malloc(sizeof(*chain));
+	if (chain == NULL)
+		parse_error(cfile, "can't allocate range");
+	memset(chain, 0, sizeof(*chain));
+	chain->pool = pool;
+	for (i = where; i > 0; --i) {
+		kind = cfile->stack[i]->kind;
+		if (kind == SHARED_NET_DECL) {
+			chain->share = cfile->stack[i];
+			break;
+		}
+	}
+	chain->low = low;
+	TAILQ_INSERT_TAIL(&known_ranges, chain);
 }
 
 /* address-range6-declaration :== ip-address6 ip-address6 SEMI
@@ -3000,12 +3075,15 @@ parse_address_range(struct parse *cfile, int type, size_t where)
 void 
 parse_address_range6(struct parse *cfile, int type, size_t where)
 {
-	struct string *lo, *hi;
+	struct string *low, *high, *range;
 	enum dhcp_token token;
 	const char *val;
 	isc_boolean_t is_temporary = ISC_FALSE;
 	struct element *pool;
-	struct element *range;
+	struct element *r;
+	struct range *chain;
+	size_t i;
+	int kind;
 
         if (local_family != AF_INET6)
                 parse_error(cfile, "range6 statement is only supported "
@@ -3014,16 +3092,18 @@ parse_address_range6(struct parse *cfile, int type, size_t where)
 	/*
 	 * Read starting address as text.
 	 */
-	lo = parse_ip6_addr_txt(cfile);
-	if (lo == NULL)
+	low = parse_ip6_addr_txt(cfile);
+	if (low == NULL)
 		parse_error(cfile, "can't parse range6 address (low)");
+	range = allocString();
+	concatString(range, low);
 
 	/* 
 	 * See if we we're using range or CIDR notation or TEMPORARY
 	 */
 	token = peek_token(&val, NULL, cfile);
 	if (token == SLASH) {
-		appendString(lo, val);
+		appendString(range, val);
 		/*
 		 * '/' means CIDR notation, so read the bits we want.
 		 */
@@ -3034,15 +3114,15 @@ parse_address_range6(struct parse *cfile, int type, size_t where)
 		/*
 		 * no sanity checks
 		 */
-		appendString(lo, val);
+		appendString(range, val);
 		/*
 		 * can be temporary (RFC 4941 like)
 		 */
 		token = peek_token(&val, NULL, cfile);
 		if (token == TEMPORARY) {
 			is_temporary = ISC_TRUE;
-			appendString(lo, " ");
-			appendString(lo, val);
+			appendString(range, " ");
+			appendString(range, val);
 			skip_token(NULL, NULL, cfile);
 		}			
 	} else if (token == TEMPORARY) {
@@ -3050,21 +3130,21 @@ parse_address_range6(struct parse *cfile, int type, size_t where)
 		 * temporary (RFC 4941)
 		 */
 		is_temporary = ISC_TRUE;
-		appendString(lo, "/64 ");
-		appendString(lo, val);
+		appendString(range, "/64 ");
+		appendString(range, val);
 		skip_token(NULL, NULL, cfile);
 	} else {
 		/*
 		 * No '/', so we are looking for the end address of 
 		 * the IPv6 pool.
 		 */
-		hi = parse_ip6_addr_txt(cfile);
-		if (hi == NULL)
+		high = parse_ip6_addr_txt(cfile);
+		if (high == NULL)
 			parse_error(cfile,
 				    "can't parse range6 address (high)");
 		/* No sanity checks */
-		appendString(lo, " - ");
-		appendString(lo, hi->content);
+		appendString(range, " - ");
+		appendString(range, high->content);
 	}
 
 	token = next_token(NULL, NULL, cfile);
@@ -3087,13 +3167,28 @@ parse_address_range6(struct parse *cfile, int type, size_t where)
 	} else
 		pool = cfile->stack[where];
 
-	range = createString(lo);
-	TAILQ_CONCAT(&range->comments, &cfile->comments);
+	r = createString(range);
+	TAILQ_CONCAT(&r->comments, &cfile->comments);
 	if (is_temporary) {
 		pool->skip = ISC_TRUE;
 		cfile->issue_counter++;
 	}
-	mapSet(pool, range, "pool");
+	mapSet(pool, r, "pool");
+
+	chain = (struct range *)malloc(sizeof(*chain));
+	if (chain == NULL)
+		parse_error(cfile, "can't allocate range");
+	memset(chain, 0, sizeof(*chain));
+	chain->pool = pool;
+	for (i = where; i > 0; --i) {
+		kind = cfile->stack[i]->kind;
+		if (kind == SHARED_NET_DECL) {
+			chain->share = cfile->stack[i];
+			break;
+		}
+	}
+	chain->low = low;
+	TAILQ_INSERT_TAIL(&known_ranges, chain);
 }
 
 /* prefix6-declaration :== ip-address6 ip-address6 SLASH number SEMI */
@@ -4319,6 +4414,37 @@ find_match(struct parse *cfile, struct element *host,
 			return subnet->subnet;
 	}
 	return cfile->stack[1];
+}
+
+/*
+ * find a subnet where to put a pool
+ * (pools are not allowed at shared-network level in Kea)
+ */
+
+static struct element *
+find_location(struct element *share, struct range *range)
+{
+	struct subnet *subnet;
+	size_t i;
+
+	TAILQ_FOREACH(subnet, &known_subnets) {
+		isc_boolean_t matching = ISC_TRUE;
+
+		if (subnet->share != share)
+			continue;
+		if (subnet->mask->length != range->low->length)
+			continue;
+		for (i = 0; i < range->low->length; i++)
+			if ((range->low->content[i] &
+			     subnet->mask->content[i]) !=
+			    subnet->addr->content[i]) {
+				matching = ISC_FALSE;
+				break;
+			}
+		if (matching)
+			return subnet->subnet;
+	}
+	return NULL;
 }
 
 /*

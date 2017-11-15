@@ -25,11 +25,22 @@
                 "code": 19,
                 "data": "true"
               }
+            ],
+            "pools": [
+              # pools at shared-network level
+              {
+                "pool": "10.5.5.5 - 10.5.5.10"
+              }
             ]
           },
           # second subnet declaration
           {
-            "subnet": "10.10.10.0/27"
+            "subnet": "10.10.10.0/27",
+            "pools": [
+              {
+                "pool": "10.10.10.5 - 10.10.10.10"
+              }
+            ]
           }
         ],
         "interface": "en0",
@@ -45,17 +56,6 @@
           }
         ],
         "valid-lifetime": 1800
-//      /// Kea pools must be in a subnet
-//      /// Reference Kea #5431
-//      "pools": [
-//        # pools at shared-network level
-//        {
-//          "pool": "10.5.5.5 - 10.5.5.10"
-//        },
-//        {
-//          "pool": "0.10.10.5 - 0.10.10.10"
-//        }
-//      ]
       }
     ]
   }

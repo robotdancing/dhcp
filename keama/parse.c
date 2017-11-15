@@ -5251,7 +5251,7 @@ default_qualifying_suffix(void)
 	struct element *qs;
 	struct comment *comment;
 
-	qs = createString(makeString(-1, ""));
+	qs = createString(allocString());
 	comment = createComment("/// Unspecified ddns-domainname (default "
 				"domain-name option value)");
 	TAILQ_INSERT_TAIL(&qs->comments, comment);
