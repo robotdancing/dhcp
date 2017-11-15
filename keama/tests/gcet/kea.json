@@ -71,6 +71,10 @@
             "data": "Ruckus CPE"
           },
           {
+            "name": "vendor-encapsulated-options",
+            "code": 43
+          },
+          {
             "space": "RKUS",
             "name": "fm-address",
             "code": 1,
@@ -88,18 +92,17 @@
             "code": 6,
             "data": "https://192.168.11.200/wsg/ap"
           }
-        ]
+        ],
 //      /// valid-lifetime in unsupported scope
-//      "valid-lifetime": 86400
-//      "config": [
-//        /// vendor-option-space is not (yet?) supported
-//        /// Reference Kea #5073
-//        {
-//          "name": "vendor-option-space",
-//          "code": 19,
-//          "value": "RKUS"
-//        }
-//      ]
+//      "valid-lifetime": 86400,
+        "option-def": [
+          {
+            "name": "vendor-encapsulated-options",
+            "code": 43,
+            "type": "empty",
+            "encapsulate": "RKUS"
+          }
+        ]
       }
     ]
   }

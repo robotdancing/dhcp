@@ -34,6 +34,8 @@ static void config_valid_lifetime(struct element *, struct parse *);
 static void config_file(struct element *, struct parse *);
 static void config_sname(struct element *, struct parse *);
 static void config_next_server(struct element *, struct parse *);
+static void config_vendor_option_space(struct element *, struct parse *);
+static void config_site_option_space(struct element *, struct parse *);
 static struct element *default_qualifying_suffix(void);
 static void config_qualifying_suffix(struct element *, struct parse *);
 static void config_enable_updates(struct element *, struct parse *);
@@ -1996,10 +1998,8 @@ parse_executable_statement(struct element *result,
 		skip_token(&val, NULL, cfile);
 		parse_semi(cfile);
 
-		st = createNull();
-		st->skip = ISC_TRUE;
-		cfile->issue_counter++;
-		mapSet(result, st, "parse-vendor-option");
+		/* Done by Kea after classification so this statement
+		 * silently does not translate */
 		break;
 
 		/* Not really a statement, but we parse it here anyway
@@ -4958,6 +4958,12 @@ parse_config_statement(struct element *result,
 	case 18: /* authoritative */
 		parse_error(cfile, "authoritative is a statement, "
 			    "here it is used as a config option");
+	case 19: /* vendor-option-space */
+		config_vendor_option_space(config, cfile);
+		break;
+	case 21: /* site-option-space */
+		config_site_option_space(config, cfile);
+		break;
 	case 23: /* ddns-domainname */
 		config_qualifying_suffix(config, cfile);
 		break;
@@ -5129,6 +5135,114 @@ config_next_server(struct element *config, struct parse *cfile)
 		TAILQ_INSERT_TAIL(&value->comments, comment);
 	}
 	mapSet(cfile->stack[scope], value, "next-server");
+}
+
+static void
+config_vendor_option_space(struct element *config, struct parse *cfile)
+{
+	struct element *defs;
+	struct element *def;
+	struct element *opts;
+	struct element *opt;
+	struct element *space;
+
+	if (local_family != AF_INET)
+		parse_error(cfile, "vendor-option-space is DHCPv4 only");
+
+	/* create local option definition */
+	def = createMap();
+	mapSet(def,
+	       createString(makeString(-1, "vendor-encapsulated-options")),
+	       "name");
+	mapSet(def, createInt(43), "code");
+	mapSet(def, createString(makeString(-1, "empty")), "type");
+	space = mapGet(config, "value");
+	if (space == NULL)
+		parse_error(cfile, "vendor-option-space has no value");
+	if (space->type != ELEMENT_STRING)
+		parse_error(cfile,
+			    "vendor-option-space value is not a string");
+	mapSet(def, space, "encapsulate");
+
+	/* add it */
+	defs = mapGet(cfile->stack[cfile->stack_top], "option-def");
+	if (defs == NULL) {
+		defs = createList();
+		mapSet(cfile->stack[cfile->stack_top], defs, "option-def");
+	} else {
+		size_t i;
+
+		/* Look for duplicate */
+		for (i = 0; i < listSize(defs); i++) {
+			struct element *item;
+			struct element *code;
+			struct element *old;
+
+			item = listGet(defs, i);
+			if ((item == NULL) || (item->type != ELEMENT_MAP))
+				continue;
+			code = mapGet(item, "code");
+			if ((code == NULL) ||
+			    (code->type != ELEMENT_INTEGER) ||
+			    (intValue(code) != 43))
+				continue;
+			old = mapGet(item, "encapsulate");
+			if ((old == NULL) || (old->type != ELEMENT_STRING))
+				continue;
+			if (eqString(stringValue(space), stringValue(old)))
+				return;
+		}
+	}
+	listPush(defs, def);
+
+	/* add a data too assuming at least one suboption exists */
+	opt = createMap();
+	mapSet(opt,
+	       createString(makeString(-1, "vendor-encapsulated-options")),
+	       "name");
+	mapSet(opt, createInt(43), "code");
+	opts = mapGet(cfile->stack[cfile->stack_top], "option-data");
+	if (opts == NULL) {
+		opts = createList();
+		mapSet(cfile->stack[cfile->stack_top], opts, "option-data");
+	}
+	listPush(opts, opt);
+}
+
+static void
+config_site_option_space(struct element *config, struct parse *cfile)
+{
+	struct element *defs;
+	struct element *space;
+	struct string *msg;
+	struct comment *comment;
+
+	if (local_family != AF_INET)
+		parse_error(cfile, "site-option-space is DHCPv4 only");
+
+	space = mapGet(config, "value");
+	if (space == NULL)
+		parse_error(cfile, "site-option-space has no value");
+	if (space->type != ELEMENT_STRING)
+		parse_error(cfile, "site-option-space value is not a string");
+
+	defs = mapGet(cfile->stack[cfile->stack_top], "option-def");
+	if (defs == NULL) {
+                defs = createList();
+		mapSet(cfile->stack[cfile->stack_top], defs, "option-def");
+        }
+
+	msg = makeString(-1, "/// site-option-space '");
+	concatString(msg, stringValue(space));
+	appendString(msg, "'");
+	comment = createComment(msg->content);
+	TAILQ_INSERT_TAIL(&defs->comments, comment);
+	msg = makeString(-1, "/// Please to move private (code 224..254)");
+	appendString(msg, " option definitions from '");
+	concatString(msg, stringValue(space));
+	appendString(msg, "' to 'dhcp4' space");
+	comment = createComment(msg->content);
+        TAILQ_INSERT_TAIL(&defs->comments, comment);
 }
 
 static struct element *

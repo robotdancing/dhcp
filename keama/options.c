@@ -321,9 +321,9 @@ struct option_def configs[] = {
 	{ "server-name", "t",			"server",  16, 3},
 	{ "next-server", "I",			"server",  17, 3},
 	{ "authoritative", "f",			"server",  18, 3},
-	{ "vendor-option-space", "U",		"server",  19, 0},
+	{ "vendor-option-space", "U",		"server",  19, 3},
 	{ "always-reply-rfc1048", "f",		"server",  20, 0},
-	{ "site-option-space", "X",		"server",  21, 0},
+	{ "site-option-space", "X",		"server",  21, 3},
 	{ "always-broadcast", "f",		"server",  22, 0},
 	{ "ddns-domainname", "t",		"server",  23, 3},
 	{ "ddns-hostname", "t",			"server",  24, 0},
@@ -766,24 +766,8 @@ get_config_comments(unsigned code)
 		TAILQ_INSERT_TAIL(&comments, comment);
 		break;
 
-	case 19: /* vendor-option-space */
-		comment = createComment("/// vendor-option-space is not "
-					"(yet?) supported");
-		TAILQ_INSERT_TAIL(&comments, comment);
-		comment = createComment("/// Reference Kea #5073");
-		TAILQ_INSERT_TAIL(&comments, comment);
-                break;
-
 	case 20: /* always-reply-rfc1048 */
 		goto no_bootp;
-
-	case 21: /* site-option-space */
-		comment = createComment("/// site-option-space is not "
-				       "supported");
-		TAILQ_INSERT_TAIL(&comments, comment);
-		comment = createComment("/// Reference Kea #5240");
-		TAILQ_INSERT_TAIL(&comments, comment);
-		break;
 
 	case 22: /* always-broadcast */
 		comment = createComment("/// always-broadcast is not "

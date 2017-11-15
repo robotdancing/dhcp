@@ -799,16 +799,21 @@
       {
         "name": "APC",
         /// from: match if (substring(option dhcp.vendor-class-identifier, 0, 3)) = 'APC'
-        "test": "substring(option[60].hex,0,3) == 'APC'"
-//      "config": [
-//        /// vendor-option-space is not (yet?) supported
-//        /// Reference Kea #5073
-//        {
-//          "name": "vendor-option-space",
-//          "code": 19,
-//          "value": "APC"
-//        }
-//      ]
+        "test": "substring(option[60].hex,0,3) == 'APC'",
+        "option-def": [
+          {
+            "name": "vendor-encapsulated-options",
+            "code": 43,
+            "type": "empty",
+            "encapsulate": "APC"
+          }
+        ],
+        "option-data": [
+          {
+            "name": "vendor-encapsulated-options",
+            "code": 43
+          }
+        ]
       },
       {
         "name": "MSFT",
@@ -854,6 +859,10 @@
             "name": "vendor-class-identifier",
             "code": 60,
             "data": "PXEClient"
+          },
+          {
+            "name": "vendor-encapsulated-options",
+            "code": 43
           },
           # Some PXE clients refuse to tftp if mtftp fails.  Others take
           # longer.
@@ -901,36 +910,18 @@
             "data": "30"
           }
         ],
-//      "config": [
-//        /// vendor-option-space is not (yet?) supported
-//        /// Reference Kea #5073
-//        {
-//          "name": "vendor-option-space",
-//          "code": 19,
-//          "value": "PXE"
-//        },
-//        /// site-option-space is not supported
-//        /// Reference Kea #5240
-//        {
-//          "name": "site-option-space",
-//          "code": 21,
-//          "value": "pxelinux"
-//        },
-//        /// vendor-option-space is not (yet?) supported
-//        /// Reference Kea #5073
-//        {
-//          "name": "vendor-option-space",
-//          "code": 19,
-//          "value": "PXE"
-//        },
-//        /// site-option-space is not supported
-//        /// Reference Kea #5240
-//        {
-//          "name": "site-option-space",
-//          "code": 21,
-//          "value": "pxelinux"
-//        }
-//      ],
+        /// site-option-space 'pxelinux'
+        /// Please to move private (code 224..254) option definitions from 'pxelinux' to 'dhcp4' space
+        /// site-option-space 'pxelinux'
+        /// Please to move private (code 224..254) option definitions from 'pxelinux' to 'dhcp4' space
+        "option-def": [
+          {
+            "name": "vendor-encapsulated-options",
+            "code": 43,
+            "type": "empty",
+            "encapsulate": "PXE"
+          }
+        ],
 //      /// Only global enable-updates is supported
 //      "enable-updates": false,
         "boot-file-name": "pxelinux.0",
