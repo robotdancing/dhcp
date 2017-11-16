@@ -224,6 +224,7 @@ post_process_classes(struct parse *cfile)
 	struct element *class;
 	struct element *name;
 	struct element *entry;
+	struct element *reduced;
 	struct string *msg;
 	struct comment *comment;
 	isc_boolean_t lose;
@@ -310,13 +311,21 @@ post_process_classes(struct parse *cfile)
 		entry = mapGet(class, "match-if");
 		if (entry == NULL)
 			continue;
+		reduced = mapGet(class, "test");
 		lose = ISC_FALSE;
-		msg = makeString(-1, "/// match if: ");
+		if (reduced != NULL)
+			msg = makeString(-1, "/// from: match if ");
+		else
+			msg = makeString(-1, "/// match if ");
 		appendString(msg, print_boolean_expression(entry, &lose));
 		if (!lose) {
 			comment = createComment(msg->content);
-			TAILQ_INSERT_TAIL(&class->comments, comment);
-			mapRemove(class, "match-if");
+			if (reduced != NULL) {
+				TAILQ_INSERT_TAIL(&reduced->comments, comment);
+				mapRemove(class, "match-if");
+				continue;
+			}
+			TAILQ_INSERT_TAIL(&entry->comments, comment);
 		}
 	}
 }
@@ -1436,6 +1445,8 @@ parse_class_declaration(struct parse *cfile, int type)
 	int declaration = 0;
 	struct string *name;
 	isc_boolean_t lose = ISC_FALSE;
+	isc_boolean_t matchedonce = ISC_FALSE;
+	isc_boolean_t submatchedonce = ISC_FALSE;
 	
 	token = next_token(&val, NULL, cfile);
 	if (token != STRING)
@@ -1632,13 +1643,6 @@ parse_class_declaration(struct parse *cfile, int type)
 			if (pc)
 				parse_error(cfile,
 					    "invalid match in subclass.");
-			if (mapContains(class, "spawning") ||
-			    mapContains(class, "match-if") ||
-			    mapContains(class, "submatch") ||
-			    mapContains(class, "test"))
-				parse_error(cfile,
-					    "A class may only have "
-					    "one 'match' or 'spawn' clause.");
 			token = peek_token(&val, NULL, cfile);
 			if (token != IF) {
 				expr = createBool(ISC_FALSE);
@@ -1646,13 +1650,21 @@ parse_class_declaration(struct parse *cfile, int type)
 				mapSet(class, expr, "spawning");
 				goto submatch;
 			}
+
 			skip_token(&val, NULL, cfile);
+			if (matchedonce)
+				parse_error(cfile,
+					    "A class may only have "
+					    "one 'match if' clause.");
+			matchedonce = ISC_TRUE;
 			expr = createMap();
 			if (!parse_boolean_expression(expr, cfile, &lose)) {
 				if (!lose)
 					parse_error(cfile,
 						    "expecting boolean expr.");
 			} else {
+				expr->skip = ISC_TRUE;
+				mapSet(class, expr, "match-if");
 				add_match_class(cfile, class, copy(expr));
 				parse_semi(cfile);
 			}
@@ -1661,13 +1673,6 @@ parse_class_declaration(struct parse *cfile, int type)
 			if (pc)
 				parse_error(cfile,
 					    "invalid spawn in subclass.");
-			if (mapContains(class, "spawning") ||
-			    mapContains(class, "match-if") ||
-			    mapContains(class, "submatch") ||
-			    mapContains(class, "test"))
-				parse_error(cfile,
-					    "A class may only have "
-					    "one 'match' or 'spawn' clause.");
 			expr = createBool(ISC_TRUE);
 			expr->skip = ISC_TRUE;
 			cfile->issue_counter++;
@@ -1677,6 +1682,11 @@ parse_class_declaration(struct parse *cfile, int type)
 				parse_error(cfile,
 					    "expecting with after spawn");
 		submatch:
+			if (submatchedonce)
+				parse_error(cfile,
+					    "can't override existing "
+					    "submatch/spawn");
+			submatchedonce = ISC_TRUE;
 			expr = createMap();
 			if (!parse_data_expression(expr, cfile, &lose)) {
 				if (!lose)
@@ -1731,8 +1741,10 @@ subclass_inherit(struct parse *cfile,
 		 struct element *superclass)
 {
 	struct string *name;
+	struct element *guard;
 	struct element *submatch;
 	struct handle *handle;
+	struct string *gmsg;
 	struct string *mmsg;
 	struct string *dmsg;
 	struct element *expr;
@@ -1749,11 +1761,12 @@ subclass_inherit(struct parse *cfile,
 	if (expr == NULL)
 		parse_error(cfile, "can't get superclass name");
 	name = stringValue(expr);
+	guard = mapGet(superclass, "match-if");
 	submatch = mapGet(superclass, "submatch");
 	if (submatch == NULL)
 		parse_error(cfile, "can't get superclass submatch");
 
-	/* Iterates on (copy of) superclass entrie */
+	/* Iterates on (copy of) superclass entries */
 	while (mapSize(superclass) > 0) {
 		handle = mapPop(superclass);
 		if ((handle == NULL) || (handle->key == NULL) ||
@@ -1764,6 +1777,8 @@ subclass_inherit(struct parse *cfile,
 		/* Superclass specific entries */
 		if ((strcmp(handle->key, "name") == 0) ||
 		    (strcmp(handle->key, "spawning") == 0) ||
+		    (strcmp(handle->key, "match-if") == 0) ||
+		    (strcmp(handle->key, "test") == 0) ||
 		    (strcmp(handle->key, "submatch") == 0))
 			continue;
 		/* Subclass specific so impossible entries */
@@ -1807,7 +1822,7 @@ subclass_inherit(struct parse *cfile,
 		mapSet(class, handle->value, handle->key);
 	}
 
-	/* build submatch = data */
+	/* build [guard and] submatch = data */
 	expr = mapGet(class, "binary");
 	if (expr != NULL) {
 		data = createMap();
@@ -1822,8 +1837,22 @@ subclass_inherit(struct parse *cfile,
 	mapSet(match, copy(data), "right");
 	expr = createMap();
 	mapSet(expr, match, "equal");
-	
-	mmsg = makeString(-1, "/// from: match ");
+
+	if (guard != NULL) {
+		match = createMap();
+		mapSet(match, copy(guard), "left");
+		mapSet(match, expr, "right");
+		expr = createMap();
+		mapSet(expr, match, "and");
+
+		gmsg = makeString(-1, "/// from: match-if ");
+		appendString(gmsg, print_boolean_expression(guard, &lose));
+		mmsg = makeString(-1, "/// match: ");
+	} else {
+		gmsg = NULL;
+		mmsg = makeString(-1, "/// from: match ");
+	}
+
 	appendString(mmsg, print_data_expression(submatch, &lose));
 	dmsg = makeString(-1, "/// data: ");
 	appendString(dmsg, print_data_expression(data, &lose));
@@ -1839,6 +1868,10 @@ subclass_inherit(struct parse *cfile,
 	if ((reduced == NULL) || (reduced->type != ELEMENT_STRING))
 		return;
 	if (!lose) {
+		if (gmsg != NULL) {
+			comment = createComment(gmsg->content);
+			TAILQ_INSERT_TAIL(&reduced->comments, comment);
+		}
 		comment = createComment(mmsg->content);
 		TAILQ_INSERT_TAIL(&reduced->comments, comment);
 		comment = createComment(dmsg->content);
@@ -1857,15 +1890,8 @@ add_match_class(struct parse *cfile,
 		struct element *expr)
 {
 	struct element *reduced;
-	struct comment *comment = NULL;
-	struct string *msg;
-	isc_boolean_t lose = ISC_FALSE;
 	isc_boolean_t modified = ISC_FALSE;
-
-	msg = makeString(-1, "/// from: match if ");
-	appendString(msg, print_boolean_expression(expr, &lose));
-	if (!lose)
-		comment = createComment(msg->content);
+	isc_boolean_t lose = ISC_FALSE;
 
 	/* evaluate the expression and try to reduce it */
 	reduced = eval_boolean_expression(expr, &modified);
@@ -1874,17 +1900,10 @@ add_match_class(struct parse *cfile,
 		parse_error(cfile, "'match if' with a constant boolean "
 			    "expression %s",
 			    print_boolean_expression(expr, &lose));
-	if ((reduced == NULL) || (reduced->type != ELEMENT_STRING)) {
-		expr->skip = ISC_TRUE;
-		cfile->issue_counter++;
-		if (comment != NULL)
-			TAILQ_INSERT_TAIL(&expr->comments, comment);
-		mapSet(class, expr, "match-if");
-	} else {
-		if (comment != NULL)
-			TAILQ_INSERT_TAIL(&reduced->comments, comment);
+	if ((reduced != NULL) && (reduced->type == ELEMENT_STRING))
 		mapSet(class, reduced, "test");
-	}
+	else
+		cfile->issue_counter++;
 }
 
 /* Move pools to subnets */
