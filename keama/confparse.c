@@ -1331,8 +1331,8 @@ parse_host_declaration(struct parse *cfile)
 			struct comment *comment;
 
 			comment = createComment("/// Host reservations "
-						"without fixed addresses were "
-						"put in the last last "
+						"without fixed addresses "
+						"were put in the last "
 						"declared subnet");
 			TAILQ_INSERT_TAIL(&hosts->comments, comment);
 			comment = createComment("/// Reference Kea #5246");
