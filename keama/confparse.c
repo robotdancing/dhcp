@@ -1689,6 +1689,8 @@ parse_class_declaration(struct parse *cfile, int type)
 				parse_semi(cfile);
 			}
 		} else if (token == LEASE) {
+			struct comment *comment;
+
 			skip_token(&val, NULL, cfile);
 			token = next_token(&val, NULL, cfile);
 			if (token != LIMIT)
@@ -1699,6 +1701,11 @@ parse_class_declaration(struct parse *cfile, int type)
 			tmp = createInt(atoll(val));
 			tmp->skip = ISC_TRUE;
 			cfile->issue_counter++;
+			comment = createComment("/// Per-class limit is not "
+						"supported by Kea");
+			TAILQ_INSERT_TAIL(&tmp->comments, comment);
+			comment = createComment("/// Reference Kea #5433");
+			TAILQ_INSERT_TAIL(&tmp->comments, comment);
 			mapSet(class, tmp, "lease-limit");
 			parse_semi(cfile);
 		} else
