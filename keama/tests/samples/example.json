@@ -136,7 +136,7 @@
 //          "value": 7200
 //        }
 //      ],
-        /// Host reservations without fixed addresses were put in the last last declared subnet
+        /// Host reservations without fixed addresses were put in the last declared subnet
         /// Reference Kea #5246
         "reservations": [
           # Hosts which require special configuration options can be listed in
