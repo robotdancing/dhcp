@@ -522,4 +522,4 @@ Variables:
  to recognize booleans and numbers. Unfortunately this is very spcific...
 
 TODO:
- - classes in pools
+ - classes in pools (to finish: add tests, after merge)

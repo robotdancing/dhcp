@@ -26,11 +26,11 @@
       {
         "name": "gen#ALL#",
         "test": "'' == ''"
-      },
-      {
-        "name": "gen#!ALL#",
-        "test": "not member('ALL')"
       }
+//    {
+//      "name": "gen#!ALL#",
+//      "test": "not member('ALL')"
+//    }
     ]
   }
 }
