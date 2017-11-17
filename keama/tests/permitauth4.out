@@ -14,11 +14,22 @@
           {
             # avoid empty pool
             "pool": "10.5.5.5 - 10.5.5.10"
-//          "allow": [
-//            "authenticated clients"
-//          ]
+//          /// From:
+//          ///   allow authenticated clients
+//          "client-class": "gen#!ALL#"
           }
         ]
+      }
+    ],
+    "client-classes": [
+      /// 'all clients' class
+      {
+        "name": "gen#ALL#",
+        "test": "'' == ''"
+      },
+      {
+        "name": "gen#!ALL#",
+        "test": "not member('ALL')"
       }
     ]
   }

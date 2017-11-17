@@ -1061,7 +1061,7 @@ printString(FILE *fp, const struct string *s)
 	assert(s != NULL);
 
 	fprintf(fp, "\"");
-	for (i = 0; i < s->length; ++i) {
+	for (i = 0; i < s->length; i++) {
 		char c = *(s->content + i);
 
 		switch (c) {

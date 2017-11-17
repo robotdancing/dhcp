@@ -523,5 +523,3 @@ Variables:
 
 TODO:
  - classes in pools
- - match if *and* spawn with
- - host set class & setReservedClientClasses
