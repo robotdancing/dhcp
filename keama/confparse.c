@@ -3451,6 +3451,7 @@ parse_pool6_statement(struct parse *cfile, int type)
 	struct element *pdpools;
 	struct element *permit;
 	struct element *prohibit;
+	struct element *acl;
 	int declaration = 0;
 	unsigned range_counter = 0;
 	unsigned prefix_counter = 0;
@@ -3472,9 +3473,7 @@ parse_pool6_statement(struct parse *cfile, int type)
 	type = POOL_DECL;
 
 	permit = createList();
-	permit->skip = ISC_TRUE;
 	prohibit = createList();
-	prohibit->skip = ISC_TRUE;
 
 	do {
 		token = peek_token(&val, NULL, cfile);
@@ -3524,14 +3523,9 @@ parse_pool6_statement(struct parse *cfile, int type)
 
 	cfile->stack_top--;
 
-	if (listSize(permit) > 0) {
-		mapSet(pool, permit, "allow");
-		cfile->issue_counter++;
-	}
-	if (listSize(prohibit) > 0) {
-		mapSet(pool, prohibit, "deny");
-		cfile->issue_counter++;
-	}
+	acl = generate_class(cfile, permit, prohibit);
+	if (acl != NULL)
+		mapSet(pool, acl, "client-class");
 
 	/*
 	 * Spread and eventually split between pools and pd-pools
@@ -4721,6 +4715,25 @@ generate_class(struct parse *cfile,
 	if ((listSize(allow) == 0) && (listSize(deny) == 0))
 		return NULL;
 
+	/* Unique allow short cut */
+	if ((listSize(allow) == 1) && (listSize(deny) == 0) &&
+	    !allow->skip && !deny->skip) {
+		elem = listGet(allow, 0);
+		assert(elem != NULL);
+		prop = mapGet(elem, "way");
+		assert(prop != NULL);
+		assert(prop->type == ELEMENT_BOOLEAN);
+		if (boolValue(prop)) {
+			class = mapGet(elem, "class");
+			assert(class != NULL);
+			assert(class->type == ELEMENT_STRING);
+			result = createString(stringValue(class));
+			/* pool class not yet merged */
+			result->skip = ISC_TRUE;
+			return result;
+		}
+	}
+
 	classes = mapGet(cfile->stack[1], "generated-classes");
 	/* Create generated-classes with gen#ALL# as first element */
 	if (classes == NULL) {
@@ -4842,6 +4855,7 @@ generate_class(struct parse *cfile,
 		if (negative)
 			appendString(expr, "not ");
 		appendString(expr, "member('");
+		class->skip = ISC_TRUE;
 		concatString(expr, stringValue(prop));
 		appendString(expr, "')");
 		if (mapContains(elem, "use-all")) {
@@ -4868,6 +4882,7 @@ generate_class(struct parse *cfile,
 		if (negative)
 			appendString(expr, "not ");
 		appendString(expr, "member('");
+		class->skip = ISC_TRUE;
 		concatString(expr, stringValue(prop));
 		appendString(expr, "')");
 		if (mapContains(elem, "use-all")) {
@@ -4882,7 +4897,7 @@ generate_class(struct parse *cfile,
 	mapSet(class, createString(name), "name");
 	mapSet(class, createString(expr), "test");
 	/* inherit untranslatable cases */
-	class->skip = allow->skip || deny->skip;
+	class->skip |= allow->skip || deny->skip;
 	listPush(classes, class);
 
 	resetString(result, name);

@@ -14,12 +14,23 @@
           {
             # avoid empty pool
             "pool": "2001::100 - 2001::200"
-//          "deny": [
-//            "unauthenticated clients"
-//          ]
+//          /// From:
+//          ///   deny unauthenticated clients
+//          "client-class": "gen#_AND_#!ALL#"
           }
         ]
       }
+    ],
+    "client-classes": [
+      /// 'all clients' class
+      {
+        "name": "gen#ALL#",
+        "test": "'' == ''"
+      }
+//    {
+//      "name": "gen#_AND_#!ALL#",
+//      "test": "not member('ALL')"
+//    }
     ]
   }
 }

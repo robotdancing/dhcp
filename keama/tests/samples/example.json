@@ -177,6 +177,10 @@
         /// from: match if (substring(option dhcp.vendor-class-identifier, 0, 4)) = 'SUNW'
         "test": "substring(option[60].hex,0,4) == 'SUNW'"
       }
+//    {
+//      "name": "gen#_AND_#!foo#",
+//      "test": "not member('foo')"
+//    }
     ],
     /// Kea shared-networks are different, cf Kea #5430
     "shared-networks": [
@@ -197,9 +201,7 @@
             "pools": [
               {
                 "pool": "10.17.224.10 - 10.17.224.250"
-//              "allow": [
-//                "members of foo"
-//              ]
+//              "client-class": "foo"
               }
             ]
           },
@@ -217,9 +219,9 @@
             "pools": [
               {
                 "pool": "10.0.29.10 - 10.0.29.230"
-//              "deny": [
-//                "members of foo"
-//              ]
+//              /// From:
+//              ///   deny foo
+//              "client-class": "gen#_AND_#!foo#"
               }
             ]
           }
