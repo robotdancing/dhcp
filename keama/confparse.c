@@ -76,6 +76,7 @@ TAILQ_HEAD(ranges, range) known_ranges;
 static void post_process_authoritative(struct parse *);
 static size_t post_process_reservations(struct parse *);
 static void post_process_classes(struct parse *);
+static void post_process_generated_classes(struct parse *);
 static void post_process_option_definitions(struct parse *);
 static void add_host_reservation_identifiers(struct parse *, const char *);
 static void add_host_id_option(struct parse *, const struct option *, int);
@@ -95,6 +96,8 @@ static struct element *find_location(struct element *, struct range *);
 static int get_prefix_length(const char *, const char *);
 static struct element *get_class(struct parse *, struct element *);
 static void concat_classes(struct parse *, struct element *, struct element *);
+static struct element *generate_class(struct parse *, struct element *,
+				      struct element *);
 
 /* Add head config file comments to the DHCP server map */
 
@@ -149,6 +152,7 @@ conf_file_parse(struct parse *cfile)
 	post_process_authoritative(cfile);
 	issues += post_process_reservations(cfile);
 	post_process_classes(cfile);
+	post_process_generated_classes(cfile);
 	post_process_option_definitions(cfile);
 
 	return issues;
@@ -327,6 +331,41 @@ post_process_classes(struct parse *cfile)
 			}
 			TAILQ_INSERT_TAIL(&entry->comments, comment);
 		}
+	}
+}
+
+/* Move generated client classes to the end of client class list */
+
+static void
+post_process_generated_classes(struct parse *cfile)
+{
+	struct element *generated;
+	struct element *classes;
+	struct element *class;
+
+	generated = mapGet(cfile->stack[1], "generated-classes");
+	if (generated == NULL)
+		return;
+	mapRemove(cfile->stack[1], "generated-classes");
+	if (listSize(generated) == 0)
+		return;
+	classes = mapGet(cfile->stack[1], "client-classes");
+	if (classes == NULL) {
+		classes = createList();
+		mapSet(cfile->stack[1], classes, "client-classes");
+	}
+
+	/* remove unused gen#ALL */
+	class = listGet(generated, 0);
+	if (!mapContains(class, "referenced"))
+		listRemove(generated, 0);
+	else
+		mapRemove(class, "referenced");
+
+	while (listSize(generated) > 0) {
+		class = listGet(generated, 0);
+		listRemove(generated, 0);
+		listPush(classes, class);
 	}
 }
 
@@ -880,46 +919,80 @@ void
 get_permit(struct parse *cfile, struct element *permit_head)
 {
 	enum dhcp_token token;
-	struct string *permit;
 	const char *val;
+	struct string *permit;
+	struct string *alias = NULL;
+	struct comment *comment = NULL;
+	struct element *member;
 	isc_boolean_t need_clients = ISC_TRUE;
+	isc_boolean_t negative = ISC_FALSE;
+	isc_boolean_t use_all = ISC_FALSE;
 
 	token = next_token(&val, NULL, cfile);
 	switch (token) {
 	case UNKNOWN:
-		permit = makeString(-1, "unknown clients");
+		permit = makeString(-1, "KNOWN_CLIENTS");
+		alias = makeString(-1, "unknown clients");
+		negative = ISC_TRUE;
+        known_clients:
+		permit_head->skip = ISC_TRUE;
+		cfile->issue_counter++;
+		comment = createComment("/// [un]known-clients is not yet "
+					"supported by Kea");
 		break;
 				
 	case KNOWN_CLIENTS:
 		need_clients = ISC_FALSE;
-		permit = makeString(-1, "known-clients");
+		permit = makeString(-1, "KNOWN_CLIENTS");
+		alias = makeString(-1, "known-clients");
+		goto known_clients;
 		break;
 
 	case UNKNOWN_CLIENTS:
 		need_clients = ISC_FALSE;
-		permit = makeString(-1, "unknown-clients");
+		permit = makeString(-1, "KNOWN_CLIENTS");
+		alias = makeString(-1, "unknown-clients");
+		negative = ISC_TRUE;
+		goto known_clients;
 		break;
 
 	case KNOWN:
-		permit = makeString(-1, "known clients");
+		permit = makeString(-1, "KNOWN_CLIENTS");
+		alias = makeString(-1, "known clients");
+		goto known_clients;
 		break;
 				
 	case AUTHENTICATED:
-		permit = makeString(-1, "authenticated clients");
+		permit = makeString(-1, "ALL");
+		alias = makeString(-1, "authenticated clients");
+		negative = ISC_TRUE;
+	authenticated_clients:
+		use_all = ISC_TRUE;
+		comment = createComment("/// [un]authenticated-clients is "
+					"not supported by ISC DHCP and Kea");
 		break;
 				
 	case UNAUTHENTICATED:
-		permit = makeString(-1, "unauthenticated clients");
+		permit = makeString(-1, "ALL");
+		alias = makeString(-1, "unauthenticated clients");
+		goto authenticated_clients;
 		break;
 
 	case ALL:
-		permit = makeString(-1, "all clients");
+		permit = makeString(-1, "ALL");
+		alias = makeString(-1, "all clients");
+		use_all = ISC_TRUE;
 		break;
 				
 	case DYNAMIC:
 		if (next_token(&val, NULL, cfile) != TOKEN_BOOTP)
 			parse_error(cfile, "expecting \"bootp\"");
-		permit = makeString(-1, "dynamic bootp clients");
+		permit = makeString(-1, "DYNAMIC_BOOTP_CLIENTS");
+		alias = makeString(-1, "dynamic bootp clients");
+		permit_head->skip = ISC_TRUE;
+		cfile->issue_counter++;
+		comment = createComment("/// dynamic-bootp-client is not "
+					"supported by Kea");
 		break;
 
 	case MEMBERS:
@@ -929,18 +1002,23 @@ get_permit(struct parse *cfile, struct element *permit_head)
 			parse_error(cfile, "expecting \"of\"");
 		if (next_token(&val, NULL, cfile) != STRING)
 			parse_error(cfile, "expecting class name.");
-		permit = makeString(-1, "members of ");
-		appendString(permit, val);
+		permit = makeString(-1, val);
 		break;
 
 	case AFTER:
 		/* don't use parse_date_code() */
 		need_clients = ISC_FALSE;
-		permit = makeString(-1, "after");
+		permit = makeString(-1, "AFTER_");
+		alias = makeString(-1, "after ");
 		while (peek_raw_token(NULL, NULL, cfile) != SEMI) {
 			next_raw_token(&val, NULL, cfile);
 			appendString(permit, val);
+			appendString(alias, val);
 		}
+		permit_head->skip = ISC_TRUE;
+		cfile->issue_counter++;
+		comment = createComment("/// after <date> is not yet "
+					"supported by Kea");
 		break;
 
 	default:
@@ -953,7 +1031,16 @@ get_permit(struct parse *cfile, struct element *permit_head)
 	 */
 	if (need_clients && (next_token(&val, NULL, cfile) != CLIENTS))
 		parse_error(cfile, "expecting \"clients\"");
-	listPush(permit_head, createString(permit));
+	member = createMap();
+	mapSet(member, createString(permit), "class");
+	mapSet(member, createBool(!negative), "way");
+	if (alias != NULL)
+		mapSet(member, createString(alias), "real");
+	if (use_all)
+		mapSet(member, createNull(), "use-all");
+	if (comment != NULL)
+		TAILQ_INSERT_TAIL(&member->comments, comment);
+	listPush(permit_head, member);
 	parse_semi(cfile);
 
 	return;
@@ -987,6 +1074,7 @@ parse_pool_statement(struct parse *cfile, int type)
 	struct element *pools;
 	struct element *permit;
 	struct element *prohibit;
+	struct element *acl;
 	int declaration = 0;
 	unsigned range_counter = 0;
 
@@ -1003,9 +1091,7 @@ parse_pool_statement(struct parse *cfile, int type)
 	type = POOL_DECL;
 
 	permit = createList();
-	permit->skip = ISC_TRUE;
 	prohibit = createList();
-	prohibit->skip = ISC_TRUE;
 
 	do {
 		token = peek_token(&val, NULL, cfile);
@@ -1056,14 +1142,9 @@ parse_pool_statement(struct parse *cfile, int type)
 
 	cfile->stack_top--;
 
-	if (listSize(permit) > 0) {
-		mapSet(pool, permit, "allow");
-		cfile->issue_counter++;
-	}
-	if (listSize(prohibit) > 0) {
-		mapSet(pool, prohibit, "deny");
-		cfile->issue_counter++;
-	}
+	acl = generate_class(cfile, permit, prohibit);
+	if (acl != NULL)
+		mapSet(pool, acl, "client-class");
 
 	pools = mapGet(cfile->stack[cfile->stack_top], "pools");
 	if (pools == NULL) {
@@ -1482,7 +1563,7 @@ parse_class_declaration(struct parse *cfile, int type)
 		group_classes = classes;
 
 	/* See if there's already a class with the specified name. */
-	for (i = 0; i < listSize(classes); ++i) {
+	for (i = 0; i < listSize(classes); i++) {
 		struct element *name;
 
 		tmp = listGet(classes, i);
@@ -4320,7 +4401,7 @@ new_network_interface(struct parse *cfile, struct element *iface)
 		mapSet(ifconf, iflist, "interfaces");
 	}
 
-	for (i = 0; i < listSize(iflist); ++i) {
+	for (i = 0; i < listSize(iflist); i++) {
 		struct element *item;
 
 		item = listGet(iflist, i);
@@ -4500,7 +4581,7 @@ get_prefix_length(const char *low, const char *high)
 			break;
 	if (plen == 128)
 		return plen;
-	for (i = (plen / 8) + 1; i < 16; ++i)
+	for (i = (plen / 8) + 1; i < 16; i++)
 		if (xor[i] != 0)
 			return -2;
 	for (i = 0; i < 8; i++) {
@@ -4618,4 +4699,194 @@ concat_classes(struct parse *cfile, struct element *dst, struct element *src)
 			continue;
 		listPush(dst, sitem);
 	}
+}
+
+/* Generate a class from allow/deny member lists */
+
+static struct element *
+generate_class(struct parse *cfile,
+	       struct element *allow, struct element *deny)
+{
+	struct element *classes;
+	struct element *result;
+	struct element *class;
+	struct element *elem;
+	struct element *prop;
+	struct string *name;
+	struct string *expr;
+	struct string *msg;
+	struct comment *comment;
+	size_t i;
+
+	if ((listSize(allow) == 0) && (listSize(deny) == 0))
+		return NULL;
+
+	classes = mapGet(cfile->stack[1], "generated-classes");
+	/* Create generated-classes with gen#ALL# as first element */
+	if (classes == NULL) {
+		classes = createList();
+		mapSet(cfile->stack[1], classes, "generated-classes");
+		class = createMap();
+		name = makeString(-1, "gen#ALL#");
+		mapSet(class, createString(name), "name");
+		expr = makeString(-1, "'' == ''");
+		mapSet(class, createString(expr), "test");
+		comment = createComment("/// 'all clients' class");
+		TAILQ_INSERT_TAIL(&class->comments, comment);
+		listPush(classes, class);
+	}
+
+	/* Create comments */
+	result = createString(makeString(-1, "__placeholder__"));
+	comment = createComment("/// From:");
+	TAILQ_INSERT_TAIL(&result->comments, comment);
+	for (i = 0; i < listSize(allow); i++) {
+		struct element *alias;
+
+		elem = listGet(allow, i);
+		assert(elem != NULL);
+		prop = mapGet(elem, "class");
+		assert(prop != NULL);
+		assert(prop->type == ELEMENT_STRING);
+		alias = mapGet(elem, "real");
+		msg = makeString(-1, "///   allow ");
+		concatString(msg, stringValue(alias ? alias : prop));
+		comment = createComment(msg->content);
+		TAILQ_INSERT_TAIL(&result->comments, comment);
+	}
+	for (i = 0; i < listSize(deny); i++) {
+		struct element *alias;
+
+		elem = listGet(deny, i);
+		assert(elem != NULL);
+		prop = mapGet(elem, "class");
+		assert(prop != NULL);
+		assert(prop->type == ELEMENT_STRING);
+		alias = mapGet(elem, "real");
+		msg = makeString(-1, "///   deny ");
+		concatString(msg, stringValue(alias ? alias : prop));
+		comment = createComment(msg->content);
+		TAILQ_INSERT_TAIL(&result->comments, comment);
+	}
+
+	/* Build name */
+	name = makeString(-1, "gen#");
+	for (i = 0; i < listSize(allow); i++) {
+		elem = listGet(allow, i);
+		assert(elem != NULL);
+		prop = mapGet(elem, "way");
+		assert(prop != NULL);
+		assert(prop->type == ELEMENT_BOOLEAN);
+		if (!boolValue(prop))
+			appendString(name, "!");
+		prop = mapGet(elem, "class");
+		assert(prop != NULL);
+		assert(prop->type == ELEMENT_STRING);
+		concatString(name, stringValue(prop));
+		appendString(name, "#");
+	}
+	if (listSize(deny) > 0) {
+		appendString(name, "_AND_#");
+		for (i = 0; i < listSize(deny); i++) {
+			elem = listGet(deny, i);
+			assert(elem != NULL);
+			prop = mapGet(elem, "way");
+			assert(prop != NULL);
+			assert(prop->type == ELEMENT_BOOLEAN);
+			if (boolValue(prop))
+				appendString(name, "!");
+			prop = mapGet(elem, "class");
+			assert(prop != NULL);
+			assert(prop->type == ELEMENT_STRING);
+			concatString(name, stringValue(prop));
+			appendString(name, "#");
+		}
+	}
+
+	/* Check if it already exists */
+	for (i = 0; i < listSize(classes); i++) {
+		struct element *descr;
+
+		class = listGet(classes, i);
+		assert(class != NULL);
+		descr = mapGet(class, "name");
+		assert(descr != NULL);
+		assert(descr->type == ELEMENT_STRING);
+		if (!eqString(name, stringValue(descr)))
+			continue;
+		/* got it! */
+		if ((i == 0) && !mapContains(class, "referenced"))
+			mapSet(class, createNull(), "referenced");
+		resetString(result, name);
+		/* pool class not yet merged */
+		result->skip = ISC_TRUE;
+		return result;
+	}
+
+	/* Create expression */
+	class = createMap();
+	expr = allocString();
+
+	if ((listSize(allow) > 0) && (listSize(deny) > 0))
+		appendString(expr, "(");
+
+	for (i = 0; i < listSize(allow); i++) {
+		isc_boolean_t negative;
+
+		if (i > 0)
+			appendString(expr, " or ");
+		elem = listGet(allow, i);
+		prop = mapGet(elem, "way");
+		negative = !boolValue(prop);
+		prop = mapGet(elem, "class");
+		if (negative)
+			appendString(expr, "not ");
+		appendString(expr, "member('");
+		concatString(expr, stringValue(prop));
+		appendString(expr, "')");
+		if (mapContains(elem, "use-all")) {
+			struct element *all;
+
+			all = listGet(classes, 0);
+			if (!mapContains(all, "referenced"))
+				mapSet(all, createNull(), "referenced");
+		}
+	}
+
+	if ((listSize(allow) > 0) && (listSize(deny) > 0))
+		appendString(expr, ") and ");
+
+	for (i = 0; i < listSize(deny); i++) {
+		isc_boolean_t negative;
+
+		if (i > 0)
+			appendString(expr, " and ");
+		elem = listGet(deny, i);
+		prop = mapGet(elem, "way");
+		negative = boolValue(prop);
+		prop = mapGet(elem, "class");
+		if (negative)
+			appendString(expr, "not ");
+		appendString(expr, "member('");
+		concatString(expr, stringValue(prop));
+		appendString(expr, "')");
+		if (mapContains(elem, "use-all")) {
+			struct element *all;
+
+			all = listGet(classes, 0);
+			if (!mapContains(all, "referenced"))
+				mapSet(all, createNull(), "referenced");
+		}
+	}
+
+	mapSet(class, createString(name), "name");
+	mapSet(class, createString(expr), "test");
+	/* inherit untranslatable cases */
+	class->skip = allow->skip || deny->skip;
+	listPush(classes, class);
+
+	resetString(result, name);
+	/* pool class not yet merged */
+	result->skip = ISC_TRUE;
+	return result;
 }

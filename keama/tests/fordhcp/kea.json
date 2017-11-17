@@ -222,9 +222,9 @@
           {
             #failover peer "isc";
             "pool": "204.152.185.135 - 204.152.185.185"
-//          "deny": [
-//            "dynamic bootp clients"
-//          ]
+//          /// From:
+//          ///   deny dynamic bootp clients
+//          "client-class": "gen#_AND_#!DYNAMIC_BOOTP_CLIENTS#"
           }
         ]
       },
@@ -278,9 +278,9 @@
           {
             #failover peer "isc";
             "pool": "204.152.189.15 - 204.152.189.50"
-//          "deny": [
-//            "dynamic bootp clients"
-//          ]
+//          /// From:
+//          ///   deny dynamic bootp clients
+//          "client-class": "gen#_AND_#!DYNAMIC_BOOTP_CLIENTS#"
           }
         ],
         "reservations": [
@@ -348,9 +348,9 @@
           {
             #failover peer "isc";
             "pool": "149.20.50.196 - 149.20.50.254"
-//          "deny": [
-//            "dynamic bootp clients"
-//          ]
+//          /// From:
+//          ///   deny dynamic bootp clients
+//          "client-class": "gen#_AND_#!DYNAMIC_BOOTP_CLIENTS#"
           }
         ]
       },
@@ -382,9 +382,9 @@
           {
             #failover peer "isc";
             "pool": "149.20.50.33 - 149.20.50.120"
-//          "deny": [
-//            "dynamic bootp clients"
-//          ]
+//          /// From:
+//          ///   deny dynamic bootp clients
+//          "client-class": "gen#_AND_#!DYNAMIC_BOOTP_CLIENTS#"
           }
         ],
         "reservations": [
@@ -529,9 +529,9 @@
           {
             #		#failover peer "isc";
             "pool": "149.20.50.140 - 149.20.50.190"
-//          "deny": [
-//            "dynamic bootp clients"
-//          ]
+//          /// From:
+//          ///   deny dynamic bootp clients
+//          "client-class": "gen#_AND_#!DYNAMIC_BOOTP_CLIENTS#"
           }
         ],
         /// Host reservations without fixed addresses were put in the last declared subnet
@@ -694,9 +694,9 @@
           {
             #failover peer "isc";
             "pool": "149.20.49.240 - 149.20.49.252"
-//          "deny": [
-//            "dynamic bootp clients"
-//          ]
+//          /// From:
+//          ///   deny dynamic bootp clients
+//          "client-class": "gen#_AND_#!DYNAMIC_BOOTP_CLIENTS#"
           }
         ]
       }
@@ -1049,6 +1049,10 @@
 //        }
 //      }
       }
+//    {
+//      "name": "gen#_AND_#!DYNAMIC_BOOTP_CLIENTS#",
+//      "test": "not member('DYNAMIC_BOOTP_CLIENTS')"
+//    }
     ]
   }
 }
