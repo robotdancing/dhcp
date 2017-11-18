@@ -201,6 +201,8 @@
             "pools": [
               {
                 "pool": "10.17.224.10 - 10.17.224.250"
+//              /// From:
+//              ///   allow foo
 //              "client-class": "foo"
               }
             ]
