@@ -1146,8 +1146,11 @@ copy(struct element *e)
 	/* don't copy key */
 	/* copy comments */
 	TAILQ_FOREACH(comment, &e->comments) {
-		comment = createComment(comment->line);
-		TAILQ_INSERT_TAIL(&result->comments, comment);
+		/* do not reuse comment variable! */
+		struct comment *tmp;
+
+		tmp = createComment(comment->line);
+		TAILQ_INSERT_TAIL(&result->comments, tmp);
 	}
 	return result;
 }

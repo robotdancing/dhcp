@@ -96,8 +96,8 @@ static struct element *find_location(struct element *, struct range *);
 static int get_prefix_length(const char *, const char *);
 static struct element *get_class(struct parse *, struct element *);
 static void concat_classes(struct parse *, struct element *, struct element *);
-static struct element *generate_class(struct parse *, struct element *,
-				      struct element *);
+static void generate_class(struct parse *, struct element *, struct element *,
+			   struct element *);
 
 /* Add head config file comments to the DHCP server map */
 
@@ -926,6 +926,7 @@ get_permit(struct parse *cfile, struct element *permit_head)
 	struct element *member;
 	isc_boolean_t need_clients = ISC_TRUE;
 	isc_boolean_t negative = ISC_FALSE;
+	isc_boolean_t known_clients = ISC_FALSE;
 	isc_boolean_t use_all = ISC_FALSE;
 
 	token = next_token(&val, NULL, cfile);
@@ -935,6 +936,7 @@ get_permit(struct parse *cfile, struct element *permit_head)
 		alias = makeString(-1, "unknown clients");
 		negative = ISC_TRUE;
         known_clients:
+		known_clients = ISC_TRUE;
 		permit_head->skip = ISC_TRUE;
 		cfile->issue_counter++;
 		comment = createComment("/// [un]known-clients is not yet "
@@ -985,11 +987,14 @@ get_permit(struct parse *cfile, struct element *permit_head)
 		break;
 				
 	case DYNAMIC:
+		/* bootp is not supported by Kea so the dynamic bootp
+		 * client set is the empty set. */
 		if (next_token(&val, NULL, cfile) != TOKEN_BOOTP)
 			parse_error(cfile, "expecting \"bootp\"");
-		permit = makeString(-1, "DYNAMIC_BOOTP_CLIENTS");
+		permit = makeString(-1, "ALL");
+		negative = ISC_TRUE;
 		alias = makeString(-1, "dynamic bootp clients");
-		permit_head->skip = ISC_TRUE;
+		use_all = ISC_TRUE;
 		cfile->issue_counter++;
 		comment = createComment("/// dynamic-bootp-client is not "
 					"supported by Kea");
@@ -1036,6 +1041,8 @@ get_permit(struct parse *cfile, struct element *permit_head)
 	mapSet(member, createBool(!negative), "way");
 	if (alias != NULL)
 		mapSet(member, createString(alias), "real");
+	if (known_clients)
+		mapSet(member, createNull(), "known-clients");
 	if (use_all)
 		mapSet(member, createNull(), "use-all");
 	if (comment != NULL)
@@ -1074,7 +1081,6 @@ parse_pool_statement(struct parse *cfile, int type)
 	struct element *pools;
 	struct element *permit;
 	struct element *prohibit;
-	struct element *acl;
 	int declaration = 0;
 	unsigned range_counter = 0;
 
@@ -1142,9 +1148,7 @@ parse_pool_statement(struct parse *cfile, int type)
 
 	cfile->stack_top--;
 
-	acl = generate_class(cfile, permit, prohibit);
-	if (acl != NULL)
-		mapSet(pool, acl, "client-class");
+	generate_class(cfile, pool, permit, prohibit);
 
 	pools = mapGet(cfile->stack[cfile->stack_top], "pools");
 	if (pools == NULL) {
@@ -1172,6 +1176,7 @@ parse_pool_statement(struct parse *cfile, int type)
 
 		first = createMap();
 		saved = copy(pool);
+		TAILQ_CONCAT(&first->comments, &pool->comments);
 		while (mapSize(pool) > 0) {
 			handle = mapPop(pool);
 			if ((handle == NULL) || (handle->key == NULL) ||
@@ -3451,7 +3456,6 @@ parse_pool6_statement(struct parse *cfile, int type)
 	struct element *pdpools;
 	struct element *permit;
 	struct element *prohibit;
-	struct element *acl;
 	int declaration = 0;
 	unsigned range_counter = 0;
 	unsigned prefix_counter = 0;
@@ -3523,9 +3527,7 @@ parse_pool6_statement(struct parse *cfile, int type)
 
 	cfile->stack_top--;
 
-	acl = generate_class(cfile, permit, prohibit);
-	if (acl != NULL)
-		mapSet(pool, acl, "client-class");
+	generate_class(cfile, pool, permit, prohibit);
 
 	/*
 	 * Spread and eventually split between pools and pd-pools
@@ -4697,8 +4699,8 @@ concat_classes(struct parse *cfile, struct element *dst, struct element *src)
 
 /* Generate a class from allow/deny member lists */
 
-static struct element *
-generate_class(struct parse *cfile,
+static void
+generate_class(struct parse *cfile, struct element *pool,
 	       struct element *allow, struct element *deny)
 {
 	struct element *classes;
@@ -4710,29 +4712,11 @@ generate_class(struct parse *cfile,
 	struct string *expr;
 	struct string *msg;
 	struct comment *comment;
+	isc_boolean_t rescan;
 	size_t i;
 
 	if ((listSize(allow) == 0) && (listSize(deny) == 0))
-		return NULL;
-
-	/* Unique allow short cut */
-	if ((listSize(allow) == 1) && (listSize(deny) == 0) &&
-	    !allow->skip && !deny->skip) {
-		elem = listGet(allow, 0);
-		assert(elem != NULL);
-		prop = mapGet(elem, "way");
-		assert(prop != NULL);
-		assert(prop->type == ELEMENT_BOOLEAN);
-		if (boolValue(prop)) {
-			class = mapGet(elem, "class");
-			assert(class != NULL);
-			assert(class->type == ELEMENT_STRING);
-			result = createString(stringValue(class));
-			/* pool class not yet merged */
-			result->skip = ISC_TRUE;
-			return result;
-		}
-	}
+		return;
 
 	classes = mapGet(cfile->stack[1], "generated-classes");
 	/* Create generated-classes with gen#ALL# as first element */
@@ -4750,7 +4734,7 @@ generate_class(struct parse *cfile,
 	}
 
 	/* Create comments */
-	result = createString(makeString(-1, "__placeholder__"));
+	result = createNull();
 	comment = createComment("/// From:");
 	TAILQ_INSERT_TAIL(&result->comments, comment);
 	for (i = 0; i < listSize(allow); i++) {
@@ -4780,6 +4764,116 @@ generate_class(struct parse *cfile,
 		concatString(msg, stringValue(alias ? alias : prop));
 		comment = createComment(msg->content);
 		TAILQ_INSERT_TAIL(&result->comments, comment);
+	}
+
+	/* Deal with special cases */
+	for (;;) {
+		rescan = ISC_FALSE;
+		for (i = 0; i < listSize(allow); i++) {
+			elem = listGet(allow, i);
+			assert(elem != NULL);
+			prop = mapGet(elem, "way");
+			assert(prop != NULL);
+			assert(prop->type == ELEMENT_BOOLEAN);
+			/* allow !ALL and other */
+			if (mapContains(elem, "use-all") && !boolValue(prop) &&
+			    (listSize(allow) > 1)) {
+				listRemove(allow, i);
+				rescan = ISC_TRUE;
+				break;
+			}
+			/* allow ALL alone */
+			if (mapContains(elem, "use-all") && boolValue(prop) &&
+			    (listSize(allow) == 1)) {
+				resetList(allow);
+				rescan = ISC_TRUE;
+				break;
+			}
+			/* ALLOW [un]known clients */
+			if (mapContains(elem, "known-clients")) {
+				listRemove(allow, i);
+				mapRemove(elem, "way");
+				mapSet(elem,
+				       createBool(!boolValue(prop)),
+				       "way");
+				listPush(deny, elem);
+				rescan = ISC_TRUE;
+				break;
+			}
+		}
+		if (!rescan)
+			break;
+	}
+
+	for (;;) {
+		rescan = ISC_FALSE;
+		for (i = 0; i < listSize(deny); i++) {
+			elem = listGet(deny, i);
+			assert(elem != NULL);
+			prop = mapGet(elem, "way");
+			assert(prop != NULL);
+			assert(prop->type == ELEMENT_BOOLEAN);
+			/* DENY !ALL */
+			if (mapContains(elem, "use-all") && !boolValue(prop)) {
+				listRemove(deny, i);
+				rescan = ISC_TRUE;
+				break;
+			}
+			/* DENY ALL */
+			if (mapContains(elem, "use-all") && boolValue(prop)) {
+				resetList(allow);
+				if (listSize(deny) > 1) {
+					listRemove(deny, i);
+					resetList(deny);
+					listPush(deny, elem);
+				}
+				break;
+			}
+			/* DENY [un]known clients */
+			if (mapContains(elem, "known-clients")) {
+				listRemove(allow, i);
+				if (boolValue(prop))
+					resetString(result,
+						    makeString(-1, "never"));
+				else
+					resetString(result,
+						    makeString(-1,"only"));
+				/* pool class not yet merged */
+				result->skip = ISC_TRUE;
+				mapSet(pool, result, "known-clients");
+				result = createNull();
+				rescan = ISC_TRUE;
+				break;
+			}
+		}
+		if (!rescan)
+			break;
+	}
+
+	/* Fully cleaned? */
+	if ((listSize(allow) == 0) && (listSize(deny) == 0)) {
+		TAILQ_CONCAT(&pool->comments, &result->comments);
+		return;
+	}
+
+	/* Unique allow member short cut */
+	if ((listSize(allow) == 1) && (listSize(deny) == 0) &&
+	    !allow->skip && !deny->skip) {
+		elem = listGet(allow, 0);
+		assert(elem != NULL);
+		prop = mapGet(elem, "way");
+		assert(prop != NULL);
+		assert(prop->type == ELEMENT_BOOLEAN);
+		class = mapGet(elem, "class");
+		assert(class != NULL);
+		assert(class->type == ELEMENT_STRING);
+		if (boolValue(prop)) {
+			resetString(result, stringValue(class));
+			/* pool class not yet merged */
+			result->skip = ISC_TRUE;
+			mapSet(pool, result, "client-class");
+			return;
+		}
 	}
 
 	/* Build name */
@@ -4833,7 +4927,8 @@ generate_class(struct parse *cfile,
 		resetString(result, name);
 		/* pool class not yet merged */
 		result->skip = ISC_TRUE;
-		return result;
+		mapSet(pool, result, "client-class");
+		return;
 	}
 
 	/* Create expression */
@@ -4903,5 +4998,5 @@ generate_class(struct parse *cfile,
 	resetString(result, name);
 	/* pool class not yet merged */
 	result->skip = ISC_TRUE;
-	return result;
+	mapSet(pool, result, "client-class");
 }

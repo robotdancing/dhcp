@@ -21,6 +21,7 @@
             "data": "true"
           },
           # interface
+          # option
           {
             "space": "dhcp4",
             "name": "domain-search",

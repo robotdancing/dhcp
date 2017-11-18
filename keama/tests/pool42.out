@@ -9,6 +9,7 @@
         /// valid-lifetime moved from an internal pool scope
         "valid-lifetime": 1800,
         "pools": [
+          # pool declaration
           {
             "option-data": [
               {

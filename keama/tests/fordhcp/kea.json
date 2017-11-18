@@ -219,12 +219,11 @@
           }
         ],
         "pools": [
+          /// From:
+          ///   deny dynamic bootp clients
           {
             #failover peer "isc";
             "pool": "204.152.185.135 - 204.152.185.185"
-//          /// From:
-//          ///   deny dynamic bootp clients
-//          "client-class": "gen#_AND_#!DYNAMIC_BOOTP_CLIENTS#"
           }
         ]
       },
@@ -275,12 +274,11 @@
         "valid-lifetime": 3100,
         "pools": [
           # 51 minutes
+          /// From:
+          ///   deny dynamic bootp clients
           {
             #failover peer "isc";
             "pool": "204.152.189.15 - 204.152.189.50"
-//          /// From:
-//          ///   deny dynamic bootp clients
-//          "client-class": "gen#_AND_#!DYNAMIC_BOOTP_CLIENTS#"
           }
         ],
         "reservations": [
@@ -345,12 +343,11 @@
         "valid-lifetime": 1200,
         "pools": [
           # 20 minutes
+          /// From:
+          ///   deny dynamic bootp clients
           {
             #failover peer "isc";
             "pool": "149.20.50.196 - 149.20.50.254"
-//          /// From:
-//          ///   deny dynamic bootp clients
-//          "client-class": "gen#_AND_#!DYNAMIC_BOOTP_CLIENTS#"
           }
         ]
       },
@@ -379,12 +376,11 @@
 //      /// Only global enable-updates is supported
 //      "enable-updates": false,
         "pools": [
+          /// From:
+          ///   deny dynamic bootp clients
           {
             #failover peer "isc";
             "pool": "149.20.50.33 - 149.20.50.120"
-//          /// From:
-//          ///   deny dynamic bootp clients
-//          "client-class": "gen#_AND_#!DYNAMIC_BOOTP_CLIENTS#"
           }
         ],
         "reservations": [
@@ -526,12 +522,11 @@
           }
         ],
         "pools": [
+          /// From:
+          ///   deny dynamic bootp clients
           {
             #		#failover peer "isc";
             "pool": "149.20.50.140 - 149.20.50.190"
-//          /// From:
-//          ///   deny dynamic bootp clients
-//          "client-class": "gen#_AND_#!DYNAMIC_BOOTP_CLIENTS#"
           }
         ],
         /// Host reservations without fixed addresses were put in the last declared subnet
@@ -691,12 +686,11 @@
           # 1 minutes
           #	default-lease-time 1200;	# 20 minutes
           #	max-lease-time 1200;		# 20 minutes
+          /// From:
+          ///   deny dynamic bootp clients
           {
             #failover peer "isc";
             "pool": "149.20.49.240 - 149.20.49.252"
-//          /// From:
-//          ///   deny dynamic bootp clients
-//          "client-class": "gen#_AND_#!DYNAMIC_BOOTP_CLIENTS#"
           }
         ]
       }
@@ -1049,10 +1043,6 @@
 //        }
 //      }
       }
-//    {
-//      "name": "gen#_AND_#!DYNAMIC_BOOTP_CLIENTS#",
-//      "test": "not member('DYNAMIC_BOOTP_CLIENTS')"
-//    }
     ]
   }
 }
