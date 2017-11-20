@@ -16,6 +16,7 @@
             "pool": "2001::100 - 2001::200"
 //          /// From:
 //          ///   deny unauthenticated clients
+//          /// [un]authenticated-clients is not supported by ISC DHCP and Kea
 //          "client-class": "gen#_AND_#!ALL#"
           }
         ]

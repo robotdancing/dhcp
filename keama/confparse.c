@@ -1046,7 +1046,7 @@ get_permit(struct parse *cfile, struct element *permit_head)
 	if (use_all)
 		mapSet(member, createNull(), "use-all");
 	if (comment != NULL)
-		TAILQ_INSERT_TAIL(&member->comments, comment);
+		TAILQ_INSERT_TAIL(&permit_head->comments, comment);
 	listPush(permit_head, member);
 	parse_semi(cfile);
 
@@ -4704,13 +4704,14 @@ generate_class(struct parse *cfile, struct element *pool,
 	       struct element *allow, struct element *deny)
 {
 	struct element *classes;
-	struct element *result;
 	struct element *class;
 	struct element *elem;
 	struct element *prop;
+	struct element *result = NULL;
 	struct string *name;
 	struct string *expr;
 	struct string *msg;
+	struct comments comments;
 	struct comment *comment;
 	isc_boolean_t rescan;
 	size_t i;
@@ -4734,9 +4735,9 @@ generate_class(struct parse *cfile, struct element *pool,
 	}
 
 	/* Create comments */
-	result = createNull();
+	TAILQ_INIT(&comments);
 	comment = createComment("/// From:");
-	TAILQ_INSERT_TAIL(&result->comments, comment);
+	TAILQ_INSERT_TAIL(&comments, comment);
 	for (i = 0; i < listSize(allow); i++) {
 		struct element *alias;
 
@@ -4749,7 +4750,7 @@ generate_class(struct parse *cfile, struct element *pool,
 		msg = makeString(-1, "///   allow ");
 		concatString(msg, stringValue(alias ? alias : prop));
 		comment = createComment(msg->content);
-		TAILQ_INSERT_TAIL(&result->comments, comment);
+		TAILQ_INSERT_TAIL(&comments, comment);
 	}
 	for (i = 0; i < listSize(deny); i++) {
 		struct element *alias;
@@ -4763,8 +4764,10 @@ generate_class(struct parse *cfile, struct element *pool,
 		msg = makeString(-1, "///   deny ");
 		concatString(msg, stringValue(alias ? alias : prop));
 		comment = createComment(msg->content);
-		TAILQ_INSERT_TAIL(&result->comments, comment);
+		TAILQ_INSERT_TAIL(&comments, comment);
 	}
+	TAILQ_CONCAT(&comments, &allow->comments);
+	TAILQ_CONCAT(&comments, &deny->comments);
 
 	/* Deal with special cases */
 	for (;;) {
@@ -4832,16 +4835,11 @@ generate_class(struct parse *cfile, struct element *pool,
 			/* DENY [un]known clients */
 			if (mapContains(elem, "known-clients")) {
 				listRemove(allow, i);
-				if (boolValue(prop))
-					resetString(result,
-						    makeString(-1, "never"));
-				else
-					resetString(result,
-						    makeString(-1,"only"));
+				result = createString(makeString(-1,
+					boolValue(prop) ? "never" : "only"));
 				/* pool class not yet merged */
 				result->skip = ISC_TRUE;
 				mapSet(pool, result, "known-clients");
-				result = createNull();
 				rescan = ISC_TRUE;
 				break;
 			}
@@ -4852,7 +4850,10 @@ generate_class(struct parse *cfile, struct element *pool,
 
 	/* Fully cleaned? */
 	if ((listSize(allow) == 0) && (listSize(deny) == 0)) {
-		TAILQ_CONCAT(&pool->comments, &result->comments);
+		if (result != NULL)
+			TAILQ_CONCAT(&result->comments, &comments);
+		else
+			TAILQ_CONCAT(&pool->comments, &comments);
 		return;
 	}
 
@@ -4868,7 +4869,8 @@ generate_class(struct parse *cfile, struct element *pool,
 		assert(class != NULL);
 		assert(class->type == ELEMENT_STRING);
 		if (boolValue(prop)) {
-			resetString(result, stringValue(class));
+			result = createString(stringValue(class));
+			TAILQ_CONCAT(&result->comments, &comments);
 			/* pool class not yet merged */
 			result->skip = ISC_TRUE;
 			mapSet(pool, result, "client-class");
@@ -4924,7 +4926,8 @@ generate_class(struct parse *cfile, struct element *pool,
 		/* got it! */
 		if ((i == 0) && !mapContains(class, "referenced"))
 			mapSet(class, createNull(), "referenced");
-		resetString(result, name);
+		result = createString(name);
+		TAILQ_CONCAT(&result->comments, &comments);
 		/* pool class not yet merged */
 		result->skip = ISC_TRUE;
 		mapSet(pool, result, "client-class");
@@ -4995,7 +4998,8 @@ generate_class(struct parse *cfile, struct element *pool,
 	class->skip |= allow->skip || deny->skip;
 	listPush(classes, class);
 
-	resetString(result, name);
+	result = createString(name);
+	TAILQ_CONCAT(&result->comments, &comments);
 	/* pool class not yet merged */
 	result->skip = ISC_TRUE;
 	mapSet(pool, result, "client-class");

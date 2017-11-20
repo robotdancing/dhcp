@@ -221,6 +221,7 @@
         "pools": [
           /// From:
           ///   deny dynamic bootp clients
+          /// dynamic-bootp-client is not supported by Kea
           {
             #failover peer "isc";
             "pool": "204.152.185.135 - 204.152.185.185"
@@ -276,6 +277,7 @@
           # 51 minutes
           /// From:
           ///   deny dynamic bootp clients
+          /// dynamic-bootp-client is not supported by Kea
           {
             #failover peer "isc";
             "pool": "204.152.189.15 - 204.152.189.50"
@@ -345,6 +347,7 @@
           # 20 minutes
           /// From:
           ///   deny dynamic bootp clients
+          /// dynamic-bootp-client is not supported by Kea
           {
             #failover peer "isc";
             "pool": "149.20.50.196 - 149.20.50.254"
@@ -378,6 +381,7 @@
         "pools": [
           /// From:
           ///   deny dynamic bootp clients
+          /// dynamic-bootp-client is not supported by Kea
           {
             #failover peer "isc";
             "pool": "149.20.50.33 - 149.20.50.120"
@@ -524,6 +528,7 @@
         "pools": [
           /// From:
           ///   deny dynamic bootp clients
+          /// dynamic-bootp-client is not supported by Kea
           {
             #		#failover peer "isc";
             "pool": "149.20.50.140 - 149.20.50.190"
@@ -688,6 +693,7 @@
           #	max-lease-time 1200;		# 20 minutes
           /// From:
           ///   deny dynamic bootp clients
+          /// dynamic-bootp-client is not supported by Kea
           {
             #failover peer "isc";
             "pool": "149.20.49.240 - 149.20.49.252"
