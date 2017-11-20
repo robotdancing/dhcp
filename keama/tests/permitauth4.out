@@ -16,6 +16,7 @@
             "pool": "10.5.5.5 - 10.5.5.10"
 //          /// From:
 //          ///   allow authenticated clients
+//          /// [un]authenticated-clients is not supported by ISC DHCP and Kea
 //          "client-class": "gen#!ALL#"
           }
         ]
