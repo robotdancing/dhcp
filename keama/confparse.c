@@ -77,6 +77,7 @@ static void post_process_authoritative(struct parse *);
 static size_t post_process_reservations(struct parse *);
 static void post_process_classes(struct parse *);
 static void post_process_generated_classes(struct parse *);
+static void check_depend(struct element *, struct element *);
 static void post_process_option_definitions(struct parse *);
 static void add_host_reservation_identifiers(struct parse *, const char *);
 static void add_host_id_option(struct parse *, const struct option *, int);
@@ -357,15 +358,67 @@ post_process_generated_classes(struct parse *cfile)
 
 	/* remove unused gen#ALL */
 	class = listGet(generated, 0);
-	if (!mapContains(class, "referenced"))
-		listRemove(generated, 0);
-	else
+	listRemove(generated, 0);
+	if (mapContains(class, "referenced")) {
 		mapRemove(class, "referenced");
+		listPush(classes, class);
+	}
 
 	while (listSize(generated) > 0) {
 		class = listGet(generated, 0);
 		listRemove(generated, 0);
+		check_depend(class, classes);
 		listPush(classes, class);
+	}
+}
+
+static void
+check_depend(struct element *class, struct element *classes)
+{
+	struct element *list;
+
+	if (!mapContains(class, "depend"))
+		return;
+	list = mapGet(class, "depend");
+	mapRemove(class, "depend");
+	while (listSize(list) > 0) {
+		struct element *depend;
+		struct string *dname;
+		struct string *msg;
+		struct comment *comment;
+		isc_boolean_t found;
+		size_t i;
+
+		depend = listGet(list, 0);
+		listRemove(list, 0);
+		assert(depend != NULL);
+		assert(depend->type == ELEMENT_STRING);
+		dname = stringValue(depend);
+		found = ISC_FALSE;
+		for (i = 0; i < listSize(classes); i++) {
+			struct element *item;
+			struct element *name;
+
+			item = listGet(classes, i);
+			assert(item != NULL);
+			assert(item->type == ELEMENT_MAP);
+			name = mapGet(item, "name");
+			if (name == NULL)
+				continue;
+			assert(name->type == ELEMENT_STRING);
+			if (eqString(stringValue(name), dname)) {
+				found = ISC_TRUE;
+				break;
+			}
+		}
+		if (found)
+			continue;
+		msg = makeString(-1, "/// Depend on missing '");
+		concatString(msg, dname);
+		appendString(msg, "' class");
+		comment = createComment(msg->content);
+		TAILQ_INSERT_TAIL(&class->comments, comment);
+		class->skip = ISC_TRUE;
 	}
 }
 
@@ -937,10 +990,6 @@ get_permit(struct parse *cfile, struct element *permit_head)
 		negative = ISC_TRUE;
         known_clients:
 		known_clients = ISC_TRUE;
-		permit_head->skip = ISC_TRUE;
-		cfile->issue_counter++;
-		comment = createComment("/// [un]known-clients is not yet "
-					"supported by Kea");
 		break;
 				
 	case KNOWN_CLIENTS:
@@ -965,7 +1014,7 @@ get_permit(struct parse *cfile, struct element *permit_head)
 		break;
 				
 	case AUTHENTICATED:
-		permit = makeString(-1, "ALL");
+		permit = makeString(-1, "gen#ALL#");
 		alias = makeString(-1, "authenticated clients");
 		negative = ISC_TRUE;
 	authenticated_clients:
@@ -975,13 +1024,13 @@ get_permit(struct parse *cfile, struct element *permit_head)
 		break;
 				
 	case UNAUTHENTICATED:
-		permit = makeString(-1, "ALL");
+		permit = makeString(-1, "gen#ALL#");
 		alias = makeString(-1, "unauthenticated clients");
 		goto authenticated_clients;
 		break;
 
 	case ALL:
-		permit = makeString(-1, "ALL");
+		permit = makeString(-1, "gen#ALL#");
 		alias = makeString(-1, "all clients");
 		use_all = ISC_TRUE;
 		break;
@@ -991,7 +1040,7 @@ get_permit(struct parse *cfile, struct element *permit_head)
 		 * client set is the empty set. */
 		if (next_token(&val, NULL, cfile) != TOKEN_BOOTP)
 			parse_error(cfile, "expecting \"bootp\"");
-		permit = makeString(-1, "ALL");
+		permit = makeString(-1, "gen#ALL#");
 		negative = ISC_TRUE;
 		alias = makeString(-1, "dynamic bootp clients");
 		use_all = ISC_TRUE;
@@ -4707,6 +4756,7 @@ generate_class(struct parse *cfile, struct element *pool,
 	struct element *class;
 	struct element *elem;
 	struct element *prop;
+	struct element *depend;
 	struct element *result = NULL;
 	struct string *name;
 	struct string *expr;
@@ -4837,8 +4887,6 @@ generate_class(struct parse *cfile, struct element *pool,
 				listRemove(allow, i);
 				result = createString(makeString(-1,
 					boolValue(prop) ? "never" : "only"));
-				/* pool class not yet merged */
-				result->skip = ISC_TRUE;
 				mapSet(pool, result, "known-clients");
 				rescan = ISC_TRUE;
 				break;
@@ -4871,8 +4919,6 @@ generate_class(struct parse *cfile, struct element *pool,
 		if (boolValue(prop)) {
 			result = createString(stringValue(class));
 			TAILQ_CONCAT(&result->comments, &comments);
-			/* pool class not yet merged */
-			result->skip = ISC_TRUE;
 			mapSet(pool, result, "client-class");
 			return;
 		}
@@ -4888,10 +4934,14 @@ generate_class(struct parse *cfile, struct element *pool,
 		assert(prop->type == ELEMENT_BOOLEAN);
 		if (!boolValue(prop))
 			appendString(name, "!");
-		prop = mapGet(elem, "class");
-		assert(prop != NULL);
-		assert(prop->type == ELEMENT_STRING);
-		concatString(name, stringValue(prop));
+		if (mapContains(elem, "use-all"))
+			concatString(name, makeString(-1, "ALL"));
+		else {
+			prop = mapGet(elem, "class");
+			assert(prop != NULL);
+			assert(prop->type == ELEMENT_STRING);
+			concatString(name, stringValue(prop));
+		}
 		appendString(name, "#");
 	}
 	if (listSize(deny) > 0) {
@@ -4904,10 +4954,14 @@ generate_class(struct parse *cfile, struct element *pool,
 			assert(prop->type == ELEMENT_BOOLEAN);
 			if (boolValue(prop))
 				appendString(name, "!");
-			prop = mapGet(elem, "class");
-			assert(prop != NULL);
-			assert(prop->type == ELEMENT_STRING);
-			concatString(name, stringValue(prop));
+			if (mapContains(elem, "use-all"))
+				concatString(name, makeString(-1, "ALL"));
+			else {
+				prop = mapGet(elem, "class");
+				assert(prop != NULL);
+				assert(prop->type == ELEMENT_STRING);
+				concatString(name, stringValue(prop));
+			}
 			appendString(name, "#");
 		}
 	}
@@ -4928,14 +4982,13 @@ generate_class(struct parse *cfile, struct element *pool,
 			mapSet(class, createNull(), "referenced");
 		result = createString(name);
 		TAILQ_CONCAT(&result->comments, &comments);
-		/* pool class not yet merged */
-		result->skip = ISC_TRUE;
 		mapSet(pool, result, "client-class");
 		return;
 	}
 
 	/* Create expression */
 	class = createMap();
+	depend = createList();
 	expr = allocString();
 
 	if ((listSize(allow) > 0) && (listSize(deny) > 0))
@@ -4953,7 +5006,6 @@ generate_class(struct parse *cfile, struct element *pool,
 		if (negative)
 			appendString(expr, "not ");
 		appendString(expr, "member('");
-		class->skip = ISC_TRUE;
 		concatString(expr, stringValue(prop));
 		appendString(expr, "')");
 		if (mapContains(elem, "use-all")) {
@@ -4962,7 +5014,8 @@ generate_class(struct parse *cfile, struct element *pool,
 			all = listGet(classes, 0);
 			if (!mapContains(all, "referenced"))
 				mapSet(all, createNull(), "referenced");
-		}
+		} else
+			listPush(depend, createString(stringValue(prop)));
 	}
 
 	if ((listSize(allow) > 0) && (listSize(deny) > 0))
@@ -4980,7 +5033,6 @@ generate_class(struct parse *cfile, struct element *pool,
 		if (negative)
 			appendString(expr, "not ");
 		appendString(expr, "member('");
-		class->skip = ISC_TRUE;
 		concatString(expr, stringValue(prop));
 		appendString(expr, "')");
 		if (mapContains(elem, "use-all")) {
@@ -4989,18 +5041,18 @@ generate_class(struct parse *cfile, struct element *pool,
 			all = listGet(classes, 0);
 			if (!mapContains(all, "referenced"))
 				mapSet(all, createNull(), "referenced");
-		}
+		} else
+			listPush(depend, createString(stringValue(prop)));
 	}
 
 	mapSet(class, createString(name), "name");
 	mapSet(class, createString(expr), "test");
+	mapSet(class, depend, "depend");
 	/* inherit untranslatable cases */
 	class->skip |= allow->skip || deny->skip;
 	listPush(classes, class);
 
 	result = createString(name);
 	TAILQ_CONCAT(&result->comments, &comments);
-	/* pool class not yet merged */
-	result->skip = ISC_TRUE;
 	mapSet(pool, result, "client-class");
 }

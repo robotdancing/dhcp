@@ -145,11 +145,11 @@
         "name": "MotoVIP",
         /// from: match if (substring(option dhcp.vendor-class-identifier, 0, 7)) = 'MotoVIP'
         "test": "substring(option[60].hex,0,7) == 'MotoVIP'"
+      },
+      {
+        "name": "gen#_AND_#!MotoVIP#",
+        "test": "not member('MotoVIP')"
       }
-//    {
-//      "name": "gen#_AND_#!MotoVIP#",
-//      "test": "not member('MotoVIP')"
-//    }
     ],
     "subnet4": [
       # Loopback subnet
@@ -288,10 +288,10 @@
 //      ],
         "pools": [
           {
-            "pool": "10.207.192.1 - 10.207.255.254"
-//          /// From:
-//          ///   deny MotoVIP
-//          "client-class": "gen#_AND_#!MotoVIP#"
+            "pool": "10.207.192.1 - 10.207.255.254",
+            /// From:
+            ///   deny MotoVIP
+            "client-class": "gen#_AND_#!MotoVIP#"
           }
         ]
       },
@@ -384,10 +384,10 @@
 //      },
         "pools": [
           {
-            "pool": "10.208.64.1 - 10.208.127.254"
-//          /// From:
-//          ///   deny MotoVIP
-//          "client-class": "gen#_AND_#!MotoVIP#"
+            "pool": "10.208.64.1 - 10.208.127.254",
+            /// From:
+            ///   deny MotoVIP
+            "client-class": "gen#_AND_#!MotoVIP#"
           }
         ]
       },
@@ -479,10 +479,10 @@
 //      },
         "pools": [
           {
-            "pool": "10.208.192.1 - 10.208.255.254"
-//          /// From:
-//          ///   deny MotoVIP
-//          "client-class": "gen#_AND_#!MotoVIP#"
+            "pool": "10.208.192.1 - 10.208.255.254",
+            /// From:
+            ///   deny MotoVIP
+            "client-class": "gen#_AND_#!MotoVIP#"
           }
         ]
       },
@@ -574,10 +574,10 @@
 //      },
         "pools": [
           {
-            "pool": "10.209.64.1 - 10.209.127.254"
-//          /// From:
-//          ///   deny MotoVIP
-//          "client-class": "gen#_AND_#!MotoVIP#"
+            "pool": "10.209.64.1 - 10.209.127.254",
+            /// From:
+            ///   deny MotoVIP
+            "client-class": "gen#_AND_#!MotoVIP#"
           }
         ]
       },
@@ -669,10 +669,10 @@
 //      },
         "pools": [
           {
-            "pool": "10.209.192.1 - 10.209.255.254"
-//          /// From:
-//          ///   deny MotoVIP
-//          "client-class": "gen#_AND_#!MotoVIP#"
+            "pool": "10.209.192.1 - 10.209.255.254",
+            /// From:
+            ///   deny MotoVIP
+            "client-class": "gen#_AND_#!MotoVIP#"
           }
         ]
       },
@@ -764,10 +764,10 @@
 //      },
         "pools": [
           {
-            "pool": "10.210.64.1 - 10.210.127.254"
-//          /// From:
-//          ///   deny MotoVIP
-//          "client-class": "gen#_AND_#!MotoVIP#"
+            "pool": "10.210.64.1 - 10.210.127.254",
+            /// From:
+            ///   deny MotoVIP
+            "client-class": "gen#_AND_#!MotoVIP#"
           }
         ]
       },
@@ -859,10 +859,10 @@
 //      },
         "pools": [
           {
-            "pool": "10.210.192.1 - 10.210.255.254"
-//          /// From:
-//          ///   deny MotoVIP
-//          "client-class": "gen#_AND_#!MotoVIP#"
+            "pool": "10.210.192.1 - 10.210.255.254",
+            /// From:
+            ///   deny MotoVIP
+            "client-class": "gen#_AND_#!MotoVIP#"
           }
         ]
       },
@@ -954,10 +954,10 @@
 //      },
         "pools": [
           {
-            "pool": "10.212.64.1 - 10.212.127.254"
-//          /// From:
-//          ///   deny MotoVIP
-//          "client-class": "gen#_AND_#!MotoVIP#"
+            "pool": "10.212.64.1 - 10.212.127.254",
+            /// From:
+            ///   deny MotoVIP
+            "client-class": "gen#_AND_#!MotoVIP#"
           }
         ]
       },
@@ -1049,10 +1049,10 @@
 //      },
         "pools": [
           {
-            "pool": "10.212.192.1 - 10.212.255.254"
-//          /// From:
-//          ///   deny MotoVIP
-//          "client-class": "gen#_AND_#!MotoVIP#"
+            "pool": "10.212.192.1 - 10.212.255.254",
+            /// From:
+            ///   deny MotoVIP
+            "client-class": "gen#_AND_#!MotoVIP#"
           }
         ]
       },
@@ -1144,10 +1144,10 @@
 //      },
         "pools": [
           {
-            "pool": "10.213.64.1 - 10.213.127.254"
-//          /// From:
-//          ///   deny MotoVIP
-//          "client-class": "gen#_AND_#!MotoVIP#"
+            "pool": "10.213.64.1 - 10.213.127.254",
+            /// From:
+            ///   deny MotoVIP
+            "client-class": "gen#_AND_#!MotoVIP#"
           }
         ]
       },
@@ -1239,10 +1239,10 @@
 //      },
         "pools": [
           {
-            "pool": "10.213.192.1 - 10.213.255.254"
-//          /// From:
-//          ///   deny MotoVIP
-//          "client-class": "gen#_AND_#!MotoVIP#"
+            "pool": "10.213.192.1 - 10.213.255.254",
+            /// From:
+            ///   deny MotoVIP
+            "client-class": "gen#_AND_#!MotoVIP#"
           }
         ]
       },
@@ -1334,10 +1334,10 @@
 //      },
         "pools": [
           {
-            "pool": "10.214.64.1 - 10.214.127.254"
-//          /// From:
-//          ///   deny MotoVIP
-//          "client-class": "gen#_AND_#!MotoVIP#"
+            "pool": "10.214.64.1 - 10.214.127.254",
+            /// From:
+            ///   deny MotoVIP
+            "client-class": "gen#_AND_#!MotoVIP#"
           }
         ]
       },
@@ -1429,10 +1429,10 @@
 //      },
         "pools": [
           {
-            "pool": "10.214.192.1 - 10.214.255.254"
-//          /// From:
-//          ///   deny MotoVIP
-//          "client-class": "gen#_AND_#!MotoVIP#"
+            "pool": "10.214.192.1 - 10.214.255.254",
+            /// From:
+            ///   deny MotoVIP
+            "client-class": "gen#_AND_#!MotoVIP#"
           }
         ]
       },
@@ -1525,10 +1525,10 @@
 //      },
         "pools": [
           {
-            "pool": "10.215.64.0 - 10.215.127.254"
-//          /// From:
-//          ///   deny MotoVIP
-//          "client-class": "gen#_AND_#!MotoVIP#"
+            "pool": "10.215.64.0 - 10.215.127.254",
+            /// From:
+            ///   deny MotoVIP
+            "client-class": "gen#_AND_#!MotoVIP#"
           }
         ]
       },
@@ -1621,10 +1621,10 @@
 //      },
         "pools": [
           {
-            "pool": "10.215.129.0 - 10.215.191.254"
-//          /// From:
-//          ///   deny MotoVIP
-//          "client-class": "gen#_AND_#!MotoVIP#"
+            "pool": "10.215.129.0 - 10.215.191.254",
+            /// From:
+            ///   deny MotoVIP
+            "client-class": "gen#_AND_#!MotoVIP#"
           }
         ]
       },
@@ -1716,10 +1716,10 @@
 //      },
         "pools": [
           {
-            "pool": "10.216.64.1 - 10.216.127.254"
-//          /// From:
-//          ///   deny MotoVIP
-//          "client-class": "gen#_AND_#!MotoVIP#"
+            "pool": "10.216.64.1 - 10.216.127.254",
+            /// From:
+            ///   deny MotoVIP
+            "client-class": "gen#_AND_#!MotoVIP#"
           }
         ]
       },
@@ -1811,10 +1811,10 @@
 //      },
         "pools": [
           {
-            "pool": "10.216.192.1 - 10.216.255.254"
-//          /// From:
-//          ///   deny MotoVIP
-//          "client-class": "gen#_AND_#!MotoVIP#"
+            "pool": "10.216.192.1 - 10.216.255.254",
+            /// From:
+            ///   deny MotoVIP
+            "client-class": "gen#_AND_#!MotoVIP#"
           }
         ]
       },
@@ -1906,10 +1906,10 @@
 //      },
         "pools": [
           {
-            "pool": "10.217.64.1 - 10.217.127.254"
-//          /// From:
-//          ///   deny MotoVIP
-//          "client-class": "gen#_AND_#!MotoVIP#"
+            "pool": "10.217.64.1 - 10.217.127.254",
+            /// From:
+            ///   deny MotoVIP
+            "client-class": "gen#_AND_#!MotoVIP#"
           }
         ]
       },
@@ -2001,10 +2001,10 @@
 //      },
         "pools": [
           {
-            "pool": "10.217.192.1 - 10.217.255.254"
-//          /// From:
-//          ///   deny MotoVIP
-//          "client-class": "gen#_AND_#!MotoVIP#"
+            "pool": "10.217.192.1 - 10.217.255.254",
+            /// From:
+            ///   deny MotoVIP
+            "client-class": "gen#_AND_#!MotoVIP#"
           }
         ]
       },
@@ -2096,10 +2096,10 @@
 //      },
         "pools": [
           {
-            "pool": "10.192.64.1 - 10.192.127.254"
-//          /// From:
-//          ///   deny MotoVIP
-//          "client-class": "gen#_AND_#!MotoVIP#"
+            "pool": "10.192.64.1 - 10.192.127.254",
+            /// From:
+            ///   deny MotoVIP
+            "client-class": "gen#_AND_#!MotoVIP#"
           }
         ]
       },
@@ -2191,10 +2191,10 @@
 //      },
         "pools": [
           {
-            "pool": "10.193.64.1 - 10.193.127.254"
-//          /// From:
-//          ///   deny MotoVIP
-//          "client-class": "gen#_AND_#!MotoVIP#"
+            "pool": "10.193.64.1 - 10.193.127.254",
+            /// From:
+            ///   deny MotoVIP
+            "client-class": "gen#_AND_#!MotoVIP#"
           }
         ]
       },
@@ -2286,10 +2286,10 @@
 //      },
         "pools": [
           {
-            "pool": "10.193.193.1 - 10.193.255.254"
-//          /// From:
-//          ///   deny MotoVIP
-//          "client-class": "gen#_AND_#!MotoVIP#"
+            "pool": "10.193.193.1 - 10.193.255.254",
+            /// From:
+            ///   deny MotoVIP
+            "client-class": "gen#_AND_#!MotoVIP#"
           }
         ]
       },
@@ -2381,10 +2381,10 @@
 //      },
         "pools": [
           {
-            "pool": "10.194.64.1 - 10.194.127.254"
-//          /// From:
-//          ///   deny MotoVIP
-//          "client-class": "gen#_AND_#!MotoVIP#"
+            "pool": "10.194.64.1 - 10.194.127.254",
+            /// From:
+            ///   deny MotoVIP
+            "client-class": "gen#_AND_#!MotoVIP#"
           }
         ]
       },
@@ -2476,10 +2476,10 @@
 //      },
         "pools": [
           {
-            "pool": "10.194.129.0 - 10.194.191.254"
-//          /// From:
-//          ///   deny MotoVIP
-//          "client-class": "gen#_AND_#!MotoVIP#"
+            "pool": "10.194.129.0 - 10.194.191.254",
+            /// From:
+            ///   deny MotoVIP
+            "client-class": "gen#_AND_#!MotoVIP#"
           }
         ]
       },
@@ -2571,10 +2571,10 @@
 //      },
         "pools": [
           {
-            "pool": "10.195.64.1 - 10.195.127.254"
-//          /// From:
-//          ///   deny MotoVIP
-//          "client-class": "gen#_AND_#!MotoVIP#"
+            "pool": "10.195.64.1 - 10.195.127.254",
+            /// From:
+            ///   deny MotoVIP
+            "client-class": "gen#_AND_#!MotoVIP#"
           }
         ]
       },
@@ -2666,10 +2666,10 @@
 //      },
         "pools": [
           {
-            "pool": "10.194.193.1 - 10.194.255.254"
-//          /// From:
-//          ///   deny MotoVIP
-//          "client-class": "gen#_AND_#!MotoVIP#"
+            "pool": "10.194.193.1 - 10.194.255.254",
+            /// From:
+            ///   deny MotoVIP
+            "client-class": "gen#_AND_#!MotoVIP#"
           }
         ]
       },
@@ -2761,10 +2761,10 @@
 //      },
         "pools": [
           {
-            "pool": "10.195.129.0 - 10.195.191.254"
-//          /// From:
-//          ///   deny MotoVIP
-//          "client-class": "gen#_AND_#!MotoVIP#"
+            "pool": "10.195.129.0 - 10.195.191.254",
+            /// From:
+            ///   deny MotoVIP
+            "client-class": "gen#_AND_#!MotoVIP#"
           }
         ]
       },
@@ -2856,10 +2856,10 @@
 //      },
         "pools": [
           {
-            "pool": "10.196.64.0 - 10.196.127.254"
-//          /// From:
-//          ///   deny MotoVIP
-//          "client-class": "gen#_AND_#!MotoVIP#"
+            "pool": "10.196.64.0 - 10.196.127.254",
+            /// From:
+            ///   deny MotoVIP
+            "client-class": "gen#_AND_#!MotoVIP#"
           }
         ]
       },
@@ -2951,10 +2951,10 @@
 //      },
         "pools": [
           {
-            "pool": "10.196.129.0 - 10.196.191.254"
-//          /// From:
-//          ///   deny MotoVIP
-//          "client-class": "gen#_AND_#!MotoVIP#"
+            "pool": "10.196.129.0 - 10.196.191.254",
+            /// From:
+            ///   deny MotoVIP
+            "client-class": "gen#_AND_#!MotoVIP#"
           }
         ]
       },
@@ -3046,10 +3046,10 @@
 //      },
         "pools": [
           {
-            "pool": "10.197.64.1 - 10.197.127.254"
-//          /// From:
-//          ///   deny MotoVIP
-//          "client-class": "gen#_AND_#!MotoVIP#"
+            "pool": "10.197.64.1 - 10.197.127.254",
+            /// From:
+            ///   deny MotoVIP
+            "client-class": "gen#_AND_#!MotoVIP#"
           }
         ]
       },
@@ -3141,10 +3141,10 @@
 //      },
         "pools": [
           {
-            "pool": "10.195.193.1 - 10.195.255.254"
-//          /// From:
-//          ///   deny MotoVIP
-//          "client-class": "gen#_AND_#!MotoVIP#"
+            "pool": "10.195.193.1 - 10.195.255.254",
+            /// From:
+            ///   deny MotoVIP
+            "client-class": "gen#_AND_#!MotoVIP#"
           }
         ]
       },
@@ -3236,10 +3236,10 @@
 //      },
         "pools": [
           {
-            "pool": "10.198.64.1 - 10.198.127.254"
-//          /// From:
-//          ///   deny MotoVIP
-//          "client-class": "gen#_AND_#!MotoVIP#"
+            "pool": "10.198.64.1 - 10.198.127.254",
+            /// From:
+            ///   deny MotoVIP
+            "client-class": "gen#_AND_#!MotoVIP#"
           }
         ]
       },
@@ -3331,10 +3331,10 @@
 //      },
         "pools": [
           {
-            "pool": "10.199.64.1 - 10.199.127.254"
-//          /// From:
-//          ///   deny MotoVIP
-//          "client-class": "gen#_AND_#!MotoVIP#"
+            "pool": "10.199.64.1 - 10.199.127.254",
+            /// From:
+            ///   deny MotoVIP
+            "client-class": "gen#_AND_#!MotoVIP#"
           }
         ]
       },
@@ -3426,10 +3426,10 @@
 //      },
         "pools": [
           {
-            "pool": "10.224.64.1 - 10.224.127.254"
-//          /// From:
-//          ///   deny MotoVIP
-//          "client-class": "gen#_AND_#!MotoVIP#"
+            "pool": "10.224.64.1 - 10.224.127.254",
+            /// From:
+            ///   deny MotoVIP
+            "client-class": "gen#_AND_#!MotoVIP#"
           }
         ]
       },
@@ -3521,10 +3521,10 @@
 //      },
         "pools": [
           {
-            "pool": "10.227.1.1 - 10.227.31.254"
-//          /// From:
-//          ///   deny MotoVIP
-//          "client-class": "gen#_AND_#!MotoVIP#"
+            "pool": "10.227.1.1 - 10.227.31.254",
+            /// From:
+            ///   deny MotoVIP
+            "client-class": "gen#_AND_#!MotoVIP#"
           }
         ]
       },
@@ -3615,10 +3615,10 @@
 //      },
         "pools": [
           {
-            "pool": "10.227.33.1 - 10.227.63.254"
-//          /// From:
-//          ///   deny MotoVIP
-//          "client-class": "gen#_AND_#!MotoVIP#"
+            "pool": "10.227.33.1 - 10.227.63.254",
+            /// From:
+            ///   deny MotoVIP
+            "client-class": "gen#_AND_#!MotoVIP#"
           }
         ]
       },
@@ -3710,10 +3710,10 @@
 //      },
         "pools": [
           {
-            "pool": "10.227.65.1 - 10.227.95.254"
-//          /// From:
-//          ///   deny MotoVIP
-//          "client-class": "gen#_AND_#!MotoVIP#"
+            "pool": "10.227.65.1 - 10.227.95.254",
+            /// From:
+            ///   deny MotoVIP
+            "client-class": "gen#_AND_#!MotoVIP#"
           }
         ]
       },
@@ -3805,10 +3805,10 @@
 //      },
         "pools": [
           {
-            "pool": "10.227.97.1 - 10.227.127.254"
-//          /// From:
-//          ///   deny MotoVIP
-//          "client-class": "gen#_AND_#!MotoVIP#"
+            "pool": "10.227.97.1 - 10.227.127.254",
+            /// From:
+            ///   deny MotoVIP
+            "client-class": "gen#_AND_#!MotoVIP#"
           }
         ]
       },
@@ -3900,10 +3900,10 @@
 //      },
         "pools": [
           {
-            "pool": "10.197.129.1 - 10.197.159.254"
-//          /// From:
-//          ///   deny MotoVIP
-//          "client-class": "gen#_AND_#!MotoVIP#"
+            "pool": "10.197.129.1 - 10.197.159.254",
+            /// From:
+            ///   deny MotoVIP
+            "client-class": "gen#_AND_#!MotoVIP#"
           }
         ]
       },
@@ -3994,10 +3994,10 @@
 //      },
         "pools": [
           {
-            "pool": "10.197.161.1 - 10.197.191.254"
-//          /// From:
-//          ///   deny MotoVIP
-//          "client-class": "gen#_AND_#!MotoVIP#"
+            "pool": "10.197.161.1 - 10.197.191.254",
+            /// From:
+            ///   deny MotoVIP
+            "client-class": "gen#_AND_#!MotoVIP#"
           }
         ]
       },
@@ -4089,10 +4089,10 @@
 //      },
         "pools": [
           {
-            "pool": "10.218.65.1 - 10.218.127.254"
-//          /// From:
-//          ///   deny MotoVIP
-//          "client-class": "gen#_AND_#!MotoVIP#"
+            "pool": "10.218.65.1 - 10.218.127.254",
+            /// From:
+            ///   deny MotoVIP
+            "client-class": "gen#_AND_#!MotoVIP#"
           }
         ]
       },
@@ -4184,10 +4184,10 @@
 //      },
         "pools": [
           {
-            "pool": "10.225.3.1 - 10.225.127.254"
-//          /// From:
-//          ///   deny MotoVIP
-//          "client-class": "gen#_AND_#!MotoVIP#"
+            "pool": "10.225.3.1 - 10.225.127.254",
+            /// From:
+            ///   deny MotoVIP
+            "client-class": "gen#_AND_#!MotoVIP#"
           }
         ]
       },
@@ -4279,10 +4279,10 @@
 //      },
         "pools": [
           {
-            "pool": "10.203.193.0 - 10.203.255.254"
-//          /// From:
-//          ///   deny MotoVIP
-//          "client-class": "gen#_AND_#!MotoVIP#"
+            "pool": "10.203.193.0 - 10.203.255.254",
+            /// From:
+            ///   deny MotoVIP
+            "client-class": "gen#_AND_#!MotoVIP#"
           }
         ]
       },
@@ -4375,10 +4375,10 @@
 //      },
         "pools": [
           {
-            "pool": "10.204.192.1 - 10.204.255.254"
-//          /// From:
-//          ///   deny MotoVIP
-//          "client-class": "gen#_AND_#!MotoVIP#"
+            "pool": "10.204.192.1 - 10.204.255.254",
+            /// From:
+            ///   deny MotoVIP
+            "client-class": "gen#_AND_#!MotoVIP#"
           }
         ]
       },
@@ -4474,10 +4474,10 @@
 //      },
         "pools": [
           {
-            "pool": "10.204.64.1 - 10.204.127.254"
-//          /// From:
-//          ///   deny MotoVIP
-//          "client-class": "gen#_AND_#!MotoVIP#"
+            "pool": "10.204.64.1 - 10.204.127.254",
+            /// From:
+            ///   deny MotoVIP
+            "client-class": "gen#_AND_#!MotoVIP#"
           }
         ]
       },
@@ -4569,10 +4569,10 @@
 //      },
         "pools": [
           {
-            "pool": "10.220.64.1 - 10.220.127.254"
-//          /// From:
-//          ///   deny MotoVIP
-//          "client-class": "gen#_AND_#!MotoVIP#"
+            "pool": "10.220.64.1 - 10.220.127.254",
+            /// From:
+            ///   deny MotoVIP
+            "client-class": "gen#_AND_#!MotoVIP#"
           }
         ]
       },
@@ -4664,10 +4664,10 @@
 //      },
         "pools": [
           {
-            "pool": "10.220.129.0 - 10.220.191.254"
-//          /// From:
-//          ///   deny MotoVIP
-//          "client-class": "gen#_AND_#!MotoVIP#"
+            "pool": "10.220.129.0 - 10.220.191.254",
+            /// From:
+            ///   deny MotoVIP
+            "client-class": "gen#_AND_#!MotoVIP#"
           }
         ]
       },
@@ -4759,10 +4759,10 @@
 //      },
         "pools": [
           {
-            "pool": "10.220.193.0 - 10.220.223.254"
-//          /// From:
-//          ///   deny MotoVIP
-//          "client-class": "gen#_AND_#!MotoVIP#"
+            "pool": "10.220.193.0 - 10.220.223.254",
+            /// From:
+            ///   deny MotoVIP
+            "client-class": "gen#_AND_#!MotoVIP#"
           }
         ]
       },
@@ -4845,10 +4845,10 @@
 //      },
         "pools": [
           {
-            "pool": "10.221.64.1 - 10.221.127.254"
-//          /// From:
-//          ///   deny MotoVIP
-//          "client-class": "gen#_AND_#!MotoVIP#"
+            "pool": "10.221.64.1 - 10.221.127.254",
+            /// From:
+            ///   deny MotoVIP
+            "client-class": "gen#_AND_#!MotoVIP#"
           }
         ]
       },
@@ -4941,10 +4941,10 @@
 //      },
         "pools": [
           {
-            "pool": "10.232.1.1 - 10.232.63.254"
-//          /// From:
-//          ///   deny MotoVIP
-//          "client-class": "gen#_AND_#!MotoVIP#"
+            "pool": "10.232.1.1 - 10.232.63.254",
+            /// From:
+            ///   deny MotoVIP
+            "client-class": "gen#_AND_#!MotoVIP#"
           }
         ]
       },
@@ -5037,10 +5037,10 @@
 //      },
         "pools": [
           {
-            "pool": "10.232.65.0 - 10.232.127.254"
-//          /// From:
-//          ///   deny MotoVIP
-//          "client-class": "gen#_AND_#!MotoVIP#"
+            "pool": "10.232.65.0 - 10.232.127.254",
+            /// From:
+            ///   deny MotoVIP
+            "client-class": "gen#_AND_#!MotoVIP#"
           }
         ]
       },
@@ -5133,10 +5133,10 @@
 //      },
         "pools": [
           {
-            "pool": "10.233.1.0 - 10.233.63.254"
-//          /// From:
-//          ///   deny MotoVIP
-//          "client-class": "gen#_AND_#!MotoVIP#"
+            "pool": "10.233.1.0 - 10.233.63.254",
+            /// From:
+            ///   deny MotoVIP
+            "client-class": "gen#_AND_#!MotoVIP#"
           }
         ]
       },
@@ -5230,10 +5230,10 @@
 //      },
         "pools": [
           {
-            "pool": "10.205.65.0 - 10.205.127.254"
-//          /// From:
-//          ///   deny MotoVIP
-//          "client-class": "gen#_AND_#!MotoVIP#"
+            "pool": "10.205.65.0 - 10.205.127.254",
+            /// From:
+            ///   deny MotoVIP
+            "client-class": "gen#_AND_#!MotoVIP#"
           }
         ]
       },
@@ -5326,10 +5326,10 @@
 //      },
         "pools": [
           {
-            "pool": "10.205.129.0 - 10.205.191.254"
-//          /// From:
-//          ///   deny MotoVIP
-//          "client-class": "gen#_AND_#!MotoVIP#"
+            "pool": "10.205.129.0 - 10.205.191.254",
+            /// From:
+            ///   deny MotoVIP
+            "client-class": "gen#_AND_#!MotoVIP#"
           }
         ]
       },
@@ -5422,10 +5422,10 @@
 //      },
         "pools": [
           {
-            "pool": "10.226.1.0 - 10.226.63.254"
-//          /// From:
-//          ///   deny MotoVIP
-//          "client-class": "gen#_AND_#!MotoVIP#"
+            "pool": "10.226.1.0 - 10.226.63.254",
+            /// From:
+            ///   deny MotoVIP
+            "client-class": "gen#_AND_#!MotoVIP#"
           }
         ]
       },
@@ -5518,10 +5518,10 @@
 //      },
         "pools": [
           {
-            "pool": "10.224.129.0 - 10.224.191.254"
-//          /// From:
-//          ///   deny MotoVIP
-//          "client-class": "gen#_AND_#!MotoVIP#"
+            "pool": "10.224.129.0 - 10.224.191.254",
+            /// From:
+            ///   deny MotoVIP
+            "client-class": "gen#_AND_#!MotoVIP#"
           }
         ]
       },
@@ -5614,10 +5614,10 @@
 //      },
         "pools": [
           {
-            "pool": "10.205.1.0 - 10.205.63.254"
-//          /// From:
-//          ///   deny MotoVIP
-//          "client-class": "gen#_AND_#!MotoVIP#"
+            "pool": "10.205.1.0 - 10.205.63.254",
+            /// From:
+            ///   deny MotoVIP
+            "client-class": "gen#_AND_#!MotoVIP#"
           }
         ]
       },
@@ -5710,10 +5710,10 @@
 //      },
         "pools": [
           {
-            "pool": "10.193.129.0 - 10.193.191.254"
-//          /// From:
-//          ///   deny MotoVIP
-//          "client-class": "gen#_AND_#!MotoVIP#"
+            "pool": "10.193.129.0 - 10.193.191.254",
+            /// From:
+            ///   deny MotoVIP
+            "client-class": "gen#_AND_#!MotoVIP#"
           }
         ]
       },
@@ -5806,10 +5806,10 @@
 //      },
         "pools": [
           {
-            "pool": "10.203.129.0 - 10.203.191.254"
-//          /// From:
-//          ///   deny MotoVIP
-//          "client-class": "gen#_AND_#!MotoVIP#"
+            "pool": "10.203.129.0 - 10.203.191.254",
+            /// From:
+            ///   deny MotoVIP
+            "client-class": "gen#_AND_#!MotoVIP#"
           }
         ]
       },
@@ -5902,10 +5902,10 @@
 //      },
         "pools": [
           {
-            "pool": "10.218.1.0 - 10.218.63.254"
-//          /// From:
-//          ///   deny MotoVIP
-//          "client-class": "gen#_AND_#!MotoVIP#"
+            "pool": "10.218.1.0 - 10.218.63.254",
+            /// From:
+            ///   deny MotoVIP
+            "client-class": "gen#_AND_#!MotoVIP#"
           }
         ]
       },
@@ -5998,10 +5998,10 @@
 //      },
         "pools": [
           {
-            "pool": "10.218.129.0 - 10.218.254.254"
-//          /// From:
-//          ///   deny MotoVIP
-//          "client-class": "gen#_AND_#!MotoVIP#"
+            "pool": "10.218.129.0 - 10.218.254.254",
+            /// From:
+            ///   deny MotoVIP
+            "client-class": "gen#_AND_#!MotoVIP#"
           }
         ]
       },
@@ -6094,10 +6094,10 @@
 //      },
         "pools": [
           {
-            "pool": "10.211.1.0 - 10.211.63.254"
-//          /// From:
-//          ///   deny MotoVIP
-//          "client-class": "gen#_AND_#!MotoVIP#"
+            "pool": "10.211.1.0 - 10.211.63.254",
+            /// From:
+            ///   deny MotoVIP
+            "client-class": "gen#_AND_#!MotoVIP#"
           }
         ]
       },
@@ -6189,10 +6189,10 @@
 //      },
         "pools": [
           {
-            "pool": "10.211.129.0 - 10.211.191.254"
-//          /// From:
-//          ///   deny MotoVIP
-//          "client-class": "gen#_AND_#!MotoVIP#"
+            "pool": "10.211.129.0 - 10.211.191.254",
+            /// From:
+            ///   deny MotoVIP
+            "client-class": "gen#_AND_#!MotoVIP#"
           }
         ]
       },
@@ -6285,10 +6285,10 @@
 //      },
         "pools": [
           {
-            "pool": "10.228.129.0 - 10.228.191.254"
-//          /// From:
-//          ///   deny MotoVIP
-//          "client-class": "gen#_AND_#!MotoVIP#"
+            "pool": "10.228.129.0 - 10.228.191.254",
+            /// From:
+            ///   deny MotoVIP
+            "client-class": "gen#_AND_#!MotoVIP#"
           }
         ]
       },
@@ -6381,10 +6381,10 @@
 //      },
         "pools": [
           {
-            "pool": "10.228.193.0 - 10.228.255.254"
-//          /// From:
-//          ///   deny MotoVIP
-//          "client-class": "gen#_AND_#!MotoVIP#"
+            "pool": "10.228.193.0 - 10.228.255.254",
+            /// From:
+            ///   deny MotoVIP
+            "client-class": "gen#_AND_#!MotoVIP#"
           }
         ]
       },
@@ -6477,10 +6477,10 @@
 //      },
         "pools": [
           {
-            "pool": "10.221.129.0 - 10.221.191.254"
-//          /// From:
-//          ///   deny MotoVIP
-//          "client-class": "gen#_AND_#!MotoVIP#"
+            "pool": "10.221.129.0 - 10.221.191.254",
+            /// From:
+            ///   deny MotoVIP
+            "client-class": "gen#_AND_#!MotoVIP#"
           }
         ]
       },
@@ -6573,10 +6573,10 @@
 //      },
         "pools": [
           {
-            "pool": "10.234.1.0 - 10.234.63.254"
-//          /// From:
-//          ///   deny MotoVIP
-//          "client-class": "gen#_AND_#!MotoVIP#"
+            "pool": "10.234.1.0 - 10.234.63.254",
+            /// From:
+            ///   deny MotoVIP
+            "client-class": "gen#_AND_#!MotoVIP#"
           }
         ]
       },
@@ -6669,10 +6669,10 @@
 //      },
         "pools": [
           {
-            "pool": "10.203.1.0 - 10.203.63.254"
-//          /// From:
-//          ///   deny MotoVIP
-//          "client-class": "gen#_AND_#!MotoVIP#"
+            "pool": "10.203.1.0 - 10.203.63.254",
+            /// From:
+            ///   deny MotoVIP
+            "client-class": "gen#_AND_#!MotoVIP#"
           }
         ]
       },
@@ -6765,10 +6765,10 @@
 //      },
         "pools": [
           {
-            "pool": "10.221.193.0 - 10.221.255.254"
-//          /// From:
-//          ///   deny MotoVIP
-//          "client-class": "gen#_AND_#!MotoVIP#"
+            "pool": "10.221.193.0 - 10.221.255.254",
+            /// From:
+            ///   deny MotoVIP
+            "client-class": "gen#_AND_#!MotoVIP#"
           }
         ]
       },
@@ -6861,10 +6861,10 @@
 //      },
         "pools": [
           {
-            "pool": "10.203.65.0 - 10.203.127.254"
-//          /// From:
-//          ///   deny MotoVIP
-//          "client-class": "gen#_AND_#!MotoVIP#"
+            "pool": "10.203.65.0 - 10.203.127.254",
+            /// From:
+            ///   deny MotoVIP
+            "client-class": "gen#_AND_#!MotoVIP#"
           }
         ]
       },
@@ -6957,10 +6957,10 @@
 //      },
         "pools": [
           {
-            "pool": "10.222.129.0 - 10.222.191.254"
-//          /// From:
-//          ///   deny MotoVIP
-//          "client-class": "gen#_AND_#!MotoVIP#"
+            "pool": "10.222.129.0 - 10.222.191.254",
+            /// From:
+            ///   deny MotoVIP
+            "client-class": "gen#_AND_#!MotoVIP#"
           }
         ]
       },
@@ -7053,10 +7053,10 @@
 //      },
         "pools": [
           {
-            "pool": "10.222.193.0 - 10.222.255.254"
-//          /// From:
-//          ///   deny MotoVIP
-//          "client-class": "gen#_AND_#!MotoVIP#"
+            "pool": "10.222.193.0 - 10.222.255.254",
+            /// From:
+            ///   deny MotoVIP
+            "client-class": "gen#_AND_#!MotoVIP#"
           }
         ]
       },
@@ -7149,10 +7149,10 @@
 //      },
         "pools": [
           {
-            "pool": "10.228.1.0 - 10.228.63.254"
-//          /// From:
-//          ///   deny MotoVIP
-//          "client-class": "gen#_AND_#!MotoVIP#"
+            "pool": "10.228.1.0 - 10.228.63.254",
+            /// From:
+            ///   deny MotoVIP
+            "client-class": "gen#_AND_#!MotoVIP#"
           }
         ]
       },
@@ -7245,10 +7245,10 @@
 //      },
         "pools": [
           {
-            "pool": "10.228.65.0 - 10.228.127.254"
-//          /// From:
-//          ///   deny MotoVIP
-//          "client-class": "gen#_AND_#!MotoVIP#"
+            "pool": "10.228.65.0 - 10.228.127.254",
+            /// From:
+            ///   deny MotoVIP
+            "client-class": "gen#_AND_#!MotoVIP#"
           }
         ]
       },
@@ -7341,10 +7341,10 @@
 //      },
         "pools": [
           {
-            "pool": "10.222.65.0 - 10.222.127.254"
-//          /// From:
-//          ///   deny MotoVIP
-//          "client-class": "gen#_AND_#!MotoVIP#"
+            "pool": "10.222.65.0 - 10.222.127.254",
+            /// From:
+            ///   deny MotoVIP
+            "client-class": "gen#_AND_#!MotoVIP#"
           }
         ]
       },
@@ -7437,10 +7437,10 @@
 //      },
         "pools": [
           {
-            "pool": "10.222.1.0 - 10.222.63.254"
-//          /// From:
-//          ///   deny MotoVIP
-//          "client-class": "gen#_AND_#!MotoVIP#"
+            "pool": "10.222.1.0 - 10.222.63.254",
+            /// From:
+            ///   deny MotoVIP
+            "client-class": "gen#_AND_#!MotoVIP#"
           }
         ]
       },
@@ -7533,10 +7533,10 @@
 //      },
         "pools": [
           {
-            "pool": "10.226.65.0 - 10.226.127.254"
-//          /// From:
-//          ///   deny MotoVIP
-//          "client-class": "gen#_AND_#!MotoVIP#"
+            "pool": "10.226.65.0 - 10.226.127.254",
+            /// From:
+            ///   deny MotoVIP
+            "client-class": "gen#_AND_#!MotoVIP#"
           }
         ]
       },
@@ -7629,10 +7629,10 @@
 //      },
         "pools": [
           {
-            "pool": "10.226.193.0 - 10.226.255.254"
-//          /// From:
-//          ///   deny MotoVIP
-//          "client-class": "gen#_AND_#!MotoVIP#"
+            "pool": "10.226.193.0 - 10.226.255.254",
+            /// From:
+            ///   deny MotoVIP
+            "client-class": "gen#_AND_#!MotoVIP#"
           }
         ]
       },
@@ -7724,10 +7724,10 @@
 //      },
         "pools": [
           {
-            "pool": "10.176.1.0 - 10.176.31.254"
-//          /// From:
-//          ///   deny MotoVIP
-//          "client-class": "gen#_AND_#!MotoVIP#"
+            "pool": "10.176.1.0 - 10.176.31.254",
+            /// From:
+            ///   deny MotoVIP
+            "client-class": "gen#_AND_#!MotoVIP#"
           }
         ]
       },
@@ -7819,10 +7819,10 @@
 //      },
         "pools": [
           {
-            "pool": "10.176.33.0 - 10.176.63.254"
-//          /// From:
-//          ///   deny MotoVIP
-//          "client-class": "gen#_AND_#!MotoVIP#"
+            "pool": "10.176.33.0 - 10.176.63.254",
+            /// From:
+            ///   deny MotoVIP
+            "client-class": "gen#_AND_#!MotoVIP#"
           }
         ]
       },
@@ -7915,10 +7915,10 @@
 //      },
         "pools": [
           {
-            "pool": "10.176.65.0 - 10.176.95.254"
-//          /// From:
-//          ///   deny MotoVIP
-//          "client-class": "gen#_AND_#!MotoVIP#"
+            "pool": "10.176.65.0 - 10.176.95.254",
+            /// From:
+            ///   deny MotoVIP
+            "client-class": "gen#_AND_#!MotoVIP#"
           }
         ]
       },
@@ -8011,10 +8011,10 @@
 //      },
         "pools": [
           {
-            "pool": "10.176.97.0 - 10.176.127.254"
-//          /// From:
-//          ///   deny MotoVIP
-//          "client-class": "gen#_AND_#!MotoVIP#"
+            "pool": "10.176.97.0 - 10.176.127.254",
+            /// From:
+            ///   deny MotoVIP
+            "client-class": "gen#_AND_#!MotoVIP#"
           }
         ]
       },
@@ -8107,10 +8107,10 @@
 //      },
         "pools": [
           {
-            "pool": "10.176.129.0 - 10.176.159.254"
-//          /// From:
-//          ///   deny MotoVIP
-//          "client-class": "gen#_AND_#!MotoVIP#"
+            "pool": "10.176.129.0 - 10.176.159.254",
+            /// From:
+            ///   deny MotoVIP
+            "client-class": "gen#_AND_#!MotoVIP#"
           }
         ]
       },
@@ -8203,10 +8203,10 @@
 //      },
         "pools": [
           {
-            "pool": "10.176.161.0 - 10.176.191.254"
-//          /// From:
-//          ///   deny MotoVIP
-//          "client-class": "gen#_AND_#!MotoVIP#"
+            "pool": "10.176.161.0 - 10.176.191.254",
+            /// From:
+            ///   deny MotoVIP
+            "client-class": "gen#_AND_#!MotoVIP#"
           }
         ]
       },
@@ -8299,10 +8299,10 @@
 //      },
         "pools": [
           {
-            "pool": "10.176.193.0 - 10.176.223.254"
-//          /// From:
-//          ///   deny MotoVIP
-//          "client-class": "gen#_AND_#!MotoVIP#"
+            "pool": "10.176.193.0 - 10.176.223.254",
+            /// From:
+            ///   deny MotoVIP
+            "client-class": "gen#_AND_#!MotoVIP#"
           }
         ]
       },
@@ -8395,10 +8395,10 @@
 //      },
         "pools": [
           {
-            "pool": "10.205.193.0 - 10.205.255.254"
-//          /// From:
-//          ///   deny MotoVIP
-//          "client-class": "gen#_AND_#!MotoVIP#"
+            "pool": "10.205.193.0 - 10.205.255.254",
+            /// From:
+            ///   deny MotoVIP
+            "client-class": "gen#_AND_#!MotoVIP#"
           }
         ]
       },
@@ -8491,10 +8491,10 @@
 //      },
         "pools": [
           {
-            "pool": "10.192.193.0 - 10.192.255.254"
-//          /// From:
-//          ///   deny MotoVIP
-//          "client-class": "gen#_AND_#!MotoVIP#"
+            "pool": "10.192.193.0 - 10.192.255.254",
+            /// From:
+            ///   deny MotoVIP
+            "client-class": "gen#_AND_#!MotoVIP#"
           }
         ]
       },
@@ -8587,10 +8587,10 @@
 //      },
         "pools": [
           {
-            "pool": "10.192.129.0 - 10.192.191.254"
-//          /// From:
-//          ///   deny MotoVIP
-//          "client-class": "gen#_AND_#!MotoVIP#"
+            "pool": "10.192.129.0 - 10.192.191.254",
+            /// From:
+            ///   deny MotoVIP
+            "client-class": "gen#_AND_#!MotoVIP#"
           }
         ]
       },
@@ -8683,10 +8683,10 @@
 //      },
         "pools": [
           {
-            "pool": "10.225.129.0 - 10.225.191.254"
-//          /// From:
-//          ///   deny MotoVIP
-//          "client-class": "gen#_AND_#!MotoVIP#"
+            "pool": "10.225.129.0 - 10.225.191.254",
+            /// From:
+            ///   deny MotoVIP
+            "client-class": "gen#_AND_#!MotoVIP#"
           }
         ]
       },
@@ -8779,10 +8779,10 @@
 //      },
         "pools": [
           {
-            "pool": "10.211.193.0 - 10.211.255.254"
-//          /// From:
-//          ///   deny MotoVIP
-//          "client-class": "gen#_AND_#!MotoVIP#"
+            "pool": "10.211.193.0 - 10.211.255.254",
+            /// From:
+            ///   deny MotoVIP
+            "client-class": "gen#_AND_#!MotoVIP#"
           }
         ]
       },
@@ -8875,10 +8875,10 @@
 //      },
         "pools": [
           {
-            "pool": "10.211.65.0 - 10.211.127.254"
-//          /// From:
-//          ///   deny MotoVIP
-//          "client-class": "gen#_AND_#!MotoVIP#"
+            "pool": "10.211.65.0 - 10.211.127.254",
+            /// From:
+            ///   deny MotoVIP
+            "client-class": "gen#_AND_#!MotoVIP#"
           }
         ]
       },
@@ -8971,10 +8971,10 @@
 //      },
         "pools": [
           {
-            "pool": "10.225.193.0 - 10.225.255.254"
-//          /// From:
-//          ///   deny MotoVIP
-//          "client-class": "gen#_AND_#!MotoVIP#"
+            "pool": "10.225.193.0 - 10.225.255.254",
+            /// From:
+            ///   deny MotoVIP
+            "client-class": "gen#_AND_#!MotoVIP#"
           }
         ]
       },
@@ -9067,10 +9067,10 @@
 //      },
         "pools": [
           {
-            "pool": "10.215.193.0 - 10.215.255.254"
-//          /// From:
-//          ///   deny MotoVIP
-//          "client-class": "gen#_AND_#!MotoVIP#"
+            "pool": "10.215.193.0 - 10.215.255.254",
+            /// From:
+            ///   deny MotoVIP
+            "client-class": "gen#_AND_#!MotoVIP#"
           }
         ]
       },
@@ -9163,10 +9163,10 @@
 //      },
         "pools": [
           {
-            "pool": "10.226.129.0 - 10.226.191.254"
-//          /// From:
-//          ///   deny MotoVIP
-//          "client-class": "gen#_AND_#!MotoVIP#"
+            "pool": "10.226.129.0 - 10.226.191.254",
+            /// From:
+            ///   deny MotoVIP
+            "client-class": "gen#_AND_#!MotoVIP#"
           }
         ]
       },
@@ -9259,10 +9259,10 @@
 //      },
         "pools": [
           {
-            "pool": "10.177.1.0 - 10.177.31.254"
-//          /// From:
-//          ///   deny MotoVIP
-//          "client-class": "gen#_AND_#!MotoVIP#"
+            "pool": "10.177.1.0 - 10.177.31.254",
+            /// From:
+            ///   deny MotoVIP
+            "client-class": "gen#_AND_#!MotoVIP#"
           }
         ]
       },
@@ -9355,10 +9355,10 @@
 //      },
         "pools": [
           {
-            "pool": "10.177.65.0 - 10.177.95.254"
-//          /// From:
-//          ///   deny MotoVIP
-//          "client-class": "gen#_AND_#!MotoVIP#"
+            "pool": "10.177.65.0 - 10.177.95.254",
+            /// From:
+            ///   deny MotoVIP
+            "client-class": "gen#_AND_#!MotoVIP#"
           }
         ]
       },
@@ -9451,10 +9451,10 @@
 //      },
         "pools": [
           {
-            "pool": "10.177.33.0 - 10.177.63.254"
-//          /// From:
-//          ///   deny MotoVIP
-//          "client-class": "gen#_AND_#!MotoVIP#"
+            "pool": "10.177.33.0 - 10.177.63.254",
+            /// From:
+            ///   deny MotoVIP
+            "client-class": "gen#_AND_#!MotoVIP#"
           }
         ]
       },
@@ -9547,10 +9547,10 @@
 //      },
         "pools": [
           {
-            "pool": "10.177.97.0 - 10.177.127.254"
-//          /// From:
-//          ///   deny MotoVIP
-//          "client-class": "gen#_AND_#!MotoVIP#"
+            "pool": "10.177.97.0 - 10.177.127.254",
+            /// From:
+            ///   deny MotoVIP
+            "client-class": "gen#_AND_#!MotoVIP#"
           }
         ]
       },
@@ -9643,10 +9643,10 @@
 //      },
         "pools": [
           {
-            "pool": "10.177.129.0 - 10.177.159.254"
-//          /// From:
-//          ///   deny MotoVIP
-//          "client-class": "gen#_AND_#!MotoVIP#"
+            "pool": "10.177.129.0 - 10.177.159.254",
+            /// From:
+            ///   deny MotoVIP
+            "client-class": "gen#_AND_#!MotoVIP#"
           }
         ]
       },
@@ -9739,10 +9739,10 @@
 //      },
         "pools": [
           {
-            "pool": "10.177.193.0 - 10.177.223.254"
-//          /// From:
-//          ///   deny MotoVIP
-//          "client-class": "gen#_AND_#!MotoVIP#"
+            "pool": "10.177.193.0 - 10.177.223.254",
+            /// From:
+            ///   deny MotoVIP
+            "client-class": "gen#_AND_#!MotoVIP#"
           }
         ]
       },
@@ -9835,10 +9835,10 @@
 //      },
         "pools": [
           {
-            "pool": "10.232.193.0 - 10.232.223.254"
-//          /// From:
-//          ///   deny MotoVIP
-//          "client-class": "gen#_AND_#!MotoVIP#"
+            "pool": "10.232.193.0 - 10.232.223.254",
+            /// From:
+            ///   deny MotoVIP
+            "client-class": "gen#_AND_#!MotoVIP#"
           }
         ]
       },
@@ -9931,10 +9931,10 @@
 //      },
         "pools": [
           {
-            "pool": "10.232.129.0 - 10.232.159.254"
-//          /// From:
-//          ///   deny MotoVIP
-//          "client-class": "gen#_AND_#!MotoVIP#"
+            "pool": "10.232.129.0 - 10.232.159.254",
+            /// From:
+            ///   deny MotoVIP
+            "client-class": "gen#_AND_#!MotoVIP#"
           }
         ]
       },
@@ -10027,10 +10027,10 @@
 //      },
         "pools": [
           {
-            "pool": "10.197.193.0 - 10.197.223.254"
-//          /// From:
-//          ///   deny MotoVIP
-//          "client-class": "gen#_AND_#!MotoVIP#"
+            "pool": "10.197.193.0 - 10.197.223.254",
+            /// From:
+            ///   deny MotoVIP
+            "client-class": "gen#_AND_#!MotoVIP#"
           }
         ]
       },
@@ -10123,10 +10123,10 @@
 //      },
         "pools": [
           {
-            "pool": "10.197.225.0 - 10.197.255.254"
-//          /// From:
-//          ///   deny MotoVIP
-//          "client-class": "gen#_AND_#!MotoVIP#"
+            "pool": "10.197.225.0 - 10.197.255.254",
+            /// From:
+            ///   deny MotoVIP
+            "client-class": "gen#_AND_#!MotoVIP#"
           }
         ]
       },
@@ -10219,10 +10219,10 @@
 //      },
         "pools": [
           {
-            "pool": "10.198.129.0 - 10.198.159.254"
-//          /// From:
-//          ///   deny MotoVIP
-//          "client-class": "gen#_AND_#!MotoVIP#"
+            "pool": "10.198.129.0 - 10.198.159.254",
+            /// From:
+            ///   deny MotoVIP
+            "client-class": "gen#_AND_#!MotoVIP#"
           }
         ]
       },
@@ -10315,10 +10315,10 @@
 //      },
         "pools": [
           {
-            "pool": "10.198.161.0 - 10.198.191.254"
-//          /// From:
-//          ///   deny MotoVIP
-//          "client-class": "gen#_AND_#!MotoVIP#"
+            "pool": "10.198.161.0 - 10.198.191.254",
+            /// From:
+            ///   deny MotoVIP
+            "client-class": "gen#_AND_#!MotoVIP#"
           }
         ]
       }
