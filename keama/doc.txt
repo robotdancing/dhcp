@@ -522,4 +522,6 @@ Variables:
  to recognize booleans and numbers. Unfortunately this is very spcific...
 
 TODO:
+ - set subnet IDs
+ - add -A for partial config (authoritative, interface, ...)
  - classes in pools (to finish: add tests, after merge)
