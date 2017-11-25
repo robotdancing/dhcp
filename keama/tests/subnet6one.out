@@ -6,6 +6,7 @@
     "subnet6": [
       # DHCPv4 subnet declaration
       {
+        "id": 1,
         "subnet": "2001::/64",
         "pd-pools": [
           # at least one pool is required

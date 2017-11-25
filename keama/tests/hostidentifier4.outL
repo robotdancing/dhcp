@@ -7,6 +7,7 @@
     "subnet4": [
       # subnet4 declaration
       {
+        "id": 1,
         "subnet": "10.5.5.0/27",
         "pools": [
           {
@@ -42,6 +43,7 @@
         ]
       },
       {
+        "id": 2,
         "subnet": "10.10.10.0/27",
         "reservations": [
 //        {
@@ -68,7 +70,7 @@
     /// The flexible host identifier is a premium feature
     "hooks-libraries": [
       {
-        "library": "/path/libdhcp_flex_id.so",
+        "library": "/tmp/kea/premium/src/hooks/dhcp/flex_id/.libs/libdhcp_flex_id.so",
         "parameters": {
           "identifier-expression": "option[250].hex"
         }

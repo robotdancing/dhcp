@@ -32,11 +32,13 @@
       # the DHCP server about it so it understands it's there and
       # not to hand out leases for it.
       {
+        "id": 1,
         "subnet": "10.14.8.195/24"
       },
       # But we do want to hand out leases for the 192.168.1.0/24
       # network for purposes of this test..
       {
+        "id": 2,
         "subnet": "192.168.1.0/24",
         "pools": [
           {

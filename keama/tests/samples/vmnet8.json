@@ -41,6 +41,7 @@
     "subnet4": [
       # default is 2 hours
       {
+        "id": 1,
         "subnet": "172.16.254.0/24",
         "pools": [
           {

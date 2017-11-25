@@ -7,6 +7,7 @@
     "subnet6": [
       # subnet declaration
       {
+        "id": 1,
         "subnet": "2001::/64",
         "option-data": [
           # range declaration

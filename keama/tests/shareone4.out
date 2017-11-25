@@ -10,6 +10,7 @@
     "subnet4": [
       # subnet declaration
       {
+        "id": 1,
         "subnet": "10.5.5.0/27",
         "valid-lifetime": 3600,
         "option-data": [

@@ -9,6 +9,7 @@
     ],
     "subnet4": [
       {
+        "id": 1,
         "subnet": "149.20.64.0/25",
         "reservations": [
           {

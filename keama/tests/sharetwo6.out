@@ -15,6 +15,7 @@
         "subnet6": [
           # subnet declaration
           {
+            "id": 1,
             "subnet": "2001::/64",
             "valid-lifetime": 3600,
             "pools": [
@@ -26,6 +27,7 @@
           },
           # second subnet declaration
           {
+            "id": 2,
             "subnet": "2002::/64",
             "pd-pools": [
               {
