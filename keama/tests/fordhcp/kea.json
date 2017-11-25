@@ -162,6 +162,7 @@
 //    /// This feature is not supported by Kea
 //    /// Skipping the subnet only partially simulates it
 //    {
+//      "id": 1,
 //      "subnet": "149.20.48.0/25"
 //    },
 //    # 187-net is all but dead
@@ -169,6 +170,7 @@
 //    /// This feature is not supported by Kea
 //    /// Skipping the subnet only partially simulates it
 //    {
+//      "id": 2,
 //      "subnet": "204.152.187.0/24"
 //    },
 //    # QuickBooks/GreatPlains VLAN
@@ -176,6 +178,7 @@
 //    /// This feature is not supported by Kea
 //    /// Skipping the subnet only partially simulates it
 //    {
+//      "id": 3,
 //      "subnet": "149.20.48.128/28"
 //    },
 //    # Device management VLAN
@@ -183,6 +186,7 @@
 //    /// This feature is not supported by Kea
 //    /// Skipping the subnet only partially simulates it
 //    {
+//      "id": 4,
 //      "subnet": "149.20.60.0/24"
 //    },
       /// Begin file fordhcp/dhcpd.voip.conf
@@ -191,6 +195,7 @@
       # two systems without modifications.
       #
       {
+        "id": 5,
         "subnet": "204.152.185.128/26",
         "option-data": [
           {
@@ -234,6 +239,7 @@
       # two systems without modifications.
       #
       {
+        "id": 6,
         "subnet": "204.152.189.0/26",
         "option-data": [
           {
@@ -304,6 +310,7 @@
       # to /etc between these two systems without modifications.
       #
       {
+        "id": 7,
         "subnet": "149.20.50.192/26",
         "option-data": [
           {
@@ -355,6 +362,7 @@
         ]
       },
       {
+        "id": 8,
         "subnet": "149.20.50.0/25",
         "option-data": [
           {
@@ -492,6 +500,7 @@
       # two systems without modifications.
       #
       {
+        "id": 9,
         "subnet": "149.20.50.128/26",
         "option-data": [
           {
@@ -648,6 +657,7 @@
         ]
       },
       {
+        "id": 10,
         "subnet": "149.20.49.224/27",
         "option-data": [
           {

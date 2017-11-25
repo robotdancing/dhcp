@@ -36,6 +36,9 @@ keama - Kea Migration Assistant
 |
 .B -6]
 [
+.B -A
+]
+[
 .B -r
 .I {perform|fatal|pass}
 ]
@@ -65,6 +68,10 @@ option.
 -6
 The input configuration is for DHCPv6.  Incompatible with the \fB-4\fR
 option.
+.TP
+-A
+The input is partial, for instance no \fBauthoritative\fR global statement
+is expected.
 .TP
 -r \fIaction\fR
 Specify what to do with hostnames: resolve them into their first address,

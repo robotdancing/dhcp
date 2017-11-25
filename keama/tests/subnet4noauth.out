@@ -9,6 +9,7 @@
 //    /// This feature is not supported by Kea
 //    /// Skipping the subnet only partially simulates it
 //    {
+//      "id": 1,
 //      "subnet": "10.5.5.0/27",
 //      "pools": [
 //        # at least one pool is required

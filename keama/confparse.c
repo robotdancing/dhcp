@@ -134,7 +134,7 @@ conf_file_parse(struct parse *cfile)
 	issues = conf_file_subparse(cfile, ROOT_GROUP);
 
 	/* Add a warning when interfaces-config is not present */
-	if (subnet_counter > 0) {
+	if (!partial && (subnet_counter > 0)) {
 		struct element *ifconf;
 
 		ifconf = mapGet(cfile->stack[1], "interfaces-config");
@@ -2328,10 +2328,10 @@ common_subnet_parsing(struct parse *cfile,
 				break;
 		}
 	}
-	if (authoritative == NULL)
+	if (!partial && (authoritative == NULL))
 		parse_error(cfile,
 			    "missing top level authoritative statement");
-	if (!boolValue(authoritative)) {
+	if (!partial && (!boolValue(authoritative))) {
 		struct comment *comment;
 
 		comment = createComment("/// Not authorized subnet");
@@ -2351,7 +2351,6 @@ common_subnet_parsing(struct parse *cfile,
 
 	/* Add the subnet to the list of subnets in this shared net. */
 	listPush(subnets, subnet);
-	subnet_counter++;
 
 	return;
 }
@@ -2379,6 +2378,9 @@ parse_subnet_declaration(struct parse *cfile)
 	subnet = createMap();
 	subnet->kind = SUBNET_DECL;
 	TAILQ_CONCAT(&subnet->comments, &cfile->comments);
+
+	subnet_counter++;
+	mapSet(subnet, createInt(subnet_counter), "id");
 
 	chain = (struct subnet *)malloc(sizeof(*chain));
 	if (chain == NULL)
@@ -2471,6 +2473,9 @@ parse_subnet6_declaration(struct parse *cfile)
 	subnet = createMap();
 	subnet->kind = SUBNET_DECL;
 	TAILQ_CONCAT(&subnet->comments, &cfile->comments);
+
+	subnet_counter++;
+	mapSet(subnet, createInt(subnet_counter), "id");
 
 	chain = (struct subnet *)malloc(sizeof(*chain));
 	if (chain == NULL)

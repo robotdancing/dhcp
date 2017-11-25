@@ -7,6 +7,7 @@
     "subnet4": [
       # subnet4 declaration
       {
+        "id": 1,
         "subnet": "10.5.5.0/27",
         "pools": [
           {

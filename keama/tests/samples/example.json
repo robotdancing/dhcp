@@ -45,10 +45,12 @@
       # No service will be given on this subnet, but declaring it helps the 
       # DHCP server to understand the network topology.
       {
+        "id": 1,
         "subnet": "10.152.187.0/24"
       },
       # This is a very basic subnet declaration.
       {
+        "id": 2,
         "subnet": "10.254.239.0/27",
         "pools": [
           {
@@ -68,6 +70,7 @@
       # This declaration allows BOOTP clients to get dynamic addresses,
       # which we don't really recommend.
       {
+        "id": 3,
         "subnet": "10.254.239.32/27",
         "pools": [
           {
@@ -92,6 +95,7 @@
       },
       # A slightly different configuration for an internal subnet.
       {
+        "id": 4,
         "subnet": "10.5.5.0/27",
         "pools": [
           {
@@ -188,6 +192,7 @@
         "name": "224-29",
         "subnet4": [
           {
+            "id": 5,
             "subnet": "10.17.224.0/24",
             "option-data": [
               #   option routers rtr-224.example.org;
@@ -208,6 +213,7 @@
             ]
           },
           {
+            "id": 6,
             "subnet": "10.0.29.0/24",
             "option-data": [
               #   option routers rtr-29.example.org;

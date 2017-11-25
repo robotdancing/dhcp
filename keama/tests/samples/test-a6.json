@@ -80,6 +80,7 @@
       #}
       # XXX: for testing
       {
+        "id": 1,
         "subnet": "3ffe:aaaa:aaaa:aaaa::/64",
         "reservations": [
           #
