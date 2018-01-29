@@ -190,7 +190,7 @@ CSCOPE = cscope
 DIST_SUBDIRS = $(SUBDIRS)
 am__DIST_COMMON = $(srcdir)/Makefile.in \
 	$(top_srcdir)/doc/devel/doxyfile.in README compile \
-	config.guess config.sub depcomp install-sh missing
+	config.guess config.sub depcomp install-sh ltmain.sh missing
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 distdir = $(PACKAGE)-$(VERSION)
 top_distdir = $(distdir)
@@ -385,7 +385,7 @@ EXTRA_DIST = RELNOTES LICENSE configure.ac+lt config+lt \
 	doc/devel/mainpage.dox doc/devel/omapi.dox doc/devel/qa.dox \
 	client/tests/Atffile common/tests/Atffile server/tests/Atffile \
 	client/tests/Kyuafile common/tests/Kyuafile \
-	server/tests/Kyuafile $(am__append_1)
+	server/tests/Kyuafile m4/README $(am__append_1)
 
 # Use an autoconf substitution vs an automake conditional here
 # to fool automake when the bind directory does not exist.
