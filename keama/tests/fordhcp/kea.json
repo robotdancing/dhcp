@@ -9,7 +9,7 @@
   # Global Configuration
   #
   /// This configuration declares some subnets but has no interfaces-config
-  /// Reference Kea #5256
+  /// Reference Kea #245
   "Dhcp4": {
 //  "config": [
 //    /// lease-file-name is an internal ISC DHCP feature
@@ -26,7 +26,7 @@
 //      "value": "local0"
 //    },
 //    /// one-lease-per-client is not supported
-//    /// Reference Kea #5228
+//    /// Reference Kea #238
 //    {
 //      "name": "one-lease-per-client",
 //      "code": 10,
@@ -34,7 +34,7 @@
 //    },
 //    /// max-lease-time is not supported
 //    /// use default-lease-time instead
-//    /// Reference Kea #5219
+//    /// Reference Kea #221
 //    {
 //      "name": "max-lease-time",
 //      "code": 2,
@@ -263,7 +263,7 @@
         ],
 //      "config": [
 //        /// always-broadcast is not supported
-//        /// Reference Kea #5232
+//        /// Reference Kea #241
 //        {
 //          "name": "always-broadcast",
 //          "code": 22,
@@ -271,7 +271,7 @@
 //        },
 //        /// max-lease-time is not supported
 //        /// use default-lease-time instead
-//        /// Reference Kea #5219
+//        /// Reference Kea #221
 //        {
 //          "name": "max-lease-time",
 //          "code": 2,
@@ -334,7 +334,7 @@
         ],
 //      "config": [
 //        /// always-broadcast is not supported
-//        /// Reference Kea #5232
+//        /// Reference Kea #241
 //        {
 //          "name": "always-broadcast",
 //          "code": 22,
@@ -342,7 +342,7 @@
 //        },
 //        /// max-lease-time is not supported
 //        /// use default-lease-time instead
-//        /// Reference Kea #5219
+//        /// Reference Kea #221
 //        {
 //          "name": "max-lease-time",
 //          "code": 2,
@@ -544,7 +544,7 @@
           }
         ],
         /// Host reservations without fixed addresses were put in the last declared subnet
-        /// Reference Kea #5246
+        /// Reference Kea #231
         "reservations": [
           {
             "hostname": "test-7960",
@@ -681,7 +681,7 @@
         ],
 //      "config": [
 //        /// always-broadcast is not supported
-//        /// Reference Kea #5232
+//        /// Reference Kea #241
 //        {
 //          "name": "always-broadcast",
 //          "code": 22,
@@ -689,7 +689,7 @@
 //        },
 //        /// max-lease-time is not supported
 //        /// use default-lease-time instead
-//        /// Reference Kea #5219
+//        /// Reference Kea #221
 //        {
 //          "name": "max-lease-time",
 //          "code": 2,
@@ -832,7 +832,7 @@
         "option-data": [
 //        # Windows doesn't put WPAD on its PRL, but does consume it.
 //        /// Possible PRL hack
-//        /// Consider setting "always-send" to true when setting data for relevant options, cf Kea #5241
+//        /// Consider setting "always-send" to true when setting data for relevant options, cf Kea #250
 //        {
 //          "space": "dhcp4",
 //          "name": "dhcp-parameter-request-list",
@@ -949,7 +949,7 @@
 //          "then": [
 //            {
 //              /// Possible PRL hack
-//              /// Consider setting "always-send" to true when setting data for relevant options, cf Kea #5241
+//              /// Consider setting "always-send" to true when setting data for relevant options, cf Kea #250
 //              "option": {
 //                "space": "dhcp4",
 //                "name": "dhcp-parameter-request-list",
@@ -1012,7 +1012,7 @@
 //          "then": [
 //            {
 //              /// Possible PRL hack
-//              /// Consider setting "always-send" to true when setting data for relevant options, cf Kea #5241
+//              /// Consider setting "always-send" to true when setting data for relevant options, cf Kea #250
 //              "option": {
 //                "space": "dhcp4",
 //                "name": "dhcp-parameter-request-list",

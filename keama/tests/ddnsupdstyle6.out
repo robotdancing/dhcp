@@ -2,7 +2,7 @@
   # ddns-update-style
   # authoritative is mandatory
   /// This configuration declares some subnets but has no interfaces-config
-  /// Reference Kea #5256
+  /// Reference Kea #245
   "Dhcp6": {
     "dhcp-ddns": {
       /// Unspecified ddns-domainname (default domain-name option value)

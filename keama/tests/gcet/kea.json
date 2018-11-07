@@ -1,6 +1,6 @@
 {
   /// This configuration declares some subnets but has no interfaces-config
-  /// Reference Kea #5256
+  /// Reference Kea #245
   "Dhcp4": {
     "option-def": [
       {

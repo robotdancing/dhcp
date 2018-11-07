@@ -102,7 +102,7 @@
         "data": ""
       },
       /// Possible PRL hack
-      /// Consider setting "always-send" to true when setting data for relevant options, cf Kea #5241
+      /// Consider setting "always-send" to true when setting data for relevant options, cf Kea #250
       {
         "space": "dhcp4",
         "name": "dhcp-parameter-request-list",

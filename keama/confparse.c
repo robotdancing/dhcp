@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017 by Internet Systems Consortium, Inc. ("ISC")
+ * Copyright (c) 2017, 2018 by Internet Systems Consortium, Inc. ("ISC")
  *
  * Permission to use, copy, modify, and distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -145,7 +145,7 @@ conf_file_parse(struct parse *cfile)
 						"declares some subnets but "
 						"has no interfaces-config");
 			TAILQ_INSERT_TAIL(&cfile->stack[1]->comments, comment);
-			comment = createComment("/// Reference Kea #5256");
+			comment = createComment("/// Reference Kea #245");
 			TAILQ_INSERT_TAIL(&cfile->stack[1]->comments, comment);
 		}
 	}
@@ -211,7 +211,7 @@ post_process_reservations(struct parse *cfile)
 		TAILQ_INSERT_TAIL(&orphans->comments, comment);
 		comment = createComment("/// Kea reservations are per subnet");
 		TAILQ_INSERT_TAIL(&orphans->comments, comment);
-		comment = createComment("/// Reference Kea #5246");
+		comment = createComment("/// Reference Kea #231");
 		TAILQ_INSERT_TAIL(&orphans->comments, comment);
 		orphans->skip = ISC_TRUE;
 		issues++;
@@ -291,7 +291,7 @@ post_process_classes(struct parse *cfile)
 					 "are not supported by Kea");
 			comment = createComment(msg->content);
 			TAILQ_INSERT_TAIL(&class->comments, comment);
-			msg = makeString(-1, "/// Reference Kea #5269");
+			msg = makeString(-1, "/// Reference Kea #248");
 			comment = createComment(msg->content);
 			TAILQ_INSERT_TAIL(&class->comments, comment);
 			msg = makeString(-1, "/// spawn with: ");
@@ -1324,7 +1324,7 @@ parse_host_declaration(struct parse *cfile)
 			comment = createComment("/// Unsupported group in "
 						"host reservations");
 			TAILQ_INSERT_TAIL(&group->comments, comment);
-			comment = createComment("/// Reference Kea #5268");
+			comment = createComment("/// Reference Kea #233");
 			TAILQ_INSERT_TAIL(&group->comments, comment);
 			mapSet(host, group, "group");
 			parse_semi(cfile);
@@ -1479,7 +1479,7 @@ parse_host_declaration(struct parse *cfile)
 						"were put in the last "
 						"declared subnet");
 			TAILQ_INSERT_TAIL(&hosts->comments, comment);
-			comment = createComment("/// Reference Kea #5246");
+			comment = createComment("/// Reference Kea #231");
 			TAILQ_INSERT_TAIL(&hosts->comments, comment);
 		}
 	}
@@ -1849,7 +1849,7 @@ parse_class_declaration(struct parse *cfile, int type)
 			comment = createComment("/// Per-class limit is not "
 						"supported by Kea");
 			TAILQ_INSERT_TAIL(&tmp->comments, comment);
-			comment = createComment("/// Reference Kea #5433");
+			comment = createComment("/// Reference Kea #237");
 			TAILQ_INSERT_TAIL(&tmp->comments, comment);
 			mapSet(class, tmp, "lease-limit");
 			parse_semi(cfile);
@@ -2171,7 +2171,7 @@ parse_shared_net_declaration(struct parse *cfile)
 			mapSet(cfile->stack[cfile->stack_top],
 			       shares, "shared-networks");
 			comment = createComment("/// Kea shared-networks "
-						"are different, cf Kea #5430");
+						"are different, cf Kea #236");
 			TAILQ_INSERT_TAIL(&shares->comments, comment);
 		}
 		listPush(shares, share);
@@ -2191,7 +2191,7 @@ parse_shared_net_declaration(struct parse *cfile)
 			comment = createComment("/// Kea pools must be "
 						"in a subnet");
 			TAILQ_INSERT_TAIL(&pools->comments, comment);
-			comment = createComment("/// Reference Kea #5431");
+			comment = createComment("/// Reference Kea #249");
 			TAILQ_INSERT_TAIL(&pools->comments, comment);
 		}
 		pools = mapGet(share, "pd-pools");
@@ -2207,7 +2207,7 @@ parse_shared_net_declaration(struct parse *cfile)
 			comment = createComment("/// Kea pools must be "
 						"in a subnet");
 			TAILQ_INSERT_TAIL(&pools->comments, comment);
-			comment = createComment("/// Reference Kea #5431");
+			comment = createComment("/// Reference Kea #249");
 			TAILQ_INSERT_TAIL(&pools->comments, comment);
 		}
 		return;

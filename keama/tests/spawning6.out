@@ -20,7 +20,7 @@
     "client-classes": [
       # superclass declaration
       /// Spawning classes are not supported by Kea
-      /// Reference Kea #5269
+      /// Reference Kea #248
       /// spawn with: option dhcp6.mysystem
       {
         "name": "foobar",

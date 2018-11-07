@@ -17,7 +17,7 @@
 //      "value": false
 //    },
 //    /// min-secs is not (yet?) supported
-//    /// Reference Kea #5231
+//    /// Reference Kea #223
 //    {
 //      "name": "min-secs",
 //      "code": 14,
@@ -50,7 +50,7 @@
 //      "value": "my.key.biz"
 //    },
 //    /// limit-addrs-per-ia is not (yet?) supported
-//    /// Reference Kea #5237
+//    /// Reference Kea #227
 //    {
 //      "name": "limit-addrs-per-ia",
 //      "code": 56,

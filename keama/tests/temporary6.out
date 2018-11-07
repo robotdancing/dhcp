@@ -2,7 +2,7 @@
   # DHCPv6 temporary (aka IA_TA) range config
   # authoritative is mandatory
   /// This configuration declares some subnets but has no interfaces-config
-  /// Reference Kea #5256
+  /// Reference Kea #245
   "Dhcp6": {
     "subnet6": [
       # subnet declaration

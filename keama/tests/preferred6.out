@@ -2,7 +2,7 @@
   # preferred lifetime
   # authoritative is mandatory
   /// This configuration declares some subnets but has no interfaces-config
-  /// Reference Kea #5256
+  /// Reference Kea #245
   "Dhcp6": {
     "preferred-lifetime": 1200,
     "renew-timer": 600,

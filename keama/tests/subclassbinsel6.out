@@ -78,7 +78,7 @@
           }
         ],
 //      /// Per-class limit is not supported by Kea
-//      /// Reference Kea #5433
+//      /// Reference Kea #237
 //      "lease-limit": 20,
         /// from: match option dhcp6.hardware
         /// data: 0x010002b388c527

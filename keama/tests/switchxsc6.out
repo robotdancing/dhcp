@@ -53,7 +53,7 @@
 //        },
 //        {
 //          /// Kea does not support yet log statements
-//          /// Reference Kea #5271
+//          /// Reference Kea #234
 //          "log": {
 //            "priority": "debug",
 //            "message": "hello"

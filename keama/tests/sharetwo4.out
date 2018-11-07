@@ -7,7 +7,7 @@
         "en0"
       ]
     },
-    /// Kea shared-networks are different, cf Kea #5430
+    /// Kea shared-networks are different, cf Kea #236
     "shared-networks": [
       # shared-network declaration
       {
