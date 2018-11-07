@@ -1,7 +1,7 @@
 {
   # Enable omapi interface
   /// This configuration declares some subnets but has no interfaces-config
-  /// Reference Kea #5256
+  /// Reference Kea #245
   "Dhcp4": {
 //  "config": [
 //    /// omapi-port is an internal ISC DHCP feature
@@ -25,7 +25,7 @@
 //    },
 //    /// max-lease-time is not supported
 //    /// use default-lease-time instead
-//    /// Reference Kea #5219
+//    /// Reference Kea #221
 //    {
 //      "name": "max-lease-time",
 //      "code": 2,
@@ -33,7 +33,7 @@
 //    },
 //    /// min-lease-time is not supported
 //    /// use default-lease-time instead
-//    /// Reference Kea #5219
+//    /// Reference Kea #221
 //    {
 //      "name": "min-lease-time",
 //      "code": 3,
@@ -276,7 +276,7 @@
 //      "config": [
 //        /// max-lease-time is not supported
 //        /// use default-lease-time instead
-//        /// Reference Kea #5219
+//        /// Reference Kea #221
 //        {
 //          "name": "max-lease-time",
 //          "code": 2,
@@ -284,7 +284,7 @@
 //        },
 //        /// min-lease-time is not supported
 //        /// use default-lease-time instead
-//        /// Reference Kea #5219
+//        /// Reference Kea #221
 //        {
 //          "name": "min-lease-time",
 //          "code": 3,
@@ -10435,7 +10435,7 @@
     ]
 //  "statement": {
 //    /// Kea does not support yet log statements
-//    /// Reference Kea #5271
+//    /// Reference Kea #234
 //    "log": {
 //      "priority": "info",
 //      "message": {

@@ -437,18 +437,16 @@ TODO: check the multiple address comment is correctly taken
 
 Options:
 --------
- Some options are known only in ISC DHCP (cf #5227), a few only by Kea.
+ Some options are known only in ISC DHCP (fixed), a few only by Kea.
  Formats are supposed to be the same, the only known exception
  (DHCPv4 domain-search) was fixed by #5087.
  For option spaces DHCPv4 vendor-encapsulated-options (code 43, in general
  associated to vendor-class-identifier code 60) uses a dedicated feature
- which has currently no equivalent in Kea (but #5073 Kea 1.3 ticket
- could fix this).
+ which has currently no equivalent in Kea (fixed).
  Option definitions are convertible with a few exception:
   - no support in Kea for an array of records (mainly by the lack
    of a corresponding syntax). BTW there is no known use too.
-  - no support in Kea for an array at the end of a record
-   (more useful, cf #5226)
+  - no support in Kea for an array at the end of a record (fixed)
    All unsupported option declarations are set to full binary (X).
   - X format means ASCII or hexa:
     * standard options are in general mapped to binary
@@ -466,8 +464,8 @@ a CSV false binary data is produced.
  For operations on options ISC DHCP has supersede, send, append,
  prepend,  default (set if not yet present), Kea puts them in code order
  with a few built-in exceptions.
- To finish there is no way today to enforce Kea to add an option
- in a response (cf #5241 Kea 1.3 ticket).
+ To finish there is the way to enforce Kea to add an option in a response
+ is pretty different and can't be automatically translated (cf Kea #250).
 
 Duplicates:
 -----------
@@ -500,7 +498,7 @@ TODO reduce more hexa aka const-data
   /tmp/bool line 9: Expecting a data expression.
   option ip-forwarding = foo = foo;
                                 ^
- Cf Kea #5265
+ Cf Kea #247
  The tautology 'foo = foo' is not a data expression so is rejected by
  both the MA and dhcpd (BTW the role of the MA is not to fix ISC DHCP
  shortcomings so it does what it is expected to do here).

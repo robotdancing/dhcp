@@ -8,7 +8,7 @@
     ]
 //  /// Orphan reservations
 //  /// Kea reservations are per subnet
-//  /// Reference Kea #5246
+//  /// Reference Kea #231
 //  "reservations": [
 //    # orphan reservation
 //    {

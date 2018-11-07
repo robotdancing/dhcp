@@ -9,7 +9,7 @@
   # We also supply a domain name to make pump (Red Hat 6.x) happy.
   #
   /// This configuration declares some subnets but has no interfaces-config
-  /// Reference Kea #5256
+  /// Reference Kea #245
   "Dhcp4": {
 //  ###### VMNET DHCP Configuration. Start of "DO NOT MODIFY SECTION" #####
 //  # Modification Instructions: This section of the configuration file contains
@@ -31,7 +31,7 @@
 //  "config": [
 //    /// max-lease-time is not supported
 //    /// use default-lease-time instead
-//    /// Reference Kea #5219
+//    /// Reference Kea #221
 //    {
 //      "name": "max-lease-time",
 //      "code": 2,
@@ -85,7 +85,7 @@
 //      "config": [
 //        /// max-lease-time is not supported
 //        /// use default-lease-time instead
-//        /// Reference Kea #5219
+//        /// Reference Kea #221
 //        {
 //          "name": "max-lease-time",
 //          "code": 2,

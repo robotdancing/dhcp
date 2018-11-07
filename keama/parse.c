@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017 by Internet Systems Consortium, Inc. ("ISC")
+ * Copyright (c) 2017, 2018 by Internet Systems Consortium, Inc. ("ISC")
  *
  * Permission to use, copy, modify, and distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -1941,7 +1941,7 @@ parse_executable_statement(struct element *result,
 			comment = createComment("/// Kea does not support "
 						"yet log statements");
 			TAILQ_INSERT_TAIL(&st->comments, comment);
-			comment= createComment("/// Reference Kea #5271");
+			comment= createComment("/// Reference Kea #234");
 			TAILQ_INSERT_TAIL(&st->comments, comment);
 			log_warning = ISC_FALSE;
 		}
@@ -4154,7 +4154,7 @@ parse_option_binary(struct element *expr, struct parse *cfile,
 		comment = createComment("/// Please consider to change "
 					"last type in the record to binary");
 		TAILQ_INSERT_TAIL(&elem->comments, comment);
-		comment = createComment("/// Reference Kea #5257");
+		comment = createComment("/// Reference Kea #246");
 		TAILQ_INSERT_TAIL(&elem->comments, comment);
 		expr->skip = ISC_TRUE;
 		cfile->issue_counter++;
@@ -4273,7 +4273,7 @@ parse_option_statement(struct element *result,
 		TAILQ_INSERT_TAIL(&opt_data->comments, comment);
 		comment = createComment("/// Consider setting \"always-send\" "
 					"to true when setting data "
-					"for relevant options, cf Kea #5241");
+					"for relevant options, cf Kea #250");
 		TAILQ_INSERT_TAIL(&opt_data->comments, comment);
 	}
 
@@ -4286,7 +4286,7 @@ parse_option_statement(struct element *result,
 		TAILQ_INSERT_TAIL(&opt_data->comments, comment);
 		comment = createComment("/// Consider setting \"always-send\" "
 					"to true when setting data "
-					"for relevant options, cf Kea #5241");
+					"for relevant options, cf Kea #250");
 		TAILQ_INSERT_TAIL(&opt_data->comments, comment);
 	}
 

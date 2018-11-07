@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017 by Internet Systems Consortium, Inc. ("ISC")
+ * Copyright (c) 2017, 2018 by Internet Systems Consortium, Inc. ("ISC")
  *
  * Permission to use, copy, modify, and distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -703,7 +703,7 @@ get_config_comments(unsigned code)
 		TAILQ_INSERT_TAIL(&comments, comment);
 		comment = createComment("/// use default-lease-time instead");
 		TAILQ_INSERT_TAIL(&comments, comment);
-		comment = createComment("/// Reference Kea #5219");
+		comment = createComment("/// Reference Kea #221");
 		TAILQ_INSERT_TAIL(&comments, comment);
 		break;
 
@@ -726,7 +726,7 @@ get_config_comments(unsigned code)
 		TAILQ_INSERT_TAIL(&comments, comment);
 		comment = createComment("/// no concrete usage known?");
 		TAILQ_INSERT_TAIL(&comments, comment);
-		comment = createComment("/// Reference Kea #5229");
+		comment = createComment("/// Reference Kea #239");
 		TAILQ_INSERT_TAIL(&comments, comment);
 		break;
 
@@ -734,7 +734,7 @@ get_config_comments(unsigned code)
 		comment = createComment("/// one-lease-per-client is not "
 				       "supported");
 		TAILQ_INSERT_TAIL(&comments, comment);
-		comment = createComment("/// Reference Kea #5228");
+		comment = createComment("/// Reference Kea #238");
 		TAILQ_INSERT_TAIL(&comments, comment);
 		break;
 
@@ -742,7 +742,7 @@ get_config_comments(unsigned code)
 		comment = createComment("/// get-lease-hostnames is not "
 				       "supported");
 		TAILQ_INSERT_TAIL(&comments, comment);
-		comment = createComment("/// Reference Kea #5230");
+		comment = createComment("/// Reference Kea #240");
 		TAILQ_INSERT_TAIL(&comments, comment);
 		break;
 
@@ -762,7 +762,7 @@ get_config_comments(unsigned code)
 		comment = createComment("/// min-secs is not (yet?) "
 					"supported");
 		TAILQ_INSERT_TAIL(&comments, comment);
-		comment = createComment("/// Reference Kea #5231");
+		comment = createComment("/// Reference Kea #223");
 		TAILQ_INSERT_TAIL(&comments, comment);
 		break;
 
@@ -773,7 +773,7 @@ get_config_comments(unsigned code)
 		comment = createComment("/// always-broadcast is not "
 				       "supported");
 		TAILQ_INSERT_TAIL(&comments, comment);
-		comment = createComment("/// Reference Kea #5232");
+		comment = createComment("/// Reference Kea #241");
 		TAILQ_INSERT_TAIL(&comments, comment);
 		break;
 
@@ -838,7 +838,7 @@ get_config_comments(unsigned code)
 		comment = createComment("/// limited-broadcast-address "
 				       "is not (yet?) supported");
 		TAILQ_INSERT_TAIL(&comments, comment);
-                comment = createComment("/// Reference Kea #5233");
+                comment = createComment("/// Reference Kea #224");
                 TAILQ_INSERT_TAIL(&comments, comment);
                 break;
 
@@ -866,7 +866,7 @@ get_config_comments(unsigned code)
 		comment = createComment("/// stash-agent-options is not "
 					"(yet?) supported");
 		TAILQ_INSERT_TAIL(&comments, comment);
-		comment = createComment("/// Reference Kea #5234");
+		comment = createComment("/// Reference Kea #218");
                 TAILQ_INSERT_TAIL(&comments, comment);
                 break;
 
@@ -874,7 +874,7 @@ get_config_comments(unsigned code)
 		comment = createComment("/// ddns-ttl is a D2 not (yet?) "
 					"supported feature");
 		TAILQ_INSERT_TAIL(&comments, comment);
-                comment = createComment("/// Reference Kea #5235");
+                comment = createComment("/// Reference Kea #225");
                 TAILQ_INSERT_TAIL(&comments, comment);
                 break;
 
@@ -962,7 +962,7 @@ get_config_comments(unsigned code)
 		comment = createComment("/// adaptive-lease-time-threshold is "
 					"not supported");
 		TAILQ_INSERT_TAIL(&comments, comment);
-		comment = createComment("/// Reference Kea #5236");
+		comment = createComment("/// Reference Kea #226");
 		TAILQ_INSERT_TAIL(&comments, comment);
                 break;
 
@@ -995,7 +995,7 @@ get_config_comments(unsigned code)
 					"is not (yet?) supported");
 		TAILQ_INSERT_TAIL(&comments, comment);
 	limit_resources:
-		comment = createComment("/// Reference Kea #5237");
+		comment = createComment("/// Reference Kea #227");
                 TAILQ_INSERT_TAIL(&comments, comment);
                 break;
 
@@ -1009,7 +1009,7 @@ get_config_comments(unsigned code)
 		comment = createComment("/// dhcp-cache-threshold "
 					"is not (yet?) supported");
 		TAILQ_INSERT_TAIL(&comments, comment);
-		comment = createComment("/// Reference Kea #5238");
+		comment = createComment("/// Reference Kea #228");
                 TAILQ_INSERT_TAIL(&comments, comment);
                 break;
 
@@ -1040,7 +1040,7 @@ get_config_comments(unsigned code)
 					"supported");
                 TAILQ_INSERT_TAIL(&comments, comment);
 	log_threshold:
-		comment = createComment("/// Reference Kea #5220");
+		comment = createComment("/// Reference Kea #222");
                 TAILQ_INSERT_TAIL(&comments, comment);
                 break;		
 
@@ -1054,7 +1054,7 @@ get_config_comments(unsigned code)
 		comment = createComment("/// server-id-check is not (yet?) "
 					"supported");
 		TAILQ_INSERT_TAIL(&comments, comment);
-		comment = createComment("/// Reference Kea #5239");
+		comment = createComment("/// Reference Kea #242");
                 TAILQ_INSERT_TAIL(&comments, comment);
 		break;
 

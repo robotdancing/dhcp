@@ -6,7 +6,7 @@
   # https://doc.admin.windstream.net/atdewiki/UpdateDhcpConfiguration
   # or your changes may/will be lost.
   /// This configuration declares some subnets but has no interfaces-config
-  /// Reference Kea #5256
+  /// Reference Kea #245
   "Dhcp4": {
     "option-data": [
       {
@@ -41,7 +41,7 @@
 //  },
 //  "config": [
 //    /// one-lease-per-client is not supported
-//    /// Reference Kea #5228
+//    /// Reference Kea #238
 //    {
 //      "name": "one-lease-per-client",
 //      "code": 10,
@@ -49,7 +49,7 @@
 //    },
 //    /// min-lease-time is not supported
 //    /// use default-lease-time instead
-//    /// Reference Kea #5219
+//    /// Reference Kea #221
 //    {
 //      "name": "min-lease-time",
 //      "code": 3,
@@ -57,7 +57,7 @@
 //    },
 //    /// max-lease-time is not supported
 //    /// use default-lease-time instead
-//    /// Reference Kea #5219
+//    /// Reference Kea #221
 //    {
 //      "name": "max-lease-time",
 //      "code": 2,
@@ -85,7 +85,7 @@
 //      "body": [
 //        {
 //          /// Kea does not support yet log statements
-//          /// Reference Kea #5271
+//          /// Reference Kea #234
 //          "log": {
 //            "priority": "info",
 //            "message": {
@@ -264,7 +264,7 @@
 //      "config": [
 //        /// min-lease-time is not supported
 //        /// use default-lease-time instead
-//        /// Reference Kea #5219
+//        /// Reference Kea #221
 //        {
 //          "name": "min-lease-time",
 //          "code": 3,
@@ -272,7 +272,7 @@
 //        },
 //        /// max-lease-time is not supported
 //        /// use default-lease-time instead
-//        /// Reference Kea #5219
+//        /// Reference Kea #221
 //        {
 //          "name": "max-lease-time",
 //          "code": 2,
@@ -700,7 +700,7 @@
 //      "config": [
 //        /// min-lease-time is not supported
 //        /// use default-lease-time instead
-//        /// Reference Kea #5219
+//        /// Reference Kea #221
 //        {
 //          "name": "min-lease-time",
 //          "code": 3,
@@ -708,7 +708,7 @@
 //        },
 //        /// max-lease-time is not supported
 //        /// use default-lease-time instead
-//        /// Reference Kea #5219
+//        /// Reference Kea #221
 //        {
 //          "name": "max-lease-time",
 //          "code": 2,
@@ -3866,7 +3866,7 @@
 //      "config": [
 //        /// min-lease-time is not supported
 //        /// use default-lease-time instead
-//        /// Reference Kea #5219
+//        /// Reference Kea #221
 //        {
 //          "name": "min-lease-time",
 //          "code": 3,
@@ -3874,7 +3874,7 @@
 //        },
 //        /// max-lease-time is not supported
 //        /// use default-lease-time instead
-//        /// Reference Kea #5219
+//        /// Reference Kea #221
 //        {
 //          "name": "max-lease-time",
 //          "code": 2,
@@ -4946,7 +4946,7 @@
 //      "config": [
 //        /// min-lease-time is not supported
 //        /// use default-lease-time instead
-//        /// Reference Kea #5219
+//        /// Reference Kea #221
 //        {
 //          "name": "min-lease-time",
 //          "code": 3,
@@ -4954,7 +4954,7 @@
 //        },
 //        /// max-lease-time is not supported
 //        /// use default-lease-time instead
-//        /// Reference Kea #5219
+//        /// Reference Kea #221
 //        {
 //          "name": "max-lease-time",
 //          "code": 2,
@@ -5142,7 +5142,7 @@
 //      "config": [
 //        /// min-lease-time is not supported
 //        /// use default-lease-time instead
-//        /// Reference Kea #5219
+//        /// Reference Kea #221
 //        {
 //          "name": "min-lease-time",
 //          "code": 3,
@@ -5150,7 +5150,7 @@
 //        },
 //        /// max-lease-time is not supported
 //        /// use default-lease-time instead
-//        /// Reference Kea #5219
+//        /// Reference Kea #221
 //        {
 //          "name": "max-lease-time",
 //          "code": 2,
@@ -5338,7 +5338,7 @@
 //      "config": [
 //        /// min-lease-time is not supported
 //        /// use default-lease-time instead
-//        /// Reference Kea #5219
+//        /// Reference Kea #221
 //        {
 //          "name": "min-lease-time",
 //          "code": 3,
@@ -5346,7 +5346,7 @@
 //        },
 //        /// max-lease-time is not supported
 //        /// use default-lease-time instead
-//        /// Reference Kea #5219
+//        /// Reference Kea #221
 //        {
 //          "name": "max-lease-time",
 //          "code": 2,
@@ -5534,7 +5534,7 @@
 //      "config": [
 //        /// min-lease-time is not supported
 //        /// use default-lease-time instead
-//        /// Reference Kea #5219
+//        /// Reference Kea #221
 //        {
 //          "name": "min-lease-time",
 //          "code": 3,
@@ -5542,7 +5542,7 @@
 //        },
 //        /// max-lease-time is not supported
 //        /// use default-lease-time instead
-//        /// Reference Kea #5219
+//        /// Reference Kea #221
 //        {
 //          "name": "max-lease-time",
 //          "code": 2,
@@ -5736,7 +5736,7 @@
         ]
       }
     ],
-    /// Kea shared-networks are different, cf Kea #5430
+    /// Kea shared-networks are different, cf Kea #236
     "shared-networks": [
       {
         "name": "dalltxlcs00-7200",
@@ -7239,7 +7239,7 @@
 //      "config": [
 //        /// min-lease-time is not supported
 //        /// use default-lease-time instead
-//        /// Reference Kea #5219
+//        /// Reference Kea #221
 //        {
 //          "name": "min-lease-time",
 //          "code": 3,
@@ -7247,7 +7247,7 @@
 //        },
 //        /// max-lease-time is not supported
 //        /// use default-lease-time instead
-//        /// Reference Kea #5219
+//        /// Reference Kea #221
 //        {
 //          "name": "max-lease-time",
 //          "code": 2,
@@ -7447,7 +7447,7 @@
 //      "config": [
 //        /// min-lease-time is not supported
 //        /// use default-lease-time instead
-//        /// Reference Kea #5219
+//        /// Reference Kea #221
 //        {
 //          "name": "min-lease-time",
 //          "code": 3,
@@ -7455,7 +7455,7 @@
 //        },
 //        /// max-lease-time is not supported
 //        /// use default-lease-time instead
-//        /// Reference Kea #5219
+//        /// Reference Kea #221
 //        {
 //          "name": "max-lease-time",
 //          "code": 2,
@@ -7739,7 +7739,7 @@
 //      "config": [
 //        /// min-lease-time is not supported
 //        /// use default-lease-time instead
-//        /// Reference Kea #5219
+//        /// Reference Kea #221
 //        {
 //          "name": "min-lease-time",
 //          "code": 3,
@@ -7747,7 +7747,7 @@
 //        },
 //        /// max-lease-time is not supported
 //        /// use default-lease-time instead
-//        /// Reference Kea #5219
+//        /// Reference Kea #221
 //        {
 //          "name": "max-lease-time",
 //          "code": 2,
@@ -9202,7 +9202,7 @@
 //      "config": [
 //        /// min-lease-time is not supported
 //        /// use default-lease-time instead
-//        /// Reference Kea #5219
+//        /// Reference Kea #221
 //        {
 //          "name": "min-lease-time",
 //          "code": 3,
@@ -9210,7 +9210,7 @@
 //        },
 //        /// max-lease-time is not supported
 //        /// use default-lease-time instead
-//        /// Reference Kea #5219
+//        /// Reference Kea #221
 //        {
 //          "name": "max-lease-time",
 //          "code": 2,
@@ -10157,7 +10157,7 @@
 //      "config": [
 //        /// min-lease-time is not supported
 //        /// use default-lease-time instead
-//        /// Reference Kea #5219
+//        /// Reference Kea #221
 //        {
 //          "name": "min-lease-time",
 //          "code": 3,
@@ -10165,7 +10165,7 @@
 //        },
 //        /// max-lease-time is not supported
 //        /// use default-lease-time instead
-//        /// Reference Kea #5219
+//        /// Reference Kea #221
 //        {
 //          "name": "max-lease-time",
 //          "code": 2,
@@ -19080,7 +19080,7 @@
 //      "config": [
 //        /// min-lease-time is not supported
 //        /// use default-lease-time instead
-//        /// Reference Kea #5219
+//        /// Reference Kea #221
 //        {
 //          "name": "min-lease-time",
 //          "code": 3,
@@ -19088,7 +19088,7 @@
 //        },
 //        /// max-lease-time is not supported
 //        /// use default-lease-time instead
-//        /// Reference Kea #5219
+//        /// Reference Kea #221
 //        {
 //          "name": "max-lease-time",
 //          "code": 2,
@@ -19410,7 +19410,7 @@
 //      "config": [
 //        /// min-lease-time is not supported
 //        /// use default-lease-time instead
-//        /// Reference Kea #5219
+//        /// Reference Kea #221
 //        {
 //          "name": "min-lease-time",
 //          "code": 3,
@@ -19418,7 +19418,7 @@
 //        },
 //        /// max-lease-time is not supported
 //        /// use default-lease-time instead
-//        /// Reference Kea #5219
+//        /// Reference Kea #221
 //        {
 //          "name": "max-lease-time",
 //          "code": 2,
@@ -19834,7 +19834,7 @@
 //      "config": [
 //        /// min-lease-time is not supported
 //        /// use default-lease-time instead
-//        /// Reference Kea #5219
+//        /// Reference Kea #221
 //        {
 //          "name": "min-lease-time",
 //          "code": 3,
@@ -19842,7 +19842,7 @@
 //        },
 //        /// max-lease-time is not supported
 //        /// use default-lease-time instead
-//        /// Reference Kea #5219
+//        /// Reference Kea #221
 //        {
 //          "name": "max-lease-time",
 //          "code": 2,
@@ -20241,7 +20241,7 @@
 //      "config": [
 //        /// min-lease-time is not supported
 //        /// use default-lease-time instead
-//        /// Reference Kea #5219
+//        /// Reference Kea #221
 //        {
 //          "name": "min-lease-time",
 //          "code": 3,
@@ -20249,7 +20249,7 @@
 //        },
 //        /// max-lease-time is not supported
 //        /// use default-lease-time instead
-//        /// Reference Kea #5219
+//        /// Reference Kea #221
 //        {
 //          "name": "max-lease-time",
 //          "code": 2,
@@ -22856,7 +22856,7 @@
 //      "config": [
 //        /// min-lease-time is not supported
 //        /// use default-lease-time instead
-//        /// Reference Kea #5219
+//        /// Reference Kea #221
 //        {
 //          "name": "min-lease-time",
 //          "code": 3,
@@ -22864,7 +22864,7 @@
 //        },
 //        /// max-lease-time is not supported
 //        /// use default-lease-time instead
-//        /// Reference Kea #5219
+//        /// Reference Kea #221
 //        {
 //          "name": "max-lease-time",
 //          "code": 2,
@@ -23383,7 +23383,7 @@
 //      "config": [
 //        /// min-lease-time is not supported
 //        /// use default-lease-time instead
-//        /// Reference Kea #5219
+//        /// Reference Kea #221
 //        {
 //          "name": "min-lease-time",
 //          "code": 3,
@@ -23391,7 +23391,7 @@
 //        },
 //        /// max-lease-time is not supported
 //        /// use default-lease-time instead
-//        /// Reference Kea #5219
+//        /// Reference Kea #221
 //        {
 //          "name": "max-lease-time",
 //          "code": 2,
@@ -24110,7 +24110,7 @@
 //      "config": [
 //        /// min-lease-time is not supported
 //        /// use default-lease-time instead
-//        /// Reference Kea #5219
+//        /// Reference Kea #221
 //        {
 //          "name": "min-lease-time",
 //          "code": 3,
@@ -24118,7 +24118,7 @@
 //        },
 //        /// max-lease-time is not supported
 //        /// use default-lease-time instead
-//        /// Reference Kea #5219
+//        /// Reference Kea #221
 //        {
 //          "name": "max-lease-time",
 //          "code": 2,
@@ -26349,7 +26349,7 @@
 //      "config": [
 //        /// min-lease-time is not supported
 //        /// use default-lease-time instead
-//        /// Reference Kea #5219
+//        /// Reference Kea #221
 //        {
 //          "name": "min-lease-time",
 //          "code": 3,
@@ -26357,7 +26357,7 @@
 //        },
 //        /// max-lease-time is not supported
 //        /// use default-lease-time instead
-//        /// Reference Kea #5219
+//        /// Reference Kea #221
 //        {
 //          "name": "max-lease-time",
 //          "code": 2,
@@ -26724,7 +26724,7 @@
 //      "config": [
 //        /// min-lease-time is not supported
 //        /// use default-lease-time instead
-//        /// Reference Kea #5219
+//        /// Reference Kea #221
 //        {
 //          "name": "min-lease-time",
 //          "code": 3,
@@ -26732,7 +26732,7 @@
 //        },
 //        /// max-lease-time is not supported
 //        /// use default-lease-time instead
-//        /// Reference Kea #5219
+//        /// Reference Kea #221
 //        {
 //          "name": "max-lease-time",
 //          "code": 2,
@@ -28509,7 +28509,7 @@
 //      "config": [
 //        /// min-lease-time is not supported
 //        /// use default-lease-time instead
-//        /// Reference Kea #5219
+//        /// Reference Kea #221
 //        {
 //          "name": "min-lease-time",
 //          "code": 3,
@@ -28517,7 +28517,7 @@
 //        },
 //        /// max-lease-time is not supported
 //        /// use default-lease-time instead
-//        /// Reference Kea #5219
+//        /// Reference Kea #221
 //        {
 //          "name": "max-lease-time",
 //          "code": 2,
@@ -29620,7 +29620,7 @@
 //      "config": [
 //        /// min-lease-time is not supported
 //        /// use default-lease-time instead
-//        /// Reference Kea #5219
+//        /// Reference Kea #221
 //        {
 //          "name": "min-lease-time",
 //          "code": 3,
@@ -29628,7 +29628,7 @@
 //        },
 //        /// max-lease-time is not supported
 //        /// use default-lease-time instead
-//        /// Reference Kea #5219
+//        /// Reference Kea #221
 //        {
 //          "name": "max-lease-time",
 //          "code": 2,
@@ -29642,7 +29642,7 @@
     ]
 //  /// Orphan reservations
 //  /// Kea reservations are per subnet
-//  /// Reference Kea #5246
+//  /// Reference Kea #231
 //  "reservations": [
 //    {
 //      "hostname": "sla01.albm_976.dhcp.windstream.net",

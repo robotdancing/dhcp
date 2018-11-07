@@ -5,7 +5,7 @@
   #
   # Required
   /// This configuration declares some subnets but has no interfaces-config
-  /// Reference Kea #5256
+  /// Reference Kea #245
   "Dhcp4": {
     "option-data": [
       # option definitions common to all supported networks...
@@ -27,7 +27,7 @@
 //  "config": [
 //    /// max-lease-time is not supported
 //    /// use default-lease-time instead
-//    /// Reference Kea #5219
+//    /// Reference Kea #221
 //    {
 //      "name": "max-lease-time",
 //      "code": 2,
@@ -133,7 +133,7 @@
 //      "config": [
 //        /// max-lease-time is not supported
 //        /// use default-lease-time instead
-//        /// Reference Kea #5219
+//        /// Reference Kea #221
 //        {
 //          "name": "max-lease-time",
 //          "code": 2,
@@ -141,7 +141,7 @@
 //        }
 //      ],
         /// Host reservations without fixed addresses were put in the last declared subnet
-        /// Reference Kea #5246
+        /// Reference Kea #231
         "reservations": [
           # Hosts which require special configuration options can be listed in
           # host statements.   If no address is specified, the address will be
@@ -186,7 +186,7 @@
         "test": "not member('foo')"
       }
     ],
-    /// Kea shared-networks are different, cf Kea #5430
+    /// Kea shared-networks are different, cf Kea #236
     "shared-networks": [
       {
         "name": "224-29",
