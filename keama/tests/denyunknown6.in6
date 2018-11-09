@@ -1,4 +1,4 @@
-# DHCPv6 permit authenticated client config
+# DHCPv6 deny unknown client config
 
 # authoritative is mandatory
 authoritative;
@@ -13,6 +13,6 @@ subnet6 2001::/64 {
         # avoid empty pool
 	range6 2001::100 2001::200;
         # call get_permit
-	deny unauthenticated clients;
+	deny unknown clients;
     }
 }
