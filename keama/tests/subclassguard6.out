@@ -1,9 +1,8 @@
 {
   # subclass with guard declaration config
-  # authoritative is mandatory
+  # options
   "Dhcp6": {
     "option-def": [
-      # options
       {
         "space": "dhcp6",
         "name": "mysystem",

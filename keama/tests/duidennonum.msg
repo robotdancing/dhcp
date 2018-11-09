@@ -1,1 +1,1 @@
-duidennonum.err line 7: enterprise number expected
+duidennonum.err line 4: enterprise number expected

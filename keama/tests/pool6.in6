@@ -1,8 +1,5 @@
 # DHCPv6 pool config
 
-# authoritative is mandatory
-authoritative;
-
 # subnet declaration
 subnet6 2001::/64 {
     # pool declaration

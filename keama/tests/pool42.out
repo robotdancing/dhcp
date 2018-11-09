@@ -1,9 +1,8 @@
 {
   # DHCPv4 pool with 2 ranges config
-  # authoritative is mandatory
+  # subnet declaration
   "Dhcp4": {
     "subnet4": [
-      # subnet declaration
       {
         "id": 1,
         "subnet": "10.5.5.0/27",

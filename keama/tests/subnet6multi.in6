@@ -1,8 +1,5 @@
 # DHCPv6 subnet declaration config
 
-# authoritative is mandatory
-authoritative;
-
 # parameter which will be changed in subnet
 default-lease-time 1800;
 

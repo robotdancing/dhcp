@@ -1,8 +1,5 @@
 # ddns-update-style
 
-# authoritative is mandatory
-authoritative;
-
 ddns-update-style standard;
 
 # embedded in pool

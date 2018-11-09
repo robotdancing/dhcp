@@ -1,5 +1,5 @@
 /*
- * Copyright(c) 2017 by Internet Systems Consortium, Inc.("ISC")
+ * Copyright(c) 2017, 2018 by Internet Systems Consortium, Inc.("ISC")
  *
  * Permission to use, copy, modify, and distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -53,7 +53,6 @@ char *output_file = NULL;
 FILE *input = NULL;
 FILE *output = NULL;
 isc_boolean_t json = ISC_FALSE;
-isc_boolean_t partial = ISC_FALSE;
 
 static const char use_noarg[] = "No argument for command: %s";
 static const char bad_resolve[] = "Bad -r argument: %s";
@@ -73,8 +72,6 @@ main(int argc, char **argv) {
 			local_family = AF_INET;
 		else if (strcmp(argv[i], "-6") == 0)
 			local_family = AF_INET6;
-		else if (strcmp(argv[i], "-A") == 0)
-			partial = ISC_TRUE;
 		else if (strcmp(argv[i], "-T") == 0)
 			json = ISC_TRUE;
 		else if (strcmp(argv[i], "-r") == 0) {

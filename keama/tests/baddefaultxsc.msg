@@ -1,1 +1,1 @@
-baddefaultxsc.err line 10: switch default statement in inappropriate scope.
+baddefaultxsc.err line 7: switch default statement in inappropriate scope.

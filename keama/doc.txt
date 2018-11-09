@@ -405,16 +405,6 @@ Pools:
  and IMHO more powerful model.
  Pool6 permissions are not supported.
 
-Authoritative declaration:
---------------------------
- No problem when set in the global scope and nothing else, so raise
- an error when parsing finishes without a positive authoritative declaration.
- Used no make some subnets known: ISC DHCP uses these subnets for
- subnet selection but sends no response including to info only.
- This is a feature without equivalent in Kea but IMHO not required.
- Negative authoritative declarations are used as a kind of disabling
- some parts so the MA comments them.
-
 Failover:
 ---------
  Display a warning on the first use.
@@ -437,12 +427,12 @@ TODO: check the multiple address comment is correctly taken
 
 Options:
 --------
- Some options are known only in ISC DHCP (fixed), a few only by Kea.
+ Some options are known only in ISC DHCP (almost fixed), a few only by Kea.
  Formats are supposed to be the same, the only known exception
  (DHCPv4 domain-search) was fixed by #5087.
  For option spaces DHCPv4 vendor-encapsulated-options (code 43, in general
  associated to vendor-class-identifier code 60) uses a dedicated feature
- which has currently no equivalent in Kea (fixed).
+ which had no equivalent in Kea (fixed).
  Option definitions are convertible with a few exception:
   - no support in Kea for an array of records (mainly by the lack
    of a corresponding syntax). BTW there is no known use too.
@@ -520,6 +510,5 @@ Variables:
  to recognize booleans and numbers. Unfortunately this is very specific...
 
 TODO:
- - align/rebase to 4.4.0-alpha
  - class like if statement
  - add more tests for classes in pools and class generation

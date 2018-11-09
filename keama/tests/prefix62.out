@@ -1,9 +1,8 @@
 {
   # DHCPv6 prefix config
-  # authoritative is mandatory
+  # subnet declaration
   "Dhcp6": {
     "subnet6": [
-      # subnet declaration
       {
         "id": 1,
         "subnet": "2001::/64",

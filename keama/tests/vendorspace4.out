@@ -1,6 +1,5 @@
 {
   # vendor option space config
-  # authoritative is mandatory
   "Dhcp4": {
     "option-def": [
       {

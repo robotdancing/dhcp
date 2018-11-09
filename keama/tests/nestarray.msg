@@ -1,1 +1,1 @@
-nestarray.err line 10: no nested arrays.
+nestarray.err line 7: no nested arrays.

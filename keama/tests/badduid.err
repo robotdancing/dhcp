@@ -1,7 +1,4 @@
 # bad (no type) server duid config
 
-# authoritative is mandatory
-authoritative;
-
 # server duid declaration
 server-duid "enterprise-specific-identifier-1234";

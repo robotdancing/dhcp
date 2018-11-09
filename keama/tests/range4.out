@@ -1,11 +1,10 @@
 {
   # DHCPv4 range config
-  # authoritative is mandatory
+  # subnet declaration
   /// This configuration declares some subnets but has no interfaces-config
   /// Reference Kea #245
   "Dhcp4": {
     "subnet4": [
-      # subnet declaration
       {
         "id": 1,
         "subnet": "10.5.5.0/27",

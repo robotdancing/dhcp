@@ -1,6 +1,6 @@
 {
   # DHCPv4 executable statement config
-  # authoritative is mandatory
+  # empty configs are not accepted by Kea
   "Dhcp4": {
     "valid-lifetime": 1800
 //  # impossible to convert statement statement

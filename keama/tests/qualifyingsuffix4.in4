@@ -1,8 +1,5 @@
 # ddns-domainname (aka qualifying-suffix)
 
-# authoritative is mandatory
-authoritative;
-
 ddns-domainname ".biz";
 ddns-updates true;
 

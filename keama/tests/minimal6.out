@@ -1,6 +1,6 @@
 {
   # DHCPv6 minimal config
-  # authoritative is mandatory
+  # empty configs are not accepted by Kea
   "Dhcp6": {
     "valid-lifetime": 1800
   }

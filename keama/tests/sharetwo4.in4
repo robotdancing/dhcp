@@ -1,8 +1,5 @@
 # DHCPv4 two subnets in shared-network declaration config
 
-# authoritative is mandatory
-authoritative;
-
 # shared-network declaration
 shared-network "foobar" {
     # interface

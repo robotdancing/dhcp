@@ -1,8 +1,5 @@
 # bad (no identifier) EN server duid config
 
-# authoritative is mandatory
-authoritative;
-
 # EN server duid declaration
 server-duid en 2495;
 

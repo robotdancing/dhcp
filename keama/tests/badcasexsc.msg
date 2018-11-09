@@ -1,1 +1,1 @@
-badcasexsc.err line 10: case statement in inappropriate scope.
+badcasexsc.err line 7: case statement in inappropriate scope.

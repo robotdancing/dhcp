@@ -27,6 +27,9 @@
 //      "value": 7200
 //    }
 //  ],
+    # We're going to be authoritative for the network we've
+    # just created.
+    "authoritative": true,
     "subnet4": [
       # No service will be given on this subnet, but we're telling
       # the DHCP server about it so it understands it's there and

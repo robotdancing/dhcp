@@ -1,9 +1,8 @@
 {
   # string option-data with embedded commas
-  # authoritative is mandatory
+  # vendor option space
   "Dhcp4": {
     "option-def": [
-      # vendor option space
       {
         "space": "dhcp4",
         "name": "a-string",

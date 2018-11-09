@@ -1,6 +1,6 @@
 {
   # DHCPv4 minimal config
-  # authoritative is mandatory
+  # empty configs are not accepted by Kea
   "Dhcp4": {
     "valid-lifetime": 1800
   }

@@ -8,6 +8,7 @@
   /// This configuration declares some subnets but has no interfaces-config
   /// Reference Kea #245
   "Dhcp4": {
+    "authoritative": true,
     "option-data": [
       {
         "space": "dhcp4",

@@ -1,6 +1,6 @@
 {
   # embedded option-data in DHCPv4 pool config
-  # authoritative is mandatory
+  # empty configs are not accepted by Kea
   /// This configuration declares some subnets but has no interfaces-config
   /// Reference Kea #245
   "Dhcp4": {

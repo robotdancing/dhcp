@@ -1,1 +1,1 @@
-listarray.err line 10: arrays of text strings not yet supported.
+listarray.err line 7: arrays of text strings not yet supported.

@@ -1,6 +1,5 @@
 {
   # ddns-domainname (aka qualifying-suffix)
-  # authoritative is mandatory
   "Dhcp6": {
     "dhcp-ddns": {
       "enable-updates": false,

@@ -1,6 +1,5 @@
 {
   # ddns-updates (aka enable-updates)
-  # authoritative is mandatory
   "Dhcp6": {
     "dhcp-ddns": {
       /// Unspecified ddns-domainname (default domain-name option value)

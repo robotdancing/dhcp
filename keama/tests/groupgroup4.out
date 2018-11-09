@@ -1,9 +1,8 @@
 {
   # multiple groups declaration config
-  # authoritative is mandatory
+  # options
   "Dhcp4": {
     "option-def": [
-      # options
       {
         "space": "dhcp4",
         "name": "mysystem",

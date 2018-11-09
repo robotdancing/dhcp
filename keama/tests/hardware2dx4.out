@@ -1,9 +1,8 @@
 {
   # simplified hardware data expression
-  # authoritative is mandatory
+  # hardware type class
   "Dhcp4": {
     "client-classes": [
-      # hardware type class
       {
         "name": "ethernet",
         /// from: match if (substring(hardware, 0, 1)) = (encode-int(1, 8))

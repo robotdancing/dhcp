@@ -1,6 +1,6 @@
 {
   # if executable statement construct
-  # authoritative is mandatory
+  # empty configs are not accepted by Kea
   "Dhcp4": {
     "valid-lifetime": 1800
 //  # if statement
