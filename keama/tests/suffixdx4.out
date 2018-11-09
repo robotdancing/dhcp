@@ -1,7 +1,7 @@
 {
   # suffix data expression
   # in fact ISC DHCP suffix can be reduced into Kea substring
-  # authoritative is mandatory
+  # empty configs are not accepted by Kea
   "Dhcp4": {
     "valid-lifetime": 1800,
     "client-classes": [

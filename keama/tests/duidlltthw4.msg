@@ -1,1 +1,1 @@
-duidlltthw4.err4 line 7: expecting a parameter or declaration
+duidlltthw4.err4 line 4: expecting a parameter or declaration

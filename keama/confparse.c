@@ -46,7 +46,7 @@ isc_boolean_t use_hw_address = ISC_FALSE;
 const struct option *host_id_option = NULL;
 int host_id_relays = 0;
 
-/* To avoid late authoritative declaration */
+/* Simple or complex config */
 unsigned subnet_counter = 0;
 
 /* For subclass name generation */
@@ -73,7 +73,6 @@ struct range {
 
 TAILQ_HEAD(ranges, range) known_ranges;
 
-static void post_process_authoritative(struct parse *);
 static size_t post_process_reservations(struct parse *);
 static void post_process_classes(struct parse *);
 static void post_process_generated_classes(struct parse *);
@@ -139,7 +138,7 @@ conf_file_parse(struct parse *cfile)
 	issues = conf_file_subparse(cfile, ROOT_GROUP);
 
 	/* Add a warning when interfaces-config is not present */
-	if (!partial && (subnet_counter > 0)) {
+	if (subnet_counter > 0) {
 		struct element *ifconf;
 
 		ifconf = mapGet(cfile->stack[1], "interfaces-config");
@@ -155,22 +154,12 @@ conf_file_parse(struct parse *cfile)
 		}
 	}
 
-	post_process_authoritative(cfile);
 	issues += post_process_reservations(cfile);
 	post_process_classes(cfile);
 	post_process_generated_classes(cfile);
 	post_process_option_definitions(cfile);
 
 	return issues;
-}
-
-/* Cleanup authoritative */ 
-
-static void
-post_process_authoritative(struct parse *cfile)
-{
-	if (mapContains(cfile->stack[1], "authoritative"))
-		mapRemove(cfile->stack[1], "authoritative");
 }
 
 /* Reservation post-processing */
@@ -805,39 +794,33 @@ parse_statement(struct parse *cfile, int type, isc_boolean_t declaration)
 			parse_error(cfile, "expecting assertion");
 		}
 		break;
+
 	case AUTHORITATIVE:
 		skip_token(&val, NULL, cfile);
 		authoritative = ISC_TRUE;
 	authoritative:
-		if (type == ROOT_GROUP) {
-			if (subnet_counter > 0)
-				goto late_authoritative;
-		} else if (type == SHARED_NET_DECL) {
-			struct element *subnets;
-
-			subnets = mapGet(cfile->stack[cfile->stack_top],
-					 local_family == AF_INET ?
-					 "subnet4" : "subnet6");
-			if ((subnets == NULL) ||
-			    (subnets->type != ELEMENT_LIST))
-				parse_error(cfile, "can't get subnets from "
-					    "shared-network");
-			if (listSize(subnets) > 0)
-		late_authoritative:
-				parse_error(cfile, "too late authoritative "
-					    "declaration");
-		} else if (type != SUBNET_DECL)
+		if (type == HOST_DECL)
 			parse_error(cfile, "authority makes no sense here.");
-		if (mapContains(cfile->stack[cfile->stack_top],
-				"authoritative"))
-			parse_error(cfile, "authoritative was already "
-				    "declared in this scope");
-		cache = createBool(authoritative);
-		cache->skip = ISC_TRUE;
-		TAILQ_CONCAT(&cache->comments, &cfile->comments);
-		mapSet(cfile->stack[cfile->stack_top], cache, "authoritative");
-		if (!authoritative || (type != ROOT_GROUP))
-			cfile->issue_counter++;
+		if (!subnet) {
+			for (i = cfile->stack_top; i > 0; --i) {
+				int kind;
+
+				kind = cfile->stack[i]->kind;
+				if ((kind == SUBNET_DECL) ||
+				    (kind == SHARED_NET_DECL) ||
+				    (kind == ROOT_GROUP)) {
+					subnet = i;
+					break;
+				}
+			}
+		}
+		if (!subnet)
+			parse_error(cfile, "can't find root group");
+		if (local_family == AF_INET) {
+			cache = createBool(authoritative);
+			TAILQ_CONCAT(&cache->comments, &cfile->comments);
+			mapSet(cfile->stack[subnet], cache, "authoritative");
+		}
 		parse_semi(cfile);
 		break;
 
@@ -2137,10 +2120,6 @@ parse_shared_net_declaration(struct parse *cfile)
 
 	cfile->stack_top--;
 
-	/* The declaration is closed so authoritative entry now useless */ 
-	if (mapContains(share, "authoritative"))
-		mapRemove(share, "authoritative");
-
 	if (listSize(subnets) == 0)
 		parse_error(cfile, "empty shared-network decl");
 	if (listSize(subnets) > 1) {
@@ -2263,7 +2242,6 @@ common_subnet_parsing(struct parse *cfile,
 	enum dhcp_token token;
 	const char *val;
 	struct element *interface;
-	struct element *authoritative;
 	int declaration = 0;
 
 	parse_lbrace(cfile);
@@ -2296,44 +2274,6 @@ common_subnet_parsing(struct parse *cfile,
 	}
 
 	cfile->stack_top--;
-
-	/* Check authority */
-	authoritative = mapGet(subnet, "authoritative");
-	if (authoritative == NULL) {
-		struct element *scope;
-		size_t i;
-
-		for (i = cfile->stack_top; i > 0; --i) {
-			scope = cfile->stack[i];
-
-			if ((scope->kind == ROOT_GROUP) ||
-			    (scope->kind == SHARED_NET_DECL) ||
-			    (scope->kind == GROUP_DECL))
-				authoritative = mapGet(scope, "authoritative");
-			if (authoritative != NULL)
-				break;
-		}
-	}
-	if (!partial && (authoritative == NULL))
-		parse_error(cfile,
-			    "missing top level authoritative statement");
-	if (!partial && (!boolValue(authoritative))) {
-		struct comment *comment;
-
-		comment = createComment("/// Not authorized subnet");
-		TAILQ_INSERT_TAIL(&subnet->comments, comment);
-		comment = createComment("/// This feature is not supported by "
-					"Kea");
-		TAILQ_INSERT_TAIL(&subnet->comments, comment);
-		comment = createComment("/// Skipping the subnet only "
-					"partially simulates it");
-		TAILQ_INSERT_TAIL(&subnet->comments, comment);
-		subnet->skip = ISC_TRUE;
-		cfile->issue_counter++;
-	}
-	/* authoritative entry is now useless */
-	if (mapContains(subnet, "authoritative"))
-		mapRemove(subnet, "authoritative");
 
 	/* Add the subnet to the list of subnets in this shared net. */
 	listPush(subnets, subnet);
@@ -2776,16 +2716,13 @@ close_group(struct parse *cfile, struct element *group)
 		    (strcmp(handle->key, "host-identifier") == 0) ||
 		    (strcmp(handle->key, "flex-id") == 0) ||
 		    (strcmp(handle->key, "test") == 0) ||
+		    (strcmp(handle->key, "authoritative") == 0) ||
 		    (strcmp(handle->key, "dhcp-ddns") == 0) ||
 		    (strcmp(handle->key, "host-reservation-identifiers") == 0))
 			parse_error(cfile, "unexpected parameter %s "
 				    "in group at %u",
 				    handle->key, order);
-		/* to drop */
-		if (strcmp(handle->key, "authoritative") == 0) {
-			free(handle);
-			continue;
-		}
+
 		/* to parent at group position */
 		if ((strcmp(handle->key, "option-space") == 0) ||
 		    (strcmp(handle->key, "server-duid") == 0) ||

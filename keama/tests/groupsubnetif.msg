@@ -1,1 +1,1 @@
-groupsubnetif.err4 line 10: expecting a parameter or declaration
+groupsubnetif.err4 line 7: expecting a parameter or declaration

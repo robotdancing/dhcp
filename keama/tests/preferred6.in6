@@ -1,8 +1,5 @@
 # preferred lifetime
 
-# authoritative is mandatory
-authoritative;
-
 preferred-lifetime 1200;
 
 # embedded in pool

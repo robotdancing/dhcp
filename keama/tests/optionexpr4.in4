@@ -1,8 +1,5 @@
 # option data expressions
 
-# authoritative is mandatory
-authoritative;
-
 # options
 option mytext code 250 = text;
 option mytext = substring("foobar", 1, 3);

@@ -1,9 +1,8 @@
 {
   # option data config
-  # authoritative is mandatory
+  # options
   "Dhcp4": {
     "option-data": [
-      # options
       {
         "space": "dhcp4",
         "name": "ip-forwarding",

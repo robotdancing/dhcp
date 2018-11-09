@@ -300,7 +300,6 @@ struct option {
 void stackPush(struct parse *cfile, struct element *elem);
 
 /* From command line */
-extern isc_boolean_t partial;
 extern char *hook_library_path;
 
 /* From common/parse.c */

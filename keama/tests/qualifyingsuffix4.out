@@ -1,6 +1,5 @@
 {
   # ddns-domainname (aka qualifying-suffix)
-  # authoritative is mandatory
   "Dhcp4": {
     "dhcp-ddns": {
       "qualifying-suffix": ".biz",

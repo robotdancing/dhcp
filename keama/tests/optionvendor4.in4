@@ -1,8 +1,5 @@
 # group and class declaration config
 
-# authoritative is mandatory
-authoritative;
-
 # vendor option space
 option space foobar;
 

@@ -1,1 +1,1 @@
-duidlltnotime.err line 7: timestamp expected
+duidlltnotime.err line 4: timestamp expected

@@ -1,6 +1,6 @@
 {
   # config (aka server option space data config
-  # authoritative is mandatory
+  # empty configs are not accepted by Kea
   "Dhcp4": {
     "valid-lifetime": 1800
 //  "config": [

@@ -1,1 +1,1 @@
-classbadmatch.err line 8: Expecting a data expression.
+classbadmatch.err line 5: Expecting a data expression.

@@ -1,6 +1,6 @@
 {
   # DHCPv6 subnet declaration config
-  # authoritative is mandatory
+  # parameter which will be changed in subnet
   /// This configuration declares some subnets but has no interfaces-config
   /// Reference Kea #245
   "Dhcp6": {

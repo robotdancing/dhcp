@@ -1,1 +1,1 @@
-duidennoid.err line 7: identifier expected
+duidennoid.err line 4: identifier expected

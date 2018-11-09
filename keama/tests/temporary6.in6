@@ -1,8 +1,5 @@
 # DHCPv6 temporary (aka IA_TA) range config
 
-# authoritative is mandatory
-authoritative;
-
 # subnet declaration
 subnet6 2001::/64 {
     # range declaration

@@ -1,8 +1,5 @@
 # DHCPv6 one-subnet shared-network declaration config
 
-# authoritative is mandatory
-authoritative;
-
 # shared-network declaration
 shared-network "foobar" {
     # interface

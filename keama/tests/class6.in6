@@ -1,8 +1,5 @@
 # class declaration config
 
-# authoritative is mandatory
-authoritative;
-
 # options
 option dhcp6.mysystem code 1250 = text;
 option dhcp6.myversion code 1251 = unsigned integer 16;

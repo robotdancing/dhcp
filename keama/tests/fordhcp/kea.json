@@ -56,6 +56,7 @@
     "dhcp-ddns": {
       "enable-updates": false
     },
+    "authoritative": true,
     "option-data": [
       {
         "space": "dhcp4",
@@ -155,40 +156,32 @@
 //    ]
 //  },
     "subnet4": [
-//    /// Begin file fordhcp/dhcpd.stubs.conf
-//    # These are stub subnets to inform the DHCP server that they exist.
-//    # sql1-blue, the "outside" network
-//    /// Not authorized subnet
-//    /// This feature is not supported by Kea
-//    /// Skipping the subnet only partially simulates it
-//    {
-//      "id": 1,
-//      "subnet": "149.20.48.0/25"
-//    },
-//    # 187-net is all but dead
-//    /// Not authorized subnet
-//    /// This feature is not supported by Kea
-//    /// Skipping the subnet only partially simulates it
-//    {
-//      "id": 2,
-//      "subnet": "204.152.187.0/24"
-//    },
-//    # QuickBooks/GreatPlains VLAN
-//    /// Not authorized subnet
-//    /// This feature is not supported by Kea
-//    /// Skipping the subnet only partially simulates it
-//    {
-//      "id": 3,
-//      "subnet": "149.20.48.128/28"
-//    },
-//    # Device management VLAN
-//    /// Not authorized subnet
-//    /// This feature is not supported by Kea
-//    /// Skipping the subnet only partially simulates it
-//    {
-//      "id": 4,
-//      "subnet": "149.20.60.0/24"
-//    },
+      /// Begin file fordhcp/dhcpd.stubs.conf
+      # These are stub subnets to inform the DHCP server that they exist.
+      # sql1-blue, the "outside" network
+      {
+        "id": 1,
+        "subnet": "149.20.48.0/25",
+        "authoritative": false
+      },
+      # 187-net is all but dead
+      {
+        "id": 2,
+        "subnet": "204.152.187.0/24",
+        "authoritative": false
+      },
+      # QuickBooks/GreatPlains VLAN
+      {
+        "id": 3,
+        "subnet": "149.20.48.128/28",
+        "authoritative": false
+      },
+      # Device management VLAN
+      {
+        "id": 4,
+        "subnet": "149.20.60.0/24",
+        "authoritative": false
+      },
       /// Begin file fordhcp/dhcpd.voip.conf
       # dhcpd.voip.conf file for Voice over IP phone network served by the 950
       # charter #failover peerset.  This file may be copied to /etc between these

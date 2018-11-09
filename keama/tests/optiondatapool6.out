@@ -1,11 +1,10 @@
 {
   # option-data in DHCPv6 pool config
-  # authoritative is mandatory
+  # subnet declaration
   /// This configuration declares some subnets but has no interfaces-config
   /// Reference Kea #245
   "Dhcp6": {
     "subnet6": [
-      # subnet declaration
       {
         "id": 1,
         "subnet": "2001::/64",

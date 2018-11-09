@@ -1,8 +1,5 @@
 # hostname config
 
-# authoritative is mandatory
-authoritative;
-
 host test1 {
     hardware ethernet 00:07:0E:36:48:19;
     fixed-address www.isc.org;

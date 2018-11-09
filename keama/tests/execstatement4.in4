@@ -1,8 +1,5 @@
 # DHCPv4 executable statement config
 
-# authoritative is mandatory
-authoritative;
-
 # empty configs are not accepted by Kea
 default-lease-time 1800;
 

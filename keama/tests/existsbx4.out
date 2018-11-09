@@ -1,6 +1,6 @@
 {
   # exists boolean expression
-  # authoritative is mandatory
+  # empty configs are not accepted by Kea
   "Dhcp4": {
     "valid-lifetime": 1800,
     "client-classes": [

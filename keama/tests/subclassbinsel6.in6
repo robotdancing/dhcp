@@ -1,8 +1,5 @@
 # subclass declaration config
 
-# authoritative is mandatory
-authoritative;
-
 # options
 option dhcp6.hardware code 1250 = string;
 option dhcp6.myversion code 1251 = unsigned integer 16;

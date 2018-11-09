@@ -1,8 +1,5 @@
 # DHCPv4 pool with 2 ranges config
 
-# authoritative is mandatory
-authoritative;
-
 # subnet declaration
 subnet 10.5.5.0 netmask 255.255.255.224 {
     # pool declaration

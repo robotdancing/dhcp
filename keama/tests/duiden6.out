@@ -1,8 +1,7 @@
 {
   # EN server duid config
-  # authoritative is mandatory
+  # EN server duid declaration
   "Dhcp6": {
-    # EN server duid declaration
     "server-id": {
       "type": "EN",
       "enterprise-id": 2495,

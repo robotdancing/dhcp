@@ -1,8 +1,5 @@
 # option data config
 
-# authoritative is mandatory
-authoritative;
-
 # options
 option space foobar;
 

@@ -22,7 +22,7 @@ set vendor-string = option vendor-class-identifier;
 
 
 # Authoritation is defined at the network level for each shared network
-#not authoritative;
+not authoritative;
 
 include "dhcp3/events.dhcpd";
 

@@ -104,7 +104,8 @@
             /// dynamic-bootp-client is not supported by Kea
             "client-class": "gen#_AND_#!ruckus#!ubnt#"
           }
-        ]
+        ],
+        "authoritative": true
       },
       #  include "/etc/dhcp3/folder.dhcpd/events.dhcpd";
       {
@@ -179,7 +180,8 @@
             /// dynamic-bootp-client is not supported by Kea
             "client-class": "gen#_AND_#!ruckus#!ubnt#"
           }
-        ]
+        ],
+        "authoritative": true
       },
       #  include "/etc/dhcp3/folder.dhcpd/events.dhcpd";
       # WANIP for ilchbat not configured
@@ -248,7 +250,8 @@
             /// dynamic-bootp-client is not supported by Kea
             "client-class": "gen#_AND_#!ruckus#!ubnt#"
           }
-        ]
+        ],
+        "authoritative": true
       },
       #  include "/etc/dhcp3/folder.dhcpd/events.dhcpd";
       # WANIP for ilchept not configured
@@ -317,7 +320,8 @@
             /// dynamic-bootp-client is not supported by Kea
             "client-class": "gen#_AND_#!ruckus#!ubnt#"
           }
-        ]
+        ],
+        "authoritative": true
       },
       #  include "/etc/dhcp3/folder.dhcpd/events.dhcpd";
       # WANIP for ilcucss_lrevdsl not configured
@@ -401,7 +405,8 @@
             "hw-address": "00:1e:67:a3:68:bf",
             "ip-address": "66.253.181.103"
           }
-        ]
+        ],
+        "authoritative": true
       },
       #  include "/etc/dhcp3/folder.dhcpd/events.dhcpd";
       # WANIP for ilcudow-free not configured
@@ -470,7 +475,8 @@
             /// dynamic-bootp-client is not supported by Kea
             "client-class": "gen#_AND_#!ruckus#!ubnt#"
           }
-        ]
+        ],
+        "authoritative": true
       },
       #  include "/etc/dhcp3/folder.dhcpd/events.dhcpd";
       # WANIP for ilcudow-paid not configured
@@ -539,7 +545,8 @@
             /// dynamic-bootp-client is not supported by Kea
             "client-class": "gen#_AND_#!ruckus#!ubnt#"
           }
-        ]
+        ],
+        "authoritative": true
       },
       #  include "/etc/dhcp3/folder.dhcpd/events.dhcpd";
       # WANIP for ilurtrb not configured
@@ -608,7 +615,8 @@
             /// dynamic-bootp-client is not supported by Kea
             "client-class": "gen#_AND_#!ruckus#!ubnt#"
           }
-        ]
+        ],
+        "authoritative": true
       },
       #  include "/etc/dhcp3/folder.dhcpd/events.dhcpd";
       # WANIP for njsetra not configured
@@ -691,7 +699,8 @@
             "hw-address": "c0:c5:20:27:d5:00",
             "ip-address": "66.253.131.61"
           }
-        ]
+        ],
+        "authoritative": true
       },
       #  include "/etc/dhcp3/folder.dhcpd/events.dhcpd";
       # WANIP for njwehen not configured
@@ -760,7 +769,8 @@
             /// dynamic-bootp-client is not supported by Kea
             "client-class": "gen#_AND_#!ruckus#!ubnt#"
           }
-        ]
+        ],
+        "authoritative": true
       }
     ],
     "host-reservation-identifiers": [
@@ -822,6 +832,8 @@
 //      }
 //    }
 //  },
+    # Authoritation is defined at the network level for each shared network
+    "authoritative": false,
     "dhcp-ddns": {
       "enable-updates": false
     },
@@ -1246,7 +1258,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/albipie.dhcpd
       # albipie DHCPD Config File.
@@ -1443,7 +1456,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/aljajac.dhcpd
       # aljajac DHCPD Config File.
@@ -1580,7 +1594,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/altrgro.dhcpd
       # altrgro DHCPD Config File.
@@ -1742,7 +1757,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/altrtro.dhcpd
       # altrtro DHCPD Config File.
@@ -1932,7 +1948,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/arfahpl.dhcpd
       # arfahpl DHCPD Config File.
@@ -2072,7 +2089,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/arjogro.dhcpd
       # arjogro DHCPD Config File.
@@ -2223,7 +2241,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/azchave.dhcpd
       # azchave DHCPD Config File.
@@ -6479,7 +6498,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/azsursv.dhcpd
       # azsursv DHCPD Config File.
@@ -6602,7 +6622,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/aztecom.dhcpd
       # aztecom DHCPD Config File.
@@ -6733,7 +6754,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/aztecsr.dhcpd
       # aztecsr DHCPD Config File.
@@ -6864,7 +6886,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/aztedis.dhcpd
       # aztedis DHCPD Config File.
@@ -7079,7 +7102,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/aztegmo.dhcpd
       # aztegmo DHCPD Config File.
@@ -7344,7 +7368,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/aztevds.dhcpd
       # aztevds DHCPD Config File.
@@ -7769,7 +7794,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/aztevil.dhcpd
       # aztevil DHCPD Config File.
@@ -8025,7 +8051,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/aztuert.dhcpd
       # aztuert DHCPD Config File.
@@ -8148,7 +8175,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/aztueru.dhcpd
       # aztueru DHCPD Config File.
@@ -8271,7 +8299,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/aztunpt.dhcpd
       # aztunpt DHCPD Config File.
@@ -8600,7 +8629,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/aztures.dhcpd
       # aztures DHCPD Config File.
@@ -8941,7 +8971,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/cafrjco.dhcpd
       # cafrjco DHCPD Config File.
@@ -9206,7 +9237,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/cagotro.dhcpd
       # cagotro DHCPD Config File.
@@ -9341,7 +9373,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/casaver.dhcpd
       # casaver DHCPD Config File.
@@ -9616,7 +9649,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/casdgra.dhcpd
       # casdgra DHCPD Config File.
@@ -9757,7 +9791,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/cobouva.dhcpd
       # cobouva DHCPD Config File.
@@ -9964,7 +9999,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/cofcgro.dhcpd
       # cofcgro DHCPD Config File.
@@ -10104,7 +10140,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/flgamel.dhcpd
       # flgamel DHCPD Config File.
@@ -10241,7 +10278,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/fljamel.dhcpd
       # fljamel DHCPD Config File.
@@ -10371,7 +10409,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/floredg.dhcpd
       # floredg DHCPD Config File.
@@ -10646,7 +10685,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/florlof.dhcpd
       # florlof DHCPD Config File.
@@ -10766,7 +10806,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/fltacam.dhcpd
       # fltacam DHCPD Config File.
@@ -13850,7 +13891,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/fltagnd.dhcpd
       # fltagnd DHCPD Config File.
@@ -14114,7 +14156,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/fltalux.dhcpd
       # fltalux DHCPD Config File.
@@ -14254,7 +14297,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/fltavth.dhcpd
       # fltavth DHCPD Config File.
@@ -14363,7 +14407,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/fltbhla.dhcpd
       # fltbhla DHCPD Config File.
@@ -14486,7 +14531,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/gaanriv.dhcpd
       # gaanriv DHCPD Config File.
@@ -14612,7 +14658,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/gadusav.dhcpd
       # gadusav DHCPD Config File.
@@ -14735,7 +14782,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/gahicol.dhcpd
       # gahicol DHCPD Config File.
@@ -14850,7 +14898,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/gakeucf.dhcpd
       # gakeucf DHCPD Config File.
@@ -15124,7 +15173,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/gamamac.dhcpd
       # gamamac DHCPD Config File.
@@ -15255,7 +15305,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/gamibel.dhcpd
       # gamibel DHCPD Config File.
@@ -15386,7 +15437,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/gasmspg.dhcpd
       # gasmspg DHCPD Config File.
@@ -15509,7 +15561,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/gaststa.dhcpd
       # gaststa DHCPD Config File.
@@ -15639,7 +15692,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/gastupi.dhcpd
       # gastupi DHCPD Config File.
@@ -15829,7 +15883,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ilcapsi.dhcpd
       # ilcapsi DHCPD Config File.
@@ -15940,7 +15995,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ilcu1001clrk.dhcpd
       # ilcu1001clrk DHCPD Config File.
@@ -16039,7 +16095,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ilcu1004sloc.dhcpd
       # ilcu1004sloc DHCPD Config File.
@@ -16154,7 +16211,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ilcu1004sto.dhcpd
       # ilcu1004sto DHCPD Config File.
@@ -16253,7 +16311,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ilcu1005sec.dhcpd
       # ilcu1005sec DHCPD Config File.
@@ -16352,7 +16411,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ilcu1006sthi.dhcpd
       # ilcu1006sthi DHCPD Config File.
@@ -16467,7 +16527,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ilcu1006sto.dhcpd
       # ilcu1006sto DHCPD Config File.
@@ -16582,7 +16643,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ilcu1007sfir.dhcpd
       # ilcu1007sfir DHCPD Config File.
@@ -16681,7 +16743,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ilcu1009wcla.dhcpd
       # ilcu1009wcla DHCPD Config File.
@@ -16800,7 +16863,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ilcu1010wcla.dhcpd
       # ilcu1010wcla DHCPD Config File.
@@ -16915,7 +16979,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ilcu1012wcla.dhcpd
       # ilcu1012wcla DHCPD Config File.
@@ -17097,7 +17162,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ilcu102greg.dhcpd
       # ilcu102greg DHCPD Config File.
@@ -17205,7 +17271,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ilcu103s.dhcpd
       # ilcu103s DHCPD Config File.
@@ -17387,7 +17454,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ilcu104earm.dhcpd
       # ilcu104earm DHCPD Config File.
@@ -17486,7 +17554,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ilcu105edan.dhcpd
       # ilcu105edan DHCPD Config File.
@@ -17601,7 +17670,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ilcu105egrn.dhcpd
       # ilcu106egrn DHCPD Config File.
@@ -17783,7 +17853,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ilcu105four.dhcpd
       # ilcu105four DHCPD Config File.
@@ -17882,7 +17953,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ilcu105john.dhcpd
       # ilcu105john DHCPD Config File.
@@ -17981,7 +18053,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ilcu106dan.dhcpd
       # ilcu106dan DHCPD Config File.
@@ -18163,7 +18236,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ilcu108chl.dhcpd
       # ilcu108chl DHCPD Config File.
@@ -18261,7 +18335,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ilcu1103euc.dhcpd
       # ilcu1103euc DHCPD Config File.
@@ -18360,7 +18435,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ilcu1106sto.dhcpd
       # ilcu1106sto DHCPD Config File.
@@ -18459,7 +18535,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ilcu11074th.dhcpd
       # ilcu11074th DHCPD Config File.
@@ -18574,7 +18651,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ilcu1107ssec.dhcpd
       # ilcu1107ssec DHCPD Config File.
@@ -18689,7 +18767,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ilcu1109sto.dhcpd
       # ilcu1109sto DHCPD Config File.
@@ -18788,7 +18867,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ilcu110ejohn.dhcpd
       # ilcu110ejohn DHCPD Config File.
@@ -18970,7 +19050,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ilcu1112sec.dhcpd
       # ilcu1112sec DHCPD Config File.
@@ -19069,7 +19150,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ilcu111echa.dhcpd
       # ilcu111echa DHCPD Config File.
@@ -19184,7 +19266,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ilcu111eh.dhcpd
       # ilcu111eh DHCPD Config File.
@@ -19299,7 +19382,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ilcu201arm.dhcpd
       # ilcu201arm DHCPD Config File.
@@ -19398,7 +19482,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ilcu202john.dhcpd
       # ilcu202john DHCPD Config File.
@@ -19513,7 +19598,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ilcu203hea.dhcpd
       # ilcu203hea DHCPD Config File.
@@ -19628,7 +19714,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ilcu203s6th.dhcpd
       # ilcu203s6th DHCPD Config File.
@@ -19810,7 +19897,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ilcu208nha.dhcpd
       # ilcu208nha DHCPD Config File.
@@ -19909,7 +19997,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ilcu208whi.dhcpd
       # ilcu208whi DHCPD Config File.
@@ -20008,7 +20097,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ilcu209clar.dhcpd
       # ilcu209clar DHCPD Config File.
@@ -20107,7 +20197,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ilcu210whi.dhcpd
       # ilcu210whi DHCPD Config File.
@@ -20206,7 +20297,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ilcu211clark.dhcpd
       # ilcu211clark DHCPD Config File.
@@ -20305,7 +20397,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ilcu211john.dhcpd
       # ilcu211john DHCPD Config File.
@@ -20404,7 +20497,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ilcu3024th.dhcpd
       # ilcu3024th DHCPD Config File.
@@ -20586,7 +20680,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ilcu303egrn.dhcpd
       # ilcu303egrn DHCPD Config File.
@@ -20684,7 +20779,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ilcu303sbus.dhcpd
       # ilcu303sbus DHCPD Config File.
@@ -20783,7 +20879,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ilcu303wgrn.dhcpd
       # ilcu303wgrn DHCPD Config File.
@@ -20898,7 +20995,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ilcu306arm.dhcpd
       # ilcu306arm DHCPD Config File.
@@ -20997,7 +21095,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ilcu306clrk.dhcpd
       # ilcu306clrk DHCPD Config File.
@@ -21096,7 +21195,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ilcu306whit.dhcpd
       # ilcu306whit DHCPD Config File.
@@ -21195,7 +21295,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ilcu307arm.dhcpd
       # ilcu307arm DHCPD Config File.
@@ -21310,7 +21411,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ilcu307clk.dhcpd
       # ilcu307clk DHCPD Config File.
@@ -21425,7 +21527,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ilcu307egre.dhcpd
       # ilcu307egre DHCPD Config File.
@@ -21524,7 +21627,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ilcu307white.dhcpd
       # ilcu307white DHCPD Config File.
@@ -21657,7 +21761,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ilcu308earm.dhcpd
       # ilcu308earm DHCPD Config File.
@@ -21756,7 +21861,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ilcu308whit.dhcpd
       # ilcu308whit DHCPD Config File.
@@ -21855,7 +21961,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ilcu309cla.dhcpd
       # ilcu309cla DHCPD Config File.
@@ -21970,7 +22077,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ilcu309egrn.dhcpd
       # ilcu309egrn DHCPD Config File.
@@ -22124,7 +22232,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ilcu309heal.dhcpd
       # ilcu309heal DHCPD Config File.
@@ -22239,7 +22348,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ilcu309s1st.dhcpd
       # ilcu309s1st DHCPD Config File.
@@ -22338,7 +22448,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ilcu309white.dhcpd
       # ilcu309white DHCPD Config File.
@@ -22445,7 +22556,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ilcu310clar.dhcpd
       # ilcu310clar DHCPD Config File.
@@ -22544,7 +22656,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ilcu310whi.dhcpd
       # ilcu310whi DHCPD Config File.
@@ -22643,7 +22756,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ilcu311white.dhcpd
       # ilcu311white DHCPD Config File.
@@ -22742,7 +22856,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ilcu312whit.dhcpd
       # ilcu312whit DHCPD Config File.
@@ -22841,7 +22956,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ilcu3rd.dhcpd
       # ilcu3rd DHCPD Config File.
@@ -23110,7 +23226,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ilcu403grn.dhcpd
       # ilcu403grn DHCPD Config File.
@@ -23209,7 +23326,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ilcu403whit.dhcpd
       # ilcu403whit DHCPD Config File.
@@ -23308,7 +23426,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ilcu405whit.dhcpd
       # ilcu405whit DHCPD Config File.
@@ -23423,7 +23542,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ilcu406grn.dhcpd
       # ilcu406grn DHCPD Config File.
@@ -23538,7 +23658,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ilcu408grn.dhcpd
       # ilcu408grn DHCPD Config File.
@@ -23637,7 +23758,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ilcu410grn.dhcpd
       # ilcu410grn DHCPD Config File.
@@ -23766,7 +23888,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ilcu411heal.dhcpd
       # ilcu411heal DHCPD Config File.
@@ -23898,7 +24021,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ilcu501heal.dhcpd
       # ilcu501heal DHCPD Config File.
@@ -23997,7 +24121,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ilcu502heal.dhcpd
       # ilcu502heal DHCPD Config File.
@@ -24096,7 +24221,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ilcu503whi.dhcpd
       # ilcu503whi DHCPD Config File.
@@ -24195,7 +24321,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ilcu5054th.dhcpd
       # ilcu5054th DHCPD Config File.
@@ -24310,7 +24437,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ilcu505buse.dhcpd
       # ilcu505buse DHCPD Config File.
@@ -24429,7 +24557,8 @@
             "id": 409,
             "subnet": "96.63.204.76/32"
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ilcu505heal.dhcpd
       # ilcu505heal DHCPD Config File.
@@ -24528,7 +24657,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ilcu505whi.dhcpd
       # ilcu505whi DHCPD Config File.
@@ -24643,7 +24773,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ilcu506st.dhcpd
       # ilcu506st DHCPD Config File.
@@ -24742,7 +24873,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ilcu507wchu.dhcpd
       # ilcu507wchu DHCPD Config File.
@@ -24857,7 +24989,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ilcu508clrk.dhcpd
       # ilcu508clrk DHCPD Config File.
@@ -24972,7 +25105,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ilcu508ew.dhcpd
       # ilcu508ew DHCPD Config File.
@@ -25087,7 +25221,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ilcu508heal.dhcpd
       # ilcu508heal DHCPD Config File.
@@ -25220,7 +25355,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ilcu508sfir.dhcpd
       # ilcu508sfir DHCPD Config File.
@@ -25335,7 +25471,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ilcu5095th.dhcpd
       # ilcu5095th DHCPD Config File.
@@ -25434,7 +25571,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ilcu509bash.dhcpd
       # ilcu509bash DHCPD Config File.
@@ -25533,7 +25671,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ilcu509clk.dhcpd
       # ilcu509clk DHCPD Config File.
@@ -25632,7 +25771,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ilcu509stou.dhcpd
       # ilcu509stou DHCPD Config File.
@@ -25731,7 +25871,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ilcu509whi.dhcpd
       # ilcu509whi DHCPD Config File.
@@ -25830,7 +25971,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ilcu510clrk.dhcpd
       # ilcu510clrk DHCPD Config File.
@@ -25929,7 +26071,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ilcu510esto.dhcpd
       # ilcu510esto DHCPD Config File.
@@ -26028,7 +26171,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ilcu511wchu.dhcpd
       # ilcu511wchu DHCPD Config File.
@@ -26143,7 +26287,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ilcu512sto.dhcpd
       # ilcu512sto DHCPD Config File.
@@ -26258,7 +26403,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ilcu52g.dhcpd
       # ilcu52g DHCPD Config File.
@@ -26373,7 +26519,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ilcu55heal.dhcpd
       # ilcu55heal DHCPD Config File.
@@ -26488,7 +26635,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ilcu565egre.dhcpd
       # ilcu565egre DHCPD Config File.
@@ -26587,7 +26735,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ilcu585gre.dhcpd
       # ilcu585gre DHCPD Config File.
@@ -26686,7 +26835,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ilcu58earm.dhcpd
       # ilcu58earm DHCPD Config File.
@@ -26868,7 +27018,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ilcu58gre.dhcpd
       # ilcu58gre DHCPD Config File.
@@ -26967,7 +27118,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ilcu58john.dhcpd
       # ilcu58john DHCPD Config File.
@@ -27066,7 +27218,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ilcu5st.dhcpd
       # ilcu5st DHCPD Config File.
@@ -27181,7 +27334,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ilcu601clark.dhcpd
       # ilcu601clark DHCPD Config File.
@@ -27314,7 +27468,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ilcu602s.dhcpd
       # ilcu602s DHCPD Config File.
@@ -27429,7 +27584,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ilcu603eclark.dhcpd
       # ilcu603eclark DHCPD Config File.
@@ -27528,7 +27684,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ilcu604whi.dhcpd
       # ilcu604whi DHCPD Config File.
@@ -27643,7 +27800,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ilcu604wsto.dhcpd
       # ilcu604wsto DHCPD Config File.
@@ -27758,7 +27916,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ilcu605fifth.dhcpd
       # ilcu605fifth DHCPD Config File.
@@ -27857,7 +28016,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ilcu605sfir.dhcpd
       # ilcu605sfir DHCPD Config File.
@@ -27956,7 +28116,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ilcu607s1.dhcpd
       # ilcu607s1 DHCPD Config File.
@@ -28055,7 +28216,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ilcu608stat.dhcpd
       # ilcu608stat DHCPD Config File.
@@ -28154,7 +28316,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ilcu609wmai.dhcpd
       # ilcu609wmai DHCPD Config File.
@@ -28269,7 +28432,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ilcu621grn.dhcpd
       # ilcu621grn DHCPD Config File.
@@ -28368,7 +28532,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ilcu701wel.dhcpd
       # ilcu701wel DHCPD Config File.
@@ -28467,7 +28632,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ilcu705wel.dhcpd
       # ilcu705wel DHCPD Config File.
@@ -28582,7 +28748,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ilcu706sfir.dhcpd
       # ilcu706sfir DHCPD Config File.
@@ -28697,7 +28864,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ilcu711elm.dhcpd
       # ilcu711elm DHCPD Config File.
@@ -28796,7 +28964,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ilcu713ran.dhcpd
       # ilcu713ran DHCPD Config File.
@@ -28895,7 +29064,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ilcu713s6.dhcpd
       # ilcu713s6 DHCPD Config File.
@@ -28994,7 +29164,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ilcu802wgre.dhcpd
       # ilcu802wgre DHCPD Config File.
@@ -29093,7 +29264,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ilcu8054th.dhcpd
       # ilcu8054th DHCPD Config File.
@@ -29192,7 +29364,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ilcu807ill.dhcpd
       # ilcu807ill DHCPD Config File.
@@ -29291,7 +29464,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ilcu905locust.dhcpd
       # ilcu905locust DHCPD Config File.
@@ -29390,7 +29564,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ilcu907wsto.dhcpd
       # ilcu907wsto DHCPD Config File.
@@ -29489,7 +29664,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ilcub310.dhcpd
       # ilcub310 DHCPD Config File.
@@ -33145,7 +33321,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ilcudg.dhcpd
       # ilcudg DHCPD Config File.
@@ -33243,7 +33420,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ilcugrg.dhcpd
       # ilcugrg DHCPD Config File.
@@ -33350,7 +33528,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ilcuito.dhcpd
       # ilcuito DHCPD Config File.
@@ -33511,7 +33690,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ilcul54.dhcpd
       # ilcul54 DHCPD Config File.
@@ -33659,7 +33839,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ilcun3c.dhcpd
       # ilcun3c DHCPD Config File.
@@ -33763,7 +33944,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ilcunoc.dhcpd
       # ilcunoc DHCPD Config File.
@@ -33960,7 +34142,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ilcupre.dhcpd
       # ilcupre DHCPD Config File.
@@ -34722,7 +34905,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ilcusredelmar.dhcpd
       # ilcusredelmar DHCPD Config File.
@@ -34784,7 +34968,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ilcuzas.dhcpd
       # ilcuzas DHCPD Config File.
@@ -34899,7 +35084,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/iledenc.dhcpd
       # iledenc DHCPD Config File.
@@ -35062,7 +35248,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/iledenw.dhcpd
       # iledenw DHCPD Config File.
@@ -35269,7 +35456,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ilnojun.dhcpd
       # ilnojun DHCPD Config File.
@@ -35392,7 +35580,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ilur106scol.dhcpd
       # ilur106scol DHCPD Config File.
@@ -35527,7 +35716,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ilur701greg.dhcpd
       # ilur701greg DHCPD Config File.
@@ -35642,7 +35832,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ilur805wg.dhcpd
       # ilur805wg DHCPD Config File.
@@ -35757,7 +35948,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ilurcco.dhcpd
       # ilurcco DHCPD Config File.
@@ -35899,7 +36091,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ilurmt6.dhcpd
       # ilurmt6 DHCPD Config File.
@@ -36013,7 +36206,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ilurpui.dhcpd
       # ilurpui DHCPD Config File.
@@ -36180,7 +36374,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/iluruco.dhcpd
       # iluruco DHCPD Config File.
@@ -36282,7 +36477,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/inblbra.dhcpd
       # inblbra DHCPD Config File.
@@ -36421,7 +36617,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/inbluco.dhcpd
       # inbluco DHCPD Config File.
@@ -36552,7 +36749,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/infwspl.dhcpd
       # infwspl DHCPD Config File.
@@ -36675,7 +36873,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/inlacsl.dhcpd
       # inlacsl DHCPD Config File.
@@ -36914,7 +37113,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/inmugro.dhcpd
       # inmugro DHCPD Config File.
@@ -37062,7 +37262,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/inmuvil.dhcpd
       # inmuvil DHCPD Config File.
@@ -37202,7 +37403,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/kslaccn.dhcpd
       # kslaccn DHCPD Config File.
@@ -37409,7 +37611,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/kswigro.dhcpd
       # kswigro DHCPD Config File.
@@ -37599,7 +37802,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/kybggab.dhcpd
       # kybggab DHCPD Config File.
@@ -37800,7 +38004,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/kybgrku.dhcpd
       # kybgrku DHCPD Config File.
@@ -38029,7 +38234,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/kybgwtn.dhcpd
       # kybgwtn DHCPD Config File.
@@ -38227,7 +38433,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/kyletnc.dhcpd
       # kyletnc DHCPD Config File.
@@ -38434,7 +38641,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/kylocar.dhcpd
       # kylocar DHCPD Config File.
@@ -38649,7 +38857,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/kylogro.dhcpd
       # kylogro DHCPD Config File.
@@ -38856,7 +39065,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/kymucsu.dhcpd
       # kymucsu DHCPD Config File.
@@ -39131,7 +39341,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/kymumur.dhcpd
       # kymumur DHCPD Config File.
@@ -39263,7 +39474,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/labrucr.dhcpd
       # labrucr DHCPD Config File.
@@ -39411,7 +39623,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/labruhh.dhcpd
       # labruhh DHCPD Config File.
@@ -39607,7 +39820,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/lalacap.dhcpd
       # lalacap DHCPD Config File.
@@ -39804,7 +40018,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/lalauha.dhcpd
       # lalauha DHCPD Config File.
@@ -39927,7 +40142,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/lalecma.dhcpd
       # lalecma DHCPD Config File.
@@ -40117,7 +40333,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/mareaor.dhcpd
       # mareaor DHCPD Config File.
@@ -40306,7 +40523,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/mdhyutc.dhcpd
       # mdhyutc DHCPD Config File.
@@ -40429,7 +40647,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/mial48w.dhcpd
       # mial48w DHCPD Config File.
@@ -40797,7 +41016,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/mideuam.dhcpd
       # mideuam DHCPD Config File.
@@ -41014,7 +41234,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/mimpvbg.dhcpd
       # mimpvbg DHCPD Config File.
@@ -41137,7 +41358,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/mnalfou.dhcpd
       # mnalfou DHCPD Config File.
@@ -41209,7 +41431,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/mnmatsu.dhcpd
       # mnmatsu DHCPD Config File.
@@ -41399,7 +41622,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/mnmi700.dhcpd
       # mnmi700 DHCPD Config File.
@@ -42827,7 +43051,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/mnmimel.dhcpd
       # mnmimel DHCPD Config File.
@@ -43025,7 +43250,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/mnro318.dhcpd
       # mnro318 DHCPD Config File.
@@ -43153,7 +43379,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
 //      "config": [
 //        /// min-lease-time is not supported
 //        /// use default-lease-time instead
@@ -43293,7 +43520,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/msstlap.dhcpd
       # msstlap DHCPD Config File.
@@ -43415,7 +43643,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/msstmsu.dhcpd
       # msstmsu DHCPD Config File.
@@ -43780,7 +44009,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ncbocob.dhcpd
       # ncbocob DHCPD Config File.
@@ -43928,7 +44158,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ncch901.dhcpd
       # ncch901 DHCPD Config File.
@@ -44059,7 +44290,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ncchgto.dhcpd
       # ncchgto DHCPD Config File.
@@ -44118,7 +44350,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ncgrbmy.dhcpd
       # ncgrbmy DHCPD Config File.
@@ -44345,7 +44578,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ncgrfsp.dhcpd
       # ncgrfsp DHCPD Config File.
@@ -44468,7 +44702,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ncgrgro.dhcpd
       # ncgrgro DHCPD Config File.
@@ -44600,7 +44835,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ncgrpir.dhcpd
       # ncgrpir DHCPD Config File.
@@ -44872,7 +45108,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ncrattg.dhcpd
       # ncrattg DHCPD Config File.
@@ -44987,7 +45224,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/nelivie.dhcpd
       # nelivie DHCPD Config File.
@@ -45127,7 +45365,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/njcamer.dhcpd
       # njcamer DHCPD Config File.
@@ -45251,7 +45490,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/njencom.dhcpd
       # njencom DHCPD Config File.
@@ -50261,7 +50501,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/njenplo.dhcpd
       # njenplo DHCPD Config File.
@@ -50535,7 +50776,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/njentow.dhcpd
       # njentow DHCPD Config File.
@@ -50793,7 +51035,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/njerlta.dhcpd
       # njerlta DHCPD Config File.
@@ -50908,7 +51151,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/njjcmar.dhcpd
       # njjcmar DHCPD Config File.
@@ -56381,7 +56625,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/njjcmon.dhcpd
       # njjcmon DHCPD Config File.
@@ -56504,7 +56749,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/njmo40p.dhcpd
       # njmo40p DHCPD Config File.
@@ -56630,7 +56876,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/njmohms.dhcpd
       # njmohms DHCPD Config File.
@@ -56761,7 +57008,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/njnyriv.dhcpd
       # njnyriv DHCPD Config File.
@@ -56910,7 +57158,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/njrapat.dhcpd
       # njrapat DHCPD Config File.
@@ -57025,7 +57274,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/njrarar.dhcpd
       # njrarar DHCPD Config File.
@@ -60056,7 +60306,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/njsefra.dhcpd
       # njsefra DHCPD Config File.
@@ -60182,7 +60433,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/njwerep.dhcpd
       # njwerep DHCPD Config File.
@@ -60349,7 +60601,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/nvlvrpl.dhcpd
       # nvlvrpl DHCPD Config File.
@@ -60472,7 +60725,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/nyamvor.dhcpd
       # nyamvor DHCPD Config File.
@@ -60679,7 +60933,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/nynyclp.dhcpd
       # nynyclp DHCPD Config File.
@@ -60802,7 +61057,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/nyropro.dhcpd
       # nyropro DHCPD Config File.
@@ -61009,7 +61265,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/nysicsi.dhcpd
       # nysicsi DHCPD Config File.
@@ -61157,7 +61414,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/nysycob.dhcpd
       # nysycob DHCPD Config File.
@@ -63090,7 +63348,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ohak401.dhcpd
       # ohak401 DHCPD Config File.
@@ -63298,7 +63557,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ohcinhh.dhcpd
       # ohcinhh DHCPD Config File.
@@ -63407,7 +63667,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ohkecpo.dhcpd
       # ohkecpo DHCPD Config File.
@@ -63609,7 +63870,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ohoxscr.dhcpd
       # ohoxscr DHCPD Config File.
@@ -63883,7 +64145,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/ohtoviv.dhcpd
       # ohtoviv DHCPD Config File.
@@ -64090,7 +64353,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/okedbry.dhcpd
       # okedbry DHCPD Config File.
@@ -64213,7 +64477,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/oklaipl.dhcpd
       # oklaipl DHCPD Config File.
@@ -64336,7 +64601,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/oknogro.dhcpd
       # oknogro DHCPD Config File.
@@ -64490,7 +64756,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/oknougr.dhcpd
       # oknougr DHCPD Config File.
@@ -64680,7 +64947,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/okwecol.dhcpd
       # okwecol DHCPD Config File.
@@ -64895,7 +65163,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/orpopcs.dhcpd
       # orpopcs DHCPD Config File.
@@ -65236,7 +65505,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/paingro.dhcpd
       # mielccc DHCPD Config File.
@@ -65367,7 +65637,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/palheco.dhcpd
       # palheco DHCPD Config File.
@@ -65490,7 +65761,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/paphevo.dhcpd
       # paphevo DHCPD Config File.
@@ -65775,7 +66047,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/paphrad.dhcpd
       # paphrad DHCPD Config File.
@@ -65979,7 +66252,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/pascgro.dhcpd
       # pascgro DHCPD Config File.
@@ -66119,7 +66393,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/scch411.dhcpd
       # scch411 DHCPD Config File.
@@ -66301,7 +66576,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/scclber.dhcpd
       # scclber DHCPD Config File.
@@ -66424,7 +66700,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/sccouoc.dhcpd
       # sccouoc DHCPD Config File.
@@ -66547,7 +66824,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/scspcsv.dhcpd
       # scspcsv DHCPD Config File.
@@ -66765,7 +67043,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/tnkngak.dhcpd
       # tnkngak DHCPD Config File.
@@ -66888,7 +67167,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/tnknuhe.dhcpd
       # tnknuhe DHCPD Config File.
@@ -67029,7 +67309,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/tnmamar.dhcpd
       # tnmamar DHCPD Config File.
@@ -67219,7 +67500,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/tnmesta.dhcpd
       # tnmesta DHCPD Config File.
@@ -67356,7 +67638,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/tnmucog.dhcpd
       # tnmucog DHCPD Config File.
@@ -67567,7 +67850,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/tnmugro.dhcpd
       # tnmugro DHCPD Config File.
@@ -67772,7 +68056,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/tnmuung.dhcpd
       # tnmuung DHCPD Config File.
@@ -67909,7 +68194,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/tnnapcl.dhcpd
       # tnnapcl DHCPD Config File.
@@ -70707,7 +70993,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/txabgro.dhcpd
       # txabgro DHCPD Config File.
@@ -70857,7 +71144,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/txad102.dhcpd
       # txad102 DHCPD Config File.
@@ -70972,7 +71260,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/txadsav.dhcpd
       # txadsav DHCPD Config File.
@@ -71087,7 +71376,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/txarmav.dhcpd
       # txarmav DHCPD Config File.
@@ -71224,7 +71514,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/txarmid.dhcpd
       # txarmid DHCPD Config File.
@@ -71355,7 +71646,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/txaudoc.dhcpd
       # txaudoc DHCPD Config File.
@@ -71639,7 +71931,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/txcacol.dhcpd
       # txcacol DHCPD Config File.
@@ -71769,7 +72062,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/txcsmel.dhcpd
       # txcsmel DHCPD Config File.
@@ -71892,7 +72186,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/txcsppl.dhcpd
       # txcsppl DHCPD Config File.
@@ -72023,7 +72318,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/txhuuhl.dhcpd
       # txhuuhl DHCPD Config File.
@@ -72236,7 +72532,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/txkiipl.dhcpd
       # txkiipl DHCPD Config File.
@@ -72359,7 +72656,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/txlugro.dhcpd
       # txlugro DHCPD Config File.
@@ -72489,7 +72787,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/txlures.dhcpd
       # txlures DHCPD Config File.
@@ -72595,7 +72894,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/txlutop.dhcpd
       # txlutop DHCPD Config File.
@@ -72736,7 +73036,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/txsaavp.dhcpd
       # txsaavp DHCPD Config File.
@@ -72873,7 +73174,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/txstgro.dhcpd
       # txstgro DHCPD Config File.
@@ -73071,7 +73373,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/txwagro.dhcpd
       # txwagro DHCPD Config File.
@@ -73268,7 +73571,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/txwfgro.dhcpd
       # txwfgro DHCPD Config File.
@@ -73419,7 +73723,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/vachgac.dhcpd
       # vachgac DHCPD Config File.
@@ -73545,7 +73850,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/vanodod.dhcpd
       # vanodod DHCPD Config File.
@@ -73763,7 +74069,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/wachgro.dhcpd
       # wachgro DHCPD Config File.
@@ -73961,7 +74268,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/wapugro.dhcpd
       # wapugro DHCPD Config File.
@@ -74101,7 +74409,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/folder.dhcpd/wvmodis.dhcpd
       # wvmodis DHCPD Config File.
@@ -74273,7 +74582,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/cmts/sites/flhltwc.dhcpd
       # flhltwc DHCPD Config File.
@@ -75639,7 +75949,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/cmts/sites/garwwct.dhcpd
       # DHCPD garwwct Config File 10/14/2010 
@@ -75906,7 +76217,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/cmts/sites/ilcunocubr.dhcpd
       # DHCPD ilcunocubr Config File 7/17/2010 
@@ -76067,7 +76379,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/cmts/sites/ilcudevubr.dhcpd
       # DHCPD ilcudevubr Config File 7/17/2010 
@@ -76212,7 +76525,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/cmts/sites/njedbva.dhcpd
       # DHCPD njedbva Config File 10/14/2010 
@@ -76408,7 +76722,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/cmts/sites/njeddhw.dhcpd
       # DHCPD njeddhw Config File 10/14/2010 
@@ -76664,7 +76979,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/cmts/sites/njedvcm.dhcpd
       # DHCPD njedvcm Config File 10/14/2010 
@@ -76845,7 +77161,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/cmts/sites/njklklr.dhcpd
       # DHCPD njklklr Config File 10/14/2010 
@@ -77001,7 +77318,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/cmts/sites/njucthr.dhcpd
       # DHCPD njucthr Config File 10/14/2010 
@@ -77172,7 +77490,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/cmts/sites/nynytrg.dhcpd
       # DHCPD nynytrg Regent Config File 10/14/2010 
@@ -77319,7 +77638,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       },
       /// Begin file dhcp3/cmts/sites/alphgrp.dhcpd
       # DHCPD alphgrp Config File 07/11/2012 
@@ -77470,7 +77790,8 @@
               }
             ]
           }
-        ]
+        ],
+        "authoritative": true
       }
     ]
 //  /// boot-file-name was defined in an unsupported scope

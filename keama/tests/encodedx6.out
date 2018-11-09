@@ -1,6 +1,6 @@
 {
   # encode data expression and extract numeric expression
-  # authoritative is mandatory
+  # empty configs are not accepted by Kea
   "Dhcp6": {
     "valid-lifetime": 1800,
     "client-classes": [

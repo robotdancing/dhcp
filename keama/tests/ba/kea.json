@@ -126,6 +126,7 @@
     "dhcp-ddns": {
       "enable-updates": false
     },
+    "authoritative": true,
     "valid-lifetime": 360000,
 //  "statement": {
 //    "config": {

@@ -1,8 +1,5 @@
 # host declaration with flexible identifiers config
 
-# authoritative is mandatory
-authoritative;
-
 # subnet4 declaration
 subnet 10.5.5.0 netmask 255.255.255.224 {
     range 10.5.5.5 10.5.5.10;

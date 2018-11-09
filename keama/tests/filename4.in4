@@ -1,8 +1,5 @@
 # filename (aka boot-file-name) and server-name (aka server-hostname)
 
-# authoritative is mandatory
-authoritative;
-
 filename "/var/boot/boot1";
 server-name "foobar.biz";
 

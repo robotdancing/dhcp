@@ -1,1 +1,1 @@
-duid2.err line 10: there is already a server-id
+duid2.err line 7: there is already a server-id

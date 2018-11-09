@@ -1,6 +1,6 @@
 {
   # DHCPv4 two subnets in shared-network declaration config
-  # authoritative is mandatory
+  # shared-network declaration
   "Dhcp4": {
     "interfaces-config": {
       "interfaces": [
@@ -9,7 +9,6 @@
     },
     /// Kea shared-networks are different, cf Kea #236
     "shared-networks": [
-      # shared-network declaration
       {
         "name": "foobar",
         "subnet4": [

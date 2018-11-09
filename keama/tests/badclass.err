@@ -1,8 +1,5 @@
 # bad (double match-if) class declaration config
 
-# authoritative is mandatory
-authoritative;
-
 # options
 option mysystem code 250 = text;
 option myversion code 251 = unsigned integer 16;

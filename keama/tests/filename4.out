@@ -1,6 +1,5 @@
 {
   # filename (aka boot-file-name) and server-name (aka server-hostname)
-  # authoritative is mandatory
   "Dhcp4": {
 //  /// boot-file-name was defined in an unsupported scope
 //  "boot-file-name": "/var/boot/boot1",

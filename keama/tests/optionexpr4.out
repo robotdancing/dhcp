@@ -1,9 +1,8 @@
 {
   # option data expressions
-  # authoritative is mandatory
+  # options
   "Dhcp4": {
     "option-def": [
-      # options
       {
         "space": "dhcp4",
         "name": "mytext",

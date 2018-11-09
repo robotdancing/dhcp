@@ -1,8 +1,5 @@
 # bad (tautology) class declaration config
 
-# authoritative is mandatory
-authoritative;
-
 # class declaration
 class "tautology" {
     # tautology

@@ -3,12 +3,11 @@
   #
   # Sample configuration file for ISC dhcpd
   #
-  # Required
+  # option definitions common to all supported networks...
   /// This configuration declares some subnets but has no interfaces-config
   /// Reference Kea #245
   "Dhcp4": {
     "option-data": [
-      # option definitions common to all supported networks...
       {
         "space": "dhcp4",
         "name": "domain-name",

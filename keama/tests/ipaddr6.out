@@ -1,6 +1,5 @@
 {
   # IPv6 addresses config
-  # authoritative is mandatory
   "Dhcp6": {
     "option-data": [
       {

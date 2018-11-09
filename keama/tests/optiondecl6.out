@@ -1,9 +1,8 @@
 {
   # option definition config
-  # authoritative is mandatory
+  # options
   "Dhcp6": {
     "option-def": [
-      # options
       {
         "space": "foobar",
         "name": "fmt-f",

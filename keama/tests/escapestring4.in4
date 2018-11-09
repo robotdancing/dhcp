@@ -1,8 +1,5 @@
 # string option-data with embedded commas
 
-# authoritative is mandatory
-authoritative;
-
 # vendor option space
 option a-string code 250 = text;
 

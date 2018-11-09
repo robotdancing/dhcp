@@ -1,1 +1,1 @@
-duidllnohw.err line 7: expecting hexadecimal number.
+duidllnohw.err line 4: expecting hexadecimal number.

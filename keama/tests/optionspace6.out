@@ -1,6 +1,6 @@
 {
   # group and class declaration config
-  # authoritative is mandatory
+  # option spaces
   "Dhcp6": {
 //  "option-space": {
 //    "name": "bar",
@@ -17,7 +17,6 @@
 //    "length-width": 1
 //  },
     "option-def": [
-      # option spaces
       {
         "space": "foobar",
         "name": "test",

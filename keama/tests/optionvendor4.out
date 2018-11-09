@@ -1,9 +1,8 @@
 {
   # group and class declaration config
-  # authoritative is mandatory
+  # vendor option space
   "Dhcp4": {
     "option-def": [
-      # vendor option space
       {
         "space": "vendor-12345",
         "name": "test",

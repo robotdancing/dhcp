@@ -1,1 +1,1 @@
-duidlltbadtype.err line 7: hardware type expected
+duidlltbadtype.err line 4: hardware type expected

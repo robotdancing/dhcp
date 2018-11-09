@@ -1,8 +1,7 @@
 {
   # LL server duid config
-  # authoritative is mandatory
+  # LL server duid declaration
   "Dhcp6": {
-    # LL server duid declaration
     "server-id": {
       "type": "LL"
     }

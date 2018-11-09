@@ -1,1 +1,1 @@
-badduid.err line 7: DUID type of LLT, EN, or LL expected
+badduid.err line 4: DUID type of LLT, EN, or LL expected

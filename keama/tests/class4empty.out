@@ -1,9 +1,8 @@
 {
   # void class declaration config
-  # authoritative is mandatory
+  # class declaration
   "Dhcp4": {
     "client-classes": [
-      # class declaration
       {
         "name": "foobar"
       }
