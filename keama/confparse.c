@@ -100,6 +100,9 @@ static void concat_classes(struct parse *, struct element *, struct element *);
 static void generate_class(struct parse *, struct element *, struct element *,
 			   struct element *);
 
+static struct string *CLASS_ALL;
+static struct string *CLASS_KNOWN;
+
 /* Add head config file comments to the DHCP server map */
 
 size_t
@@ -111,6 +114,8 @@ conf_file_parse(struct parse *cfile)
 
 	TAILQ_INIT(&known_subnets);
 	TAILQ_INIT(&known_ranges);
+	CLASS_ALL = makeString(-1, "ALL");
+	CLASS_KNOWN = makeString(-1, "KNOWN");
 
 	top = createMap();
 	top->kind = TOPLEVEL;
@@ -356,14 +361,6 @@ post_process_generated_classes(struct parse *cfile)
 		mapSet(cfile->stack[1], classes, "client-classes");
 	}
 
-	/* remove unused gen#ALL */
-	class = listGet(generated, 0);
-	listRemove(generated, 0);
-	if (mapContains(class, "referenced")) {
-		mapRemove(class, "referenced");
-		listPush(classes, class);
-	}
-
 	while (listSize(generated) > 0) {
 		class = listGet(generated, 0);
 		listRemove(generated, 0);
@@ -394,6 +391,9 @@ check_depend(struct element *class, struct element *classes)
 		assert(depend != NULL);
 		assert(depend->type == ELEMENT_STRING);
 		dname = stringValue(depend);
+		if (eqString(dname, CLASS_ALL) ||
+		    eqString(dname, CLASS_KNOWN))
+			continue;
 		found = ISC_FALSE;
 		for (i = 0; i < listSize(classes); i++) {
 			struct element *item;
@@ -979,60 +979,51 @@ get_permit(struct parse *cfile, struct element *permit_head)
 	struct element *member;
 	isc_boolean_t need_clients = ISC_TRUE;
 	isc_boolean_t negative = ISC_FALSE;
-	isc_boolean_t known_clients = ISC_FALSE;
-	isc_boolean_t use_all = ISC_FALSE;
 
 	token = next_token(&val, NULL, cfile);
 	switch (token) {
 	case UNKNOWN:
-		permit = makeString(-1, "KNOWN_CLIENTS");
-		alias = makeString(-1, "unknown clients");
+		permit = CLASS_KNOWN;
 		negative = ISC_TRUE;
-        known_clients:
-		known_clients = ISC_TRUE;
+		alias = makeString(-1, "unknown clients");
 		break;
 				
 	case KNOWN_CLIENTS:
 		need_clients = ISC_FALSE;
-		permit = makeString(-1, "KNOWN_CLIENTS");
+		permit = CLASS_KNOWN;
 		alias = makeString(-1, "known-clients");
-		goto known_clients;
 		break;
 
 	case UNKNOWN_CLIENTS:
 		need_clients = ISC_FALSE;
-		permit = makeString(-1, "KNOWN_CLIENTS");
-		alias = makeString(-1, "unknown-clients");
+		permit = CLASS_KNOWN;
 		negative = ISC_TRUE;
-		goto known_clients;
+		alias = makeString(-1, "unknown-clients");
 		break;
 
 	case KNOWN:
-		permit = makeString(-1, "KNOWN_CLIENTS");
+		permit = CLASS_KNOWN;
 		alias = makeString(-1, "known clients");
-		goto known_clients;
 		break;
 				
 	case AUTHENTICATED:
-		permit = makeString(-1, "gen#ALL#");
+		permit = CLASS_ALL;
 		alias = makeString(-1, "authenticated clients");
 		negative = ISC_TRUE;
 	authenticated_clients:
-		use_all = ISC_TRUE;
 		comment = createComment("/// [un]authenticated-clients is "
 					"not supported by ISC DHCP and Kea");
 		break;
 				
 	case UNAUTHENTICATED:
-		permit = makeString(-1, "gen#ALL#");
+		permit = CLASS_ALL;
 		alias = makeString(-1, "unauthenticated clients");
 		goto authenticated_clients;
 		break;
 
 	case ALL:
-		permit = makeString(-1, "gen#ALL#");
+		permit = CLASS_ALL;
 		alias = makeString(-1, "all clients");
-		use_all = ISC_TRUE;
 		break;
 				
 	case DYNAMIC:
@@ -1040,10 +1031,9 @@ get_permit(struct parse *cfile, struct element *permit_head)
 		 * client set is the empty set. */
 		if (next_token(&val, NULL, cfile) != TOKEN_BOOTP)
 			parse_error(cfile, "expecting \"bootp\"");
-		permit = makeString(-1, "gen#ALL#");
+		permit = CLASS_ALL;
 		negative = ISC_TRUE;
 		alias = makeString(-1, "dynamic bootp clients");
-		use_all = ISC_TRUE;
 		cfile->issue_counter++;
 		comment = createComment("/// dynamic-bootp-client is not "
 					"supported by Kea");
@@ -1090,10 +1080,6 @@ get_permit(struct parse *cfile, struct element *permit_head)
 	mapSet(member, createBool(!negative), "way");
 	if (alias != NULL)
 		mapSet(member, createString(alias), "real");
-	if (known_clients)
-		mapSet(member, createNull(), "known-clients");
-	if (use_all)
-		mapSet(member, createNull(), "use-all");
 	if (comment != NULL)
 		TAILQ_INSERT_TAIL(&permit_head->comments, comment);
 	listPush(permit_head, member);
@@ -4775,18 +4761,9 @@ generate_class(struct parse *cfile, struct element *pool,
 		return;
 
 	classes = mapGet(cfile->stack[1], "generated-classes");
-	/* Create generated-classes with gen#ALL# as first element */
 	if (classes == NULL) {
 		classes = createList();
 		mapSet(cfile->stack[1], classes, "generated-classes");
-		class = createMap();
-		name = makeString(-1, "gen#ALL#");
-		mapSet(class, createString(name), "name");
-		expr = makeString(-1, "'' == ''");
-		mapSet(class, createString(expr), "test");
-		comment = createComment("/// 'all clients' class");
-		TAILQ_INSERT_TAIL(&class->comments, comment);
-		listPush(classes, class);
 	}
 
 	/* Create comments */
@@ -4833,28 +4810,20 @@ generate_class(struct parse *cfile, struct element *pool,
 			prop = mapGet(elem, "way");
 			assert(prop != NULL);
 			assert(prop->type == ELEMENT_BOOLEAN);
+			class = mapGet(elem, "class");
+			assert(class != NULL);
+			assert(class->type == ELEMENT_STRING);
 			/* allow !ALL and other */
-			if (mapContains(elem, "use-all") && !boolValue(prop) &&
-			    (listSize(allow) > 1)) {
+			if (eqString(stringValue(class), CLASS_ALL) &&
+			    !boolValue(prop) && (listSize(allow) > 1)) {
 				listRemove(allow, i);
 				rescan = ISC_TRUE;
 				break;
 			}
 			/* allow ALL alone */
-			if (mapContains(elem, "use-all") && boolValue(prop) &&
-			    (listSize(allow) == 1)) {
+			if (eqString(stringValue(class), CLASS_ALL) &&
+			    boolValue(prop) && (listSize(allow) == 1)) {
 				resetList(allow);
-				rescan = ISC_TRUE;
-				break;
-			}
-			/* ALLOW [un]known clients */
-			if (mapContains(elem, "known-clients")) {
-				listRemove(allow, i);
-				mapRemove(elem, "way");
-				mapSet(elem,
-				       createBool(!boolValue(prop)),
-				       "way");
-				listPush(deny, elem);
 				rescan = ISC_TRUE;
 				break;
 			}
@@ -4871,29 +4840,25 @@ generate_class(struct parse *cfile, struct element *pool,
 			prop = mapGet(elem, "way");
 			assert(prop != NULL);
 			assert(prop->type == ELEMENT_BOOLEAN);
+			class = mapGet(elem, "class");
+			assert(class != NULL);
+			assert(class->type == ELEMENT_STRING);
 			/* DENY !ALL */
-			if (mapContains(elem, "use-all") && !boolValue(prop)) {
+			if (eqString(stringValue(class), CLASS_ALL) &&
+			    !boolValue(prop)) {
 				listRemove(deny, i);
 				rescan = ISC_TRUE;
 				break;
 			}
 			/* DENY ALL */
-			if (mapContains(elem, "use-all") && boolValue(prop)) {
+			if (eqString(stringValue(class), CLASS_ALL) &&
+			    boolValue(prop)) {
 				resetList(allow);
 				if (listSize(deny) > 1) {
 					listRemove(deny, i);
 					resetList(deny);
 					listPush(deny, elem);
 				}
-				break;
-			}
-			/* DENY [un]known clients */
-			if (mapContains(elem, "known-clients")) {
-				listRemove(allow, i);
-				result = createString(makeString(-1,
-					boolValue(prop) ? "never" : "only"));
-				mapSet(pool, result, "known-clients");
-				rescan = ISC_TRUE;
 				break;
 			}
 		}
@@ -4939,14 +4904,10 @@ generate_class(struct parse *cfile, struct element *pool,
 		assert(prop->type == ELEMENT_BOOLEAN);
 		if (!boolValue(prop))
 			appendString(name, "!");
-		if (mapContains(elem, "use-all"))
-			concatString(name, makeString(-1, "ALL"));
-		else {
-			prop = mapGet(elem, "class");
-			assert(prop != NULL);
-			assert(prop->type == ELEMENT_STRING);
-			concatString(name, stringValue(prop));
-		}
+		prop = mapGet(elem, "class");
+		assert(prop != NULL);
+		assert(prop->type == ELEMENT_STRING);
+		concatString(name, stringValue(prop));
 		appendString(name, "#");
 	}
 	if (listSize(deny) > 0) {
@@ -4959,14 +4920,10 @@ generate_class(struct parse *cfile, struct element *pool,
 			assert(prop->type == ELEMENT_BOOLEAN);
 			if (boolValue(prop))
 				appendString(name, "!");
-			if (mapContains(elem, "use-all"))
-				concatString(name, makeString(-1, "ALL"));
-			else {
-				prop = mapGet(elem, "class");
-				assert(prop != NULL);
-				assert(prop->type == ELEMENT_STRING);
-				concatString(name, stringValue(prop));
-			}
+			prop = mapGet(elem, "class");
+			assert(prop != NULL);
+			assert(prop->type == ELEMENT_STRING);
+			concatString(name, stringValue(prop));
 			appendString(name, "#");
 		}
 	}
@@ -4982,9 +4939,6 @@ generate_class(struct parse *cfile, struct element *pool,
 		assert(descr->type == ELEMENT_STRING);
 		if (!eqString(name, stringValue(descr)))
 			continue;
-		/* got it! */
-		if ((i == 0) && !mapContains(class, "referenced"))
-			mapSet(class, createNull(), "referenced");
 		result = createString(name);
 		TAILQ_CONCAT(&result->comments, &comments);
 		mapSet(pool, result, "client-class");
@@ -5013,14 +4967,7 @@ generate_class(struct parse *cfile, struct element *pool,
 		appendString(expr, "member('");
 		concatString(expr, stringValue(prop));
 		appendString(expr, "')");
-		if (mapContains(elem, "use-all")) {
-			struct element *all;
-
-			all = listGet(classes, 0);
-			if (!mapContains(all, "referenced"))
-				mapSet(all, createNull(), "referenced");
-		} else
-			listPush(depend, createString(stringValue(prop)));
+		listPush(depend, createString(stringValue(prop)));
 	}
 
 	if ((listSize(allow) > 0) && (listSize(deny) > 0))
@@ -5040,14 +4987,7 @@ generate_class(struct parse *cfile, struct element *pool,
 		appendString(expr, "member('");
 		concatString(expr, stringValue(prop));
 		appendString(expr, "')");
-		if (mapContains(elem, "use-all")) {
-			struct element *all;
-
-			all = listGet(classes, 0);
-			if (!mapContains(all, "referenced"))
-				mapSet(all, createNull(), "referenced");
-		} else
-			listPush(depend, createString(stringValue(prop)));
+		listPush(depend, createString(stringValue(prop)));
 	}
 
 	mapSet(class, createString(name), "name");

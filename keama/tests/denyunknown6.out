@@ -1,5 +1,5 @@
 {
-  # DHCPv6 permit authenticated client config
+  # DHCPv6 deny unknown client config
   # authoritative is mandatory
   /// This configuration declares some subnets but has no interfaces-config
   /// Reference Kea #245
@@ -16,17 +16,16 @@
             # avoid empty pool
             "pool": "2001::100 - 2001::200",
             /// From:
-            ///   deny unauthenticated clients
-            /// [un]authenticated-clients is not supported by ISC DHCP and Kea
-            "client-class": "gen#_AND_#!ALL#"
+            ///   deny unknown clients
+            "client-class": "gen#_AND_#KNOWN#"
           }
         ]
       }
     ],
     "client-classes": [
       {
-        "name": "gen#_AND_#!ALL#",
-        "test": "not member('ALL')"
+        "name": "gen#_AND_#KNOWN#",
+        "test": "member('KNOWN')"
       }
     ]
   }
