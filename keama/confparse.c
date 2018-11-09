@@ -154,7 +154,8 @@ conf_file_parse(struct parse *cfile)
 		}
 	}
 
-	issues += post_process_reservations(cfile);
+	if (!global_hr)
+		issues += post_process_reservations(cfile);
 	post_process_classes(cfile);
 	post_process_generated_classes(cfile);
 	post_process_option_definitions(cfile);
@@ -177,7 +178,7 @@ post_process_reservations(struct parse *cfile)
 
 	issues = 0;
 	hosts = mapGet(cfile->stack[1], "reservations");
-	if (hosts == NULL)
+	if ((hosts == NULL) || global_hr)
 		return issues;
 	mapRemove(cfile->stack[1], "reservations");
 	orphans = createList();
@@ -4424,7 +4425,7 @@ addrmask(const struct string *address, const struct string *netmask)
 
 /*
  * find a place where to put a reservation
- * (reservations aka hosts must be in a subnet in Kea)
+ * (reservations aka hosts must be in a subnet in Kea < 1.5)
  * (defaulting to the last defined subnet (e.g. for reservations
  *  without any address).
  * (first step is to find an enclosing group).
@@ -4440,6 +4441,21 @@ find_match(struct parse *cfile, struct element *host,
 	size_t group;
 	size_t i, len;
 	int kind;
+
+	if (global_hr) {
+		struct element *hosts;
+
+		hosts = mapGet(cfile->stack[1], "reservations");
+		if (!hosts) {
+			mapSet(cfile->stack[1],
+			       createString(makeString(-1, "global")),
+			       "reservation-mode");
+			hosts = createList();
+			mapSet(cfile->stack[1], hosts, "reservations");
+		}
+		*used_heuristicp = ISC_FALSE;
+		return cfile->stack[1];
+	}
 
 	for (group = cfile->stack_top; group > 0; --group) {
 		kind = cfile->stack[group]->kind;

@@ -21,7 +21,7 @@ fi
 
 out=/tmp/$file.out$$
 
-../../keama $options -i  $file.conf -o $out >&2
+../../keama $options -N -i  $file.conf -o $out >&2
 status=$?
 if [ $status -eq 255 ]; then
 	echo "$file config raised an error" >&2
