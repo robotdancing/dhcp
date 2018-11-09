@@ -11,10 +11,14 @@ Extensions:
  - .msg  = resultat (first line of standard error) for error test
  - .in4  = source for working test in DHCPv4
  - .in6  = source for working test in DHCPv6
- - .inL  = source for working test in DHCPv4 with -l $HOOK
+ - .inn  = source for working test in DHCPv4 with -N
+ - .inN  = source for working test in DHCPv6 with -N
+ - .inl  = source for working test in DHCPv4 with -l $HOOK
+ - .inL  = source for working test in DHCPv6 with -l $HOOK
+ - .outl = resultat for working test with default hook library path
  - .outL = resultat for working test with default hook library path
  - .out  = resultat for working test
-There is no working test in DHCPv4 and DHCPv6.
+There is no working test in both DHCPv4 and DHCPv6.
 The body of the name of a working test must include 4 or 6 so
 the .out can be submitted to kea-dhcp4 or kea-dhcp6
 

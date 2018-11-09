@@ -14,7 +14,7 @@ file=fordhcp/dhcpd.conf
 expected=fordhcp/kea.json
 out=/tmp/dans.out$$
 
-../keama -4 -i  $file -o $out >&2
+../keama -4 -N -i  $file -o $out >&2
 status=$?
 if [ $status -eq 255 ]; then
 	echo "Dan's config raised an error" >&2

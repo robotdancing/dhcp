@@ -14,7 +14,7 @@ file=czb/dhcpd.conf
 expected=czb/kea.json
 out=/tmp/czb.out$$
 
-../keama -4 -i  $file -o $out >&2
+../keama -4 -N -i  $file -o $out >&2
 status=$?
 if [ $status -eq 255 ]; then
 	echo "Czb config raised an error" >&2

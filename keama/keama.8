@@ -1,6 +1,6 @@
 .\"	keama.8
 .\"
-.\" Copyright (c) 2017 by Internet Systems Consortium, Inc. ("ISC")
+.\" Copyright (c) 2017, 2018 by Internet Systems Consortium, Inc. ("ISC")
 .\"
 .\" Permission to use, copy, modify, and distribute this software for any
 .\" purpose with or without fee is hereby granted, provided that the above
@@ -36,7 +36,7 @@ keama - Kea Migration Assistant
 |
 .B -6]
 [
-.B -A
+.B -N
 ]
 [
 .B -r
@@ -68,6 +68,9 @@ option.
 -6
 The input configuration is for DHCPv6.  Incompatible with the \fB-4\fR
 option.
+.TP
+-N
+Instead of using global host reservations, put them in the matching subnet.
 .TP
 -r \fIaction\fR
 Specify what to do with hostnames: resolve them into their first address,

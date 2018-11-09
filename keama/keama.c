@@ -32,7 +32,8 @@
 
 #include "keama.h"
 
-#define KEAMA_USAGE	"Usage: keama [-4|-6] [-r {perform|fatal|pass}\\n" \
+#define KEAMA_USAGE	"Usage: keama [-4|-6] [-N]" \
+			" [-r {perform|fatal|pass}\\n" \
 			" [-l hook-library-path]" \
 			" [-i input-file] [-o output-file]\n"
 
@@ -52,6 +53,7 @@ char *input_file = NULL;
 char *output_file = NULL;
 FILE *input = NULL;
 FILE *output = NULL;
+isc_boolean_t global_hr = ISC_TRUE;
 isc_boolean_t json = ISC_FALSE;
 
 static const char use_noarg[] = "No argument for command: %s";
@@ -72,6 +74,8 @@ main(int argc, char **argv) {
 			local_family = AF_INET;
 		else if (strcmp(argv[i], "-6") == 0)
 			local_family = AF_INET6;
+		else if (strcmp(argv[i], "-N") == 0)
+			global_hr = ISC_FALSE;
 		else if (strcmp(argv[i], "-T") == 0)
 			json = ISC_TRUE;
 		else if (strcmp(argv[i], "-r") == 0) {

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017 by Internet Systems Consortium, Inc. ("ISC")
+ * Copyright (c) 2017, 2018 by Internet Systems Consortium, Inc. ("ISC")
  *
  * Permission to use, copy, modify, and distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -301,6 +301,7 @@ void stackPush(struct parse *cfile, struct element *elem);
 
 /* From command line */
 extern char *hook_library_path;
+extern isc_boolean_t global_hr;
 
 /* From common/parse.c */
 void parse_error(struct parse *, const char *, ...)

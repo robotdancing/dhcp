@@ -330,7 +330,8 @@ Part 5: Specific issues
 
 Reservations:
 -------------
- ISC DHCP host declarations are global, Kea reservations are per subnet.
+ ISC DHCP host declarations are global, Kea reservations were per subnet
+ only until 1.5.
  It is possible to use the fixed address but:
   - it is possible to finish with orphan reservations, i.e.
    reservations with an address which match no subnets
@@ -510,5 +511,6 @@ Variables:
  to recognize booleans and numbers. Unfortunately this is very specific...
 
 TODO:
+ - global host reservations
  - class like if statement
  - add more tests for classes in pools and class generation
