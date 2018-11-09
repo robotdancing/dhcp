@@ -1,0 +1,1785 @@
+
+# Enable omapi interface
+omapi-port 7911;
+key omapi_key
+{
+  algorithm HMAC-MD5;
+  secret aQ5XiRuI9hczDCvp9B5kXgUGQjDcj5gYdwGxcv99+pc=;
+};
+omapi-key omapi_key;
+
+# Global Options and Policies.
+
+option option-62 code 62 = string;
+option option-98 code 98 = string;
+option option-116 code 116 = boolean;
+option option-117 code 117 = unsigned integer 16;
+option option-119 code 119 = string;
+# option option-120 code 120 = string;
+option classless-routes code 121 = array of unsigned integer 8;
+option option-121 code 121 = string;
+option option-150 code 150 = array of ip-address;
+option option-176 code 176 = string;
+
+ddns-update-style none;
+authoritative ;
+log-facility local5 ;
+default-lease-time 360000;
+max-lease-time 360000;
+min-lease-time 360000;
+# default-lease-time 3600;
+# max-lease-time 3600;
+# min-lease-time 3600;
+
+ping-check True ;
+ping-timeout 2 ;
+deny client-updates ;
+
+class "MotoVIP" {
+        match if substring (option vendor-class-identifier,0,7) = "MotoVIP";}
+
+
+# Loopback subnet
+# Used by server to receive DHCP Release messages from localhost
+subnet 127.0.0.1 netmask 255.255.255.255 {
+}
+
+subnet 10.0.49.0 netmask 255.255.255.0 {
+}
+
+subnet 10.237.3.0 netmask 255.255.255.224 {
+}
+
+subnet 169.254.255.0 netmask 255.255.255.252 {
+}
+
+#######################declare subnets################################
+
+###For MS to test STB
+# subnet 10.232.0.0 netmask 255.255.128.0 {
+        # option subnet-mask 255.255.128.0 ;
+        # option routers 10.232.0.1 ;
+        # option domain-name-servers 10.237.3.4, 10.237.3.5 ;
+        # default-lease-time 600;
+        # max-lease-time 600;
+        # min-lease-time 600;
+        # pool {
+                # deny members of "MotoVIP";
+                # range 10.0.49.10 10.0.49.254;
+        # }
+# }
+
+###### Halifax for Peter Carter ##############
+subnet 10.207.128.0 netmask 255.255.128.0 {
+        option subnet-mask 255.255.128.0 ;
+        if substring (option vendor-class-identifier,0,4) = "MSFT"{
+          option routers 10.207.128.1 ;
+          option domain-name-servers 10.237.3.6;
+        }
+        if substring (option vendor-class-identifier,0,2) = "RG"{
+          # option classless-routes  = 0F:0A:EC:0A:CF:80:01 ;
+          option classless-routes  = 0F:0A:EC:0A:CF:80:01 ;
+        }
+        default-lease-time 90000;
+        max-lease-time 90000;
+        min-lease-time 90000;
+        pool {
+                deny members of "MotoVIP";
+                range 10.207.192.1 10.207.255.254;
+        }
+
+}
+
+######Saint John NB, Union St.##############
+subnet 10.208.0.0 netmask 255.255.128.0 {
+        option subnet-mask 255.255.128.0 ;
+        if substring (option vendor-class-identifier,0,4) = "MSFT"{
+                option routers 10.208.0.1 ;
+                option domain-name-servers 10.237.3.4, 10.237.3.5 ;
+        }
+        if substring (option vendor-class-identifier,0,2) = "RG"{
+                option classless-routes  = 0F:0A:EC:0A:D0:00:01 ;
+        }
+        pool {
+                deny members of "MotoVIP";
+                range 10.208.64.1 10.208.127.254;
+        }
+
+}
+
+######Saint John NB, Millidgeville##############
+subnet 10.208.128.0 netmask 255.255.128.0{
+option subnet-mask 255.255.128.0 ;
+        if substring (option vendor-class-identifier,0,4) = "MSFT"{
+            option routers 10.208.128.1;
+        option domain-name-servers 10.237.3.4 , 10.237.3.5 ;
+        }
+        if substring (option vendor-class-identifier,0,2) = "RG"{
+                option classless-routes  = 0F:0A:EC:0A:D0:80:01 ;
+    }
+    pool {
+        deny members of "MotoVIP";
+        range 10.208.192.1 10.208.255.254;
+    }
+}
+
+######Saint John NB, Rothesay##############
+subnet 10.209.0.0 netmask 255.255.128.0{
+option subnet-mask 255.255.128.0 ;
+        if substring (option vendor-class-identifier,0,4) = "MSFT"{
+        option routers 10.209.0.1;
+        option domain-name-servers 10.237.3.4 , 10.237.3.5 ;
+        }
+        if substring (option vendor-class-identifier,0,2) = "RG"{
+                option classless-routes  = 0F:0A:EC:0A:D1:00:01 ;
+        }
+    pool {
+        deny members of "MotoVIP";
+        range 10.209.64.1 10.209.127.254;
+    }
+}
+
+#######Saint John NB, Bayside##############
+subnet 10.209.128.0 netmask 255.255.128.0{
+option subnet-mask 255.255.128.0 ;
+        if substring (option vendor-class-identifier,0,4) = "MSFT"{
+        option routers 10.209.128.1;
+        option domain-name-servers 10.237.3.4 , 10.237.3.5 ;
+        }
+        if substring (option vendor-class-identifier,0,2) = "RG"{
+                option classless-routes  = 0F:0A:EC:0A:D1:80:01 ;
+        }
+    pool {
+        deny members of "MotoVIP";
+        range 10.209.192.1 10.209.255.254;
+    }
+}
+
+######Saint John NB, Lancaster##############
+subnet 10.210.0.0 netmask 255.255.128.0{
+option subnet-mask 255.255.128.0 ;
+        if substring (option vendor-class-identifier,0,4) = "MSFT"{
+        option routers 10.210.0.1;
+        option domain-name-servers 10.237.3.4 , 10.237.3.5 ;
+        }
+        if substring (option vendor-class-identifier,0,2) = "RG"{
+                option classless-routes  = 0F:0A:EC:0A:D2:00:01 ;
+        }
+    pool{
+        deny members of "MotoVIP";
+        range 10.210.64.1 10.210.127.254;
+    }
+}
+
+######Saint John NB, McAllister##############
+subnet 10.210.128.0 netmask 255.255.128.0{
+option subnet-mask 255.255.128.0 ;
+        if substring (option vendor-class-identifier,0,4) = "MSFT"{
+        option routers 10.210.128.1;
+        option domain-name-servers 10.237.3.4 , 10.237.3.5 ;
+        }
+        if substring (option vendor-class-identifier,0,2) = "RG"{
+                option classless-routes  = 0F:0A:EC:0A:D2:80:01 ;
+        }
+    pool {
+        deny members of "MotoVIP";
+        range 10.210.192.1 10.210.255.254;
+    }
+}
+
+#######Moncton NB, Alma St.##############
+subnet 10.212.0.0 netmask 255.255.128.0{
+option subnet-mask 255.255.128.0 ;
+        if substring (option vendor-class-identifier,0,4) = "MSFT"{
+                option routers 10.212.0.1;
+                option domain-name-servers 10.237.3.4 , 10.237.3.5 ;
+        }
+        if substring (option vendor-class-identifier,0,2) = "RG"{
+                option classless-routes  = 0F:0A:EC:0A:D4:00:01 ;
+        }
+        pool {
+        deny members of "MotoVIP";
+                range 10.212.64.1 10.212.127.254;
+     }
+}
+
+#######Moncton NB, Riverview##############
+subnet 10.212.128.0 netmask 255.255.128.0{
+option subnet-mask 255.255.128.0 ;
+        if substring (option vendor-class-identifier,0,4) = "MSFT"{
+                option routers 10.212.128.1;
+                option domain-name-servers 10.237.3.4 , 10.237.3.5 ;
+        }
+        if substring (option vendor-class-identifier,0,2) = "RG"{
+                option classless-routes  = 0F:0A:EC:0A:D4:80:01 ;
+        }
+        pool {
+        deny members of "MotoVIP";
+                range 10.212.192.1 10.212.255.254;
+     }
+}
+
+#######Moncton NB, MacBeth##############
+subnet 10.213.0.0 netmask 255.255.128.0{
+option subnet-mask 255.255.128.0 ;
+        if substring (option vendor-class-identifier,0,4) = "MSFT"{
+                option routers 10.213.0.1;
+                option domain-name-servers 10.237.3.4 , 10.237.3.5 ;
+        }
+        if substring (option vendor-class-identifier,0,2) = "RG"{
+                option classless-routes  = 0F:0A:EC:0A:D5:00:01 ;
+        }
+        pool {
+        deny members of "MotoVIP";
+                range 10.213.64.1 10.213.127.254;
+     }
+}
+
+#######Moncton NB, Mountain Rd.##############
+subnet 10.213.128.0 netmask 255.255.128.0{
+option subnet-mask 255.255.128.0 ;
+        if substring (option vendor-class-identifier,0,4) = "MSFT"{
+                option routers 10.213.128.1;
+                option domain-name-servers 10.237.3.4 , 10.237.3.5 ;
+        }
+        if substring (option vendor-class-identifier,0,2) = "RG"{
+                option classless-routes  = 0F:0A:EC:0A:D5:80:01 ;
+        }
+        pool {
+        deny members of "MotoVIP";
+                range 10.213.192.1 10.213.255.254;
+     }
+}
+
+#######Moncton NB, Elmwood##############
+subnet 10.214.0.0 netmask 255.255.128.0{
+option subnet-mask 255.255.128.0 ;
+        if substring (option vendor-class-identifier,0,4) = "MSFT"{
+                option routers 10.214.0.1;
+                option domain-name-servers 10.237.3.4 , 10.237.3.5 ;
+        }
+        if substring (option vendor-class-identifier,0,2) = "RG"{
+                option classless-routes  = 0F:0A:EC:0A:D6:00:01 ;
+        }
+pool    {
+                deny members of "MotoVIP";
+      range 10.214.64.1 10.214.127.254;
+      }
+}
+
+#######Moncton NB, Champlain##############
+subnet 10.214.128.0 netmask 255.255.128.0{
+option subnet-mask 255.255.128.0 ;
+        if substring (option vendor-class-identifier,0,4) = "MSFT"{
+                option routers 10.214.128.1;
+                option domain-name-servers 10.237.3.4 , 10.237.3.5 ;
+        }
+        if substring (option vendor-class-identifier,0,2) = "RG"{
+                option classless-routes  = 0F:0A:EC:0A:D6:80:01 ;
+        }
+        pool {
+      deny members of "MotoVIP";
+      range 10.214.192.1 10.214.255.254;
+     }
+}
+
+###### Moncton, NB ##############
+subnet 10.215.0.0 netmask 255.255.128.0 {
+option subnet-mask 255.255.128.0 ;
+        if substring (option vendor-class-identifier,0,4) = "MSFT"{
+        option routers 10.215.0.1 ;
+        option domain-name-servers 10.237.3.4, 10.237.3.5 ;
+        }
+        if substring (option vendor-class-identifier,0,2) = "RG"{
+                option classless-routes  = 0F:0A:EC:0A:D7:00:01 ;
+        }
+    pool {
+        deny members of "MotoVIP";
+        range 10.215.64.0 10.215.127.254;
+    }
+
+}
+
+###### Moncton, NB ##############
+subnet 10.215.128.0 netmask 255.255.192.0 {
+option subnet-mask 255.255.192.0 ;
+        if substring (option vendor-class-identifier,0,4) = "MSFT"{
+        option routers 10.215.128.1 ;
+        option domain-name-servers 10.237.3.4, 10.237.3.5 ;
+        }
+        if substring (option vendor-class-identifier,0,2) = "RG"{
+                option classless-routes  = 0F:0A:EC:0A:D7:80:01 ;
+        }
+    pool {
+        deny members of "MotoVIP";
+        range 10.215.129.0 10.215.191.254;
+    }
+
+}
+
+#######Fredericton NB, Wisley Rd.##############
+subnet 10.216.0.0 netmask 255.255.128.0{
+option subnet-mask 255.255.128.0 ;
+        if substring (option vendor-class-identifier,0,4) = "MSFT"{
+                option routers 10.216.0.1;
+                option domain-name-servers 10.237.3.4 , 10.237.3.5 ;
+        }
+        if substring (option vendor-class-identifier,0,2) = "RG"{
+                option classless-routes  = 0F:0A:EC:0A:D8:00:01 ;
+        }
+        pool {
+      deny members of "MotoVIP";
+      range 10.216.64.1 10.216.127.254;
+     }
+}
+
+#######Fredericton NB, Maryland Hill##############
+subnet 10.216.128.0 netmask 255.255.128.0{
+option subnet-mask 255.255.128.0 ;
+        if substring (option vendor-class-identifier,0,4) = "MSFT"{
+                option routers 10.216.128.1;
+                option domain-name-servers 10.237.3.4 , 10.237.3.5 ;
+        }
+        if substring (option vendor-class-identifier,0,2) = "RG"{
+                option classless-routes  = 0F:0A:EC:0A:D8:80:01 ;
+        }
+        pool {
+        deny members of "MotoVIP";
+                range 10.216.192.1 10.216.255.254;
+     }
+}
+
+#######Fredericton NB, Carleton##############
+subnet 10.217.0.0 netmask 255.255.128.0{
+option subnet-mask 255.255.128.0 ;
+        if substring (option vendor-class-identifier,0,4) = "MSFT"{
+                option routers 10.217.0.1;
+                option domain-name-servers 10.237.3.4 , 10.237.3.5 ;
+        }
+        if substring (option vendor-class-identifier,0,2) = "RG"{
+                option classless-routes  = 0F:0A:EC:0A:D9:00:01 ;
+        }
+        pool {
+                deny members of "MotoVIP";
+                range 10.217.64.1 10.217.127.254;
+      }
+}
+
+#######Fredericton NB, Devon##############
+subnet 10.217.128.0 netmask 255.255.128.0{
+option subnet-mask 255.255.128.0 ;
+        if substring (option vendor-class-identifier,0,4) = "MSFT"{
+                option routers 10.217.128.1;
+                option domain-name-servers 10.237.3.4 , 10.237.3.5 ;
+        }
+        if substring (option vendor-class-identifier,0,2) = "RG"{
+                option classless-routes  = 0F:0A:EC:0A:D9:80:01 ;
+        }
+        pool {
+        deny members of "MotoVIP";
+                range 10.217.192.1 10.217.255.254;
+     }
+}
+
+#######Halifax NS, Rockingham##############
+subnet 10.192.0.0 netmask 255.255.128.0{
+option subnet-mask 255.255.128.0 ;
+        if substring (option vendor-class-identifier,0,4) = "MSFT"{
+                option routers 10.192.0.1;
+                option domain-name-servers 10.237.3.4 , 10.237.3.5 ;
+        }
+        if substring (option vendor-class-identifier,0,2) = "RG"{
+                option classless-routes  = 0F:0A:EC:0A:C0:00:01 ;
+        }
+        pool {
+        deny members of "MotoVIP";
+                range 10.192.64.1 10.192.127.254;
+     }
+}
+
+#######Halifax NS, Woodlawn##############
+subnet 10.193.0.0 netmask 255.255.128.0{
+option subnet-mask 255.255.128.0 ;
+        if substring (option vendor-class-identifier,0,4) = "MSFT"{
+                option routers 10.193.0.1;
+                option domain-name-servers 10.237.3.4 , 10.237.3.5 ;
+        }
+        if substring (option vendor-class-identifier,0,2) = "RG"{
+                option classless-routes  = 0F:0A:EC:0A:C1:00:01 ;
+        }
+        pool {
+        deny members of "MotoVIP";
+                range 10.193.64.1 10.193.127.254;
+     }
+}
+
+#######Halifax NS, Woodlawn (Edge 2)##############
+subnet 10.193.192.0 netmask 255.255.192.0{
+option subnet-mask 255.255.192.0 ;
+        if substring (option vendor-class-identifier,0,4) = "MSFT"{
+                option routers 10.193.192.1;
+                option domain-name-servers 10.237.3.4 , 10.237.3.5 ;
+        }
+        if substring (option vendor-class-identifier,0,2) = "RG"{
+                option classless-routes  = 0F:0A:EC:0A:C1:C0:01 ;
+        }
+        pool {
+        deny members of "MotoVIP";
+                range 10.193.193.1 10.193.255.254;
+     }
+}
+
+#######Halifax NS, Harbour##############
+subnet 10.194.0.0 netmask 255.255.128.0{
+option subnet-mask 255.255.128.0 ;
+        if substring (option vendor-class-identifier,0,4) = "MSFT"{
+                option routers 10.194.0.1;
+                option domain-name-servers 10.237.3.4 , 10.237.3.5 ;
+        }
+        if substring (option vendor-class-identifier,0,2) = "RG"{
+                option classless-routes  = 0F:0A:EC:0A:C2:00:01 ;
+        }
+        pool {
+        deny members of "MotoVIP";
+                range 10.194.64.1 10.194.127.254;
+     }
+}
+
+####### SYDNEY EDGE 2 ##############
+subnet 10.194.128.0 netmask 255.255.192.0{
+option subnet-mask 255.255.192.0 ;
+        if substring (option vendor-class-identifier,0,4) = "MSFT"{
+                option routers 10.194.128.1;
+                option domain-name-servers 10.237.3.4 , 10.237.3.5 ;
+        }
+        if substring (option vendor-class-identifier,0,2) = "RG"{
+                option classless-routes  = 0F:0A:EC:0A:C2:80:01 ;
+        }
+        pool {
+        deny members of "MotoVIP";
+                range 10.194.129.0 10.194.191.254;
+     }
+}
+
+####### Halifax NS, Bedford ##############
+subnet 10.195.0.0 netmask 255.255.128.0{
+option subnet-mask 255.255.128.0 ;
+        if substring (option vendor-class-identifier,0,4) = "MSFT"{
+                option routers 10.195.0.1;
+                option domain-name-servers 10.237.3.4 , 10.237.3.5 ;
+        }
+        if substring (option vendor-class-identifier,0,2) = "RG"{
+                option classless-routes  = 0F:0A:EC:0A:C3:00:01 ;
+        }
+        pool {
+        deny members of "MotoVIP";
+                range 10.195.64.1 10.195.127.254;
+     }
+}
+
+####### Halifax NS, Bedford (Edge #2) ##############
+subnet 10.194.192.0 netmask 255.255.192.0{
+option subnet-mask 255.255.192.0 ;
+        if substring (option vendor-class-identifier,0,4) = "MSFT"{
+                option routers 10.194.192.1;
+                option domain-name-servers 10.237.3.4 , 10.237.3.5 ;
+        }
+        if substring (option vendor-class-identifier,0,2) = "RG"{
+                option classless-routes  = 0F:0A:EC:0A:C2:C0:01 ;
+        }
+        pool {
+        deny members of "MotoVIP";
+                range 10.194.193.1 10.194.255.254;
+     }
+}
+
+####### KENTVILLE EDGE 2 ##############
+subnet 10.195.128.0 netmask 255.255.192.0{
+option subnet-mask 255.255.192.0 ;
+        if substring (option vendor-class-identifier,0,4) = "MSFT"{
+                option routers 10.195.128.1;
+                option domain-name-servers 10.237.3.4 , 10.237.3.5 ;
+        }
+        if substring (option vendor-class-identifier,0,2) = "RG"{
+                option classless-routes  = 0F:0A:EC:0A:C3:80:01 ;
+        }
+        pool {
+        deny members of "MotoVIP";
+                range 10.195.129.0 10.195.191.254;
+     }
+}
+
+#######Halifax NS, Bishop##############
+subnet 10.196.0.0 netmask 255.255.128.0{
+option subnet-mask 255.255.128.0 ;
+        if substring (option vendor-class-identifier,0,4) = "MSFT"{
+                option routers 10.196.0.1;
+                option domain-name-servers 10.237.3.4 , 10.237.3.5 ;
+        }
+        if substring (option vendor-class-identifier,0,2) = "RG"{
+                option classless-routes  = 0F:0A:EC:0A:C4:00:01 ;
+        }
+        pool {
+      deny members of "MotoVIP";
+      range 10.196.64.0 10.196.127.254;
+    }
+}
+
+####### Halifax NS, Willowdale (EDGE #2) ##############
+subnet 10.196.128.0 netmask 255.255.192.0{
+option subnet-mask 255.255.192.0 ;
+        if substring (option vendor-class-identifier,0,4) = "MSFT"{
+                option routers 10.196.128.1;
+                option domain-name-servers 10.237.3.4 , 10.237.3.5 ;
+        }
+        if substring (option vendor-class-identifier,0,2) = "RG"{
+                option classless-routes  = 0F:0A:EC:0A:C4:80:01 ;
+        }
+        pool {
+      deny members of "MotoVIP";
+      range 10.196.129.0 10.196.191.254;
+    }
+}
+
+#######Halifax NS, Lorne##############
+subnet 10.197.0.0 netmask 255.255.128.0{
+option subnet-mask 255.255.128.0 ;
+        if substring (option vendor-class-identifier,0,4) = "MSFT"{
+                option routers 10.197.0.1;
+                option domain-name-servers 10.237.3.4 , 10.237.3.5 ;
+        }
+        if substring (option vendor-class-identifier,0,2) = "RG"{
+                option classless-routes  = 0F:0A:EC:0A:C5:00:01 ;
+        }
+        pool {
+        deny members of "MotoVIP";
+                range 10.197.64.1 10.197.127.254;
+     }
+}
+
+#######Halifax NS, Lorne##############
+subnet 10.195.192.0 netmask 255.255.192.0{
+option subnet-mask 255.255.192.0 ;
+        if substring (option vendor-class-identifier,0,4) = "MSFT"{
+                option routers 10.195.192.1;
+                option domain-name-servers 10.237.3.4 , 10.237.3.5 ;
+        }
+        if substring (option vendor-class-identifier,0,2) = "RG"{
+                option classless-routes  = 0F:0A:EC:0A:C3:C0:01 ;
+        }
+        pool {
+        deny members of "MotoVIP";
+                range 10.195.193.1 10.195.255.254;
+     }
+}
+
+#######Halifax NS, Sackville##############
+subnet 10.198.0.0 netmask 255.255.128.0{
+option subnet-mask 255.255.128.0 ;
+        if substring (option vendor-class-identifier,0,4) = "MSFT"{
+                option routers 10.198.0.1;
+                option domain-name-servers 10.237.3.4 , 10.237.3.5 ;
+        }
+        if substring (option vendor-class-identifier,0,2) = "RG"{
+                option classless-routes  = 0F:0A:EC:0A:C6:00:01 ;
+        }
+        pool {
+        deny members of "MotoVIP";
+                range 10.198.64.1 10.198.127.254;
+      }
+}
+
+#######Halifax NS, Spryfield##############
+subnet 10.199.0.0 netmask 255.255.128.0{
+option subnet-mask 255.255.128.0 ;
+        if substring (option vendor-class-identifier,0,4) = "MSFT"{
+                option routers 10.199.0.1;
+                option domain-name-servers 10.237.3.4 , 10.237.3.5 ;
+        }
+        if substring (option vendor-class-identifier,0,2) = "RG"{
+                option classless-routes  = 0F:0A:EC:0A:C7:00:01 ;
+        }
+        pool {
+        deny members of "MotoVIP";
+                range 10.199.64.1 10.199.127.254;
+     }
+}
+
+######NFLD, Allandale##############
+subnet 10.224.0.0 netmask 255.255.128.0{
+option subnet-mask 255.255.128.0 ;
+        if substring (option vendor-class-identifier,0,4) = "MSFT"{
+                option routers 10.224.0.1;
+                option domain-name-servers 10.237.3.4 , 10.237.3.5 ;
+        }
+        if substring (option vendor-class-identifier,0,2) = "RG"{
+                option classless-routes  = 0F:0A:EC:0A:E0:00:01 ;
+        }
+        pool {
+        deny members of "MotoVIP";
+                range 10.224.64.1 10.224.127.254;
+      }
+}
+
+######NFLD, Allandale EDGE 3##############
+subnet 10.227.0.0 netmask 255.255.224.0{
+option subnet-mask 255.255.224.0 ;
+        if substring (option vendor-class-identifier,0,4) = "MSFT"{
+                option routers 10.227.0.1;
+                option domain-name-servers 10.237.3.4 , 10.237.3.5 ;
+        }
+        if substring (option vendor-class-identifier,0,2) = "RG"{
+                option classless-routes  = 0F:0A:EC:0A:E3:00:01 ;
+        }
+        pool {
+        deny members of "MotoVIP";
+                range 10.227.1.1 10.227.31.254;
+      }
+}
+
+subnet 10.227.32.0 netmask 255.255.224.0{
+option subnet-mask 255.255.224.0 ;
+        if substring (option vendor-class-identifier,0,4) = "MSFT"{
+                option routers 10.227.32.1;
+                option domain-name-servers 10.237.3.4 , 10.237.3.5 ;
+        }
+        if substring (option vendor-class-identifier,0,2) = "RG"{
+                option classless-routes  = 0F:0A:EC:0A:E3:20:01 ;
+        }
+        pool {
+        deny members of "MotoVIP";
+                range 10.227.33.1 10.227.63.254;
+      }
+}
+
+######NFLD, O'Connell Dr - CRBKNF04D00##############
+subnet 10.227.64.0 netmask 255.255.224.0{
+option subnet-mask 255.255.224.0 ;
+        if substring (option vendor-class-identifier,0,4) = "MSFT"{
+                option routers 10.227.64.1;
+                option domain-name-servers 10.237.3.4 , 10.237.3.5 ;
+        }
+        if substring (option vendor-class-identifier,0,2) = "RG"{
+                option classless-routes  = 0F:0A:EC:0A:E3:40:01 ;
+        }
+        pool {
+        deny members of "MotoVIP";
+                range 10.227.65.1 10.227.95.254;
+      }
+}
+
+###### Mount Pearl Edge #4 (MTPRNF01D12) ##############
+subnet 10.227.96.0 netmask 255.255.224.0{
+option subnet-mask 255.255.224.0 ;
+        if substring (option vendor-class-identifier,0,4) = "MSFT"{
+                option routers 10.227.96.1;
+                option domain-name-servers 10.237.3.4 , 10.237.3.5 ;
+        }
+        if substring (option vendor-class-identifier,0,2) = "RG"{
+                option classless-routes  = 0F:0A:EC:0A:E3:60:01 ;
+        }
+        pool {
+        deny members of "MotoVIP";
+                range 10.227.97.1 10.227.127.254;
+      }
+}
+
+###### NS, SACKVILLE EDGE 3##############
+subnet 10.197.128.0 netmask 255.255.224.0{
+        option subnet-mask 255.255.224.0 ;
+        if substring (option vendor-class-identifier,0,4) = "MSFT"{
+                option routers 10.197.128.1;
+                option domain-name-servers 10.237.3.4 , 10.237.3.5 ;
+        }
+        if substring (option vendor-class-identifier,0,2) = "RG"{
+                option classless-routes  = 0F:0A:EC:0A:C5:80:01 ;
+        }
+        pool {
+        deny members of "MotoVIP";
+                range 10.197.129.1 10.197.159.254;
+      }
+}
+
+subnet 10.197.160.0 netmask 255.255.224.0{
+        option subnet-mask 255.255.224.0 ;
+        if substring (option vendor-class-identifier,0,4) = "MSFT"{
+                option routers 10.197.160.1;
+                option domain-name-servers 10.237.3.4 , 10.237.3.5 ;
+        }
+        if substring (option vendor-class-identifier,0,2) = "RG"{
+                option classless-routes  = 0F:0A:EC:0A:C5:A0:01 ;
+        }
+        pool {
+        deny members of "MotoVIP";
+                range 10.197.161.1 10.197.191.254;
+      }
+}
+
+###### STJH, LANCASTER ##############
+subnet 10.218.64.0 netmask 255.255.192.0{
+option subnet-mask 255.255.192.0 ;
+        if substring (option vendor-class-identifier,0,4) = "MSFT"{
+                option routers 10.218.64.1;
+                option domain-name-servers 10.237.3.4 , 10.237.3.5 ;
+        }
+        if substring (option vendor-class-identifier,0,2) = "RG"{
+                option classless-routes  = 0F:0A:EC:0A:DA:40:01 ;
+        }
+        pool {
+        deny members of "MotoVIP";
+                range 10.218.65.1 10.218.127.254;
+      }
+}
+
+######NFLD, Mount Pearl##############
+subnet 10.225.0.0 netmask 255.255.128.0{
+option subnet-mask 255.255.128.0 ;
+        if substring (option vendor-class-identifier,0,4) = "MSFT"{
+                option routers 10.225.0.1;
+                option domain-name-servers 10.237.3.4 , 10.237.3.5 ;
+        }
+        if substring (option vendor-class-identifier,0,2) = "RG"{
+                option classless-routes  = 0F:0A:EC:0A:E1:00:01 ;
+        }
+        pool {
+        deny members of "MotoVIP";
+                range 10.225.3.1 10.225.127.254;
+     }
+}
+
+####### Sackville (SKVLNS01D07) ##############
+subnet 10.203.192.0 netmask 255.255.192.0{
+        option subnet-mask 255.255.192.0 ;
+        if substring (option vendor-class-identifier,0,4) = "MSFT"{
+                option routers 10.203.192.1;
+                option domain-name-servers 10.237.3.4 , 10.237.3.5 ;
+        }
+        if substring (option vendor-class-identifier,0,2) = "RG"{
+                option classless-routes  = 0F:0A:EC:0A:CB:C0:01 ;
+        }
+        pool {
+        deny members of "MotoVIP";
+                range 10.203.193.0 10.203.255.254;
+      }
+}
+
+###### Sydney, NS ##############
+subnet 10.204.128.0 netmask 255.255.128.0 {
+option subnet-mask 255.255.128.0 ;
+        if substring (option vendor-class-identifier,0,4) = "MSFT"{
+        option routers 10.204.128.1 ;
+        option domain-name-servers 10.237.3.4, 10.237.3.5 ;
+        }
+        if substring (option vendor-class-identifier,0,2) = "RG"{
+                option classless-routes  = 0F:0A:EC:0A:CC:80:01 ;
+        }
+    pool {
+        deny members of "MotoVIP";
+        range 10.204.192.1 10.204.255.254;
+    }
+}
+
+###### Coxheath, NS ##############
+subnet 10.204.0.0 netmask 255.255.128.0 {
+option subnet-mask 255.255.128.0 ;
+        if substring (option vendor-class-identifier,0,4) = "MSFT"{
+        option routers 10.204.0.1 ;
+        # default-lease-time 1800;
+        # max-lease-time 1800;
+        # min-lease-time 1800;
+        option domain-name-servers 10.237.3.4, 10.237.3.5 ;
+        }
+        if substring (option vendor-class-identifier,0,2) = "RG"{
+                option classless-routes  = 0F:0A:EC:0A:CC:00:01 ;
+        }
+    pool {
+        deny members of "MotoVIP";
+        range 10.204.64.1 10.204.127.254;
+    }
+}
+
+####### Bathurst NB##############
+subnet 10.220.0.0 netmask 255.255.128.0{
+option subnet-mask 255.255.128.0 ;
+        if substring (option vendor-class-identifier,0,4) = "MSFT"{
+                option routers 10.220.0.1;
+        option domain-name-servers 10.237.3.4, 10.237.3.5 ;
+        }
+        if substring (option vendor-class-identifier,0,2) = "RG"{
+                option classless-routes  = 0F:0A:EC:0A:DC:00:01 ;
+        }
+    pool {
+        range 10.220.64.1 10.220.127.254;
+        deny members of "MotoVIP";
+    }
+}
+
+####### Bathurst NB##############
+subnet 10.220.128.0 netmask 255.255.192.0{
+option subnet-mask 255.255.192.0 ;
+        if substring (option vendor-class-identifier,0,4) = "MSFT"{
+                option routers 10.220.128.1;
+        option domain-name-servers 10.237.3.4, 10.237.3.5 ;
+        }
+        if substring (option vendor-class-identifier,0,2) = "RG"{
+                option classless-routes  = 0F:0A:EC:0A:DC:80:01 ;
+        }
+    pool {
+        range 10.220.129.0 10.220.191.254;
+        deny members of "MotoVIP";
+    }
+}
+
+####### Moncton Alma 4 NB - MCTNNBSAD17##############
+subnet 10.220.192.0 netmask 255.255.224.0{
+option subnet-mask 255.255.224.0 ;
+        if substring (option vendor-class-identifier,0,4) = "MSFT"{
+                option routers 10.220.192.1;
+        option domain-name-servers 10.237.3.4, 10.237.3.5 ;
+        }
+        if substring (option vendor-class-identifier,0,2) = "RG"{
+                option classless-routes  = 0F:0A:EC:0A:DC:C0:01 ;
+        }
+    pool {
+        range 10.220.193.0 10.220.223.254;
+        deny members of "MotoVIP";
+    }
+}
+
+
+####### Newcastle NB##############
+subnet 10.221.0.0 netmask 255.255.128.0{
+        if substring (option vendor-class-identifier,0,4) = "MSFT"{
+            option routers 10.221.0.1;
+        option domain-name-servers 10.237.3.4, 10.237.3.5 ;
+        }
+        if substring (option vendor-class-identifier,0,2) = "RG"{
+                option classless-routes  = 0F:0A:EC:0A:DD:00:01 ;
+        }
+    pool {
+        range 10.221.64.1 10.221.127.254;
+        deny members of "MotoVIP";
+    }
+}
+
+###### Charlottetown, PEI ##############
+subnet 10.232.0.0 netmask 255.255.192.0 {
+option subnet-mask 255.255.192.0 ;
+        if substring (option vendor-class-identifier,0,4) = "MSFT"{
+        option routers 10.232.0.1 ;
+        option domain-name-servers 10.237.3.4, 10.237.3.5 ;
+        }
+        if substring (option vendor-class-identifier,0,2) = "RG"{
+                option classless-routes  = 0F:0A:EC:0A:E8:00:01 ;
+        }
+    pool {
+        deny members of "MotoVIP";
+        range 10.232.1.1 10.232.63.254;
+    }
+}
+
+###### Charlottetown, PEI II ##############
+subnet 10.232.64.0 netmask 255.255.192.0 {
+option subnet-mask 255.255.192.0 ;
+        if substring (option vendor-class-identifier,0,4) = "MSFT"{
+        option routers 10.232.64.1 ;
+        option domain-name-servers 10.237.3.4, 10.237.3.5 ;
+        }
+        if substring (option vendor-class-identifier,0,2) = "RG"{
+                option classless-routes  = 0F:0A:EC:0A:E8:40:01 ;
+        }
+    pool {
+        deny members of "MotoVIP";
+        range 10.232.65.0 10.232.127.254;
+    }
+}
+
+###### Summerside PEI ##############
+subnet 10.233.0.0 netmask 255.255.192.0 {
+option subnet-mask 255.255.192.0 ;
+        if substring (option vendor-class-identifier,0,4) = "MSFT"{
+        option routers 10.233.0.1 ;
+        option domain-name-servers 10.237.3.4, 10.237.3.5 ;
+        }
+        if substring (option vendor-class-identifier,0,2) = "RG"{
+                option classless-routes  = 0F:0A:EC:0A:E9:00:01 ;
+        }
+    pool {
+        deny members of "MotoVIP";
+        range 10.233.1.0 10.233.63.254;
+    }
+}
+
+###### Truro, NS ##############
+subnet 10.205.64.0 netmask 255.255.192.0 {
+        option subnet-mask 255.255.192.0 ;
+        if substring (option vendor-class-identifier,0,4) = "MSFT"{
+        option routers 10.205.64.1 ;
+        option domain-name-servers 10.237.3.4, 10.237.3.5 ;
+        }
+        if substring (option vendor-class-identifier,0,2) = "RG"{
+                # option classless-routes  = 0F:0A:EC:0A:CD:40:01 ;
+                option classless-routes  = 0F:0A:EC:0A:CD:40:01 ;
+        }
+    pool {
+        deny members of "MotoVIP";
+        range 10.205.65.0 10.205.127.254;
+    }
+}
+
+###### Truro, NS ##############
+subnet 10.205.128.0 netmask 255.255.192.0 {
+option subnet-mask 255.255.192.0 ;
+        if substring (option vendor-class-identifier,0,4) = "MSFT"{
+        option routers 10.205.128.1 ;
+        option domain-name-servers 10.237.3.4, 10.237.3.5 ;
+        }
+        if substring (option vendor-class-identifier,0,2) = "RG"{
+                option classless-routes  = 0F:0A:EC:0A:CD:80:01 ;
+        }
+    pool {
+        deny members of "MotoVIP";
+        range 10.205.129.0 10.205.191.254;
+    }
+}
+
+###### Long Pond, NL ##############
+subnet 10.226.0.0 netmask 255.255.192.0 {
+option subnet-mask 255.255.192.0 ;
+        if substring (option vendor-class-identifier,0,4) = "MSFT"{
+        option routers 10.226.0.1 ;
+        option domain-name-servers 10.237.3.4, 10.237.3.5 ;
+        }
+    if substring (option vendor-class-identifier,0,2) = "RG"{
+                option classless-routes  = 0F:0A:EC:0A:E2:00:01 ;
+        }
+         pool {
+        deny members of "MotoVIP";
+        range 10.226.1.0 10.226.63.254;
+     }
+}
+
+###### St. John's 2, NS ##############
+subnet 10.224.128.0 netmask 255.255.128.0 {
+option subnet-mask 255.255.128.0 ;
+        if substring (option vendor-class-identifier,0,4) = "MSFT"{
+        option routers 10.224.128.1 ;
+        option domain-name-servers 10.237.3.4, 10.237.3.5 ;
+        }
+        if substring (option vendor-class-identifier,0,2) = "RG"{
+                        option classless-routes  = 0F:0A:EC:0A:E0:80:01 ;
+        }
+    pool {
+        deny members of "MotoVIP";
+        range 10.224.129.0 10.224.191.254;
+    }
+}
+
+###### New Glasgow, NS ##############
+subnet 10.205.0.0 netmask 255.255.192.0 {
+option subnet-mask 255.255.192.0 ;
+        if substring (option vendor-class-identifier,0,4) = "MSFT"{
+        option routers 10.205.0.1 ;
+        option domain-name-servers 10.237.3.4, 10.237.3.5 ;
+        }
+        if substring (option vendor-class-identifier,0,2) = "RG"{
+                option classless-routes  = 0F:0A:EC:0A:CD:00:01 ;
+        }
+    pool {
+        deny members of "MotoVIP";
+        range 10.205.1.0 10.205.63.254;
+    }
+}
+
+###### Willowdale ##############
+subnet 10.193.128.0 netmask 255.255.192.0 {
+option subnet-mask 255.255.192.0 ;
+        if substring (option vendor-class-identifier,0,4) = "MSFT"{
+        option routers 10.193.128.1 ;
+        option domain-name-servers 10.237.3.4, 10.237.3.5 ;
+        }
+        if substring (option vendor-class-identifier,0,2) = "RG"{
+                option classless-routes  = 0F:0A:EC:0A:C1:80:01 ;
+        }
+    pool {
+        deny members of "MotoVIP";
+        range 10.193.129.0 10.193.191.254;
+    }
+}
+
+###### Glace Bay ##############
+subnet 10.203.128.0 netmask 255.255.192.0 {
+option subnet-mask 255.255.192.0 ;
+        if substring (option vendor-class-identifier,0,4) = "MSFT"{
+        option routers 10.203.128.1 ;
+        option domain-name-servers 10.237.3.4, 10.237.3.5 ;
+        }
+        if substring (option vendor-class-identifier,0,2) = "RG"{
+                option classless-routes  = 0F:0A:EC:0A:CB:80:01 ;
+        }
+    pool {
+        deny members of "MotoVIP";
+        range 10.203.129.0 10.203.191.254;
+    }
+}
+
+###### FCTNNBSCD32 - Carleton St. #2 ##############
+subnet 10.218.0.0 netmask 255.255.192.0 {
+option subnet-mask 255.255.192.0 ;
+        if substring (option vendor-class-identifier,0,4) = "MSFT"{
+        option routers 10.218.0.1 ;
+        option domain-name-servers 10.237.3.4, 10.237.3.5 ;
+        }
+        if substring (option vendor-class-identifier,0,2) = "RG"{
+                option classless-routes  = 0F:0A:EC:0A:DA:00:01 ;
+        }
+    pool {
+        deny members of "MotoVIP" ;
+        range 10.218.1.0 10.218.63.254 ;
+    }
+}
+
+###### FCTNNBSCD32 - Carleton St. #2 ##############
+subnet 10.218.128.0 netmask 255.255.128.0 {
+option subnet-mask 255.255.128.0 ;
+        if substring (option vendor-class-identifier,0,4) = "MSFT"{
+        option routers 10.218.128.1 ;
+        option domain-name-servers 10.237.3.4, 10.237.3.5 ;
+        }
+        if substring (option vendor-class-identifier,0,2) = "RG"{
+                option classless-routes  = 0F:0A:EC:0A:DA:80:01 ;
+        }
+    pool {
+        deny members of "MotoVIP" ;
+        range 10.218.129.0 10.218.254.254 ;
+    }
+}
+
+###### STJHNBSUOL2 - Union St. #2 ##############
+subnet 10.211.0.0 netmask 255.255.192.0 {
+option subnet-mask 255.255.192.0 ;
+        if substring (option vendor-class-identifier,0,4) = "MSFT"{
+        option routers 10.211.0.1 ;
+        option domain-name-servers 10.237.3.4, 10.237.3.5 ;
+        }
+        if substring (option vendor-class-identifier,0,2) = "RG"{
+                option classless-routes  = 0F:0A:EC:0A:D3:00:01 ;
+        }
+    pool {
+        deny members of "MotoVIP" ;
+        range 10.211.1.0 10.211.63.254 ;
+    }
+}
+
+####### Oromocto (ORMONBSCD02) ##############
+subnet 10.211.128.0 netmask 255.255.192.0{
+        option subnet-mask 255.255.192.0 ;
+        if substring (option vendor-class-identifier,0,4) = "MSFT"{
+                option routers 10.211.128.1;
+                option domain-name-servers 10.237.3.4 , 10.237.3.5 ;
+        }
+        if substring (option vendor-class-identifier,0,2) = "RG"{
+                option classless-routes  = 0F:0A:EC:0A:D3:80:01 ;
+        }
+        pool {
+        deny members of "MotoVIP";
+                range 10.211.129.0 10.211.191.254;
+      }
+}
+
+###### CRBKNF02D00 - Corner Brook ##############
+subnet 10.228.128.0 netmask 255.255.192.0 {
+option subnet-mask 255.255.192.0 ;
+        if substring (option vendor-class-identifier,0,4) = "MSFT"{
+        option routers 10.228.128.1 ;
+        option domain-name-servers 10.237.3.4, 10.237.3.5 ;
+        }
+        if substring (option vendor-class-identifier,0,2) = "RG"{
+                option classless-routes  = 0F:0A:EC:0A:E4:80:01 ;
+        }
+    pool {
+        deny members of "MotoVIP" ;
+        range 10.228.129.0 10.228.191.254 ;
+    }
+}
+
+###### Clarenville Edge (CLVLNFXAD01) ##############
+subnet 10.228.192.0 netmask 255.255.192.0 {
+option subnet-mask 255.255.192.0 ;
+        if substring (option vendor-class-identifier,0,4) = "MSFT"{
+        option routers 10.228.192.1 ;
+        option domain-name-servers 10.237.3.4, 10.237.3.5 ;
+        }
+        if substring (option vendor-class-identifier,0,2) = "RG"{
+                option classless-routes  = 0F:0A:EC:0A:E4:C0:01 ;
+        }
+    pool {
+        deny members of "MotoVIP" ;
+        range 10.228.193.0 10.228.255.254 ;
+    }
+}
+
+###### EDMNNBSCD01 - Edmunston ##############
+subnet 10.221.128.0 netmask 255.255.192.0 {
+option subnet-mask 255.255.192.0 ;
+        if substring (option vendor-class-identifier,0,4) = "MSFT"{
+        option routers 10.221.128.1 ;
+        option domain-name-servers 10.237.3.4, 10.237.3.5 ;
+        }
+        if substring (option vendor-class-identifier,0,2) = "RG"{
+                option classless-routes  = 0F:0A:EC:0A:DD:80:01 ;
+        }
+    pool {
+        deny members of "MotoVIP" ;
+        range 10.221.129.0 10.221.191.254 ;
+    }
+}
+
+###### MTAGPE03D05 - Montague ##############
+subnet 10.234.0.0 netmask 255.255.192.0 {
+option subnet-mask 255.255.192.0 ;
+        if substring (option vendor-class-identifier,0,4) = "MSFT"{
+        option routers 10.234.0.1 ;
+        option domain-name-servers 10.237.3.4, 10.237.3.5 ;
+        }
+        if substring (option vendor-class-identifier,0,2) = "RG"{
+                option classless-routes  = 0F:0A:EC:0A:EA:00:01 ;
+        }
+    pool {
+        deny members of "MotoVIP" ;
+        range 10.234.1.0 10.234.63.254 ;
+    }
+}
+
+###### YRMONS01D04 - Yarmouth ##############
+subnet 10.203.0.0 netmask 255.255.192.0 {
+option subnet-mask 255.255.192.0 ;
+        if substring (option vendor-class-identifier,0,4) = "MSFT"{
+        option routers 10.203.0.1 ;
+        option domain-name-servers 10.237.3.4, 10.237.3.5 ;
+        }
+        if substring (option vendor-class-identifier,0,2) = "RG"{
+                option classless-routes  = 0F:0A:EC:0A:CB:00:01 ;
+        }
+    pool {
+        deny members of "MotoVIP" ;
+        range 10.203.1.0 10.203.63.254 ;
+    }
+}
+
+###### WDSTNBSCD01 - Woodstock ##############
+subnet 10.221.192.0 netmask 255.255.192.0 {
+option subnet-mask 255.255.192.0 ;
+        if substring (option vendor-class-identifier,0,4) = "MSFT"{
+        option routers 10.221.192.1 ;
+        option domain-name-servers 10.237.3.4, 10.237.3.5 ;
+        }
+        if substring (option vendor-class-identifier,0,2) = "RG"{
+                option classless-routes  = 0F:0A:EC:0A:DD:C0:01 ;
+        }
+    pool {
+        deny members of "MotoVIP" ;
+        range 10.221.193.0 10.221.255.254 ;
+    }
+}
+
+###### BRWRNS02D02 - Bridgewater ##############
+subnet 10.203.64.0 netmask 255.255.192.0 {
+option subnet-mask 255.255.192.0 ;
+        if substring (option vendor-class-identifier,0,4) = "MSFT"{
+        option routers 10.203.64.1 ;
+        option domain-name-servers 10.237.3.4, 10.237.3.5 ;
+        }
+        if substring (option vendor-class-identifier,0,2) = "RG"{
+                        option classless-routes  = 0F:0A:EC:0A:CB:40:01 ;
+        }
+    pool {
+        deny members of "MotoVIP" ;
+        range 10.203.65.0 10.203.127.254 ;
+    }
+}
+
+###### SHDCNBSCD01 - Shediac ##############
+subnet 10.222.128.0 netmask 255.255.192.0 {
+option subnet-mask 255.255.192.0 ;
+        if substring (option vendor-class-identifier,0,4) = "MSFT"{
+        option routers 10.222.128.1 ;
+        option domain-name-servers 10.237.3.4, 10.237.3.5 ;
+        }
+        if substring (option vendor-class-identifier,0,2) = "RG"{
+                option classless-routes  = 0F:0A:EC:0A:DE:80:01 ;
+        }
+    pool {
+        deny members of "MotoVIP" ;
+        range 10.222.129.0 10.222.191.254 ;
+    }
+}
+
+###### Campbellton Edge (CMTNNBSCD02) #############
+subnet 10.222.192.0 netmask 255.255.192.0 {
+option subnet-mask 255.255.192.0 ;
+        if substring (option vendor-class-identifier,0,4) = "MSFT"{
+        option routers 10.222.192.1 ;
+        option domain-name-servers 10.237.3.4, 10.237.3.5 ;
+        }
+        if substring (option vendor-class-identifier,0,2) = "RG"{
+                option classless-routes  = 0F:0A:EC:0A:DE:C0:01 ;
+        }
+    pool {
+        deny members of "MotoVIP" ;
+        range 10.222.193.0 10.222.255.254 ;
+    }
+}
+
+###### GNDRNFXAD01 - Gander ##############
+subnet 10.228.0.0 netmask 255.255.192.0 {
+option subnet-mask 255.255.192.0 ;
+        if substring (option vendor-class-identifier,0,4) = "MSFT"{
+        option routers 10.228.0.1 ;
+        option domain-name-servers 10.237.3.4, 10.237.3.5 ;
+        }
+        if substring (option vendor-class-identifier,0,2) = "RG"{
+                option classless-routes  = 0F:0A:EC:0A:E4:00:01 ;
+        }
+    pool {
+        deny members of "MotoVIP" ;
+        range 10.228.1.0 10.228.63.254 ;
+    }
+}
+
+###### GDFLNF02D01 - Grand Falls ##############
+subnet 10.228.64.0 netmask 255.255.192.0 {
+option subnet-mask 255.255.192.0 ;
+        if substring (option vendor-class-identifier,0,4) = "MSFT"{
+        option routers 10.228.64.1 ;
+        option domain-name-servers 10.237.3.4, 10.237.3.5 ;
+        }
+        if substring (option vendor-class-identifier,0,2) = "RG"{
+                option classless-routes  = 0F:0A:EC:0A:E4:40:01 ;
+        }
+    pool {
+        deny members of "MotoVIP" ;
+        range 10.228.65.0 10.228.127.254 ;
+    }
+}
+
+###### SUSXNBSCD01 - Sussex ##############
+subnet 10.222.64.0 netmask 255.255.192.0 {
+option subnet-mask 255.255.192.0 ;
+        if substring (option vendor-class-identifier,0,4) = "MSFT"{
+        option routers 10.222.64.1 ;
+        option domain-name-servers 10.237.3.4, 10.237.3.5 ;
+        }
+        if substring (option vendor-class-identifier,0,2) = "RG"{
+                option classless-routes  = 0F:0A:EC:0A:DE:40:01 ;
+        }
+    pool {
+        deny members of "MotoVIP" ;
+        range 10.222.65.0 10.222.127.254 ;
+    }
+}
+
+###### HMPNNBSCD21 - Hampton ##############
+subnet 10.222.0.0 netmask 255.255.192.0 {
+option subnet-mask 255.255.192.0 ;
+        if substring (option vendor-class-identifier,0,4) = "MSFT"{
+        option routers 10.222.0.1 ;
+        option domain-name-servers 10.237.3.4, 10.237.3.5 ;
+        }
+        if substring (option vendor-class-identifier,0,2) = "RG"{
+                option classless-routes  = 0F:0A:EC:0A:DE:00:01 ;
+        }
+        pool {
+                deny members of "MotoVIP" ;
+                range 10.222.1.0 10.222.63.254 ;
+        }
+}
+
+###### MTPRNF01D08 - Mount Pearl Edge #2 ##############
+subnet 10.226.64.0 netmask 255.255.192.0 {
+option subnet-mask 255.255.192.0 ;
+        if substring (option vendor-class-identifier,0,4) = "MSFT"{
+        option routers 10.226.64.1 ;
+        option domain-name-servers 10.237.3.4, 10.237.3.5 ;
+        }
+        if substring (option vendor-class-identifier,0,2) = "RG"{
+                option classless-routes  = 0F:0A:EC:0A:E2:40:01 ;
+        }
+        pool {
+                deny members of "MotoVIP" ;
+                range 10.226.65.0 10.226.127.254 ;
+        }
+}
+
+###### MTPRNF01D08 - Mount Pearl Edge #3 ##############
+subnet 10.226.192.0 netmask 255.255.192.0 {
+option subnet-mask 255.255.192.0 ;
+        if substring (option vendor-class-identifier,0,4) = "MSFT"{
+        option routers 10.226.192.1 ;
+        option domain-name-servers 10.237.3.4, 10.237.3.5 ;
+        }
+        if substring (option vendor-class-identifier,0,2) = "RG"{
+                option classless-routes  = 0F:0A:EC:0A:E2:C0:01 ;
+        }
+        pool {
+                deny members of "MotoVIP" ;
+                range 10.226.193.0 10.226.255.254 ;
+        }
+}
+
+####### Sudbury Minto St. (SDBRON9878W) ##############
+subnet 10.176.0.0 netmask 255.255.224.0{
+        option subnet-mask 255.255.224.0 ;
+        if substring (option vendor-class-identifier,0,4) = "MSFT"{
+                option routers 10.176.0.1;
+                option domain-name-servers 10.237.3.4 , 10.237.3.5 ;
+        }
+        if substring (option vendor-class-identifier,0,2) = "RG"{
+                option classless-routes  = 0F:0A:EC:0A:B0:00:01 ;
+        }
+        pool {
+        deny members of "MotoVIP";
+                range 10.176.1.0 10.176.31.254;
+      }
+}
+
+####### Sudbury Lasalle Blvd. (SDBRON4406W) ##############
+subnet 10.176.32.0 netmask 255.255.224.0{
+        option subnet-mask 255.255.224.0 ;
+        if substring (option vendor-class-identifier,0,4) = "MSFT"{
+                option routers 10.176.32.1;
+                option domain-name-servers 10.237.3.4 , 10.237.3.5 ;
+        }
+        if substring (option vendor-class-identifier,0,2) = "RG"{
+                option classless-routes  = 0F:0A:EC:0A:B0:20:01 ;
+        }
+        pool {
+        deny members of "MotoVIP";
+                range 10.176.33.0 10.176.63.254;
+      }
+}
+
+###### Hanmer Ontario ##############
+subnet 10.176.64.0 netmask 255.255.224.0 {
+  option subnet-mask 255.255.224.0 ;
+  if substring (option vendor-class-identifier,0,4) = "MSFT"{
+    option routers 10.176.64.1 ;
+    option domain-name-servers 10.237.3.4, 10.237.3.5 ;
+  }
+  if substring (option vendor-class-identifier,0,2) = "RG"{
+    option classless-routes  = 0F:0A:EC:0A:B0:40:01 ;
+  }
+  pool {
+    deny members of "MotoVIP";
+    range 10.176.65.0 10.176.95.254;
+  }
+}
+
+###### Chelmsford Ontario ##############
+subnet 10.176.96.0 netmask 255.255.224.0 {
+  option subnet-mask 255.255.224.0 ;
+  if substring (option vendor-class-identifier,0,4) = "MSFT"{
+    option routers 10.176.96.1 ;
+    option domain-name-servers 10.237.3.4, 10.237.3.5 ;
+  }
+  if substring (option vendor-class-identifier,0,2) = "RG"{
+    option classless-routes  = 0F:0A:EC:0A:B0:60:01 ;
+  }
+  pool {
+    deny members of "MotoVIP";
+    range 10.176.97.0 10.176.127.254;
+  }
+}
+
+###### Rockwood Ontario ##############
+subnet 10.176.128.0 netmask 255.255.224.0 {
+  option subnet-mask 255.255.224.0 ;
+  if substring (option vendor-class-identifier,0,4) = "MSFT"{
+    option routers 10.176.128.1 ;
+    option domain-name-servers 10.237.3.4, 10.237.3.5 ;
+  }
+  if substring (option vendor-class-identifier,0,2) = "RG"{
+    option classless-routes  = 0F:0A:EC:0A:B0:80:01 ;
+  }
+  pool {
+    deny members of "MotoVIP";
+    range 10.176.129.0 10.176.159.254;
+  }
+}
+
+###### North Bay 1 Ontario ##############
+subnet 10.176.160.0 netmask 255.255.224.0 {
+  option subnet-mask 255.255.224.0 ;
+  if substring (option vendor-class-identifier,0,4) = "MSFT"{
+    option routers 10.176.160.1 ;
+    option domain-name-servers 10.237.3.4, 10.237.3.5 ;
+  }
+  if substring (option vendor-class-identifier,0,2) = "RG"{
+    option classless-routes  = 0F:0A:EC:0A:B0:A0:01 ;
+  }
+  pool {
+    deny members of "MotoVIP";
+    range 10.176.161.0 10.176.191.254;
+  }
+}
+
+###### North Bay 2 Ontario ##############
+subnet 10.176.192.0 netmask 255.255.224.0 {
+  option subnet-mask 255.255.224.0 ;
+  if substring (option vendor-class-identifier,0,4) = "MSFT"{
+    option routers 10.176.192.1 ;
+    option domain-name-servers 10.237.3.4, 10.237.3.5 ;
+  }
+  if substring (option vendor-class-identifier,0,2) = "RG"{
+    option classless-routes  = 0F:0A:EC:0A:B0:C0:01 ;
+  }
+  pool {
+    deny members of "MotoVIP";
+    range 10.176.193.0 10.176.223.254;
+  }
+}
+
+###### Port Hawkesbury (PHBYNS01D02) ##############
+subnet 10.205.192.0 netmask 255.255.192.0 {
+option subnet-mask 255.255.192.0 ;
+    if substring (option vendor-class-identifier,0,4) = "MSFT"{
+        option routers 10.205.192.1 ;
+        option domain-name-servers 10.237.3.4, 10.237.3.5 ;
+    }
+    if substring (option vendor-class-identifier,0,2) = "RG"{
+        option classless-routes  = 0F:0A:EC:0A:CD:C0:01 ;
+    }
+    pool {
+        deny members of "MotoVIP";
+        range 10.205.193.0 10.205.255.254;
+    }
+}
+
+###### Antigonish  (AGSHNS01D03) ##############
+subnet 10.192.192.0 netmask 255.255.192.0 {
+option subnet-mask 255.255.192.0 ;
+    if substring (option vendor-class-identifier,0,4) = "MSFT"{
+        option routers 10.192.192.1 ;
+        option domain-name-servers 10.237.3.4, 10.237.3.5 ;
+    }
+    if substring (option vendor-class-identifier,0,2) = "RG"{
+        option classless-routes  = 0F:0A:EC:0A:C0:C0:01 ;
+    }
+    pool {
+        deny members of "MotoVIP";
+        range 10.192.193.0 10.192.255.254;
+    }
+}
+
+###### Antigonish  (AGSHNS01D03) ##############
+subnet 10.192.128.0 netmask 255.255.192.0 {
+option subnet-mask 255.255.192.0 ;
+    if substring (option vendor-class-identifier,0,4) = "MSFT"{
+        option routers 10.192.128.1 ;
+        option domain-name-servers 10.237.3.4, 10.237.3.5 ;
+    }
+    if substring (option vendor-class-identifier,0,2) = "RG"{
+        option classless-routes  = 0F:0A:EC:0A:C0:80:01 ;
+    }
+    pool {
+        deny members of "MotoVIP";
+        range 10.192.129.0 10.192.191.254;
+    }
+}
+
+###### Deer Lake (DRLKNF01D01) ##############
+subnet 10.225.128.0 netmask 255.255.192.0 {
+option subnet-mask 255.255.192.0 ;
+    if substring (option vendor-class-identifier,0,4) = "MSFT"{
+        option routers 10.225.128.1 ;
+        option domain-name-servers 10.237.3.4, 10.237.3.5 ;
+    }
+    if substring (option vendor-class-identifier,0,2) = "RG"{
+        option classless-routes  = 0F:0A:EC:0A:E1:80:01 ;
+    }
+    pool {
+        deny members of "MotoVIP";
+        range 10.225.129.0 10.225.191.254;
+    }
+}
+
+###### Rothesay (RHSYNBSCD05) ##############
+subnet 10.211.192.0 netmask 255.255.192.0 {
+option subnet-mask 255.255.192.0 ;
+    if substring (option vendor-class-identifier,0,4) = "MSFT"{
+        option routers 10.211.192.1 ;
+        option domain-name-servers 10.237.3.4, 10.237.3.5 ;
+    }
+    if substring (option vendor-class-identifier,0,2) = "RG"{
+        option classless-routes  = 0F:0A:EC:0A:D3:C0:01 ;
+    }
+    pool {
+        deny members of "MotoVIP";
+        range 10.211.193.0 10.211.255.254;
+    }
+}
+
+###### Devon (FCTNNBSDD08) ##############
+subnet 10.211.64.0 netmask 255.255.192.0 {
+option subnet-mask 255.255.192.0 ;
+    if substring (option vendor-class-identifier,0,4) = "MSFT"{
+        option routers 10.211.64.1 ;
+        option domain-name-servers 10.237.3.4, 10.237.3.5 ;
+    }
+    if substring (option vendor-class-identifier,0,2) = "RG"{
+        option classless-routes  = 0F:0A:EC:0A:D3:40:01 ;
+    }
+    pool {
+        deny members of "MotoVIP";
+        range 10.211.65.0 10.211.127.254;
+    }
+}
+
+###### Marystown (MYTWNF01D01) ##############
+subnet 10.225.192.0 netmask 255.255.192.0 {
+option subnet-mask 255.255.192.0 ;
+    if substring (option vendor-class-identifier,0,4) = "MSFT"{
+        option routers 10.225.192.1 ;
+        option domain-name-servers 10.237.3.4, 10.237.3.5 ;
+    }
+    if substring (option vendor-class-identifier,0,2) = "RG"{
+        option classless-routes  = 0F:0A:EC:0A:E1:C0:01 ;
+    }
+    pool {
+        deny members of "MotoVIP";
+        range 10.225.193.0 10.225.255.254;
+    }
+}
+
+#######Moncton NB, Mountain Rd. Edge 2##############
+subnet 10.215.192.0 netmask 255.255.192.0 {
+option subnet-mask 255.255.192.0 ;
+    if substring (option vendor-class-identifier,0,4) = "MSFT"{
+        option routers 10.215.192.1 ;
+        option domain-name-servers 10.237.3.4, 10.237.3.5 ;
+    }
+    if substring (option vendor-class-identifier,0,2) = "RG"{
+        option classless-routes  = 0F:0A:EC:0A:D7:C0:01 ;
+    }
+    pool {
+        deny members of "MotoVIP";
+        range 10.215.193.0 10.215.255.254;
+    }
+}
+
+###### Bay Roberts (BARTNF01D01) ##############
+subnet 10.226.128.0 netmask 255.255.192.0 {
+option subnet-mask 255.255.192.0 ;
+    if substring (option vendor-class-identifier,0,4) = "MSFT"{
+        option routers 10.226.128.1 ;
+        option domain-name-servers 10.237.3.4, 10.237.3.5 ;
+    }
+    if substring (option vendor-class-identifier,0,2) = "RG"{
+        option classless-routes  = 0F:0A:EC:0A:E2:80:01 ;
+    }
+    pool {
+        deny members of "MotoVIP";
+        range 10.226.129.0 10.226.191.254;
+    }
+}
+
+###### Sault Ste Marie 1 (SSMRON9432W) ##############
+subnet 10.177.0.0 netmask 255.255.224.0 {
+option subnet-mask 255.255.224.0 ;
+    if substring (option vendor-class-identifier,0,4) = "MSFT"{
+        option routers 10.177.0.1 ;
+        option domain-name-servers 10.237.3.4, 10.237.3.5 ;
+    }
+    if substring (option vendor-class-identifier,0,2) = "RG"{
+        option classless-routes  = 0F:0A:EC:0A:B1:00:01 ;
+    }
+    pool {
+        deny members of "MotoVIP";
+        range 10.177.1.0 10.177.31.254;
+    }
+}
+
+###### Sault Ste Marie 2 (SSMRON9433W) ##############
+subnet 10.177.64.0 netmask 255.255.224.0 {
+option subnet-mask 255.255.224.0 ;
+    if substring (option vendor-class-identifier,0,4) = "MSFT"{
+        option routers 10.177.64.1 ;
+        option domain-name-servers 10.237.3.4, 10.237.3.5 ;
+    }
+    if substring (option vendor-class-identifier,0,2) = "RG"{
+        option classless-routes  = 0F:0A:EC:0A:B1:40:01 ;
+    }
+    pool {
+        deny members of "MotoVIP";
+        range 10.177.65.0 10.177.95.254;
+    }
+}
+
+###### Timmins Edge #1 (TMNSONXT57W) ##############
+subnet 10.177.32.0 netmask 255.255.224.0 {
+option subnet-mask 255.255.224.0 ;
+    if substring (option vendor-class-identifier,0,4) = "MSFT"{
+        option routers 10.177.32.1 ;
+        option domain-name-servers 10.237.3.4, 10.237.3.5 ;
+    }
+    if substring (option vendor-class-identifier,0,2) = "RG"{
+        option classless-routes  = 0F:0A:EC:0A:B1:20:01 ;
+    }
+    pool {
+        deny members of "MotoVIP";
+        range 10.177.33.0 10.177.63.254;
+    }
+}
+
+###### Timmins Edge #2 (TMNSONXT58W) ##############
+subnet 10.177.96.0 netmask 255.255.224.0 {
+option subnet-mask 255.255.224.0 ;
+    if substring (option vendor-class-identifier,0,4) = "MSFT"{
+        option routers 10.177.96.1 ;
+        option domain-name-servers 10.237.3.4, 10.237.3.5 ;
+    }
+    if substring (option vendor-class-identifier,0,2) = "RG"{
+        option classless-routes  = 0F:0A:EC:0A:B1:60:01 ;
+    }
+    pool {
+        deny members of "MotoVIP";
+        range 10.177.97.0 10.177.127.254;
+    }
+}
+
+###### New Liskeard Edge #1 (NLKDONXT44W) ##############
+subnet 10.177.128.0 netmask 255.255.224.0 {
+option subnet-mask 255.255.224.0 ;
+    if substring (option vendor-class-identifier,0,4) = "MSFT"{
+        option routers 10.177.128.1 ;
+        option domain-name-servers 10.237.3.4, 10.237.3.5 ;
+    }
+    if substring (option vendor-class-identifier,0,2) = "RG"{
+        option classless-routes  = 0F:0A:EC:0A:B1:80:01 ;
+    }
+    pool {
+        deny members of "MotoVIP";
+        range 10.177.129.0 10.177.159.254;
+    }
+}
+
+###### New Liskeard Edge #1 (NLKDONXT44W) ##############
+subnet 10.177.192.0 netmask 255.255.224.0 {
+option subnet-mask 255.255.224.0 ;
+    if substring (option vendor-class-identifier,0,4) = "MSFT"{
+        option routers 10.177.192.1 ;
+        option domain-name-servers 10.237.3.4, 10.237.3.5 ;
+    }
+    if substring (option vendor-class-identifier,0,2) = "RG"{
+        option classless-routes  = 0F:0A:EC:0A:B1:C0:01 ;
+    }
+    pool {
+        deny members of "MotoVIP";
+        range 10.177.193.0 10.177.223.254;
+    }
+}
+
+###### Montague Edge   (MTAGPE03D05) ##############
+subnet 10.232.192.0 netmask 255.255.224.0 {
+option subnet-mask 255.255.224.0 ;
+    if substring (option vendor-class-identifier,0,4) = "MSFT"{
+        option routers 10.232.192.1 ;
+        option domain-name-servers 10.237.3.4, 10.237.3.5 ;
+    }
+    if substring (option vendor-class-identifier,0,2) = "RG"{
+        option classless-routes  = 0F:0A:EC:0A:E8:C0:01 ;
+    }
+    pool {
+        deny members of "MotoVIP";
+        range 10.232.193.0 10.232.223.254;
+    }
+}
+
+
+###### Summerside Edge#2  (SMSDPE01D10) ##############
+subnet 10.232.128.0 netmask 255.255.224.0 {
+option subnet-mask 255.255.224.0 ;
+    if substring (option vendor-class-identifier,0,4) = "MSFT"{
+        option routers 10.232.128.1 ;
+        option domain-name-servers 10.237.3.4, 10.237.3.5 ;
+    }
+    if substring (option vendor-class-identifier,0,2) = "RG"{
+        option classless-routes  = 0F:0A:EC:0A:E8:80:01 ;
+    }
+    pool {
+        deny members of "MotoVIP";
+        range 10.232.129.0 10.232.159.254;
+    }
+}
+
+
+###### Sydney NS Edge#3   (SYDNNS01D12) ##############
+subnet 10.197.192.0 netmask 255.255.224.0 {
+option subnet-mask 255.255.224.0 ;
+    if substring (option vendor-class-identifier,0,4) = "MSFT"{
+        option routers 10.197.192.1 ;
+        option domain-name-servers 10.237.3.4, 10.237.3.5 ;
+    }
+    if substring (option vendor-class-identifier,0,2) = "RG"{
+        option classless-routes  = 0F:0A:EC:0A:C5:C0:01 ;
+    }
+    pool {
+        deny members of "MotoVIP";
+        range 10.197.193.0 10.197.223.254;
+    }
+}
+
+###### Elmsdale NS    (EMDLNS01D02) ##############
+subnet 10.197.224.0 netmask 255.255.224.0 {
+option subnet-mask 255.255.224.0 ;
+    if substring (option vendor-class-identifier,0,4) = "MSFT"{
+        option routers 10.197.224.1 ;
+        option domain-name-servers 10.237.3.4, 10.237.3.5 ;
+    }
+    if substring (option vendor-class-identifier,0,2) = "RG"{
+        option classless-routes  = 0F:0A:EC:0A:C5:E0:01 ;
+    }
+    pool {
+        deny members of "MotoVIP";
+        range 10.197.225.0 10.197.255.254;
+    }
+}
+
+
+###### Rockingham NS   (HLFXNS05D11) ##############
+subnet 10.198.128.0 netmask 255.255.224.0 {
+option subnet-mask 255.255.224.0 ;
+    if substring (option vendor-class-identifier,0,4) = "MSFT"{
+        option routers 10.198.128.1 ;
+        option domain-name-servers 10.237.3.4, 10.237.3.5 ;
+    }
+    if substring (option vendor-class-identifier,0,2) = "RG"{
+        option classless-routes  = 0F:0A:EC:0A:C6:80:01 ;
+    }
+    pool {
+        deny members of "MotoVIP";
+        range 10.198.129.0 10.198.159.254;
+    }
+}
+
+###### Truro NS Edge 2   (TRURNS01D07) ##############
+subnet 10.198.160.0 netmask 255.255.224.0 {
+option subnet-mask 255.255.224.0 ;
+    if substring (option vendor-class-identifier,0,4) = "MSFT"{
+        option routers 10.198.160.1 ;
+        option domain-name-servers 10.237.3.4, 10.237.3.5 ;
+    }
+    if substring (option vendor-class-identifier,0,2) = "RG"{
+        option classless-routes  = 0F:0A:EC:0A:C6:A0:01 ;
+    }
+    pool {
+        deny members of "MotoVIP";
+        range 10.198.161.0 10.198.191.254;
+    }
+}
+
+
+
+
+log (info, concat ("LEASE for ", binary-to-ascii (10, 8, ".", leased-address), " via ", option agent.circuit-id, " from ", substring (binary-to-ascii (16, 8, ":", hardware), 0, 50)));
+

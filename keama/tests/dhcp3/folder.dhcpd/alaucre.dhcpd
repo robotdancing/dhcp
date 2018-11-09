@@ -6,7 +6,8 @@
 option sip-server-address code 120 = string;
 
 # Acatel ATAs require TFTP server option
-option tftp-server-address code 66 = string;
+#option tftp-server-address code 66 = string;
+#address is 150, here it should be name
 
 shared-network alaucre {
     authoritative;
@@ -65,7 +66,7 @@ shared-network alaucre {
         option sip-server-address 1:44:ea:80:49;   # 69.73.91.40
 
         # Acatel ATAs require TFTP server option
-        option tftp-server-address "68.234.128.73";
+        option tftp-server-name "68.234.128.73";
 
         pool {
             failover peer "NATIONAL";
