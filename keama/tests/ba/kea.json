@@ -115,13 +115,7 @@
 //      "code": 121,
 //      "type": "string"
 //    },
-      {
-        "space": "dhcp4",
-        "name": "option-150",
-        "code": 150,
-        "array": true,
-        "type": "ipv4-address"
-      },
+      #option option-150 code 150 = array of ip-address;
       {
         "space": "dhcp4",
         "name": "option-176",

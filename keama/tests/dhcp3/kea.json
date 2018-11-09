@@ -867,14 +867,6 @@
         "code": 120,
         "type": "string"
       }
-//    # Acatel ATAs require TFTP server option
-//    /// Kea does not allow redefinition of options
-//    {
-//      "space": "dhcp4",
-//      "name": "tftp-server-address",
-//      "code": 66,
-//      "type": "string"
-//    }
     ],
     "client-classes": [
       # Define device classes
@@ -1020,6 +1012,9 @@
     ],
     /// Kea shared-networks are different, cf Kea #236
     "shared-networks": [
+      # Acatel ATAs require TFTP server option
+      #option tftp-server-address code 66 = string;
+      #address is 150, here it should be name
       {
         "name": "alaucre",
         "subnet4": [
@@ -1168,7 +1163,7 @@
                 "name": "domain-name-servers",
                 "code": 6,
                 "data": "66.253.214.16, 50.30.184.16"
-              }
+              },
 //            # Sip Server option need for Acatel ATAs
 //            # add 01: +  the hexadecimal version of the IP address
 //            # Ex: IP address 10.0.8.174 converted to hexadecimal
@@ -1182,15 +1177,15 @@
 //              /// Please consider to change last type in the record to binary
 //              /// Reference Kea #246
 //              "data": "0144ea8049"
-//            }
-//            # 69.73.91.40
-//            # Acatel ATAs require TFTP server option
-//            {
-//              "space": "dhcp4",
-//              "name": "tftp-server-address",
-//              "code": 66,
-//              "data": "68.234.128.73"
-//            }
+//            },
+              # 69.73.91.40
+              # Acatel ATAs require TFTP server option
+              {
+                "space": "dhcp4",
+                "name": "tftp-server-name",
+                "code": 66,
+                "data": "68.234.128.73"
+              }
             ],
             "valid-lifetime": 14400,
             "pools": [

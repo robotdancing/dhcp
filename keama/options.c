@@ -160,12 +160,12 @@ struct option_def options4[] = {
 	/// not supported by ISC DHCP
 	{ "client-last-transaction-time", "L",  "dhcp",  91, 2},
 	{ "associated-ip", "Ia",                "dhcp",  92, 2},
-	{ "client-system", "S",			"dhcp",  93, 1},
-	/// not supported by ISC DHCP
-	{ "client-ndi", "BBB",			"dhcp",  94, 1},
-	/// not supported by ISC DHCP
-	{ "uuid-guid", "BX",			"dhcp",  97, 1},
-	/// not supported by ISC DHCP
+	{ "pxe-system-type", "Sa",		"dhcp",  93, 2},
+	// pxe-system-type client-system
+	{ "pxe-interface-id", "BBB",		"dhcp",  94, 2},
+	// pxe-interface-id client-ndi
+	{ "pxe-client-id", "BX",		"dhcp",  97, 2},
+	// pxe-client-id uuid-guid
 	{ "uap-servers", "t",			"dhcp",  98, 2},
         { "geoconf-civic", "X",                 "dhcp",  99, 2},
 	{ "pcode", "t",				"dhcp", 100, 2},
@@ -188,6 +188,8 @@ struct option_def options4[] = {
 	{ "ipv4-address-andsf", "Ia",		"dhcp", 142, 0},
 	/// not supported by Kea
         { "rdnss-selection", "BIID",		"dhcp", 146, 2},
+	{ "tftp-server-address", "Ia",		"dhcp", 150, 0},
+	/// not supported by Kea
 	{ "v4-portparams", "BBS",		"dhcp", 159, 2},
 	{ "v4-captive-portal", "t",		"dhcp", 160, 2},
         { "option-6rd", "BB6Ia",		"dhcp", 212, 2},
@@ -297,6 +299,7 @@ struct option_def agents[] = {
 	{ "agent-id", "I",			"agent",   3, 0},
 	{ "DOCSIS-device-class", "L",		"agent",   4, 0},
 	{ "link-selection", "I",		"agent",   5, 0},
+	{ "relay-port", "Z",			"agent",  19, 0},
 	{ NULL, NULL, NULL, 0, 0 }
 };
 
@@ -361,6 +364,8 @@ struct option_def configs[] = {
 	{ "dhcpv6-pid-file-name", "t",		"server",  55, 0},
 	{ "limit-addrs-per-ia", "L",		"server",  56, 0},
 	{ "limit-prefs-per-ia", "L",		"server",  57, 0},
+ 	{ "delayed-ack", "S",			"server",  58, 0},
+ 	{ "max-ack-delay", "L",			"server",  59, 0},
 	{ "dhcp-cache-threshold", "B",		"server",  78, 0},
 	{ "dont-use-fsync", "f",		"server",  79, 0},
 	{ "ddns-local-address4", "I",		"server",  80, 0},
@@ -374,6 +379,10 @@ struct option_def configs[] = {
 						"server",  87, 0},
 	{ "dhcpv6-set-tee-times", "f",		"server",  88, 0},
 	{ "abandon-lease-time", "T",		"server",  89, 0},
+ 	{ "use-eui-64", "f",			"server",  90, 0},
+	{ "release-on-roam", "f",		"server",  95, 0},
+	{ "local-address6", "6",		"server",  96, 0},
+	{ "ping-cltt-secs", "T",		"server",  98, 0},
 	{ NULL, NULL, NULL, 0, 0 }
 };
 
@@ -426,6 +435,15 @@ options_init(void)
 			break;
 		case 82:
 			option->name = "dhcp-agent-options";
+			break;
+		case 93:
+			option->name = "client-system";
+			break;
+		case 94:
+			option->name = "client-ndi";
+			break;
+		case 97:
+			option->name = "uuid-guid";
 			break;
 		case 124:
 			option->name = "vivco-suboptions";
@@ -1005,6 +1023,12 @@ get_config_comments(unsigned code)
                 TAILQ_INSERT_TAIL(&comments, comment);
 		goto limit_resources;
 
+	case 58: /* delayed-ack */
+	case 59: /* max-ack-delay */
+		comment = createComment("/// delayed ack no supported");
+		TAILQ_INSERT_TAIL(&comments, comment);
+		break;
+
 	case 78: /* dhcp-cache-threshold */
 		comment = createComment("/// dhcp-cache-threshold "
 					"is not (yet?) supported");
@@ -1084,6 +1108,30 @@ get_config_comments(unsigned code)
 					"and decline-probation-period");
 		TAILQ_INSERT_TAIL(&comments, comment);
 		break;
+	case 90: /* use-eui-64 */
+		comment = createComment("/// EUI-64 is not (yet) supported");
+		TAILQ_INSERT_TAIL(&comments, comment);
+		comment = createComment("/// Reference Kea #265");
+		TAILQ_INSERT_TAIL(&comments, comment);
+                break;
+	case 95: /* release-on-roam */
+		comment = createComment("/// release-on-roam is not (yet) "
+					"supported");
+		TAILQ_INSERT_TAIL(&comments, comment);
+		comment = createComment("/// Reference Kea #266");
+		TAILQ_INSERT_TAIL(&comments, comment);
+                break;
+	case 96: /* local-address6 */
+		comment = createComment("/// local-address6 is not supported");
+		TAILQ_INSERT_TAIL(&comments, comment);
+		comment = createComment("/// Kea equivalent feature is "
+					"to specify an interface address");
+		TAILQ_INSERT_TAIL(&comments, comment);
+		break;
+	case 98: /* ping-cltt-secs */
+		comment = createComment("/// ping-cltt-secs is not supported");
+		TAILQ_INSERT_TAIL(&comments, comment);
+		goto no_ping;
 	}
 	return &comments;
 }
