@@ -366,6 +366,7 @@ struct option_def configs[] = {
 	{ "limit-prefs-per-ia", "L",		"server",  57, 0},
  	{ "delayed-ack", "S",			"server",  58, 0},
  	{ "max-ack-delay", "L",			"server",  59, 0},
+	/* LDAP */
 	{ "dhcp-cache-threshold", "B",		"server",  78, 0},
 	{ "dont-use-fsync", "f",		"server",  79, 0},
 	{ "ddns-local-address4", "I",		"server",  80, 0},
@@ -380,8 +381,15 @@ struct option_def configs[] = {
 	{ "dhcpv6-set-tee-times", "f",		"server",  88, 0},
 	{ "abandon-lease-time", "T",		"server",  89, 0},
  	{ "use-eui-64", "f",			"server",  90, 0},
+        { "check-secs-byte-order", "f",         "server",  91, 0},
+        /* Duplicate */
+        { "persist-eui-64-leases", "f",         "server",  91, 0},
+        { "ddns-dual-stack-mixed-mode", "f",    "server",  92, 0},
+        { "ddns-guard-id-must-match", "f",      "server",  93, 0},
+        { "ddns-other-guard-is-dynamic", "f",   "server",  94, 0},
 	{ "release-on-roam", "f",		"server",  95, 0},
 	{ "local-address6", "6",		"server",  96, 0},
+        { "bind-local-address6", "f",           "server",  97, 0},
 	{ "ping-cltt-secs", "T",		"server",  98, 0},
 	{ NULL, NULL, NULL, 0, 0 }
 };
