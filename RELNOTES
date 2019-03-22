@@ -109,6 +109,23 @@ by Eric Young (eay@cryptsoft.com).
   this dependency.
   [ISC-Bugs #3,!1   git #cc35f84943df44dac2499f3e16e8aaba7d54191d]
 
+- Several options were changed from option format of "d" which in reality
+  is simply treated as text, to a format of "D" which is RFC 1035 compliant
+  host names.  You must now specify these values as single hostname
+  enclosed in quotes.   The affected options are:
+
+    DHCPv4:
+        v4-lost
+        v4-access-domain
+    DHCPv6:
+        v6-lost
+        v6-access-domain
+        aftr-name
+        erp-local-domain-name
+
+  Thanks to Jay Doran at BlueCat Networks for reporting this issue.
+  [ISC-Bugs #2,!3   git #TDB]
+
 		Changes since 4.4.0 (New Features)
 - none
 		Changes since 4.4.0 (Bug Fixes)

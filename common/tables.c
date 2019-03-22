@@ -236,7 +236,7 @@ static struct option dhcp_options[] = {
 	{"pana-agent", "Ia",			&dhcp_universe, 136, 1 },
 #endif
 #if defined(RFC5223_OPTIONS)
-	{"v4-lost", "d",			&dhcp_universe, 137, 1 },
+	{"v4-lost", "D",			&dhcp_universe, 137, 1 },
 #endif
 #if defined(RFC5417_OPTIONS)
 	{"capwap-ac-v4", "Ia",			&dhcp_universe, 138, 1 },
@@ -272,7 +272,7 @@ static struct option dhcp_options[] = {
         { "option-6rd", "BB6Ia",		&dhcp_universe, 212, 1 },
 #endif
 #if defined(RFC5986_OPTIONS)
-	{"v4-access-domain", "d",		&dhcp_universe, 213, 1 },
+	{"v4-access-domain", "D",		&dhcp_universe, 213, 1 },
 #endif
 	{ NULL, NULL, NULL, 0, 0 }
 };
@@ -497,7 +497,7 @@ static struct option dhcpv6_options[] = {
 
 			/* RFC5223 OPTIONS */
 #if defined(RFC5223_OPTIONS)
-	{ "v6-lost", "d",			&dhcpv6_universe, 51, 1 },
+	{ "v6-lost", "D",			&dhcpv6_universe, 51, 1 },
 #endif
 
 			/* RFC5417 OPTIONS */
@@ -512,7 +512,7 @@ static struct option dhcpv6_options[] = {
 
 			/* RFC5986 OPTIONS */
 #if defined(RFC5986_OPTIONS)
-	{ "v6-access-domain", "d",		&dhcpv6_universe, 57, 1 },
+	{ "v6-access-domain", "D",		&dhcpv6_universe, 57, 1 },
 #endif
 
 			/* RFC6011 OPTIONS */
@@ -530,12 +530,12 @@ static struct option dhcpv6_options[] = {
 
 			/* RFC6334 OPTIONS */
 #if defined(RFC6334_OPTIONS)
-	{ "aftr-name", "d",			&dhcpv6_universe, 64, 1 },
+	{ "aftr-name", "D",			&dhcpv6_universe, 64, 1 },
 #endif
 
 			/* RFC6440 OPTIONS */
 #if defined(RFC6440_OPTIONS)
-	{ "erp-local-domain-name", "d",		&dhcpv6_universe, 65, 1 },
+	{ "erp-local-domain-name", "D",		&dhcpv6_universe, 65, 1 },
 #endif
 
 			/* RFC6731 OPTIONS */
