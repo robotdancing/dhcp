@@ -73,18 +73,18 @@ fi
 
 if [ $errcase -ne 0 ]; then
 	if [ $dual -eq 1 ]; then
-		../keama -4 -i $full >& $out
+		../keama -4 -i $full >$out 2>&1
 		if [ $? -ne 255 ]; then
 			echo "$full -4 doesn't fail as expected" >&2
 			exit 1
 		fi
-		../keama -6 -i $full >& $out
+		../keama -6 -i $full >$out 2>&1 
 		if [ $? -ne 255 ]; then
 			echo "$full -6 doesn't fail as expected" >&2
 			exit 1
 		fi
 	else
-		../keama $options -i $full >& $out
+		../keama $options -i $full >$out 2>&1 
 		if [ $? -ne 255 ]; then
 			echo "$full doesn't fail as expected" >&2
 			exit 1
