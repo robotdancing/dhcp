@@ -1151,6 +1151,7 @@ eval_data_expression(struct element *expr, isc_boolean_t *modifiedp)
 				fmt = "%d";
 				break;
 			case 16:
+            default:
 				fmt = "%x";
 				break;
 			}
@@ -1180,6 +1181,7 @@ eval_data_expression(struct element *expr, isc_boolean_t *modifiedp)
 				fmt = "%d";
 				break;
 			case 16:
+            default:
 				fmt = "%x";
 				break;
 			}
@@ -1190,7 +1192,7 @@ eval_data_expression(struct element *expr, isc_boolean_t *modifiedp)
 				
 				if (i != 0)
 					concatString(r, sep);
-				memcmp(&val, buf->content + i, 2);
+				memcpy(&val, buf->content + i, 2);
 				val = ntohs(val);
 				snprintf(num, sizeof(num), fmt, (int)val);
 				appendString(r, num);
@@ -1210,6 +1212,7 @@ eval_data_expression(struct element *expr, isc_boolean_t *modifiedp)
 				fmt = "%lld";
 				break;
 			case 16:
+            default:
 				fmt = "%llx";
 				break;
 			}
@@ -1220,7 +1223,7 @@ eval_data_expression(struct element *expr, isc_boolean_t *modifiedp)
 				
 				if (i != 0)
 					concatString(r, sep);
-				memcmp(&val, buf->content + i, 4);
+				memcpy(&val, buf->content + i, 4);
 				val = ntohl(val);
 				snprintf(num, sizeof(num), fmt,
 					 (long long)val);
@@ -2195,7 +2198,6 @@ cmp_hexa(struct element *left, isc_boolean_t left_is_hexa,
 {
 	struct string *sleft;
 	struct string *sright;
-	struct string *hexa;
 
 	/* both are not hexa */
 	if (!left_is_hexa && !right_is_hexa) {
@@ -2233,7 +2235,7 @@ cmp_hexa(struct element *left, isc_boolean_t left_is_hexa,
 		return ISC_FALSE;
 
 	/* build the hexa representation */
-	hexa = makeStringExt(sright->length, sright->content, 'X');
+	makeStringExt(sright->length, sright->content, 'X');
 
 	return ISC_TF(strcasecmp(sleft->content, sright->content) == 0);
 }
