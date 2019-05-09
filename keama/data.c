@@ -655,7 +655,8 @@ listGet(struct element *l, int i)
 	assert(elem != NULL);
 	assert(elem->key == NULL);
 
-	for (unsigned j = i; j > 0; --j) {
+	unsigned j;
+	for (j = i; j > 0; --j) {
 		elem = TAILQ_NEXT(elem);
 		assert(elem != NULL);
 		assert(elem->key == NULL);
@@ -681,7 +682,8 @@ listSet(struct element *l, struct element *e, int i)
 		assert(prev != NULL);
 		assert(prev->key == NULL);
 
-		for (unsigned j = i; j > 1; --j) {
+		unsigned j;
+		for (j = i; j > 1; --j) {
 			prev = TAILQ_NEXT(prev);
 			assert(prev != NULL);
 			assert(prev->key == NULL);
@@ -714,7 +716,8 @@ listRemove(struct element *l, int i)
 	assert(elem != NULL);
 	assert(elem->key == NULL);
 
-	for (unsigned j = i; j > 0; --j) {
+	unsigned j;
+	for (j = i; j > 0; --j) {
 		elem = TAILQ_NEXT(elem);
 		assert(elem != NULL);
 		assert(elem->key == NULL);

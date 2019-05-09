@@ -435,7 +435,6 @@ read_conf_file(struct parse *parent, const char *filename, int group_type)
 	struct string *msg;
 	struct comment *comment;
 	size_t amount = parent->stack_size * sizeof(struct element *);
-	size_t cnt;
 
 	if ((file = open (filename, O_RDONLY)) < 0)
 
@@ -459,7 +458,7 @@ read_conf_file(struct parse *parent, const char *filename, int group_type)
 	comment = createComment(msg->content);
 	TAILQ_INSERT_TAIL(&cfile->comments, comment);
 
-	cnt = conf_file_subparse(cfile, group_type);
+	conf_file_subparse(cfile, group_type);
 
 	amount = cfile->stack_size * sizeof(struct element *);
 	if (cfile->stack_size > parent->stack_size) {
@@ -1535,20 +1534,20 @@ static void add_host_reservation_identifiers(struct parse *, const char *);
 void
 parse_class_declaration(struct parse *cfile, int type)
 {
-	const char *val;
+	const char *val = NULL;
 	enum dhcp_token token;
-	size_t group;
-	size_t i;
+	size_t group = 0;
+	size_t i = 0;
 	struct element *group_classes = NULL;
-	struct element *classes;
+	struct element *classes = NULL;
 	struct element *class = NULL;
 	struct element *pc = NULL; /* p(arent)c(lass) */
-	struct element *tmp;
-	struct element *expr;
-	struct element *data;
+	struct element *tmp = NULL;
+	struct element *expr = NULL;
+	struct element *data = NULL;
 	isc_boolean_t binary = ISC_FALSE;
 	int declaration = 0;
-	struct string *name;
+	struct string *name = NULL;
 	isc_boolean_t lose = ISC_FALSE;
 	isc_boolean_t matchedonce = ISC_FALSE;
 	isc_boolean_t submatchedonce = ISC_FALSE;
@@ -2298,7 +2297,7 @@ parse_subnet_declaration(struct parse *cfile)
 	struct string *prefix;
 	unsigned char addr[4];
 	unsigned len = sizeof(addr);
-	size_t parent;
+	size_t parent = 0;
 	size_t i;
 	int kind = 0;
 
@@ -2388,7 +2387,7 @@ parse_subnet6_declaration(struct parse *cfile)
 	struct string *address;
 	struct string *prefix;
 	struct string *netmask;
-	size_t parent;
+	size_t parent = 0;
         size_t i;
         int kind = 0;
 	char *p;
@@ -2553,7 +2552,7 @@ close_group(struct parse *cfile, struct element *group)
 	struct handle *pools = NULL;
 	struct handles downs;
 	struct comment *comment;
-	const char *key;
+	const char *key = NULL;
 	const char *name = NULL;
 	unsigned order = 0;
 	isc_boolean_t marked = ISC_FALSE;
@@ -3053,7 +3052,6 @@ parse_address_range(struct parse *cfile, int type, size_t where)
 	unsigned len = sizeof(addr);
 	enum dhcp_token token;
 	const char *val;
-	isc_boolean_t dynamic = ISC_FALSE;
 	struct element *pool;
 	struct element *r;
 	struct range *chain;
@@ -3062,7 +3060,6 @@ parse_address_range(struct parse *cfile, int type, size_t where)
 
 	if ((token = peek_token(&val, NULL, cfile)) == DYNAMIC_BOOTP) {
 		skip_token(&val, NULL, cfile);
-		dynamic = ISC_TRUE;
 	}
 
 	/* Get the bottom address in the range... */
@@ -4083,9 +4080,6 @@ parse_option_space_dir(struct parse *cfile)
 	if (token == DYNAMIC)
 		space->status = dynamic;
 	else if (token == UNKNOWN) {
-		isc_boolean_t isc_known;
-
-		isc_known = ISC_TRUE;
 		token = next_token(NULL, NULL, cfile);
 		if (token == KNOWN)
 			space->status = known;
@@ -4096,9 +4090,6 @@ parse_option_space_dir(struct parse *cfile)
 	} else if (token != UNKNOWN)
 		parse_error(cfile, "expected KNOW or UNKNOWN or DYNAMIC");
 	else {
-		isc_boolean_t isc_known;
-
-		isc_known = ISC_FALSE;
                 if (token == KNOWN)
 			space->status = isc_dhcp_unknown;
                 else if (token == UNKNOWN)
@@ -4196,12 +4187,9 @@ void
 parse_option_status_dir(struct parse *cfile, struct option *option,
 			enum dhcp_token token)
 {
-	isc_boolean_t isc_known;
-
 	if (token == DYNAMIC)
 		option->status = dynamic;
 	else if (token == KNOWN) {
-		isc_known = ISC_TRUE;
 		token = next_token(NULL, NULL, cfile);
 		if (token == KNOWN)
 			option->status = known;
@@ -4212,7 +4200,6 @@ parse_option_status_dir(struct parse *cfile, struct option *option,
 	} else if (token != UNKNOWN)
 		parse_error(cfile, "expected KNOW or UNKNOWN or DYNAMIC");
 	else {
-		isc_known = ISC_FALSE;
 		if (token == KNOWN)
 			option->status = isc_dhcp_unknown;
 		else if (token == UNKNOWN)

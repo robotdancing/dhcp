@@ -468,7 +468,7 @@ parse_numeric_aggregate(struct parse *cfile, unsigned char *buf,
 	enum dhcp_token token;
 	unsigned char *bufp = buf, *s;
 	unsigned count = 0;
-	struct string *r = NULL, *t;
+	struct string *r = NULL, *t = NULL;
 
 	if (!bufp && *max) {
 		bufp = (unsigned char *)malloc(*max * size / 8);
@@ -3078,9 +3078,7 @@ parse_non_binary(struct element *expr,
 		if (token == OPTION)
 			mapSet(expr, nexp, "option");
 		else {
-			struct comment *comment;
-
-			comment = createComment("/// config-option is "
+			createComment("/// config-option is "
 						"not supported by Kea");
 			TAILQ_CONCAT(&nexp->comments, &cfile->comments);
 			mapSet(expr, nexp, "config-option");
@@ -5341,7 +5339,7 @@ static void
 config_ddns_update_style(struct element *config, struct parse *cfile)
 {
 	struct element *value;
-	isc_boolean_t enable;
+	isc_boolean_t enable = ISC_FALSE;
 	size_t scope;
 
 	value = mapGet(config, "value");
