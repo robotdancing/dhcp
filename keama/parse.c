@@ -3812,10 +3812,11 @@ new_rhs:
 			binop_name = "or";
 		boolean:
 			if ((rhs_context != context_boolean) &&
-			    (rhs_context != context_any))
+			    (rhs_context != context_any)) {
 				parse_error(cfile,
 					    "expecting boolean expressions");
-				break;
+			}
+			break;
 
 		case expr_add:
 			binop_name = "add";
