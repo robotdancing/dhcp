@@ -96,6 +96,14 @@ by Eric Young (eay@cryptsoft.com).
   a more detailed discussion.
   [ISC-Bugs #36283]
 
+- A new configuration parameter, ping-timeout-ms (v4 operation only),
+  has been added that allows the user to specify the amount of time
+  the server waits for a ping-check response in milliseconds rather
+  than in seconds (via ping-timeout). When greater than zero, the value
+  of ping-timeout-ms will override the value of ping-timeout.  Thanks
+  to Jay Doran from Bluecat Networks for suggesting this feature.
+  [ISC-Bugs #10]
+
 		Changes since 4.4.1 (Bug Fixes)
 
 - Corrected a misuse of the BIND9 DDNS API which caused DDNS updates to be
