@@ -3578,6 +3578,7 @@ int parse_lease_declaration (struct lease **lp, struct parse *cfile)
 			    if (token != EQUAL) {
 				parse_warn (cfile,
 					    "expecting '=' in set statement.");
+				binding_value_dereference(&nv, MDL);
 				if (newbinding) {
 					dfree(binding->name, MDL);
 					dfree(binding, MDL);
