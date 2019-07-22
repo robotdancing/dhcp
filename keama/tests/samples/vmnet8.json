@@ -28,16 +28,7 @@
 //    }
 //  },
     "valid-lifetime": 1800,
-//  "config": [
-//    /// max-lease-time is not supported
-//    /// use default-lease-time instead
-//    /// Reference Kea #221
-//    {
-//      "name": "max-lease-time",
-//      "code": 2,
-//      "value": 7200
-//    }
-//  ],
+    "max-valid-lifetime": 7200,
     "subnet4": [
       # default is 2 hours
       {
@@ -82,16 +73,7 @@
           }
         ],
         "valid-lifetime": 1800,
-//      "config": [
-//        /// max-lease-time is not supported
-//        /// use default-lease-time instead
-//        /// Reference Kea #221
-//        {
-//          "name": "max-lease-time",
-//          "code": 2,
-//          "value": 7200
-//        }
-//      ],
+        "max-valid-lifetime": 7200,
         "reservations": [
           {
             "hostname": "vmnet8",

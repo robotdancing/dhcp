@@ -30,7 +30,9 @@
 #include <stdlib.h>
 #include <string.h>
 
-static void config_valid_lifetime(struct element *, struct parse *);
+static void config_min_valid_lifetime(struct element *, struct parse *);
+static void config_def_valid_lifetime(struct element *, struct parse *);
+static void config_max_valid_lifetime(struct element *, struct parse *);
 static void config_file(struct element *, struct parse *);
 static void config_sname(struct element *, struct parse *);
 static void config_next_server(struct element *, struct parse *);
@@ -4943,7 +4945,13 @@ parse_config_statement(struct element *result,
 
 	switch (option->code) {
 	case 1: /* default-lease-time */
-		config_valid_lifetime(config, cfile);
+		config_def_valid_lifetime(config, cfile);
+		break;
+	case 2: /* max-lease-time */
+		config_max_valid_lifetime(config, cfile);
+		break;
+	case 3: /* min-lease-time */
+		config_min_valid_lifetime(config, cfile);
 		break;
 	case 15: /* filename */
 		config_file(config, cfile);
@@ -4990,7 +4998,7 @@ parse_config_statement(struct element *result,
 }
 
 static void
-config_valid_lifetime(struct element *config, struct parse *cfile)
+config_def_valid_lifetime(struct element *config, struct parse *cfile)
 {
 	struct element *value;
 	struct comment *comment;
@@ -5013,19 +5021,97 @@ config_valid_lifetime(struct element *config, struct parse *cfile)
 			pop_from_pool = ISC_TRUE;
 			continue;
 		}
-		comment = createComment("/// valid-lifetime in unsupported "
-					"scope");
+		comment = createComment("/// default-valid-lifetime in "
+					"unsupported scope");
 		TAILQ_INSERT_TAIL(&value->comments, comment);
 		value->skip = ISC_TRUE;
 		cfile->issue_counter++;
 		break;
 	}
 	if (pop_from_pool) {
-		comment= createComment("/// valid-lifetime moved from "
+		comment= createComment("/// default-valid-lifetime moved from "
 				       "an internal pool scope");
 		TAILQ_INSERT_TAIL(&value->comments, comment);
 	}
 	mapSet(cfile->stack[scope], value, "valid-lifetime");
+}
+
+static void
+config_min_valid_lifetime(struct element *config, struct parse *cfile)
+{
+	struct element *value;
+	struct comment *comment;
+	size_t scope;
+	isc_boolean_t pop_from_pool = ISC_FALSE;
+
+	value = mapGet(config, "value");
+
+	for (scope = cfile->stack_top; scope > 0; --scope) {
+		int kind = cfile->stack[scope]->kind;
+
+		if (kind == PARAMETER)
+			continue;
+		if ((kind == ROOT_GROUP) ||
+		    (kind == SHARED_NET_DECL) ||
+		    (kind == SUBNET_DECL) ||
+		    (kind == GROUP_DECL))
+			break;
+		if (kind == POOL_DECL) {
+			pop_from_pool = ISC_TRUE;
+			continue;
+		}
+		comment = createComment("/// min-valid-lifetime in "
+					"unsupported scope");
+		TAILQ_INSERT_TAIL(&value->comments, comment);
+		value->skip = ISC_TRUE;
+		cfile->issue_counter++;
+		break;
+	}
+	if (pop_from_pool) {
+		comment= createComment("/// min-valid-lifetime moved from "
+				       "an internal pool scope");
+		TAILQ_INSERT_TAIL(&value->comments, comment);
+	}
+	mapSet(cfile->stack[scope], value, "min-valid-lifetime");
+}
+
+static void
+config_max_valid_lifetime(struct element *config, struct parse *cfile)
+{
+	struct element *value;
+	struct comment *comment;
+	size_t scope;
+	isc_boolean_t pop_from_pool = ISC_FALSE;
+
+	value = mapGet(config, "value");
+
+	for (scope = cfile->stack_top; scope > 0; --scope) {
+		int kind = cfile->stack[scope]->kind;
+
+		if (kind == PARAMETER)
+			continue;
+		if ((kind == ROOT_GROUP) ||
+		    (kind == SHARED_NET_DECL) ||
+		    (kind == SUBNET_DECL) ||
+		    (kind == GROUP_DECL))
+			break;
+		if (kind == POOL_DECL) {
+			pop_from_pool = ISC_TRUE;
+			continue;
+		}
+		comment = createComment("/// max-valid-lifetime in "
+					"unsupported scope");
+		TAILQ_INSERT_TAIL(&value->comments, comment);
+		value->skip = ISC_TRUE;
+		cfile->issue_counter++;
+		break;
+	}
+	if (pop_from_pool) {
+		comment= createComment("/// max-valid-lifetime moved from "
+				       "an internal pool scope");
+		TAILQ_INSERT_TAIL(&value->comments, comment);
+	}
+	mapSet(cfile->stack[scope], value, "max-valid-lifetime");
 }
 
 static void

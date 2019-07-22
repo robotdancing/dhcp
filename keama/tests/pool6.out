@@ -8,7 +8,7 @@
       {
         "id": 1,
         "subnet": "2001::/64",
-        /// valid-lifetime moved from an internal pool scope
+        /// default-valid-lifetime moved from an internal pool scope
         "valid-lifetime": 1800,
         "pools": [
           # pool declaration

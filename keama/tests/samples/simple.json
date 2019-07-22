@@ -17,16 +17,7 @@
       }
     ],
     "valid-lifetime": 1800,
-//  "config": [
-//    /// max-lease-time is not supported
-//    /// use default-lease-time instead
-//    /// Reference Kea #221
-//    {
-//      "name": "max-lease-time",
-//      "code": 2,
-//      "value": 7200
-//    }
-//  ],
+    "max-valid-lifetime": 7200,
     # We're going to be authoritative for the network we've
     # just created.
     "authoritative": true,

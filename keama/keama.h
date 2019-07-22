@@ -301,6 +301,7 @@ void stackPush(struct parse *cfile, struct element *elem);
 
 /* From command line */
 extern char *hook_library_path;
+extern isc_boolean_t use_isc_lifetimes;
 extern isc_boolean_t global_hr;
 
 /* From common/parse.c */

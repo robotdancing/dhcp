@@ -11,6 +11,8 @@ Extensions:
  - .msg  = resultat (first line of standard error) for error test
  - .in4  = source for working test in DHCPv4
  - .in6  = source for working test in DHCPv6
+ - .ind  = source for working test in DHCPv4 with -D
+ - .inD  = source for working test in DHCPv6 with -D
  - .inn  = source for working test in DHCPv4 with -N
  - .inN  = source for working test in DHCPv6 with -N
  - .inl  = source for working test in DHCPv4 with -l $HOOK

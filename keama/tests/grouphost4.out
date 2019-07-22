@@ -55,7 +55,7 @@
 //          "hostname": "test3",
 //          "hw-address": "fddi 00:07:0e:36:48:19",
 //          "ip-address": "10.10.10.1",
-//          /// valid-lifetime in unsupported scope
+//          /// default-valid-lifetime in unsupported scope
 //          "valid-lifetime": 3600,
 //          "option-data": [
 //            {

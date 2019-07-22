@@ -32,7 +32,7 @@
 
 #include "keama.h"
 
-#define KEAMA_USAGE	"Usage: keama [-4|-6] [-N]" \
+#define KEAMA_USAGE	"Usage: keama [-4|-6] [-D] [-N]" \
 			" [-r {perform|fatal|pass}\\n" \
 			" [-l hook-library-path]" \
 			" [-i input-file] [-o output-file]\n"
@@ -53,6 +53,7 @@ char *input_file = NULL;
 char *output_file = NULL;
 FILE *input = NULL;
 FILE *output = NULL;
+isc_boolean_t use_isc_lifetimes = ISC_FALSE;
 isc_boolean_t global_hr = ISC_TRUE;
 isc_boolean_t json = ISC_FALSE;
 
@@ -74,6 +75,8 @@ main(int argc, char **argv) {
 			local_family = AF_INET;
 		else if (strcmp(argv[i], "-6") == 0)
 			local_family = AF_INET6;
+		else if (strcmp(argv[i], "-D") == 0)
+			use_isc_lifetimes = ISC_TRUE;
 		else if (strcmp(argv[i], "-N") == 0)
 			global_hr = ISC_FALSE;
 		else if (strcmp(argv[i], "-T") == 0)

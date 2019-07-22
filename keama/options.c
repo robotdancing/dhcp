@@ -287,6 +287,7 @@ struct option_def options6[] = {
 	{ "dhcp4-o-dhcp6-server", "6a",		"dhcp6", 88, 2},
 	/// dhcp4-o-dhcp6-server dhcp4o6-server-addr
 	{ "v6-captive-portal", "t",		"dhcp6", 103, 2},
+	{ "relay-source-port", "S",		"dhcp6", 135, 2},
 	{ "ipv6-address-andsf", "6a",		"dhcp6", 143, 2},
 	{ NULL, NULL, NULL, 0, 0 }
 };
@@ -306,8 +307,8 @@ struct option_def agents[] = {
 /// SERVER
 struct option_def configs[] = {
 	{ "default-lease-time", "T",		"server",   1, 3},
-	{ "max-lease-time", "T",		"server",   2, 0},
-	{ "min-lease-time", "T",		"server",   3, 0},
+	{ "max-lease-time", "T",		"server",   2, 3},
+	{ "min-lease-time", "T",		"server",   3, 3},
 	{ "dynamic-bootp-lease-cutoff", "T",	"server",   4, 0},
 	{ "dynamic-bootp-lease-length", "L",	"server",   5, 0},
 	{ "boot-unknown-clients", "f",		"server",   6, 0},
@@ -723,20 +724,6 @@ get_config_comments(unsigned code)
 
 	TAILQ_INIT(&comments);
 	switch (code) {
-	case 2: /* max-lease-time */
-		comment = createComment("/// max-lease-time is not supported");
-	lease_time:
-		TAILQ_INSERT_TAIL(&comments, comment);
-		comment = createComment("/// use default-lease-time instead");
-		TAILQ_INSERT_TAIL(&comments, comment);
-		comment = createComment("/// Reference Kea #221");
-		TAILQ_INSERT_TAIL(&comments, comment);
-		break;
-
-	case 3: /* min-lease-time */
-		comment = createComment("/// min-lease-time is not supported");
-		goto lease_time;
-
 	case 4: /* dynamic-bootp-lease-cutoff */
 	case 5: /* dynamic-bootp-lease-length */
 	case 6: /* boot-unknown-clients */

@@ -95,7 +95,7 @@
             "data": "https://192.168.11.200/wsg/ap"
           }
         ],
-//      /// valid-lifetime in unsupported scope
+//      /// default-valid-lifetime in unsupported scope
 //      "valid-lifetime": 86400,
         "option-def": [
           {

@@ -23,15 +23,8 @@
       }
     ],
     "valid-lifetime": 600,
+    "max-valid-lifetime": 7200,
 //  "config": [
-//    /// max-lease-time is not supported
-//    /// use default-lease-time instead
-//    /// Reference Kea #221
-//    {
-//      "name": "max-lease-time",
-//      "code": 2,
-//      "value": 7200
-//    },
 //    /// log-facility is not supported
 //    /// Please use the KEA_LOGGER_DESTINATION environment variable instead
 //    {
@@ -129,16 +122,7 @@
           }
         ],
         "valid-lifetime": 600,
-//      "config": [
-//        /// max-lease-time is not supported
-//        /// use default-lease-time instead
-//        /// Reference Kea #221
-//        {
-//          "name": "max-lease-time",
-//          "code": 2,
-//          "value": 7200
-//        }
-//      ],
+        "max-valid-lifetime": 7200,
         /// Host reservations without fixed addresses were put in the last declared subnet
         /// Reference Kea #231
         "reservations": [

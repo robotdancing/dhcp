@@ -48,22 +48,6 @@
 //      "code": 10,
 //      "value": true
 //    },
-//    /// min-lease-time is not supported
-//    /// use default-lease-time instead
-//    /// Reference Kea #221
-//    {
-//      "name": "min-lease-time",
-//      "code": 3,
-//      "value": 86400
-//    },
-//    /// max-lease-time is not supported
-//    /// use default-lease-time instead
-//    /// Reference Kea #221
-//    {
-//      "name": "max-lease-time",
-//      "code": 2,
-//      "value": 86400
-//    },
 //    /// log-facility is not supported
 //    /// Please use the KEA_LOGGER_DESTINATION environment variable instead
 //    {
@@ -73,6 +57,8 @@
 //    }
 //  ],
     "valid-lifetime": 86400,
+    "min-valid-lifetime": 86400,
+    "max-valid-lifetime": 86400,
 //  # LLog specific message for psuedo accounting records 
 //  # kept for historical purposes.
 //  # Fields: NAS IP Addr, NAS Port (derived from Cisco agent ID), MAC Addr, IP Addr, Host, OS ID
@@ -261,25 +247,9 @@
             "data": "173.185.15.255"
           }
         ],
-        "valid-lifetime": 3600
-//      "config": [
-//        /// min-lease-time is not supported
-//        /// use default-lease-time instead
-//        /// Reference Kea #221
-//        {
-//          "name": "min-lease-time",
-//          "code": 3,
-//          "value": 3600
-//        },
-//        /// max-lease-time is not supported
-//        /// use default-lease-time instead
-//        /// Reference Kea #221
-//        {
-//          "name": "max-lease-time",
-//          "code": 2,
-//          "value": 3600
-//        }
-//      ]
+        "valid-lifetime": 3600,
+        "min-valid-lifetime": 3600,
+        "max-valid-lifetime": 3600
       },
       {
         "id": 23,
@@ -697,25 +667,9 @@
             "data": "98.22.15.255"
           }
         ],
-        "valid-lifetime": 3600
-//      "config": [
-//        /// min-lease-time is not supported
-//        /// use default-lease-time instead
-//        /// Reference Kea #221
-//        {
-//          "name": "min-lease-time",
-//          "code": 3,
-//          "value": 3600
-//        },
-//        /// max-lease-time is not supported
-//        /// use default-lease-time instead
-//        /// Reference Kea #221
-//        {
-//          "name": "max-lease-time",
-//          "code": 2,
-//          "value": 3600
-//        }
-//      ]
+        "valid-lifetime": 3600,
+        "min-valid-lifetime": 3600,
+        "max-valid-lifetime": 3600
 //      "statement": {
 //        "on": {
 //          "condition": "commit",
@@ -3485,25 +3439,9 @@
             "data": "166.82.195.1"
           }
         ],
-        "valid-lifetime": 7200
-//      "config": [
-//        /// min-lease-time is not supported
-//        /// use default-lease-time instead
-//        /// Reference Kea #221
-//        {
-//          "name": "min-lease-time",
-//          "code": 3,
-//          "value": 7200
-//        },
-//        /// max-lease-time is not supported
-//        /// use default-lease-time instead
-//        /// Reference Kea #221
-//        {
-//          "name": "max-lease-time",
-//          "code": 2,
-//          "value": 7200
-//        }
-//      ]
+        "valid-lifetime": 7200,
+        "min-valid-lifetime": 7200,
+        "max-valid-lifetime": 7200
 //      "statement": {
 //        "on": {
 //          "condition": "commit",
@@ -4558,25 +4496,9 @@
             "data": "166.102.165.11, 207.91.5.250"
           }
         ],
-        "valid-lifetime": 3600
-//      "config": [
-//        /// min-lease-time is not supported
-//        /// use default-lease-time instead
-//        /// Reference Kea #221
-//        {
-//          "name": "min-lease-time",
-//          "code": 3,
-//          "value": 3600
-//        },
-//        /// max-lease-time is not supported
-//        /// use default-lease-time instead
-//        /// Reference Kea #221
-//        {
-//          "name": "max-lease-time",
-//          "code": 2,
-//          "value": 3600
-//        }
-//      ]
+        "valid-lifetime": 3600,
+        "min-valid-lifetime": 3600,
+        "max-valid-lifetime": 3600
 //      "statement": {
 //        "on": {
 //          "condition": "commit",
@@ -4754,25 +4676,9 @@
             "data": "166.102.165.13, 207.91.5.252"
           }
         ],
-        "valid-lifetime": 120
-//      "config": [
-//        /// min-lease-time is not supported
-//        /// use default-lease-time instead
-//        /// Reference Kea #221
-//        {
-//          "name": "min-lease-time",
-//          "code": 3,
-//          "value": 120
-//        },
-//        /// max-lease-time is not supported
-//        /// use default-lease-time instead
-//        /// Reference Kea #221
-//        {
-//          "name": "max-lease-time",
-//          "code": 2,
-//          "value": 120
-//        }
-//      ]
+        "valid-lifetime": 120,
+        "min-valid-lifetime": 120,
+        "max-valid-lifetime": 120
 //      "statement": {
 //        "on": {
 //          "condition": "commit",
@@ -4950,25 +4856,9 @@
             "data": "166.102.165.13, 207.91.5.252"
           }
         ],
-        "valid-lifetime": 120
-//      "config": [
-//        /// min-lease-time is not supported
-//        /// use default-lease-time instead
-//        /// Reference Kea #221
-//        {
-//          "name": "min-lease-time",
-//          "code": 3,
-//          "value": 120
-//        },
-//        /// max-lease-time is not supported
-//        /// use default-lease-time instead
-//        /// Reference Kea #221
-//        {
-//          "name": "max-lease-time",
-//          "code": 2,
-//          "value": 120
-//        }
-//      ]
+        "valid-lifetime": 120,
+        "min-valid-lifetime": 120,
+        "max-valid-lifetime": 120
 //      "statement": {
 //        "on": {
 //          "condition": "commit",
@@ -5146,25 +5036,9 @@
             "data": "166.102.165.13, 207.91.5.252"
           }
         ],
-        "valid-lifetime": 600
-//      "config": [
-//        /// min-lease-time is not supported
-//        /// use default-lease-time instead
-//        /// Reference Kea #221
-//        {
-//          "name": "min-lease-time",
-//          "code": 3,
-//          "value": 600
-//        },
-//        /// max-lease-time is not supported
-//        /// use default-lease-time instead
-//        /// Reference Kea #221
-//        {
-//          "name": "max-lease-time",
-//          "code": 2,
-//          "value": 600
-//        }
-//      ]
+        "valid-lifetime": 600,
+        "min-valid-lifetime": 600,
+        "max-valid-lifetime": 600
 //      "statement": {
 //        "on": {
 //          "condition": "commit",
@@ -6837,25 +6711,9 @@
             "data": "207.91.5.20, 207.91.5.252"
           }
         ],
-        "valid-lifetime": 3600
-//      "config": [
-//        /// min-lease-time is not supported
-//        /// use default-lease-time instead
-//        /// Reference Kea #221
-//        {
-//          "name": "min-lease-time",
-//          "code": 3,
-//          "value": 3600
-//        },
-//        /// max-lease-time is not supported
-//        /// use default-lease-time instead
-//        /// Reference Kea #221
-//        {
-//          "name": "max-lease-time",
-//          "code": 2,
-//          "value": 3600
-//        }
-//      ]
+        "valid-lifetime": 3600,
+        "min-valid-lifetime": 3600,
+        "max-valid-lifetime": 3600
       },
       {
         "name": "hbbsnmlcs01-7200",
@@ -7045,25 +6903,9 @@
             "data": "207.91.5.20, 207.91.5.252"
           }
         ],
-        "valid-lifetime": 3600
-//      "config": [
-//        /// min-lease-time is not supported
-//        /// use default-lease-time instead
-//        /// Reference Kea #221
-//        {
-//          "name": "min-lease-time",
-//          "code": 3,
-//          "value": 3600
-//        },
-//        /// max-lease-time is not supported
-//        /// use default-lease-time instead
-//        /// Reference Kea #221
-//        {
-//          "name": "max-lease-time",
-//          "code": 2,
-//          "value": 3600
-//        }
-//      ]
+        "valid-lifetime": 3600,
+        "min-valid-lifetime": 3600,
+        "max-valid-lifetime": 3600
       },
       {
         "name": "rudsnmlcs00-7200",
@@ -7337,25 +7179,9 @@
             ]
           }
         ],
-        "valid-lifetime": 3600
-//      "config": [
-//        /// min-lease-time is not supported
-//        /// use default-lease-time instead
-//        /// Reference Kea #221
-//        {
-//          "name": "min-lease-time",
-//          "code": 3,
-//          "value": 3600
-//        },
-//        /// max-lease-time is not supported
-//        /// use default-lease-time instead
-//        /// Reference Kea #221
-//        {
-//          "name": "max-lease-time",
-//          "code": 2,
-//          "value": 3600
-//        }
-//      ]
+        "valid-lifetime": 3600,
+        "min-valid-lifetime": 3600,
+        "max-valid-lifetime": 3600
       },
       {
         "name": "txrktxlcs00-7200",
@@ -8801,24 +8627,8 @@
           }
         ],
         "valid-lifetime": 3600,
-//      "config": [
-//        /// min-lease-time is not supported
-//        /// use default-lease-time instead
-//        /// Reference Kea #221
-//        {
-//          "name": "min-lease-time",
-//          "code": 3,
-//          "value": 3600
-//        },
-//        /// max-lease-time is not supported
-//        /// use default-lease-time instead
-//        /// Reference Kea #221
-//        {
-//          "name": "max-lease-time",
-//          "code": 2,
-//          "value": 3600
-//        }
-//      ],
+        "min-valid-lifetime": 3600,
+        "max-valid-lifetime": 3600,
         "option-data": [
           {
             "space": "dhcp4",
@@ -9756,24 +9566,8 @@
           }
         ],
         "valid-lifetime": 3600,
-//      "config": [
-//        /// min-lease-time is not supported
-//        /// use default-lease-time instead
-//        /// Reference Kea #221
-//        {
-//          "name": "min-lease-time",
-//          "code": 3,
-//          "value": 3600
-//        },
-//        /// max-lease-time is not supported
-//        /// use default-lease-time instead
-//        /// Reference Kea #221
-//        {
-//          "name": "max-lease-time",
-//          "code": 2,
-//          "value": 3600
-//        }
-//      ],
+        "min-valid-lifetime": 3600,
+        "max-valid-lifetime": 3600,
         "option-data": [
           {
             "space": "dhcp4",
@@ -13927,25 +13721,9 @@
             ]
           }
         ],
-        "valid-lifetime": 7200
-//      "config": [
-//        /// min-lease-time is not supported
-//        /// use default-lease-time instead
-//        /// Reference Kea #221
-//        {
-//          "name": "min-lease-time",
-//          "code": 3,
-//          "value": 7200
-//        },
-//        /// max-lease-time is not supported
-//        /// use default-lease-time instead
-//        /// Reference Kea #221
-//        {
-//          "name": "max-lease-time",
-//          "code": 2,
-//          "value": 7200
-//        }
-//      ]
+        "valid-lifetime": 7200,
+        "min-valid-lifetime": 7200,
+        "max-valid-lifetime": 7200
 //      "statement": {
 //        "on": {
 //          "condition": "commit",
@@ -14257,25 +14035,9 @@
             ]
           }
         ],
-        "valid-lifetime": 7200
-//      "config": [
-//        /// min-lease-time is not supported
-//        /// use default-lease-time instead
-//        /// Reference Kea #221
-//        {
-//          "name": "min-lease-time",
-//          "code": 3,
-//          "value": 7200
-//        },
-//        /// max-lease-time is not supported
-//        /// use default-lease-time instead
-//        /// Reference Kea #221
-//        {
-//          "name": "max-lease-time",
-//          "code": 2,
-//          "value": 7200
-//        }
-//      ]
+        "valid-lifetime": 7200,
+        "min-valid-lifetime": 7200,
+        "max-valid-lifetime": 7200
 //      "statement": {
 //        "on": {
 //          "condition": "commit",
@@ -14681,25 +14443,9 @@
             ]
           }
         ],
-        "valid-lifetime": 7200
-//      "config": [
-//        /// min-lease-time is not supported
-//        /// use default-lease-time instead
-//        /// Reference Kea #221
-//        {
-//          "name": "min-lease-time",
-//          "code": 3,
-//          "value": 7200
-//        },
-//        /// max-lease-time is not supported
-//        /// use default-lease-time instead
-//        /// Reference Kea #221
-//        {
-//          "name": "max-lease-time",
-//          "code": 2,
-//          "value": 7200
-//        }
-//      ]
+        "valid-lifetime": 7200,
+        "min-valid-lifetime": 7200,
+        "max-valid-lifetime": 7200
 //      "statement": {
 //        "on": {
 //          "condition": "commit",
@@ -15088,25 +14834,9 @@
             ]
           }
         ],
-        "valid-lifetime": 7200
-//      "config": [
-//        /// min-lease-time is not supported
-//        /// use default-lease-time instead
-//        /// Reference Kea #221
-//        {
-//          "name": "min-lease-time",
-//          "code": 3,
-//          "value": 7200
-//        },
-//        /// max-lease-time is not supported
-//        /// use default-lease-time instead
-//        /// Reference Kea #221
-//        {
-//          "name": "max-lease-time",
-//          "code": 2,
-//          "value": 7200
-//        }
-//      ]
+        "valid-lifetime": 7200,
+        "min-valid-lifetime": 7200,
+        "max-valid-lifetime": 7200
 //      "statement": {
 //        "on": {
 //          "condition": "commit",
@@ -17367,25 +17097,9 @@
             ]
           }
         ],
-        "valid-lifetime": 7200
-//      "config": [
-//        /// min-lease-time is not supported
-//        /// use default-lease-time instead
-//        /// Reference Kea #221
-//        {
-//          "name": "min-lease-time",
-//          "code": 3,
-//          "value": 7200
-//        },
-//        /// max-lease-time is not supported
-//        /// use default-lease-time instead
-//        /// Reference Kea #221
-//        {
-//          "name": "max-lease-time",
-//          "code": 2,
-//          "value": 7200
-//        }
-//      ]
+        "valid-lifetime": 7200,
+        "min-valid-lifetime": 7200,
+        "max-valid-lifetime": 7200
 //      "statement": {
 //        "on": {
 //          "condition": "commit",
@@ -17887,25 +17601,9 @@
             ]
           }
         ],
-        "valid-lifetime": 7200
-//      "config": [
-//        /// min-lease-time is not supported
-//        /// use default-lease-time instead
-//        /// Reference Kea #221
-//        {
-//          "name": "min-lease-time",
-//          "code": 3,
-//          "value": 7200
-//        },
-//        /// max-lease-time is not supported
-//        /// use default-lease-time instead
-//        /// Reference Kea #221
-//        {
-//          "name": "max-lease-time",
-//          "code": 2,
-//          "value": 7200
-//        }
-//      ]
+        "valid-lifetime": 7200,
+        "min-valid-lifetime": 7200,
+        "max-valid-lifetime": 7200
 //      "statement": {
 //        "on": {
 //          "condition": "commit",
@@ -18600,25 +18298,9 @@
             ]
           }
         ],
-        "valid-lifetime": 7200
-//      "config": [
-//        /// min-lease-time is not supported
-//        /// use default-lease-time instead
-//        /// Reference Kea #221
-//        {
-//          "name": "min-lease-time",
-//          "code": 3,
-//          "value": 7200
-//        },
-//        /// max-lease-time is not supported
-//        /// use default-lease-time instead
-//        /// Reference Kea #221
-//        {
-//          "name": "max-lease-time",
-//          "code": 2,
-//          "value": 7200
-//        }
-//      ]
+        "valid-lifetime": 7200,
+        "min-valid-lifetime": 7200,
+        "max-valid-lifetime": 7200
 //      "statement": {
 //        "on": {
 //          "condition": "commit",
@@ -20811,25 +20493,9 @@
             ]
           }
         ],
-        "valid-lifetime": 7200
-//      "config": [
-//        /// min-lease-time is not supported
-//        /// use default-lease-time instead
-//        /// Reference Kea #221
-//        {
-//          "name": "min-lease-time",
-//          "code": 3,
-//          "value": 7200
-//        },
-//        /// max-lease-time is not supported
-//        /// use default-lease-time instead
-//        /// Reference Kea #221
-//        {
-//          "name": "max-lease-time",
-//          "code": 2,
-//          "value": 7200
-//        }
-//      ]
+        "valid-lifetime": 7200,
+        "min-valid-lifetime": 7200,
+        "max-valid-lifetime": 7200
 //      "statement": {
 //        "on": {
 //          "condition": "commit",
@@ -21179,25 +20845,9 @@
             ]
           }
         ],
-        "valid-lifetime": 7200
-//      "config": [
-//        /// min-lease-time is not supported
-//        /// use default-lease-time instead
-//        /// Reference Kea #221
-//        {
-//          "name": "min-lease-time",
-//          "code": 3,
-//          "value": 7200
-//        },
-//        /// max-lease-time is not supported
-//        /// use default-lease-time instead
-//        /// Reference Kea #221
-//        {
-//          "name": "max-lease-time",
-//          "code": 2,
-//          "value": 7200
-//        }
-//      ]
+        "valid-lifetime": 7200,
+        "min-valid-lifetime": 7200,
+        "max-valid-lifetime": 7200
 //      "statement": {
 //        "on": {
 //          "condition": "commit",
@@ -22608,25 +22258,9 @@
             ]
           }
         ],
-        "valid-lifetime": 7200
-//      "config": [
-//        /// min-lease-time is not supported
-//        /// use default-lease-time instead
-//        /// Reference Kea #221
-//        {
-//          "name": "min-lease-time",
-//          "code": 3,
-//          "value": 7200
-//        },
-//        /// max-lease-time is not supported
-//        /// use default-lease-time instead
-//        /// Reference Kea #221
-//        {
-//          "name": "max-lease-time",
-//          "code": 2,
-//          "value": 7200
-//        }
-//      ]
+        "valid-lifetime": 7200,
+        "min-valid-lifetime": 7200,
+        "max-valid-lifetime": 7200
       },
       ###################################
       # VLAN Catena-ATM_Dynamic (1300)
@@ -23521,25 +23155,9 @@
             ]
           }
         ],
-        "valid-lifetime": 3600
-//      "config": [
-//        /// min-lease-time is not supported
-//        /// use default-lease-time instead
-//        /// Reference Kea #221
-//        {
-//          "name": "min-lease-time",
-//          "code": 3,
-//          "value": 3600
-//        },
-//        /// max-lease-time is not supported
-//        /// use default-lease-time instead
-//        /// Reference Kea #221
-//        {
-//          "name": "max-lease-time",
-//          "code": 2,
-//          "value": 3600
-//        }
-//      ]
+        "valid-lifetime": 3600,
+        "min-valid-lifetime": 3600,
+        "max-valid-lifetime": 3600
       }
     ],
     "host-reservation-identifiers": [
@@ -23572,7 +23190,7 @@
             "data": "162.39.168.71"
           }
         ]
-//      /// valid-lifetime in unsupported scope
+//      /// default-valid-lifetime in unsupported scope
 //      "valid-lifetime": 120
       },
       /// Begin file ws/dhcpd.fixed

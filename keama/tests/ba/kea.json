@@ -23,22 +23,6 @@
 //      "code": 44,
 //      "value": "local5"
 //    },
-//    /// max-lease-time is not supported
-//    /// use default-lease-time instead
-//    /// Reference Kea #221
-//    {
-//      "name": "max-lease-time",
-//      "code": 2,
-//      "value": 360000
-//    },
-//    /// min-lease-time is not supported
-//    /// use default-lease-time instead
-//    /// Reference Kea #221
-//    {
-//      "name": "min-lease-time",
-//      "code": 3,
-//      "value": 360000
-//    },
 //    /// ping-check is not supported
 //    /// Kea has no ping probing
 //    {
@@ -128,6 +112,8 @@
     },
     "authoritative": true,
     "valid-lifetime": 360000,
+    "max-valid-lifetime": 360000,
+    "min-valid-lifetime": 360000,
 //  "statement": {
 //    "config": {
 //      "value": "deny",
@@ -268,24 +254,8 @@
 //        }
 //      },
         "valid-lifetime": 90000,
-//      "config": [
-//        /// max-lease-time is not supported
-//        /// use default-lease-time instead
-//        /// Reference Kea #221
-//        {
-//          "name": "max-lease-time",
-//          "code": 2,
-//          "value": 90000
-//        },
-//        /// min-lease-time is not supported
-//        /// use default-lease-time instead
-//        /// Reference Kea #221
-//        {
-//          "name": "min-lease-time",
-//          "code": 3,
-//          "value": 90000
-//        }
-//      ],
+        "max-valid-lifetime": 90000,
+        "min-valid-lifetime": 90000,
         "pools": [
           {
             "pool": "10.207.192.1 - 10.207.255.254",

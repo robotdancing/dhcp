@@ -32,14 +32,6 @@
 //      "code": 10,
 //      "value": true
 //    },
-//    /// max-lease-time is not supported
-//    /// use default-lease-time instead
-//    /// Reference Kea #221
-//    {
-//      "name": "max-lease-time",
-//      "code": 2,
-//      "value": 1800
-//    },
 //    /// omapi-port is an internal ISC DHCP feature
 //    {
 //      "name": "omapi-port",
@@ -90,6 +82,7 @@
       }
     ],
     "valid-lifetime": 1800,
+    "max-valid-lifetime": 1800,
 //  # 30 week
 //  #default-lease-time 3100;	# 51 minutes.
 //  #max-lease-time 604800;		# 1 week
@@ -261,17 +254,10 @@
 //          "name": "always-broadcast",
 //          "code": 22,
 //          "value": true
-//        },
-//        /// max-lease-time is not supported
-//        /// use default-lease-time instead
-//        /// Reference Kea #221
-//        {
-//          "name": "max-lease-time",
-//          "code": 2,
-//          "value": 3100
 //        }
 //      ],
         "valid-lifetime": 3100,
+        "max-valid-lifetime": 3100,
         "pools": [
           # 51 minutes
           /// From:
@@ -332,17 +318,10 @@
 //          "name": "always-broadcast",
 //          "code": 22,
 //          "value": true
-//        },
-//        /// max-lease-time is not supported
-//        /// use default-lease-time instead
-//        /// Reference Kea #221
-//        {
-//          "name": "max-lease-time",
-//          "code": 2,
-//          "value": 1200
 //        }
 //      ],
         "valid-lifetime": 1200,
+        "max-valid-lifetime": 1200,
         "pools": [
           # 20 minutes
           /// From:
@@ -679,17 +658,10 @@
 //          "name": "always-broadcast",
 //          "code": 22,
 //          "value": true
-//        },
-//        /// max-lease-time is not supported
-//        /// use default-lease-time instead
-//        /// Reference Kea #221
-//        {
-//          "name": "max-lease-time",
-//          "code": 2,
-//          "value": 60
 //        }
 //      ],
         "valid-lifetime": 60,
+        "max-valid-lifetime": 60,
         "pools": [
           # 1 minutes
           #	default-lease-time 1200;	# 20 minutes

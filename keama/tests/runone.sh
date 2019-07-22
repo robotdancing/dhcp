@@ -46,6 +46,8 @@ case $trail in
 	6) options="-6";;
 	F) options="-4 -r fatal";;
 	P) options="-4 -r pass";;
+	d) options="-4 -D";;
+	D) options="-6 -D";;
 	n) options="-4 -N";;
 	N) options="-6 -N";;
 	l) options="-4 -l ${HOOK:-/path/}"; hook=1;;

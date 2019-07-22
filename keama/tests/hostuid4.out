@@ -27,7 +27,7 @@
                 "data": "example.com, example.org"
               }
             ],
-//          /// valid-lifetime in unsupported scope
+//          /// default-valid-lifetime in unsupported scope
 //          "valid-lifetime": 1800,
             "ip-address": "10.5.5.1"
 //          "extra-ip-addresses": [

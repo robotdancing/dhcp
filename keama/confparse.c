@@ -73,6 +73,7 @@ struct range {
 
 TAILQ_HEAD(ranges, range) known_ranges;
 
+static void post_process_lifetimes(struct parse *);
 static size_t post_process_reservations(struct parse *);
 static void post_process_classes(struct parse *);
 static void post_process_generated_classes(struct parse *);
@@ -154,6 +155,8 @@ conf_file_parse(struct parse *cfile)
 		}
 	}
 
+	if (use_isc_lifetimes)
+		post_process_lifetimes(cfile);
 	if (!global_hr)
 		issues += post_process_reservations(cfile);
 	post_process_classes(cfile);
@@ -161,6 +164,46 @@ conf_file_parse(struct parse *cfile)
 	post_process_option_definitions(cfile);
 
 	return issues;
+}
+
+/* Lifetime post-processing */
+static void
+post_process_lifetimes(struct parse *cfile)
+{
+	struct element *entry;
+
+	entry = mapGet(cfile->stack[1], "valid-lifetime");
+	if (entry == NULL) {
+		struct comment *comment;
+
+		/* DEFAULT_DEFAULT_LEASE_TIME is 43200 */
+		entry = createInt(43200);
+		comment = createComment("/// Use ISC DHCP default lifetime");
+		TAILQ_INSERT_TAIL(&entry->comments, comment);
+		mapSet(cfile->stack[1], entry, "valid-lifetime");
+	}
+
+	entry = mapGet(cfile->stack[1], "min-valid-lifetime");
+	if (entry == NULL) {
+		struct comment *comment;
+
+		/* DEFAULT_MIN_LEASE_TIME is 300 */
+		entry = createInt(300);
+		comment = createComment("/// Use ISC DHCP min lifetime");
+		TAILQ_INSERT_TAIL(&entry->comments, comment);
+		mapSet(cfile->stack[1], entry, "min-valid-lifetime");
+	}
+
+	entry = mapGet(cfile->stack[1], "max-valid-lifetime");
+	if (entry == NULL) {
+		struct comment *comment;
+
+		/* DEFAULT_MAX_LEASE_TIME is 86400 */
+		entry = createInt(86400);
+		comment = createComment("/// Use ISC DHCP max lifetime");
+		TAILQ_INSERT_TAIL(&entry->comments, comment);
+		mapSet(cfile->stack[1], entry, "max-valid-lifetime");
+	}
 }
 
 /* Reservation post-processing */
