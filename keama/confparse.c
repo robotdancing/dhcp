@@ -155,8 +155,7 @@ conf_file_parse(struct parse *cfile)
 		}
 	}
 
-	if (use_isc_lifetimes)
-		post_process_lifetimes(cfile);
+	post_process_lifetimes(cfile);
 	if (!global_hr)
 		issues += post_process_reservations(cfile);
 	post_process_classes(cfile);
@@ -173,7 +172,7 @@ post_process_lifetimes(struct parse *cfile)
 	struct element *entry;
 
 	entry = mapGet(cfile->stack[1], "valid-lifetime");
-	if (entry == NULL) {
+	if ((entry == NULL) && use_isc_lifetimes) {
 		struct comment *comment;
 
 		/* DEFAULT_DEFAULT_LEASE_TIME is 43200 */
@@ -184,7 +183,7 @@ post_process_lifetimes(struct parse *cfile)
 	}
 
 	entry = mapGet(cfile->stack[1], "min-valid-lifetime");
-	if (entry == NULL) {
+	if ((entry == NULL) && use_isc_lifetimes) {
 		struct comment *comment;
 
 		/* DEFAULT_MIN_LEASE_TIME is 300 */
@@ -195,7 +194,7 @@ post_process_lifetimes(struct parse *cfile)
 	}
 
 	entry = mapGet(cfile->stack[1], "max-valid-lifetime");
-	if (entry == NULL) {
+	if ((entry == NULL) && use_isc_lifetimes) {
 		struct comment *comment;
 
 		/* DEFAULT_MAX_LEASE_TIME is 86400 */
@@ -204,6 +203,13 @@ post_process_lifetimes(struct parse *cfile)
 		TAILQ_INSERT_TAIL(&entry->comments, comment);
 		mapSet(cfile->stack[1], entry, "max-valid-lifetime");
 	}
+
+	/* Done for DHCPv4 */
+	if (local_family == AF_INET)
+		return;
+
+	/* There is no builtin default for preferred-lifetime,
+	   nor min/max values in ISC DHCP. */
 }
 
 /* Reservation post-processing */
