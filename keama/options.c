@@ -382,15 +382,15 @@ struct option_def configs[] = {
 	{ "abandon-lease-time", "T",		"server",  89, 0},
  	{ "use-eui-64", "f",			"server",  90, 0},
         { "check-secs-byte-order", "f",         "server",  91, 0},
-        /* Duplicate */
-        { "persist-eui-64-leases", "f",         "server",  91, 0},
-        { "ddns-dual-stack-mixed-mode", "f",    "server",  92, 0},
-        { "ddns-guard-id-must-match", "f",      "server",  93, 0},
-        { "ddns-other-guard-is-dynamic", "f",   "server",  94, 0},
-	{ "release-on-roam", "f",		"server",  95, 0},
-	{ "local-address6", "6",		"server",  96, 0},
-        { "bind-local-address6", "f",           "server",  97, 0},
-	{ "ping-cltt-secs", "T",		"server",  98, 0},
+        { "persist-eui-64-leases", "f",         "server",  92, 0},
+        { "ddns-dual-stack-mixed-mode", "f",    "server",  93, 0},
+        { "ddns-guard-id-must-match", "f",      "server",  94, 0},
+        { "ddns-other-guard-is-dynamic", "f",   "server",  95, 0},
+	{ "release-on-roam", "f",		"server",  96, 0},
+	{ "local-address6", "6",		"server",  97, 0},
+        { "bind-local-address6", "f",           "server",  98, 0},
+	{ "ping-cltt-secs", "T",		"server",  99, 0},
+	{ "ping-timeout-ms", "T",		"server", 100, 0},
 	{ NULL, NULL, NULL, 0, 0 }
 };
 
@@ -1122,22 +1122,27 @@ get_config_comments(unsigned code)
 		comment = createComment("/// Reference Kea #265");
 		TAILQ_INSERT_TAIL(&comments, comment);
                 break;
-	case 95: /* release-on-roam */
+	case 96: /* release-on-roam */
 		comment = createComment("/// release-on-roam is not (yet) "
 					"supported");
 		TAILQ_INSERT_TAIL(&comments, comment);
 		comment = createComment("/// Reference Kea #266");
 		TAILQ_INSERT_TAIL(&comments, comment);
                 break;
-	case 96: /* local-address6 */
+	case 97: /* local-address6 */
 		comment = createComment("/// local-address6 is not supported");
 		TAILQ_INSERT_TAIL(&comments, comment);
 		comment = createComment("/// Kea equivalent feature is "
 					"to specify an interface address");
 		TAILQ_INSERT_TAIL(&comments, comment);
 		break;
-	case 98: /* ping-cltt-secs */
+	case 99: /* ping-cltt-secs */
 		comment = createComment("/// ping-cltt-secs is not supported");
+		TAILQ_INSERT_TAIL(&comments, comment);
+		goto no_ping;
+	case 100: /* ping-timeout-ms */
+		comment = createComment("/// ping-timeout-ms is not "
+					"supported");
 		TAILQ_INSERT_TAIL(&comments, comment);
 		goto no_ping;
 	}

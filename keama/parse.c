@@ -5340,7 +5340,7 @@ static void
 config_ddns_update_style(struct element *config, struct parse *cfile)
 {
 	struct element *value;
-	isc_boolean_t enable = ISC_FALSE;
+	isc_boolean_t enable = ISC_TRUE;
 	size_t scope;
 
 	value = mapGet(config, "value");
